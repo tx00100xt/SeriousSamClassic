@@ -112,11 +112,11 @@ This version of the engine comes with a set of resources (`\SE1_10b.GRO`) that a
 What is XPLUS?
 XPLUS is a global modification that changes effects, models, weapons, textures to high definition. XPLUS was created by fans of the game Serious Sam and is distributed for free.
 
-![XPLUS Oasis](https://github.com/tx00100xt/SeriousSamClassic/blob/raw?file=Images%2Fsamxplus_1.png&commit=382d2374d557df93f42cc80cde2479953ded1d9d)
+![XPLUS Oasis](https://raw.githubusercontent.com/tx00100xt/SeriousSamClassic/main/Images/samxplus_1.png)
 
-![XPLUS Dunes](https://github.com/tx00100xt/SeriousSamClassic/blob/raw?file=Images%2Fsamxplus_2.png&commit=382d2374d557df93f42cc80cde2479953ded1d9d)
+![XPLUS Dunes](https://raw.githubusercontent.com/tx00100xt/SeriousSamClassic/main/Images/samxplus_2.png)
 
-![XPLUS Sacred Yards](https://github.com/tx00100xt/SeriousSamClassic/blob/raw?file=Images%2Fsamxplus_3.png&commit=382d2374d557df93f42cc80cde2479953ded1d9d)
+![XPLUS Sacred Yards](https://raw.githubusercontent.com/tx00100xt/SeriousSamClassic/main/Images/samxplus_3.png)
 
 #### Building XPLUS (only for SS:TFE)
 
