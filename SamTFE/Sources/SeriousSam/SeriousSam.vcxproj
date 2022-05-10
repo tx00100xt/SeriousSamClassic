@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <ProjectGuid>{F0E01B8A-1C93-85CB-693E-B9CA24A27168}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir);$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\Bin\Debug;$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Lib;$(LibraryPath)</LibraryPath>
+    <GenerateManifest>true</GenerateManifest>
+    <EmbedManifest>true</EmbedManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir);$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\Bin;$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Lib;$(LibraryPath)</LibraryPath>
+    <GenerateManifest>true</GenerateManifest>
+    <EmbedManifest>true</EmbedManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AFXDLL;_WINDLL;_USRDLL;DIRECT3D_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\SeriousSam.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdH.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <DisableSpecificWarnings>4996;4333</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\SeriousSam.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\SeriousSam.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>gamed.lib gamempd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OutputFile>Debug\SeriousSam.exe</OutputFile>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateMapFile>true</GenerateMapFile>
+    </Link>
+    <CustomBuildStep>
+      <Command>copy Debug\$(TargetName).exe $(SolutionDir)..\Bin\Debug\ &gt;nul 
+copy Debug\$(TargetName).map $(SolutionDir)..\Bin\Debug\ &gt;nul </Command>
+      <Message>Copying %(Filename) binaries to \Bin\Debug</Message>
+      <Outputs>$(SolutionDir)..\Bin\Debug\$(InputName).exe;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitFramePointers>false</OmitFramePointers>
+      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_WINDLL;_AFXDLL;_USRDLL;DIRECT3D_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\SeriousSam.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdH.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <DisableSpecificWarnings>4996;4333</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\SeriousSam.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\SeriousSam.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>game.lib gamemp.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OutputFile>Release\SeriousSam.exe</OutputFile>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateMapFile>true</GenerateMapFile>
+    </Link>
+    <CustomBuildStep>
+      <Command>copy Release\$(TargetName).exe $(SolutionDir)..\Bin\ &gt;nul 
+copy Release\$(TargetName).map $(SolutionDir)..\Bin\ &gt;nul </Command>
+      <Message>Copying %(Filename) binaries to \Bin</Message>
+      <Outputs>$(SolutionDir)..\Bin\$(InputName).exe;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CmdLine.cpp" />
+    <ClCompile Include="Credits.cpp" />
+    <ClCompile Include="GLSettings.cpp" />
+    <ClCompile Include="GUI\Components\MenuGadget.cpp" />
+    <ClCompile Include="GUI\Components\MGArrow.cpp" />
+    <ClCompile Include="GUI\Components\MGButton.cpp" />
+    <ClCompile Include="GUI\Components\MGChangePlayer.cpp" />
+    <ClCompile Include="GUI\Components\MGEdit.cpp" />
+    <ClCompile Include="GUI\Components\MGFileButton.cpp" />
+    <ClCompile Include="GUI\Components\MGHighScore.cpp" />
+    <ClCompile Include="GUI\Components\MGKeyDefinition.cpp" />
+    <ClCompile Include="GUI\Components\MGLevelButton.cpp" />
+    <ClCompile Include="GUI\Components\MGModel.cpp" />
+    <ClCompile Include="GUI\Components\MGServerList.cpp" />
+    <ClCompile Include="GUI\Components\MGSlider.cpp" />
+    <ClCompile Include="GUI\Components\MGTitle.cpp" />
+    <ClCompile Include="GUI\Components\MGTrigger.cpp" />
+    <ClCompile Include="GUI\Components\MGVarButton.cpp" />
+    <ClCompile Include="GUI\Menus\GameMenu.cpp" />
+    <ClCompile Include="GUI\Menus\MAudioOptions.cpp" />
+    <ClCompile Include="GUI\Menus\MConfirm.cpp" />
+    <ClCompile Include="GUI\Menus\MControls.cpp" />
+    <ClCompile Include="GUI\Menus\MCustomizeAxis.cpp" />
+    <ClCompile Include="GUI\Menus\MCustomizeKeyboard.cpp" />
+    <ClCompile Include="GUI\Menus\MDisabled.cpp" />
+    <ClCompile Include="GUI\Menus\Menu.cpp" />
+    <ClCompile Include="GUI\Menus\MenuStartersAF.cpp" />
+    <ClCompile Include="GUI\Menus\MenuManager.cpp" />
+    <ClCompile Include="GUI\Menus\MenuPrinting.cpp" />
+    <ClCompile Include="GUI\Menus\MenuStuff.cpp" />
+    <ClCompile Include="GUI\Menus\MenuActions.cpp" />
+    <ClCompile Include="GUI\Menus\MHighScore.cpp" />
+    <ClCompile Include="GUI\Menus\MInGame.cpp" />
+    <ClCompile Include="GUI\Menus\MLevels.cpp" />
+    <ClCompile Include="GUI\Menus\MLoadSave.cpp" />
+    <ClCompile Include="GUI\Menus\MMain.cpp" />
+    <ClCompile Include="GUI\Menus\MNetwork.cpp" />
+    <ClCompile Include="GUI\Menus\MNetworkJoin.cpp" />
+    <ClCompile Include="GUI\Menus\MNetworkOpen.cpp" />
+    <ClCompile Include="GUI\Menus\MNetworkStart.cpp" />
+    <ClCompile Include="GUI\Menus\MOptions.cpp" />
+    <ClCompile Include="GUI\Menus\MPlayerProfile.cpp" />
+    <ClCompile Include="GUI\Menus\MSelectPlayers.cpp" />
+    <ClCompile Include="GUI\Menus\MServers.cpp" />
+    <ClCompile Include="GUI\Menus\MSinglePlayer.cpp" />
+    <ClCompile Include="GUI\Menus\MSinglePlayerNew.cpp" />
+    <ClCompile Include="GUI\Menus\MSplitScreen.cpp" />
+    <ClCompile Include="GUI\Menus\MSplitStart.cpp" />
+    <ClCompile Include="GUI\Menus\MVar.cpp" />
+    <ClCompile Include="GUI\Menus\MVideoOptions.cpp" />
+    <ClCompile Include="LCDDrawing.cpp" />
+    <ClCompile Include="LevelInfo.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
+    <ClInclude Include="GUI\Components\MenuGadget.h" />
+    <ClInclude Include="GUI\Components\MGArrow.h" />
+    <ClInclude Include="GUI\Components\MGButton.h" />
+    <ClInclude Include="GUI\Components\MGChangePlayer.h" />
+    <ClInclude Include="GUI\Components\MGEdit.h" />
+    <ClInclude Include="GUI\Components\MGFileButton.h" />
+    <ClInclude Include="GUI\Components\MGHighScore.h" />
+    <ClInclude Include="GUI\Components\MGKeyDefinition.h" />
+    <ClInclude Include="GUI\Components\MGLevelButton.h" />
+    <ClInclude Include="GUI\Components\MGModel.h" />
+    <ClInclude Include="GUI\Components\MGServerList.h" />
+    <ClInclude Include="GUI\Components\MGSlider.h" />
+    <ClInclude Include="GUI\Components\MGTitle.h" />
+    <ClInclude Include="GUI\Components\MGTrigger.h" />
+    <ClInclude Include="GUI\Components\MGVarButton.h" />
+    <ClInclude Include="GUI\Menus\GameMenu.h" />
+    <ClInclude Include="GUI\Menus\MAudioOptions.h" />
+    <ClInclude Include="GUI\Menus\MConfirm.h" />
+    <ClInclude Include="GUI\Menus\MControls.h" />
+    <ClInclude Include="GUI\Menus\MCredits.h" />
+    <ClInclude Include="GUI\Menus\MCustomizeAxis.h" />
+    <ClInclude Include="GUI\Menus\MCustomizeKeyboard.h" />
+    <ClInclude Include="GUI\Menus\MDisabled.h" />
+    <ClInclude Include="GUI\Menus\Menu.h" />
+    <ClInclude Include="GUI\Menus\MenuActions.h" />
+    <ClInclude Include="GUI\Menus\MenuManager.h" />
+    <ClInclude Include="GUI\Menus\MenuPrinting.h" />
+    <ClInclude Include="GUI\Menus\MenuStartersAF.h" />
+    <ClInclude Include="GUI\Menus\MenuStuff.h" />
+    <ClInclude Include="GUI\Menus\MenuStarters.h" />
+    <ClInclude Include="GUI\Menus\MHighScore.h" />
+    <ClInclude Include="GUI\Menus\MInGame.h" />
+    <ClInclude Include="GUI\Menus\MLevels.h" />
+    <ClInclude Include="GUI\Menus\MLoadSave.h" />
+    <ClInclude Include="GUI\Menus\MMain.h" />
+    <ClInclude Include="GUI\Menus\MNetwork.h" />
+    <ClInclude Include="GUI\Menus\MNetworkJoin.h" />
+    <ClInclude Include="GUI\Menus\MNetworkOpen.h" />
+    <ClInclude Include="GUI\Menus\MNetworkStart.h" />
+    <ClInclude Include="GUI\Menus\MOptions.h" />
+    <ClInclude Include="GUI\Menus\MPlayerProfile.h" />
+    <ClInclude Include="GUI\Menus\MRenderingOptions.h" />
+    <ClInclude Include="GUI\Menus\MSelectPlayers.h" />
+    <ClInclude Include="GUI\Menus\MServers.h" />
+    <ClInclude Include="GUI\Menus\MSinglePlayer.h" />
+    <ClInclude Include="GUI\Menus\MSinglePlayerNew.h" />
+    <ClInclude Include="GUI\Menus\MSplitScreen.h" />
+    <ClInclude Include="GUI\Menus\MSplitStart.h" />
+    <ClInclude Include="GUI\Menus\MVar.h" />
+    <ClInclude Include="GUI\Menus\MVideoOptions.h" />
+    <ClCompile Include="GUI\Menus\MenuStarters.cpp" />
+    <ClCompile Include="SeriousSam.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdH.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">StdH.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="SplashScreen.cpp" />
+    <ClCompile Include="StdH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdH.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">StdH.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="VarList.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArrowDir.h" />
+    <ClInclude Include="CmdLine.h" />
+    <ClInclude Include="Credits.h" />
+    <ClInclude Include="FileInfo.h" />
+    <ClInclude Include="GLSettings.h" />
+    <ClInclude Include="LCDDrawing.h" />
+    <ClInclude Include="LevelInfo.h" />
+    <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SeriousSam.h" />
+    <ClInclude Include="SplashScreen.h" />
+    <ClInclude Include="StdH.h" />
+    <ClInclude Include="VarList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="nocursor.cur" />
+    <CustomBuild Include="nodrop.cur" />
+    <CustomBuild Include="res\SeriousSam.ico" />
+    <CustomBuild Include="Splash.bmp" />
+    <CustomBuild Include="..\..\Flesh\Scripts\Menu\ApplyShadowmaps.ini">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\Menu\ApplyTextures.ini">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\Menu\ApplyVideo.ini">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\CustomOptions\GameOptions.cfg">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\Menu\GameOptions.cfg">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\CustomOptions\GameOptions.des">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\CustomOptions\GFX-AdvancedRendering.cfg">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\CustomOptions\GFX-AdvancedRendering.des">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\CustomOptions\PredictionOptions.cfg">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\CustomOptions\PredictionOptions.des">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\Menu\RenderingOptions.cfg">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Scripts\Addons\SFX-AutoAdjust.des">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Flesh\Data\Credits.txt" />
+    <CustomBuild Include="..\..\Flesh\Data\Credits_Demo.txt" />
+    <CustomBuild Include="..\..\Flesh\Data\Credits_End.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SeriousSam.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
