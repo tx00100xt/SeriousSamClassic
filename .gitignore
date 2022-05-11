@@ -35,7 +35,7 @@ Debug/
 
 # custom user build dirs
 /*build*
-/Sources/*build*
+/Sources/*build
 
 # Visual Studio
 *.vs
