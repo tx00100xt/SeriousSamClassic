@@ -41,7 +41,7 @@ git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
 
 If you have access to a copy of the game (either by CD or through Steam),
 you can copy the *.gro files from the game directory to the repository.
-(SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The Second Encounter)
+(SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
 
 #### Building (only for SS:TFE)
 

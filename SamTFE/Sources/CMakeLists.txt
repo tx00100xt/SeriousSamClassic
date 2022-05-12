@@ -977,6 +977,7 @@ add_executable(SeriousSam
     SeriousSam/Menu.cpp
     SeriousSam/MenuGadgets.cpp
     SeriousSam/MenuPrinting.cpp
+    SeriousSam/iconvlite.cpp
 )
 target_link_libraries(SeriousSam ${ENGINELIB})
 add_dependencies(SeriousSam ParseEntities)

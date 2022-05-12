@@ -73,3 +73,6 @@ All notable changes to this project will be documented in this file.
 
 ## 2022-05-10
 - Added amp11lib to project.
+
+## 2022-05-12
+- Added Window1251 to Utf8 conversion for SDL_CreateWindow title.
