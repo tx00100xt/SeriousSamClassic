@@ -821,6 +821,7 @@ set(ENGINE_SRCS
     Engine/Base/Parser.cpp
     Engine/Base/Parser.h
     Engine/Base/IFeel.cpp
+    Engine/Base/iconvlite.cpp
     Engine/Base/Unix/UnixFileSystem.cpp
     Engine/Base/Unix/UnixDynamicLoader.cpp
     Engine/Base/SDL/SDLTimer.cpp
@@ -977,7 +978,6 @@ add_executable(SeriousSam
     SeriousSam/Menu.cpp
     SeriousSam/MenuGadgets.cpp
     SeriousSam/MenuPrinting.cpp
-    SeriousSam/iconvlite.cpp
 )
 target_link_libraries(SeriousSam ${ENGINELIB})
 add_dependencies(SeriousSam ParseEntities)

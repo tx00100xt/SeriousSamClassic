@@ -74,5 +74,7 @@ All notable changes to this project will be documented in this file.
 ## 2022-05-10
 - Added amp11lib to project.
 
-## 2022-05-12
+## 2022-05-12 - 2022-05-12
 - Added Window1251 to Utf8 conversion for SDL_CreateWindow title.
+- Added CTString strWindow1251ToUtf8 function.
+- Added suport Windows-1251 filenames for game resources.
