@@ -138,7 +138,7 @@ ENGINE_API void LoadIntVar(    const CTFileName &fnmVar, INDEX &iVar);
 ENGINE_API void SaveIntVar(    const CTFileName &fnmVar, INDEX &iVar);
 
 ENGINE_API CTString RemoveSpecialCodes( const CTString &str);
-
+ENGINE_API CTString strWindow1251ToUtf8(CTString from);
 
 #include <Engine/Base/CTString.inl>
 

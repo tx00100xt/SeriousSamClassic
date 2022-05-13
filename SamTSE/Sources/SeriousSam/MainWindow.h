@@ -16,6 +16,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern BOOL _bWindowChanging;    // ignores window messages while this is set
 extern HWND _hwndMain;
 
+#ifdef PLATFORM_UNIX
+extern __attribute__ ((visibility("default"))) CTString strWindow1251ToUtf8(CTString from);
+#else
+DECL_DLL extern CTString strWindow1251ToUtf8(CTString from);
+#endif
+
 // init/end main window management
 void MainWindow_Init(void);
 void MainWindow_End(void);

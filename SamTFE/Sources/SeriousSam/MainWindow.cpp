@@ -16,7 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "SeriousSam/StdH.h"
 #include "MainWindow.h"
 #include "resource.h"
-#include "iconvlite.h"
 
 // !!! FIXME : Make a clean abstraction, remove these #ifdefs.
 #ifdef PLATFORM_UNIX
@@ -30,13 +29,6 @@ static char achWindowTitle[256]; // current window title
 
 // for window reposition function
 static PIX _pixLastSizeI, _pixLastSizeJ;
-
-// used to convert filenames from ansi format (written inside text files) into utf-8 (
-CTString convertWindow1251ToUtf8(CTString from) {
-  static char outBuffer[10000];
-  cp2utf1(outBuffer, from.str_String, sizeof(outBuffer) - 10);
-  return (CTString) outBuffer;
-}
 
 #ifdef PLATFORM_WIN32
 static HBITMAP _hbmSplash = NULL;
@@ -253,7 +245,7 @@ void OpenMainWindowNormal( PIX pixSizeI, PIX pixSizeJ)
 #else
   SDL_snprintf( achWindowTitle, sizeof (achWindowTitle), TRANSV("Serious Sam (Window %dx%d)"), pixSizeI, pixSizeJ);
   //CPrintF((const char*)"--- %s ---\n",achWindowTitle);
-  _hwndMain = SDL_CreateWindow((const char*) convertWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, SDL_WINDOW_OPENGL);
+  _hwndMain = SDL_CreateWindow((const char*) strWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, SDL_WINDOW_OPENGL);
   if( _hwndMain==NULL) FatalError(TRANSV("Cannot open main window!"));
   SE_UpdateWindowHandle( _hwndMain);
   _pixLastSizeI = pixSizeI;
@@ -291,7 +283,7 @@ void OpenMainWindowFullScreen( PIX pixSizeI, PIX pixSizeJ)
 #else
   SDL_snprintf( achWindowTitle, sizeof (achWindowTitle), TRANSV("Serious Sam (FullScreen %dx%d)"), pixSizeI, pixSizeJ);
   //CPrintF((const char*)"--- %s ---\n",achWindowTitle);
-  _hwndMain = SDL_CreateWindow((const char*)convertWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
+  _hwndMain = SDL_CreateWindow((const char*)strWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
   if( _hwndMain==NULL) FatalError(TRANSV("Cannot open main window!"));
   SE_UpdateWindowHandle( _hwndMain);
   _pixLastSizeI = pixSizeI;

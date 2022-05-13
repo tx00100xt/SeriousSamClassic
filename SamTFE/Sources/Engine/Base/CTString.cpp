@@ -713,7 +713,13 @@ void SaveIntVar(const CTFileName &fnmVar, INDEX &iVar)
   strVar.SaveVar(fnmVar);
 }
 
-
+// used to convert string from ansi format into utf-8 (
+CTString strWindow1251ToUtf8(CTString from)
+{
+  static char outBuffer[10000];
+  cp2utf1(outBuffer, from.str_String, sizeof(outBuffer) - 10);
+  return (CTString) outBuffer;
+}
 
 // remove special codes from string
 CTString RemoveSpecialCodes( const CTString &str)
