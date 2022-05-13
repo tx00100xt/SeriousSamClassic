@@ -111,6 +111,7 @@ This version of the engine comes with a set of resources (`\SE1_10b.GRO`) that a
 
 What is XPLUS?
 XPLUS is a global modification that changes effects, models, weapons, textures to high definition. XPLUS was created by fans of the game Serious Sam and is distributed for free.
+Remark: -JD- and VITEK is author this mod for windows.
 
 ![XPLUS Oasis](https://raw.githubusercontent.com/tx00100xt/SeriousSamClassic/main/Images/samxplus_1.png)
 
