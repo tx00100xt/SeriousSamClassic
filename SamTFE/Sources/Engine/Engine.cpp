@@ -557,10 +557,11 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   }
 
   _pConsole = new CConsole;
-  if (_strLogFile=="") {
+  if (_strLogFile=="") {/*
     _strLogFile = CTFileName(CTString(strExePath)).FileName();
     // chop off end of Unix executable filename... --ryan.
-    _strLogFile.ReplaceSubstr(CTString("-bin"), CTString(""));
+    _strLogFile.ReplaceSubstr(CTString("-bin"), CTString(""));*/
+    _strLogFile = "SeriousSam";
   }
   _pConsole->Initialize(_fnmUserDir+_strLogFile+".log", 90, 512);
 
