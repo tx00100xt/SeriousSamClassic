@@ -83,7 +83,7 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTFE/Sources
-cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.e
+cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
@@ -98,7 +98,7 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTSE/Sources
-cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.e
+cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
@@ -184,7 +184,7 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTFE/Sources
-cp -vfr Entities/PlayerWeaponsHD.es Entities/PlayerWeapons.e
+cp -vfr Entities/PlayerWeaponsHD.es Entities/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
@@ -215,7 +215,7 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTSE/Sources
-cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.e
+cp -vfr Entities/PlayerWeaponsHD.es Entities/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
