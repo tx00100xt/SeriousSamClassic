@@ -79,5 +79,5 @@ All notable changes to this project will be documented in this file.
 - Added CTString strWindow1251ToUtf8 function.
 - Added suport Windows-1251 filenames for game resources.
 
-## 2022-05-12 - 2022-05-12
+## 2022-05-23
 - Fixed build for FreeBSD. Added definition for FreeBSD.
