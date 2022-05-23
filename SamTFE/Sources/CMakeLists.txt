@@ -962,6 +962,10 @@ add_library(${ENGINELIB} SHARED
 )
 add_dependencies(${ENGINELIB} ParseEntities)
 target_link_libraries(${ENGINELIB} engine_safemath)
+if(FREEBSD)
+target_link_libraries(${ENGINELIB} ${SDL2_LIBRARY})
+target_link_libraries(${ENGINELIB} ${ZLIB_LIBRARIES})
+endif()
 set_target_properties(${ENGINELIB} PROPERTIES ENABLE_EXPORTS ON)
 
 add_executable(SeriousSam
