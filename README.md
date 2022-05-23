@@ -34,7 +34,7 @@ There are still many asserts in the engine. Most of them are irrelevant and shou
 Type this in your terminal:
 
 ```
-git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
+git clone https://gitflic.ru/project/tx00100xt/serioussamclassic.git SeriousSamClassic
 ```
 
 #### Copy official game data (optional)
@@ -59,6 +59,52 @@ Type this in your terminal:
 ```
 cd SeriousSamClassic/SamTSE/Sources
 ./build-linux64.sh        	# use build-linux32.sh for 32-bits
+```
+
+### FreeBSD
+
+#### Setting up the repository
+
+Type this in your terminal:
+
+```
+git clone https://gitflic.ru/project/tx00100xt/serioussamclassic.git SeriousSamClassic
+```
+
+#### Copy official game data (optional)
+
+If you have access to a copy of the game (either by CD or through Steam),
+you can copy the *.gro files from the game directory to the repository.
+(SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
+
+#### Building (only for SS:TFE)
+
+Type this in your terminal:
+
+```
+cd SeriousSamClassic/SamTFE/Sources
+cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.e
+mkdir cmake-build
+cd cmake-build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
+make -j4
+cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
+cp -v Debug/*.so ../../Bin
+```
+
+#### Building (only for SS:TSE)
+
+Type this in your terminal:
+
+```
+cd SeriousSamClassic/SamTSE/Sources
+cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.e
+mkdir cmake-build
+cd cmake-build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+make -j4
+cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
+cp -v Debug/*.so ../../Bin
 ```
 
 Note that the CD version of SS:TSE used MP3 for music. You will need to build / get `libamp11lib.so` and copy it inside `Bin` with the other libs to have music. Steam version uses ogg and doesn't need this library.
@@ -119,6 +165,8 @@ Remark: -JD- and VITEK is author this mod for windows.
 
 ![XPLUS Sacred Yards](https://raw.githubusercontent.com/tx00100xt/SeriousSamClassic/main/Images/samxplus_3.png)
 
+### Linux
+
 #### Building XPLUS (only for SS:TFE)
 
 Type this in your terminal:
@@ -127,8 +175,28 @@ Type this in your terminal:
 cd SeriousSamClassic/SamTFE/Sources
 ./build-linux64xplus.sh -DTFE=TRUE	# use build-linux32xplus.sh for 32-bits
 ```
+
+### FreeBSD
+
+#### Building XPLUS (only for SS:TFE)
+
+Type this in your terminal:
+
+```
+cd SeriousSamClassic/SamTFE/Sources
+cp -vfr Entities/PlayerWeaponsHD.es Entities/PlayerWeapons.e
+mkdir cmake-build
+cd cmake-build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
+make -j4
+cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
+cp -v Debug/*.so ../../Bin
+```
+
 Download [XplusTFE] and unpack to  SeriousSamClassic/SamTFE/Mods directory.
 To start the modification, use the game menu - item Modification.
+
+### Linux
 
 #### Building XPLUS (only for SS:TSE)
 
@@ -137,6 +205,23 @@ Type this in your terminal:
 ```
 cd SeriousSamClassic/SamTSE/Sources
 ./build-linux64xplus.sh        	    # use build-linux32xplus.sh for 32-bits
+```
+
+### FreeBSD
+
+#### Building XPLUS (only for SS:TSE)
+
+Type this in your terminal:
+
+```
+cd SeriousSamClassic/SamTSE/Sources
+cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.e
+mkdir cmake-build
+cd cmake-build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+make -j4
+cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
+cp -v Debug/*.so ../../Bin
 ```
 
 Download [XplusTSE] and unpack to  SeriousSamClassic/SamTSE/Mods directory.
