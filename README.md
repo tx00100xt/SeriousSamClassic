@@ -189,8 +189,7 @@ mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
 make -j4
-cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
-cp -v Debug/*.so ../../Bin
+cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
 
 Download [XplusTFE] and unpack to  SeriousSamClassic/SamTFE/Mods directory.
@@ -220,8 +219,7 @@ mkdir cmake-build
 cd cmake-build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
 make -j4
-cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
-cp -v Debug/*.so ../../Bin
+cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
 
 Download [XplusTSE] and unpack to  SeriousSamClassic/SamTSE/Mods directory.
