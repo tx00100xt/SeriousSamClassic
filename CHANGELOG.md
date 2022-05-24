@@ -81,3 +81,6 @@ All notable changes to this project will be documented in this file.
 
 ## 2022-05-23
 - Fixed build for FreeBSD. Added definition for FreeBSD.
+
+## 2022-05-24
+- Fixed all network issues on FreeBSD.

@@ -303,6 +303,7 @@ void _initializeWinsock(void)
 
   // get the host IP
   hostent* phe;
+  #ifndef PLATFORM_FREEBSD
   if(!ga_bMSLegacy) {
     phe = gethostbyname(ga_strServer);
   } else {
@@ -316,11 +317,17 @@ void _initializeWinsock(void)
     _uninitWinsock();
     return;
   }
-
+  #endif
+  
   // create the socket destination address
   _sin = new sockaddr_in;
   _sin->sin_family = AF_INET;
+  #ifdef PLATFORM_FREEBSD
+  _sin->sin_addr.s_addr = inet_addr("116.202.216.176");  // 42amsterdam.net = 116.202.216.176
+  #else
   _sin->sin_addr.s_addr = *(ULONG*)phe->h_addr_list[0];
+  #endif
+  
   if(!ga_bMSLegacy) {
     _sin->sin_port = htons(9005);
   } else {
@@ -396,7 +403,9 @@ void _uninitWinsock()
 
 void _sendPacketTo(const char* szBuffer, sockaddr_in* addsin)
 {
-  sendto(_socket, szBuffer, strlen(szBuffer), 0, (sockaddr*)addsin, sizeof(sockaddr_in));
+  //DateTime(_datetime);
+  //CPrintF("[%s] Send sendto\n", _datetime);
+  sendto(_socket, (const void *)szBuffer, strlen(szBuffer), 0, (sockaddr*)addsin, sizeof(sockaddr_in));
 }
 
 
@@ -874,7 +883,11 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
 	
     if( gethostname ( _cName, sizeof(_cName)) == 0)
 	{
+	    #ifdef PLATFORM_FREEBSD
+	    if((_phHostinfo = gethostbyname("localhost")) != NULL)
+	    #else
 		if((_phHostinfo = gethostbyname(_cName)) != NULL)
+		#endif
 		{
 			int _iCount = 0;
 			while(_phHostinfo->h_addr_list[_iCount])
@@ -966,8 +979,13 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
 
 /* Open a socket and connect to the Master server */
 
+    #ifdef PLATFORM_FREEBSD
+    peer.sin_addr.s_addr = inet_addr("116.202.216.176");  // 42amsterdam.net = 116.202.216.176
+    peer.sin_port        = htons(28900);
+    #else
     peer.sin_addr.s_addr = uiMSIP = resolv(cMS);
     peer.sin_port        = htons(usMSport);
+    #endif
     peer.sin_family      = AF_INET;
 
     static const struct linger  ling = {1,2};

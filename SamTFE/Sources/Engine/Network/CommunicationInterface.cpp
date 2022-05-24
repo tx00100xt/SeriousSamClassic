@@ -217,7 +217,10 @@ ULONG StringToAddress(const CTString &strAddress)
   // if not a valid numeric address
   if (ulAddress==INADDR_NONE) {
     // lookup the host
-    HOSTENT *phe = gethostbyname(strAddress);
+    #ifdef PLATFORM_FREEBSD
+    CPrintF("StringToAddressr: %s.\n",  (const char *) strAddress);
+    #endif
+    HOSTENT *phe = gethostbyname(strAddress); // crash on FreeBSD
     // if succeeded
     if (phe!=NULL) {
       // get that address
@@ -370,7 +373,12 @@ void CCommunicationInterface::PrepareForUse(BOOL bUseNetwork, BOOL bClient)
     // get default
     char hostname[256];
     gethostname(hostname, sizeof(hostname)-1);
+    //CPrintF("hostname: %s\n", (const char*) hostname);
+    #ifdef PLATFORM_FREEBSD 
+    cm_strName = "localhost";
+    #else
     cm_strName = hostname;
+    #endif
     // lookup the host
     HOSTENT *phe = gethostbyname(cm_strName);
     // if succeeded

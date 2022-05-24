@@ -64,6 +64,9 @@ void *CUnixDynamicLoader::FindSymbol(const char *sym)
 
 void CUnixDynamicLoader::DoOpen(const char *lib)
 {
+    #ifdef PLATFORM_FREEBSD
+    dlerror(); // need for clean Undefined symbol "_nss_cache_cycle_prevention_function" message
+    #endif
     module = ::dlopen(lib, RTLD_LAZY | RTLD_GLOBAL);
     SetError();
 }
