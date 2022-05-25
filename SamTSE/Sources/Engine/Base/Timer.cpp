@@ -461,11 +461,11 @@ static __int64 GetCPUSpeedHz(void)
 }
 #endif // PLATFORM_WIN32
 
-
+/*
 #if PLATFORM_MACOSX
 extern "C" { signed int GetCPUSpeed(void); }  // carbon function, avoid header.
 #endif
-
+*/
 /*
  * Constructor.
  */
@@ -494,7 +494,7 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
     // measure profiling errors and set epsilon corrections
     CProfileForm::CalibrateProfilingTimers();
   }
-
+/*
 #elif PLATFORM_MACOSX
   tm_llPerformanceCounterFrequency = tm_llCPUSpeedHZ = ((__int64) GetCPUSpeed()) * 1000000;
 
@@ -504,7 +504,7 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
 
   sysctlbyname("hw.clockrate", &mhz, &len, NULL, 0);
   tm_llPerformanceCounterFrequency = tm_llCPUSpeedHZ = (__int64) (mhz * 1000000);
-
+*/
 #else
   int mhz;
   // Here we use the RDTSC-based routine

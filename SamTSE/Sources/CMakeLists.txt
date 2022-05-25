@@ -966,6 +966,16 @@ if(FREEBSD)
 target_link_libraries(${ENGINELIB} ${SDL2_LIBRARY})
 target_link_libraries(${ENGINELIB} ${ZLIB_LIBRARIES})
 endif()
+if(MACOSX)
+    if(USE_SYSTEM_SDL2) # use sdl2 framework on system
+      target_link_libraries(${ENGINELIB} ${SDL2_LIBRARY})
+    else() # use local libsdl2
+	  find_library(COCOA_FRAMEWORK Cocoa)
+      target_link_libraries(${ENGINELIB} "${COCOA_FRAMEWORK}")
+      target_link_libraries(${ENGINELIB} "${CMAKE_CURRENT_SOURCE_DIR}/lib/macosx/libSDL2-2.0.0.dylib")
+    endif()
+target_link_libraries(${ENGINELIB} ${ZLIB_LIBRARIES})
+endif()
 set_target_properties(${ENGINELIB} PROPERTIES ENABLE_EXPORTS ON)
 
 add_executable(SeriousSam
