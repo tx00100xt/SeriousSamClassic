@@ -405,7 +405,7 @@ void _sendPacketTo(const char* szBuffer, sockaddr_in* addsin)
 {
   //DateTime(_datetime);
   //CPrintF("[%s] Send sendto\n", _datetime);
-  sendto(_socket, (const void *)szBuffer, strlen(szBuffer), 0, (sockaddr*)addsin, sizeof(sockaddr_in));
+  sendto(_socket, szBuffer, strlen(szBuffer), 0, (sockaddr*)addsin, sizeof(sockaddr_in));
 }
 
 

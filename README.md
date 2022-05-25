@@ -225,6 +225,13 @@ cp -v Debug/*.so ../../Mods/XPLUS/Bin
 Download [XplusTSE] and unpack to  SeriousSamClassic/SamTSE/Mods directory.
 To start the modification, use the game menu - item Modification.
 
+### Suported OS
+* Linux
+* FreeBSD (no longer)
+
+### Other OS
+* Not supported
+
 License
 -------
 
