@@ -960,6 +960,9 @@ set(ENGINELIB "Engine${DEBUGSUFFIX}")
 add_library(${ENGINELIB} SHARED
      ${ENGINE_SRCS}
 )
+if(MACOSX)
+    target_link_libraries(${ENGINELIB} "-undefined dynamic_lookup")
+endif()
 add_dependencies(${ENGINELIB} ParseEntities)
 target_link_libraries(${ENGINELIB} engine_safemath)
 if(FREEBSD)
