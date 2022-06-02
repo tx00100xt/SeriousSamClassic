@@ -1815,6 +1815,8 @@ void StartNewMode( enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pi
       eColorDepth = (DisplayDepth)aDefaultModes[iMode][0];
       eGfxAPI     = (GfxAPIType)  aDefaultModes[iMode][1];
       iAdapter    =               aDefaultModes[iMode][2];
+      // set sam_iGfxAPI for SDL_CreateWindow
+      sam_iGfxAPI = eGfxAPI;
       CPrintF(TRANSV("\nTrying recovery mode %d...\n"), iMode);
       bSuccess = TryToSetDisplayMode( eGfxAPI, iAdapter, pixSizeI, pixSizeJ, aspSizeI, aspSizeJ, eColorDepth, bFullScreenMode);
       if( bSuccess) break;
