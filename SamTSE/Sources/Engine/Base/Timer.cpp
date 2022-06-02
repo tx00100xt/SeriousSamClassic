@@ -44,6 +44,10 @@ static inline __int64 ReadTSC(void)
   struct timespec tp;
   clock_gettime(CLOCK_MONOTONIC, &tp);
   return( (((__int64) tp.tv_sec) * 1000000000LL) + ((__int64) tp.tv_nsec));
+#elif (defined PLATFORM_RPI4)
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return( (((__int64) tv.tv_sec) * 1000000) + ((__int64) tv.tv_usec) );
 #elif (defined __MSVC_INLINE__)
   __int64 mmRet;
   __asm {
@@ -117,6 +121,7 @@ void sys_precise_clock(uint64_t *result)
 	          (uint64_t) tv.tv_usec;
 }
 
+#if !defined(PLATFORM_PANDORA) && !defined(PLATFORM_PYRA) && !defined(PLATFORM_RPI4)
 // cpu_rdtsc
 void cpu_rdtsc(uint64_t* result)
 {
@@ -239,7 +244,7 @@ int cpu_clock_measure(int millis, int quad_check)
 //
 // END libcpuid functions
 //
-
+#endif // not PANDORA PYRA RPI4
 
 // link with Win-MultiMedia
 #ifdef _MSC_VER
@@ -484,7 +489,8 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
 #if defined(PLATFORM_PANDORA) || defined(PLATFORM_PYRA)
   // just use gettimeofday.
   tm_llCPUSpeedHZ = tm_llPerformanceCounterFrequency = 1000000000LL;
-
+#elif PLATFORM_RPI4
+  tm_llCPUSpeedHZ = tm_llPerformanceCounterFrequency = 1000000;
 #elif PLATFORM_WIN32
   { // this part of code must be executed as precisely as possible
     CSetPriority sp(REALTIME_PRIORITY_CLASS, THREAD_PRIORITY_TIME_CRITICAL);

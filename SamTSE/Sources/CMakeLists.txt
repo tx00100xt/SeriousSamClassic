@@ -277,6 +277,11 @@ if (PYRA)
     add_definitions(-DPLATFORM_PYRA=1)
 endif()
 
+option(RPI4 "Raspberry PI 4" FALSE)
+if(RPI4)
+    add_definitions(-DPLATFORM_RPI4=1)
+endif()
+
 option(USE_TREMOR "Use Tremor instead of Vorbis" FALSE)
 if (USE_TREMOR)
     add_definitions(-DUSE_TREMOR=1)
