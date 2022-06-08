@@ -27,7 +27,12 @@ template class CStaticArray<CProfileTimer>;
 
 static inline __int64 ReadTSC_profile(void)
 {
-#if (defined __MSVC_INLINE__)
+#if defined(PLATFORM_PANDORA) || defined(PLATFORM_PYRA) || (defined PLATFORM_RPI4)
+  struct timespec tv;
+  clock_gettime(CLOCK_MONOTONIC, &tv);
+  return( (((__int64) tv.tv_sec) * 1000) + (((__int64) tv.tv_nsec) / 1000000) );
+
+#elif (defined __MSVC_INLINE__)
   __int64 mmRet;
   __asm {
     rdtsc
@@ -48,17 +53,34 @@ static inline __int64 ReadTSC_profile(void)
   );
   return(mmRet);
 
-#else
-  #ifdef __arm__
-  struct timespec tv;
-  clock_gettime(CLOCK_MONOTONIC, &tv);
-  return( (((__int64) tv.tv_sec) * 1000) + (((__int64) tv.tv_nsec) / 1000000) );
-  #else
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  return( (((__int64) tv.tv_sec) * 1000) + (((__int64) tv.tv_usec) / 1000) );
-  #endif
+#elif (defined __GNU_INLINE_X86_64__ )
+    uint64_t x;
+    asm volatile (
+        ".intel_syntax noprefix  \n\t" // switch to prettier syntax
+        // 'If software requires RDTSC to be executed only after all previous
+        // instructions have executed and all previous loads and stores are
+        // globally visible, it can execute the sequence MFENCE;LFENCE
+        // immediately before RDTSC.'
+        // https://www.felixcloutier.com/x86/rdtsc
+        "mfence                  \n\t"
+        "lfence                  \n\t"
+        // similar effect, execute CPUID before RDTSC
+        // cf. https://www.intel.de/content/dam/www/public/us/en/documents/white-papers/ia-32-ia-64-benchmark-code-execution-paper.pdf
+        //"cpuid                   \n\t" // writes to EAX, EBX, ECX, EDX
+        "rdtsc                   \n\t" // counter into EDX:EAX
+        "shl     rdx, 0x20       \n\t" // shift higher-half left
+        "or      rax, rdx        \n\t" // combine them
+        ".att_syntax prefix      \n\t" // switch back to the default syntax
 
+
+        : "=a" (x)       // output operands,
+                         // i.e. overwrites (=)  R'a'X which is mapped to x
+        :                // input operands
+        : "rdx");        // additional clobbers (with cpuid also: rbx, rcx)
+    return x;
+
+#else
+  #error Please implement for your platform/compiler.
 #endif
 }
 
