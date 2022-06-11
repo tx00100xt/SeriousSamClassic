@@ -19,6 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
+#include <pthread.h>
+#include <stdio.h>
+
 // intra-process mutex (only used by thread of same process)
 class CTCriticalSection {
 public:
@@ -50,6 +53,26 @@ public:
   ENGINE_API BOOL TryToLock(void);
   ENGINE_API BOOL IsLocked(void);
   ENGINE_API void Unlock(void);
+};
+
+template <typename T>
+class CThreadLocal {
+  pthread_key_t key;
+
+public:
+  CThreadLocal() { pthread_key_create(&key, nullptr); }
+
+  T &get() {
+    T *ptr = (T *)pthread_getspecific(key);
+    if (!ptr) {
+      ptr = new T;
+      memset(ptr, 0, sizeof(T));
+      pthread_setspecific(key, ptr);
+    }
+    return *ptr;
+  }
+
+  T &operator*() { return get(); }
 };
 
 #endif  /* include-once check. */

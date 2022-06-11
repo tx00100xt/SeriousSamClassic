@@ -297,7 +297,7 @@ endif()
 
 
 # !!! FIXME: I currently force this, but you shouldn't _have_ to.
-option(USE_SINGLE_THREAD "Use Single Threaded version" TRUE)
+option(USE_SINGLE_THREAD "Use Single Threaded version" FALSE)
 if(USE_SINGLE_THREAD)
  add_definitions(-DSINGLE_THREADED=1)
 endif()

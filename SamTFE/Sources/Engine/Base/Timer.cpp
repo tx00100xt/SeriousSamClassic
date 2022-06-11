@@ -30,6 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #if defined PLATFORM_UNIX
 #include <sys/time.h>
+#include <pthread.h>
 #endif
 
 #if PLATFORM_FREEBSD
@@ -255,6 +256,8 @@ THREADLOCAL(TIME, _CurrentTickTimer, 0.0f);
 // pointer to global timer object
 CTimer *_pTimer = NULL;
 
+pthread_t g_timerMainThread;
+
 const TIME CTimer::TickQuantum = TIME(1/20.0);    // 20 ticks per second
 
 /*
@@ -321,8 +324,8 @@ void CTimer_TimerFunc_internal(void)
     CTimerValue tvTimeNow = _pTimer->GetHighPrecisionTimer();
     TIME        tmTickNow = _pTimer->tm_RealTimeTimer;
     // calculate how long has passed since we have last been on time
-    //TIME tmTimeDelay = (TIME)(tvTimeNow - _pTimer->tm_tvLastTimeOnTime).GetSeconds();
-    //TIME tmTickDelay =       (tmTickNow - _pTimer->tm_tmLastTickOnTime);
+    TIME tmTimeDelay = (TIME)(tvTimeNow - _pTimer->tm_tvLastTimeOnTime).GetSeconds();
+    TIME tmTickDelay =       (tmTickNow - _pTimer->tm_tmLastTickOnTime);
 
     _sfStats.StartTimer(CStatForm::STI_TIMER);
     // if we are keeping up to time (more or less)
@@ -356,6 +359,7 @@ void __stdcall CTimer_TimerFunc(UINT uID, UINT uMsg, ULONG dwUser, ULONG dw1, UL
   CTimer_TimerFunc_internal();
 }
 #elif (defined PLATFORM_UNIX)
+/*
 #include "SDL.h"
 Uint32 CTimer_TimerFunc_SDL(Uint32 interval, void* param)
 {
@@ -366,6 +370,25 @@ Uint32 CTimer_TimerFunc_SDL(Uint32 interval, void* param)
   CTimer_TimerFunc_internal();
   return(interval);
 }
+*/
+void *CTimer_TimerMain(void *input) {
+  while(true) {
+    // sleep
+    usleep(ULONG(_pTimer->TickQuantum * 1000.0f * 1000.0f)); // microsecond
+
+    // TODO: unsynch
+    if (_pTimer->tm_bPaused) {
+      usleep(50000);
+      continue;
+    }
+
+    // access to the list of handlers must be locked
+    CTSingleLock slHooks(&_pTimer->tm_csHooks, TRUE);
+    // handle all timers
+    CTimer_TimerFunc_internal();
+  }
+}
+
 #endif
 #endif
 
@@ -547,7 +570,7 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
     if( tm_TimerID==NULL) FatalError(TRANS("Cannot initialize multimedia timer!"));
 
    #else
-
+/*
     if (SDL_Init(SDL_INIT_TIMER) == -1) FatalError(TRANS("Cannot initialize multimedia timer!"));
     tm_TimerID = SDL_AddTimer(ULONG(TickQuantum*1000.0f), CTimer_TimerFunc_SDL, NULL);
     if( tm_TimerID==NULL) FatalError(TRANS("Cannot initialize multimedia timer!"));
@@ -565,6 +588,29 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
     }
     // report fatal
     if( iTry>3) FatalError(TRANS("Problem with initializing multimedia timer - please try again."));
+  }
+*/
+    int ret = pthread_create(&g_timerMainThread, 0, &CTimer_TimerMain, nullptr);
+    if (ret != 0) {
+      const char *err;
+      FatalError("Cannot create multimedia thread: %s (%i)", strerror(ret), ret);
+    }
+    pthread_setname_np(g_timerMainThread, "SeriousSamTimer");
+   #endif
+
+    // make sure that timer interrupt is ticking
+    INDEX iTry = 1;
+    for (; iTry <= 3; iTry++) {
+      const TIME tmTickBefore = GetRealTimeTick();
+      usleep(1000 * 1000 * iTry * 3 * TickQuantum);
+      const TIME tmTickAfter = GetRealTimeTick();
+      if (tmTickBefore != tmTickAfter) break;
+      usleep(1000 * 1000 * iTry);
+    }
+    // report fatal
+    if (iTry > 3) {
+      FatalError(TRANS("Problem with initializing multimedia timer - please try again."));
+    }
   }
 #endif  // !defined SINGLE_THREADED
 }
