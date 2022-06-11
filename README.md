@@ -34,7 +34,7 @@ There are still many asserts in the engine. Most of them are irrelevant and shou
 Type this in your terminal:
 
 ```
-git clone https://gitflic.ru/project/tx00100xt/serioussamclassic.git SeriousSamClassic
+git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
 ```
 
 #### Copy official game data (optional)
@@ -68,7 +68,7 @@ cd SeriousSamClassic/SamTSE/Sources
 Type this in your terminal:
 
 ```
-git clone https://gitflic.ru/project/tx00100xt/serioussamclassic.git SeriousSamClassic
+git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
 ```
 
 #### Copy official game data (optional)
