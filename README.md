@@ -191,8 +191,11 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
 make -j4
 cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
-
-Download [XplusTFE] and unpack to  SeriousSamClassic/SamTFE/Mods directory.
+Download:
+```
+curl https://edef2.pcloud.com/cBZEh8IFHZBWy1PQZQMEzZZkLmnr7Z2ZZPs0ZkZt4cMQZp7ZuVZN7ZAkZFXZ0VZqkZ7XZeXZj7Z4XZ2XZ1kZPXZ02gRZABH07IYis6Xtk3lJMNQ84FXOBzA7/SamTFE-XPLUS.tar.xz -o SamTFE-XPLUS.tar.xz
+```
+or take an archive from google drive [XplusTFE], and unpack to  SeriousSamClassic/SamTFE/Mods directory.
 To start the modification, use the game menu - item Modification.
 
 ### Linux
@@ -221,8 +224,11 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
 make -j4
 cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
-
-Download [XplusTSE] and unpack to  SeriousSamClassic/SamTSE/Mods directory.
+Download:
+```
+curl https://edef4.pcloud.com/cBZ038IFHZzR71PQZQMEzZZQzmnr7Z2ZZPs0ZkZlW2SQZWXZokZHVZ6XZYVZSkZcXZQVZakZ7VZ5VZ2kZLXZwXZy2gRZdet7CRqrNVBWPTlYtFYm15SMkVuy/SamTSE-XPLUS.tar.xz -o SamTSE-XPLUS.tar.xz
+```
+or take an archive from google drive [XplusTSE], and unpack to  SeriousSamClassic/SamTSE/Mods directory.
 To start the modification, use the game menu - item Modification.
 
 ### Suported OS
