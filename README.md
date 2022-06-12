@@ -192,10 +192,7 @@ make -j4
 cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
 Download:
-```
-curl https://edef2.pcloud.com/cBZEh8IFHZBWy1PQZQMEzZZkLmnr7Z2ZZPs0ZkZt4cMQZp7ZuVZN7ZAkZFXZ0VZqkZ7XZeXZj7Z4XZ2XZ1kZPXZ02gRZABH07IYis6Xtk3lJMNQ84FXOBzA7/SamTFE-XPLUS.tar.xz -o SamTFE-XPLUS.tar.xz
-```
-or take an archive from google drive [XplusTFE], and unpack to  SeriousSamClassic/SamTFE/Mods directory.
+[Xplus TFE from Google Drive] or [Xplus TFE from pCloud], and unpack to  SeriousSamClassic/SamTFE/Mods directory.
 To start the modification, use the game menu - item Modification.
 
 ### Linux
@@ -225,10 +222,7 @@ make -j4
 cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
 Download:
-```
-curl https://edef4.pcloud.com/cBZ038IFHZzR71PQZQMEzZZQzmnr7Z2ZZPs0ZkZlW2SQZWXZokZHVZ6XZYVZSkZcXZQVZakZ7VZ5VZ2kZLXZwXZy2gRZdet7CRqrNVBWPTlYtFYm15SMkVuy/SamTSE-XPLUS.tar.xz -o SamTSE-XPLUS.tar.xz
-```
-or take an archive from google drive [XplusTSE], and unpack to  SeriousSamClassic/SamTSE/Mods directory.
+[Xplus TSE from Google Drive] or [Xplus TSE from pCloud],, and unpack to  SeriousSamClassic/SamTSE/Mods directory.
 To start the modification, use the game menu - item Modification.
 
 ### Suported OS
@@ -250,5 +244,7 @@ Some of the code included with the engine sources is not licensed under the GNU 
 * LightWave SDK (located in `Sources/LWSkaExporter/SDK`) by NewTek Inc.
 * libogg/libvorbis (located in `Sources/libogg` and `Sources/libvorbis`) by Xiph.Org Foundation
 
-[XplusTFE]: https://drive.google.com/file/d/1MPmibfMCGTWFBSGeFWG3uae0zZzJpiKy/view?usp=sharing "Serious Sam Classic XPLUS Mod"
-[XplusTSE]: https://drive.google.com/file/d/1W_UIeVl7y3ZBroM39FmKdngNZuXC7DKv/view?usp=sharing "Serious Sam Classic XPLUS Mod"
+[Xplus TFE from Google Drive]: https://drive.google.com/file/d/1MPmibfMCGTWFBSGeFWG3uae0zZzJpiKy/view?usp=sharing "Serious Sam Classic XPLUS Mod"
+[Xplus TSE from Google Drive]: https://drive.google.com/file/d/1W_UIeVl7y3ZBroM39FmKdngNZuXC7DKv/view?usp=sharing "Serious Sam Classic XPLUS Mod"
+[Xplus TFE from pCloud]: https://e1.pcloud.link/publink/show?code=XZ02gRZ4nhrRGPSfV4aEL4IF8GYySafWVJX "Serious Sam Classic XPLUS Mod"
+[Xplus TSE from pCloud]: https://e1.pcloud.link/publink/show?code=XZy2gRZ3D7n8fu83SkhIdB1xRaK7y9pKiry "Serious Sam Classic XPLUS Mod"
