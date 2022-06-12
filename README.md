@@ -138,7 +138,7 @@ This version of the engine comes with a set of resources (`\SE1_10b.GRO`) that a
 ### Running the game
 
 1. Locate the game directory for "Serious Sam Classic The Second Encounter" ([steam](https://store.steampowered.com/app/41060/Serious_Sam_Classic_The_Second_Encounter/))
-1. Build game from source code or [Download latest release](https://github.com/tx00100xt/SeriousSamClassic/releases) and copy the latest files from the game directory to SamTFE/Bin
+1. Build game from source code or [Download latest release](https://github.com/tx00100xt/SeriousSamClassic/releases) and copy the latest files from the game directory to SamTSE/Bin
 1. Copy all *.gro files and Help folder from the game directory to SamTSE directory.
    At the current time the files are:
    * Help (folder)
