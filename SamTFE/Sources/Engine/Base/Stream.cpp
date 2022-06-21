@@ -17,6 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string.h>
 #include <fcntl.h>
 
 // !!! FIXME : rcg10162001 Need this anymore, since _findfirst() is abstracted?
@@ -60,6 +61,8 @@ THREADLOCAL(CListHead *, _plhOpenedStreams, NULL);
 
 // global string with application path (utf-8)
 CTFileName _fnmApplicationPath;
+CTFileName _fnmApplicationPathTMP; // home dir or application path
+
 // global string with filename of the started application
 CTFileName _fnmApplicationExe;
 // global string with user-specific writable directory.
@@ -881,6 +884,8 @@ void CTFileStream::Open_t(const CTFileName &fnFileName, CTStream::OpenMode om/*=
   CTFileName fnmFullFileName;
   INDEX iFile = ExpandFilePath((om == OM_READ)?EFP_READ:EFP_WRITE, fnFileName, fnmFullFileName);
   
+  // CPrintF("Open_t: `%s\n  %s\n",(const char *) (CTString&)fnFileName ,(const char *) (CTString)fnmFullFileName);
+
   // if read only mode requested
   if( om == OM_READ) {
     // initially, no physical file
@@ -1453,7 +1458,7 @@ static INDEX ExpandFilePath_read(ULONG ulType, const CTFileName &fnmFile, CTFile
 
     // first try in the mod's dir
     if (!fil_bPreferZips) {
-      fnmExpanded = _fnmApplicationPath + _fnmMod + convertWindow1251ToUtf8(fnmFile);
+      fnmExpanded = _fnmApplicationPathTMP + _fnmMod + convertWindow1251ToUtf8(fnmFile);
       if (IsFileReadable_internal(fnmExpanded)) {
         return EFP_FILE;
       }
@@ -1471,7 +1476,7 @@ static INDEX ExpandFilePath_read(ULONG ulType, const CTFileName &fnmFile, CTFile
 
     // try in the mod's dir after
     if (fil_bPreferZips) {
-      fnmExpanded = _fnmApplicationPath + _fnmMod + convertWindow1251ToUtf8(fnmFile);
+      fnmExpanded = _fnmApplicationPathTMP + _fnmMod + convertWindow1251ToUtf8(fnmFile);
       if (IsFileReadable_internal(fnmExpanded)) {
         return EFP_FILE;
       }
@@ -1480,13 +1485,13 @@ static INDEX ExpandFilePath_read(ULONG ulType, const CTFileName &fnmFile, CTFile
 
   // try in the app's base dir
   if (!fil_bPreferZips) {
-    CTFileName fnmAppPath = _fnmApplicationPath;
+    CTFileName fnmAppPath = _fnmApplicationPathTMP;
     fnmAppPath.SetAbsolutePath();
 
     if(fnmFile.HasPrefix(fnmAppPath)) {
       fnmExpanded = convertWindow1251ToUtf8(fnmFile);
     } else {
-      fnmExpanded = _fnmApplicationPath + convertWindow1251ToUtf8(fnmFile);
+      fnmExpanded = _fnmApplicationPathTMP + convertWindow1251ToUtf8(fnmFile);
     }
 
     if (IsFileReadable_internal(fnmExpanded)) {
@@ -1506,7 +1511,7 @@ static INDEX ExpandFilePath_read(ULONG ulType, const CTFileName &fnmFile, CTFile
 
   // try in the app's base dir
   if (fil_bPreferZips) {
-    fnmExpanded = _fnmApplicationPath + convertWindow1251ToUtf8(fnmFile);
+    fnmExpanded = _fnmApplicationPathTMP + convertWindow1251ToUtf8(fnmFile);
     if (IsFileReadable_internal(fnmExpanded)) {
       return EFP_FILE;
     }
@@ -1576,19 +1581,59 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
   CTFileName fnmFileAbsolute = fnmFile;
   fnmFileAbsolute.SetAbsolutePath();
 
+//#######################################################################################################################
+//###############                             users files in home dir                ####################################
+//#######################################################################################################################
+  //CTFileName _fnmApplicationPathTMP; ... move to begin file
+
+  int _savegame       = strncmp((const char *)fnmFile, (const char *) "SaveGame", (size_t) 8 );
+  int _usercontrols   = strncmp((const char *)fnmFile, (const char *) "Controls", (size_t) 8 );
+  int _persistentsym  = strncmp((const char *)fnmFile, (const char *) "Scripts/PersistentSymbols.ini", (size_t) 29 );
+  int _gamesgms       = strncmp((const char *)fnmFile, (const char *) "Data/SeriousSam.gms", (size_t) 19 );
+  int _comsolehistory = strncmp((const char *)fnmFile, (const char *) "Temp/ConsoleHistory.txt", (size_t) 23 );
+  int _userdemos      = strncmp((const char *)fnmFile, (const char *) "Demos/Demo", (size_t) 10 );
+  int _playersplr     = strncmp((const char *)fnmFile, (const char *) "Players", (size_t) 7 );
+  int _screenshots    = strncmp((const char *)fnmFile, (const char *) "ScreenShots", (size_t) 11 );
+  int _levelsvis      = strncmp((const char *)fnmFile, (const char *) "Levels", (size_t) 6 );
+
+  //CPrintF("ExpandFilePath: %s\n",(const char *) fnmFile);
+
+  if( _savegame == 0 || _persistentsym == 0 || _gamesgms == 0 ||
+    _comsolehistory == 0 || _userdemos == 0 || _playersplr == 0 || _screenshots == 0 ) {
+       _fnmApplicationPathTMP = _fnmUserDir;
+  } else {
+       _fnmApplicationPathTMP = _fnmApplicationPath;
+  }
+
+  if( _levelsvis == 0 ) {
+    if (fnmFileAbsolute.FileExt()==".vis") {
+       _fnmApplicationPathTMP = _fnmUserDir;
+    }
+  }
+
+  if( _usercontrols == 0 ) {
+    CTFileName _fnSControls = fnmFileAbsolute.FileName();
+    int _controls   = strncmp((const char *)_fnSControls, (const char *) "Controls", (size_t) 8 );
+    if ( _controls == 0 ) {
+       _fnmApplicationPathTMP = _fnmUserDir;
+    }
+  }
+
+//#######################################################################################################################
+
   // if writing
   if (ulType&EFP_WRITE) {
     // if should write to mod dir
     if (_fnmMod!="" && (!FileMatchesList(_afnmBaseWriteInc, fnmFileAbsolute) || FileMatchesList(_afnmBaseWriteExc, fnmFileAbsolute))) {
       // do that
-      fnmExpanded = _fnmApplicationPath + _fnmMod + convertWindow1251ToUtf8(fnmFileAbsolute);
+      fnmExpanded = _fnmApplicationPathTMP + _fnmMod + convertWindow1251ToUtf8(fnmFileAbsolute);
       fnmExpanded.SetAbsolutePath();
       VerifyDirsExist(fnmExpanded.FileDir());
       return EFP_FILE;
     // if should not write to mod dir
     } else {
       // write to base dir
-      fnmExpanded = _fnmApplicationPath + convertWindow1251ToUtf8(fnmFileAbsolute);
+      fnmExpanded = _fnmApplicationPathTMP + convertWindow1251ToUtf8(fnmFileAbsolute);
       fnmExpanded.SetAbsolutePath();
       VerifyDirsExist(fnmExpanded.FileDir());
       return EFP_FILE;
@@ -1617,12 +1662,12 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
   // in other cases
   } else  {
     ASSERT(FALSE);
-    fnmExpanded = _fnmApplicationPath + convertWindow1251ToUtf8(fnmFileAbsolute);
+    fnmExpanded = _fnmApplicationPathTMP + convertWindow1251ToUtf8(fnmFileAbsolute);
     fnmExpanded.SetAbsolutePath();
     return EFP_FILE;
   }
 
-  fnmExpanded = _fnmApplicationPath + convertWindow1251ToUtf8(fnmFileAbsolute);
+  fnmExpanded = _fnmApplicationPathTMP + convertWindow1251ToUtf8(fnmFileAbsolute);
   fnmExpanded.SetAbsolutePath();
   return EFP_NONE;
 }

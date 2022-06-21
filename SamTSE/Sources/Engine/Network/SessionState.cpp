@@ -1640,6 +1640,8 @@ void CSessionState::ReadWorldAndState_t(CTStream *pstr)   // throw char *
   // read world filename from stream
   (*pstr)>>_pNetwork->ga_fnmWorld;
 
+  //#### Note:removed check FileTimeStamp for Demo
+  /*
   if (CTFileName(pstr->GetDescription()).FileExt()==".dem" &&
     GetFileTimeStamp_t(pstr->GetDescription())<=GetFileTimeStamp_t(_pNetwork->ga_fnmWorld)) {
     ThrowF_t(
@@ -1647,7 +1649,7 @@ void CSessionState::ReadWorldAndState_t(CTStream *pstr)   // throw char *
       "is older than file '%s'!\n"),
       (const char *) CTString(pstr->GetDescription()),
       (const char *) CTString(_pNetwork->ga_fnmWorld));
-  }
+  }*/
 
   // prepare the world for loading
   _pNetwork->ga_World.DeletePredictors();
