@@ -90,3 +90,6 @@ All notable changes to this project will be documented in this file.
 - Fixed build for raspberry pi.
 - Fixed broken menu and display of models in NETRICSA for platforms not using RDTSC.
 - Reverts Critical Section from win32 original code, set multithreading by default.
+- Removed check timestrapped for recorded demo.
+- Added definition for raspberry pi and e2k.
+- Rewrote the game code. Now all user data is stored in the home directory.
