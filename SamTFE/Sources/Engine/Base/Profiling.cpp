@@ -27,7 +27,7 @@ template class CStaticArray<CProfileTimer>;
 
 static inline __int64 ReadTSC_profile(void)
 {
-#if defined(PLATFORM_PANDORA) || defined(PLATFORM_PYRA) || (defined PLATFORM_RPI4)
+#if defined(PLATFORM_PANDORA) || defined(PLATFORM_PYRA) || (defined PLATFORM_RPI4) || defined(__e2k__)
   struct timespec tv;
   clock_gettime(CLOCK_MONOTONIC, &tv);
   return( (((__int64) tv.tv_sec) * 1000) + (((__int64) tv.tv_nsec) / 1000000) );
