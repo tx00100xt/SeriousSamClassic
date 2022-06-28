@@ -86,7 +86,7 @@ All notable changes to this project will be documented in this file.
 - Fixed all network issues on FreeBSD.
 - Using RDTSC for FreeBSD.
 
-## 2022-06-02 - 2022-06-11
+## 2022-06-02 - 2022-06-21
 - Fixed build for raspberry pi.
 - Fixed broken menu and display of models in NETRICSA for platforms not using RDTSC.
 - Reverts Critical Section from win32 original code, set multithreading by default.
