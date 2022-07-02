@@ -44,6 +44,7 @@ DECL_DLL extern FLOAT _fPlayerFOVAdjuster = 1.0f;
 
 extern INDEX hud_bShowPing				= TRUE;
 extern INDEX hud_bShowKills				= TRUE;
+extern INDEX hud_bShowScore				= TRUE;
 
 extern void JumpFromBouncer(CEntity *penToBounce, CEntity *penBouncer);
 // from game
@@ -619,6 +620,7 @@ void CPlayer_OnInitClass(void)
   // declare player control variables
   _pShell->DeclareSymbol("persistent user INDEX	hud_bShowPing;",	&hud_bShowPing);
   _pShell->DeclareSymbol("persistent user INDEX	hud_bShowKills;",	&hud_bShowKills);
+  _pShell->DeclareSymbol("persistent user INDEX	hud_bShowScore;",	&hud_bShowScore);
 
   _pShell->DeclareSymbol("user INDEX ctl_bMoveForward;",  &pctlCurrent.bMoveForward);
   _pShell->DeclareSymbol("user INDEX ctl_bMoveBackward;", &pctlCurrent.bMoveBackward);

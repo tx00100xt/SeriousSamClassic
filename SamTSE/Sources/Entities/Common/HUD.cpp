@@ -25,6 +25,7 @@ DECL_DLL extern FLOAT _fFragScorerHeightAdjuster = 1.5f;
 //
 extern INDEX hud_bShowPing;
 extern INDEX hud_bShowKills;
+extern INDEX hud_bShowScore;
 
 // cheats
 extern INDEX cht_bEnable;
@@ -1046,15 +1047,17 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
     iScore = iScoreSum;
   }
 
-  // prepare and draw score or frags info 
-  strValue.PrintF( "%d", iScore);
-  fRow = pixTopBound  +fHalfUnit;
-  fCol = pixLeftBound +fHalfUnit;
-  fAdv = fAdvUnit+ fChrUnit*fWidthAdj/2 -fHalfUnit;
-  HUD_DrawBorder( fCol,      fRow, fOneUnit,           fOneUnit, colBorder);
-  HUD_DrawBorder( fCol+fAdv, fRow, fChrUnit*fWidthAdj, fOneUnit, colBorder);
-  HUD_DrawText(   fCol+fAdv, fRow, strValue, colScore, 1.0f);
-  HUD_DrawIcon(   fCol,      fRow, _toFrags, colScore, 1.0f, FALSE);
+  if( hud_bShowScore ) {
+    // prepare and draw score or frags info 
+    strValue.PrintF( "%d", iScore);
+    fRow = pixTopBound  +fHalfUnit;
+    fCol = pixLeftBound +fHalfUnit;
+    fAdv = fAdvUnit+ fChrUnit*fWidthAdj/2 -fHalfUnit;
+    HUD_DrawBorder( fCol,      fRow, fOneUnit,           fOneUnit, colBorder);
+    HUD_DrawBorder( fCol+fAdv, fRow, fChrUnit*fWidthAdj, fOneUnit, colBorder);
+    HUD_DrawText(   fCol+fAdv, fRow, strValue, colScore, 1.0f);
+    HUD_DrawIcon(   fCol,      fRow, _toFrags, colScore, 1.0f, FALSE);
+  }
 
   // eventually draw mana info 
   if( bScoreMatch || bFragMatch) {
@@ -1069,7 +1072,7 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
   }
 
   // if single player or cooperative mode
-  if( bSinglePlay || bCooperative)
+  if( (bSinglePlay || bCooperative) && hud_bShowScore)
   {
     // prepare and draw hiscore info 
     strValue.PrintF( "%d", Max(_penPlayer->m_iHighScore, _penPlayer->m_psGameStats.ps_iScore));
