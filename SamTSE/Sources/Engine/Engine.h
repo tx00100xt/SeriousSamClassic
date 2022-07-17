@@ -168,6 +168,8 @@ ENGINE_API extern ULONG _ulEngineBuildMinor;
 ENGINE_API extern BOOL _bDedicatedServer;
 ENGINE_API extern BOOL _bWorldEditorApp; // is this world editor app
 ENGINE_API extern CTString _strLogFile;
+ENGINE_API extern CTFileName _fnmModLibPath;
+ENGINE_API extern INDEX sys_iSysPath;
 
 // temporary vars for adjustments
 ENGINE_API extern FLOAT tmp_af[10];

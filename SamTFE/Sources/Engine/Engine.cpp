@@ -47,6 +47,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #if PLATFORM_UNIX
 #include "SDL.h"
+#include <limits.h>
 #endif
 
 // this version string can be referenced from outside the engine
@@ -57,6 +58,7 @@ ENGINE_API ULONG _ulEngineBuildMinor = _SE_BUILD_MINOR;
 ENGINE_API BOOL _bDedicatedServer = FALSE;
 ENGINE_API BOOL _bWorldEditorApp  = FALSE;
 ENGINE_API CTString _strLogFile = "";
+ENGINE_API CTFileName _fnmModLibPath;
 
 // global handle for application windows
 // !!! FIXME rcg10072001 this needs to be abstracted.
@@ -102,6 +104,10 @@ static INDEX sys_iHDDMisc = 0;
 // MOD info
 static CTString sys_strModName = "";
 static CTString sys_strModExt  = "";
+
+// Path vars
+static INDEX sys_iGameBits = 0;
+ENGINE_API INDEX sys_iSysPath = 0;
 
 // enables paranoia checks for allocation array
 BOOL _bAllocationArrayParanoiaCheck = FALSE;
@@ -594,9 +600,39 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   CPrintF(TRANSV("--- Serious Engine Startup ---\n"));
   CPrintF("  %s\n\n", (const char *) _strEngineBuild);
 
+  // Path vars
+  sys_iGameBits  = (int)(CHAR_BIT * sizeof(void *));
+  CPrintF(TRANSV("Running %d version\n"), sys_iGameBits);
+
+  int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/bin/", (size_t) 9 );
+  if( _isystempath == 0 ) {
+       sys_iSysPath = 1; // using system path
+  } else {
+       sys_iSysPath = 0; // using standarted path
+  }
+
+  // get library path for mods
+  _fnmModLibPath = "";
+  if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/x86_64-linux-gnu")) {
+    _fnmModLibPath = "/usr/lib/x86_64-linux-gnu/" + strGameID + "/"; 
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/i386-linux-gnu")) {
+    _fnmModLibPath = "/usr/lib/i386-linux-gnu/" + strGameID + "/";
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib64")) {
+    _fnmModLibPath = "/usr/lib64/" + strGameID + "/";
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib")) {
+    _fnmModLibPath = "/usr/lib/" + strGameID + "/";
+  } else {
+    _fnmModLibPath = _fnmApplicationPath;
+  }
+
+  if( sys_iSysPath == 1 ) {
+    _fnmApplicationPath = "/usr/share/" + strGameID + "/"; // all game data
+  }
+
   // print info on the started application
-  CPrintF(TRANSV("Executable: %s\n"), strExePath);
-  CPrintF(TRANSV("Assumed engine directory: %s\n"), (const char *) _fnmApplicationPath);
+  CPrintF(TRANSV("Executable: %s\n"), (const char *) strExePath);
+  CPrintF(TRANSV("Assumed engine data directory: %s\n"), (const char *) _fnmApplicationPath);
+  CPrintF(TRANSV("Assumed mods library directory: %s\n"), (const char *) _fnmModLibPath);
 
   CPrintF("\n");
 
@@ -661,6 +697,9 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   // MOD info
   _pShell->DeclareSymbol("user const CTString sys_strModName;", (void *) &sys_strModName);
   _pShell->DeclareSymbol("user const CTString sys_strModExt;",  (void *) &sys_strModExt);
+  // Path vars
+  _pShell->DeclareSymbol("user const INDEX sys_iGameBits    ;", (void *) &sys_iGameBits);
+  _pShell->DeclareSymbol("user const INDEX sys_iSysPath    ;", (void *) &sys_iSysPath);
 
   // Stock clearing
   extern void FreeUnusedStock(void);

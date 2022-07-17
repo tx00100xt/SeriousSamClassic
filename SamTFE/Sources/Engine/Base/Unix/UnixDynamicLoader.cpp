@@ -67,7 +67,14 @@ void CUnixDynamicLoader::DoOpen(const char *lib)
     #ifdef PLATFORM_FREEBSD
     dlerror(); // need for clean Undefined symbol "_nss_cache_cycle_prevention_function" message
     #endif
-    module = ::dlopen(lib, RTLD_LAZY | RTLD_GLOBAL);
+
+    CTFileName fnmLib = CTString(lib);
+    CTFileName fnmLibname = fnmLib.FileName();
+    int _libvorbisfile   = strncmp((const char *)fnmLibname, (const char *) "libvorbisfile", (size_t) 13 ); // skip
+    if( _pShell->GetINDEX("sys_iSysPath") == 1 && _libvorbisfile !=0 ) {
+        fnmLib = _fnmModLibPath + _fnmMod + fnmLib.FileName() + fnmLib.FileExt();
+    }
+    module = ::dlopen((const char *)fnmLib, RTLD_LAZY | RTLD_GLOBAL);
     SetError();
 }
 

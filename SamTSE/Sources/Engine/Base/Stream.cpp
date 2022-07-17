@@ -1619,6 +1619,11 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
     }
   }
 
+  if( _pShell->GetINDEX("sys_iSysPath") == 1 && fnmFileAbsolute.FileExt()==".so" ) {
+    _fnmApplicationPathTMP = _fnmModLibPath;
+    fnmFileAbsolute = fnmFileAbsolute.FileName() + fnmFileAbsolute.FileExt();
+  }
+
 //#######################################################################################################################
 
   // if writing
