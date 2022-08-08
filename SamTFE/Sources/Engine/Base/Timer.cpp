@@ -573,7 +573,11 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
 
     if (SDL_Init(SDL_INIT_TIMER) == -1) FatalError(TRANS("Cannot initialize multimedia timer!"));
     tm_TimerID = SDL_AddTimer(ULONG(TickQuantum*1000.0f), CTimer_TimerFunc_SDL, NULL);
+   #ifdef PLATFORM_FREEBSD
+    if( tm_TimerID==0x00) FatalError(TRANS("Cannot initialize multimedia timer!"));
+   #else
     if( tm_TimerID==NULL) FatalError(TRANS("Cannot initialize multimedia timer!"));
+   #endif
    #endif
 
     // make sure that timer interrupt is ticking
