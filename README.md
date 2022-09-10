@@ -254,7 +254,9 @@ To start the modification, use the game menu - item Modification.
 ### Other OS
 Not supported
 
-#### Building demo version of the game
+
+Building demo version of the game
+---------------------------------
 
 To build the demo version of the game, official demo files for Windows and official patches for the game from Croteam are used. 
 These files are automatically downloaded and unpacked in demo build scripts.
