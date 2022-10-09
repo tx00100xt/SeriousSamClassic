@@ -48,6 +48,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #if PLATFORM_UNIX
 #include "SDL.h"
 #include <limits.h>
+#include <pwd.h>
+#include <dirent.h>
 #endif
 
 // this version string can be referenced from outside the engine
@@ -108,6 +110,11 @@ static CTString sys_strModExt  = "";
 // Path vars
 static INDEX sys_iGameBits = 0;
 ENGINE_API INDEX sys_iSysPath = 0;
+//
+char _path[2048];
+static int _testfiledone;
+//static CTFileName gam_FETestFile;
+//static CTFileName gam_SETestFile;
 
 // enables paranoia checks for allocation array
 BOOL _bAllocationArrayParanoiaCheck = FALSE;
@@ -130,6 +137,50 @@ BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
   return TRUE;
 }
 #endif
+
+static void _list_dir(const char *name, int indent, CTString strGameID)
+{
+    DIR *dir;
+    struct dirent *entry;
+
+    if (!(dir = opendir(name)))
+        return;
+
+    //if ( _testfiledone == 1 )
+    //    return;
+
+    while ((entry = readdir(dir)) != NULL) {
+      //  if ( _testfiledone == 1 )
+      //     break;
+      // char path[2048];
+        if (entry->d_type == DT_DIR) {
+            char path[2048];
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+                continue;
+            snprintf(path, sizeof(path), "%s/%s", name, entry->d_name);
+            _list_dir(path, indent + 2, strGameID);
+        } else {
+           if( strGameID == "serioussamse") {
+               int _testfile = strncmp((const char *)entry->d_name, (const char *) "SE1_00_Levels.gro", (size_t) 13 ); 
+               if( _testfile == 0) {
+                  memcpy(_path, name, 2047);
+                  CPrintF("Found: %s/%s\n", name, entry->d_name);
+                  //_testfiledone = 1;
+                  break;
+               }
+           } else {
+               int _testfile = strncmp((const char *)entry->d_name, (const char *) "1_00_music.gro", (size_t) 10 ); 
+               if( _testfile == 0) {
+                  memcpy(_path, name, 2047);
+                  CPrintF("Found: %s/%s\n", name, entry->d_name);
+                  //_testfiledone = 1;
+                  break;
+               }
+           }
+        }
+    }
+    closedir(dir);
+}
 
 static void DetectCPU(void)
 {
@@ -602,7 +653,7 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
 
   // Path vars
   sys_iGameBits  = (int)(CHAR_BIT * sizeof(void *));
-  CPrintF(TRANSV("Running %d version\n"), sys_iGameBits);
+  CPrintF(TRANSV("Running %d-bit version\n"), sys_iGameBits);
 
   int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/bin/", (size_t) 9 );
   if( _isystempath == 0 ) {
@@ -625,8 +676,36 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
     _fnmModLibPath = _fnmApplicationPath;
   }
 
-  if( sys_iSysPath == 1 ) {
-    _fnmApplicationPath = "/usr/share/" + strGameID + "/"; // all game data
+  if( sys_iSysPath == 1 ) { // search game data
+  //if( 1 == 1 ) { // search game data
+    CTFileName _fnm_usr_TestFile, _fnm_local_TestFile;
+    // set testing files
+    if( strGameID == "serioussamse") {
+      _fnm_usr_TestFile = "/usr/share/" + strGameID + "/" + "SE1_00_Levels.gro"; //  data in usr
+      _fnm_local_TestFile = _fnmUserDir + "SE1_00_Levels.gro";                   //  data in home
+    } else {
+      _fnm_usr_TestFile = "/usr/share/" + strGameID + "/" + "1_00_music.gro"; //  data in usr
+      _fnm_local_TestFile = _fnmUserDir + "1_00_music.gro";                   //  data in home
+    }
+    // test
+    CPrintF(TRANSV("Testing system path: %s\n"), (const char *) _fnm_usr_TestFile);
+    CPrintF(TRANSV("Testing local  path: %s\n"), (const char *) _fnm_local_TestFile);
+    if( access((const char *) _fnm_usr_TestFile, F_OK) == 0 ) {
+      CPrintF(TRANSV("Found system path: %s\n"), (const char *) _fnm_usr_TestFile);
+      _fnmApplicationPath = "/usr/share/" + strGameID + "/"; // all game data
+    } else if(  access((const char *) _fnm_local_TestFile, F_OK) == 0 ) {
+      CPrintF(TRANSV("Found local path: %s\n"), (const char *) _fnm_local_TestFile);
+      _fnmApplicationPath = _fnmUserDir;                     // all game data
+    } else {
+      struct passwd *pw = getpwuid(getuid());
+      const char *_homedir = pw->pw_dir;
+      _testfiledone = 0;
+      _list_dir(_homedir, 0, strGameID);
+      CTString _PATH;
+      _PATH = (CTString)_path;
+      _fnmApplicationPath = (CTFileName) _PATH + "/";
+      CPrintF(TRANSV("Found home path: %s\n"), (const char *) _fnmApplicationPath);
+    }
   }
 
   // print info on the started application
