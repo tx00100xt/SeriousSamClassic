@@ -113,8 +113,6 @@ ENGINE_API INDEX sys_iSysPath = 0;
 //
 char _path[2048];
 static int _testfiledone;
-//static CTFileName gam_FETestFile;
-//static CTFileName gam_SETestFile;
 
 // enables paranoia checks for allocation array
 BOOL _bAllocationArrayParanoiaCheck = FALSE;
@@ -146,13 +144,12 @@ static void _list_dir(const char *name, int indent, CTString strGameID)
     if (!(dir = opendir(name)))
         return;
 
-    //if ( _testfiledone == 1 )
-    //    return;
+    if ( _testfiledone == 1 )
+        return;
 
     while ((entry = readdir(dir)) != NULL) {
-      //  if ( _testfiledone == 1 )
-      //     break;
-      // char path[2048];
+        if ( _testfiledone == 1 )
+           break;
         if (entry->d_type == DT_DIR) {
             char path[2048];
             if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
@@ -165,7 +162,7 @@ static void _list_dir(const char *name, int indent, CTString strGameID)
                if( _testfile == 0) {
                   memcpy(_path, name, 2047);
                   CPrintF("Found: %s/%s\n", name, entry->d_name);
-                  //_testfiledone = 1;
+                  _testfiledone = 1;
                   break;
                }
            } else {
@@ -173,7 +170,7 @@ static void _list_dir(const char *name, int indent, CTString strGameID)
                if( _testfile == 0) {
                   memcpy(_path, name, 2047);
                   CPrintF("Found: %s/%s\n", name, entry->d_name);
-                  //_testfiledone = 1;
+                  _testfiledone = 1;
                   break;
                }
            }
@@ -677,34 +674,67 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   }
 
   if( sys_iSysPath == 1 ) { // search game data
-  //if( 1 == 1 ) { // search game data
-    CTFileName _fnm_usr_TestFile, _fnm_local_TestFile;
+    CTFileName _fnm_usr_TestFile, _fnm_local_TestFile, _fnm_home_TestFile;
+    CTString _fnmUserDataPath, _fnm_TestFile;
+    int _fd;
+
+    if( access((const char *) _fnmUserDir+_strLogFile+".cfg", F_OK) == 0 ) {
+      _fd = open((const char *) _fnmUserDir+_strLogFile+".cfg", O_RDONLY,S_IRUSR);
+      read(_fd, _path, 2048);
+      _fnmUserDataPath = (CTString)_path + "/";
+      close(_fd);
+      CPrintF(TRANSV("Testing home path: %s\n"), (const char *) _fnmUserDataPath);
+    } else { 
+      _fnmUserDataPath = "";
+    }
+
     // set testing files
     if( strGameID == "serioussamse") {
-      _fnm_usr_TestFile = "/usr/share/" + strGameID + "/" + "SE1_00_Levels.gro"; //  data in usr
-      _fnm_local_TestFile = _fnmUserDir + "SE1_00_Levels.gro";                   //  data in home
+      _fnm_TestFile = "SE1_00_Levels.gro";
     } else {
-      _fnm_usr_TestFile = "/usr/share/" + strGameID + "/" + "1_00_music.gro"; //  data in usr
-      _fnm_local_TestFile = _fnmUserDir + "1_00_music.gro";                   //  data in home
+      _fnm_TestFile = "1_00_music.gro";
     }
+    CPrintF(TRANSV("Testing file: %s\n"), (const char *) _fnm_TestFile);
+    _fnm_usr_TestFile = "/usr/share/" + strGameID + "/" + _fnm_TestFile; //  data in usr
+    _fnm_local_TestFile = _fnmUserDir + _fnm_TestFile;                   //  data in home .local
+    _fnm_home_TestFile = (const char *)_fnmUserDataPath  + _fnm_TestFile;
     // test
-    CPrintF(TRANSV("Testing system path: %s\n"), (const char *) _fnm_usr_TestFile);
-    CPrintF(TRANSV("Testing local  path: %s\n"), (const char *) _fnm_local_TestFile);
-    if( access((const char *) _fnm_usr_TestFile, F_OK) == 0 ) {
-      CPrintF(TRANSV("Found system path: %s\n"), (const char *) _fnm_usr_TestFile);
-      _fnmApplicationPath = "/usr/share/" + strGameID + "/"; // all game data
-    } else if(  access((const char *) _fnm_local_TestFile, F_OK) == 0 ) {
-      CPrintF(TRANSV("Found local path: %s\n"), (const char *) _fnm_local_TestFile);
-      _fnmApplicationPath = _fnmUserDir;                     // all game data
+    if( access((const char *) _fnm_home_TestFile, F_OK) != 0 ) {
+      CPrintF(TRANSV("Testing system path: %s\n"), (const char *) _fnm_usr_TestFile);
+      CPrintF(TRANSV("Testing local  path: %s\n"), (const char *) _fnm_local_TestFile);
+      if( access((const char *) _fnm_usr_TestFile, F_OK) == 0 ) {
+        _fnmApplicationPath = "/usr/share/" + strGameID + "/";                       // all game data
+        CPrintF(TRANSV("Found usr path: %s\n"), (const char *) _fnmUserDataPath);
+      } else if( access((const char *) _fnm_local_TestFile, F_OK) == 0 ) {
+        _fnmApplicationPath = _fnmUserDir;                                           // all game data
+        CPrintF(TRANSV("Found local path: %s\n"), (const char *) _fnmUserDataPath);
+      } else {
+        // search in home dir 
+        // BOOL YesNoMessage(const char *strFormat, ...)
+        InfoMessage(TRANS("No game files were found in /usr/share/%s/\n or %s\nThe home directory will be searched."),(const char *) strGameID,(const char *) _fnmUserDir);
+        struct passwd *pw = getpwuid(getuid());
+        const char *_homedir = pw->pw_dir;
+        _testfiledone = 0;
+        _list_dir(_homedir, 0, strGameID);
+        CTString _PATH;
+        _PATH = (CTString)_path;
+        _fnmApplicationPath = (CTFileName) _PATH + "/";
+        _fnm_home_TestFile  = (CTFileName) _PATH + "/" + _fnm_TestFile; 
+        if( access((const char *) _fnm_home_TestFile, F_OK) == 0 ) {
+          //_fnmApplicationPath = (CTFileName) _PATH + "/";
+          CPrintF(TRANSV("Found home path: %s\n"), (const char *) _fnm_home_TestFile);
+          _fd = open((const char *) _fnmUserDir+_strLogFile+".cfg", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+          write(_fd, _path, 2948);
+          close(_fd);
+        } else {
+          CPrintF(TRANSV("ERROR: Game data not ound!\n"));
+          _fnmUserDataPath = "";
+          FatalError(TRANS("Failed to search game data!\nPlease put the game data in the paths:\n/usr/share/%s/\n or %s\n or somewhere in your home directory"),(const char *) strGameID,(const char *) _fnmUserDir);
+        }
+      } 
     } else {
-      struct passwd *pw = getpwuid(getuid());
-      const char *_homedir = pw->pw_dir;
-      _testfiledone = 0;
-      _list_dir(_homedir, 0, strGameID);
-      CTString _PATH;
-      _PATH = (CTString)_path;
-      _fnmApplicationPath = (CTFileName) _PATH + "/";
-      CPrintF(TRANSV("Found home path: %s\n"), (const char *) _fnmApplicationPath);
+      CPrintF(TRANSV("Found path: %s\n"), (const char *) _fnmUserDataPath);
+      _fnmApplicationPath = _fnmUserDataPath;                                         // all game data
     }
   }
 
