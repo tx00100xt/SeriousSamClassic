@@ -93,3 +93,8 @@ All notable changes to this project will be documented in this file.
 - Removed check timestrapped for recorded demo.
 - Added definition for raspberry pi and e2k.
 - Rewrote the game code. Now all user data is stored in the home directory.
+
+## 2022-07-17 - 2022-11-18
+- Structuring paths for installation in /usr/bin /usr/lib /usr/share
+- Fixed building for RPI4 on 32-bit system.
+
