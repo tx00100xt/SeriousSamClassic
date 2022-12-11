@@ -293,13 +293,13 @@ cd SeriousSamClassic-VK
 ./build-linux64demo.sh        	    # use build-linux32demo.sh for 32-bits
 ```
 
-Suported Architectures
+Supported Architectures
 ----------------------
 * `x86`
 * `aarch64`
 * `e2k` (elbrus)
 
-Suported OS
+Supported OS
 -----------
 * `Linux`
 * `FreeBSD`
