@@ -97,4 +97,9 @@ All notable changes to this project will be documented in this file.
 ## 2022-07-17 - 2022-11-18
 - Structuring paths for installation in /usr/bin /usr/lib /usr/share
 - Fixed building for RPI4 on 32-bit system.
+- Fixed FreeBSD compilatiun with USE_SINGLE_THREAD=FALSE
+- Added game data search.
+- Fixed timer for gcc 11.3
+- Added hud_bShowScore console variable.
+- Fixed old scripts for AMD cards.
 

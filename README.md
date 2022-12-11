@@ -279,14 +279,6 @@ Download:
 [Xplus TSE from Google Drive] or [Xplus TSE from pCloud],, and unpack to  SeriousSamClassic/SamTSE/Mods directory.
 To start the modification, use the game menu - item Modification.
 
-### Suported OS
-* Linux
-* FreeBSD
-
-### Other OS
-Not supported
-
-
 Building demo version of the game
 ---------------------------------
 
@@ -300,6 +292,18 @@ git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
 cd SeriousSamClassic-VK
 ./build-linux64demo.sh        	    # use build-linux32demo.sh for 32-bits
 ```
+
+Suported Architectures
+----------------------
+* `x86`
+* `aarch64`
+* `e2k` (elbrus)
+
+Suported OS
+-----------
+* `Linux`
+* `FreeBSD`
+* `Raspberry PI OS`
 
 License
 -------
