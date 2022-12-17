@@ -103,3 +103,5 @@ All notable changes to this project will be documented in this file.
 - Added hud_bShowScore console variable.
 - Fixed old scripts for AMD cards.
 
+## 2022-12-14 - 2022-12-18
+- Added support Windows.
