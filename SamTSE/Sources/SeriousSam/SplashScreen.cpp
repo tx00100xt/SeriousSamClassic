@@ -24,7 +24,7 @@ static HBITMAP _hbmSplashMask = NULL;
 static BITMAP _bmSplashMask;
 static HWND hwnd = NULL;
 
-static long FAR PASCAL SplashWindowProc( HWND hWnd, UINT message, 
+static LONG_PTR FAR PASCAL SplashWindowProc( HWND hWnd, UINT message, 
 			    WPARAM wParam, LPARAM lParam )
 {
   switch( message ) {
@@ -73,7 +73,7 @@ void ShowSplashScreen(HINSTANCE hInstance)
 
   WNDCLASSA wc;
   wc.style = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = SplashWindowProc;
+  wc.lpfnWndProc = (WNDPROC)SplashWindowProc;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
   wc.hInstance = hInstance;

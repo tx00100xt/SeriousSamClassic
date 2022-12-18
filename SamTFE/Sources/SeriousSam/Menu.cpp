@@ -487,7 +487,8 @@ CTString astrDisplayAPIRadioTexts[] = {
   RADIOTRANS( "OpenGL"),
 #ifdef SE1_D3D
   RADIOTRANS( "Direct3D"),
-#endif
+#endif 
+
 };
 CMGTrigger mgDisplayAdaptersTrigger;
 CMGTrigger mgFullScreenTrigger;
@@ -873,9 +874,11 @@ void StopMenus( BOOL bGoToRoot /*=TRUE*/)
     }
   }
 
+#ifdef PLATFORM_UNIX
   // rcg02042003 hack for SDL vs. Win32.
   if (_pInput != NULL)
     _pInput->ClearRelativeMouseMotion();
+#endif
 }
 
 
@@ -2146,7 +2149,7 @@ void RefreshSoundFormat( void)
   }
 
   mgAudioAutoTrigger.mg_iSelected = Clamp(sam_bAutoAdjustAudio, 0, 1);
-  mgAudioAPITrigger.mg_iSelected = Clamp(_pShell->GetINDEX("snd_iInterface"), 0, 2);
+  mgAudioAPITrigger.mg_iSelected = Clamp(_pShell->GetINDEX("snd_iInterface"), (INDEX)0, (INDEX)2);
 
   mgWaveVolume.mg_iMinPos = 0;
   mgWaveVolume.mg_iMaxPos = VOLUME_STEPS;
@@ -2716,8 +2719,8 @@ BOOL DoMenu( CDrawPort *pdp)
   _pGfx->GetCurrentDisplayMode(dmCurrent);
   if (dmCurrent.IsFullScreen()) {
     // clamp mouse pointer
-    _pixCursorPosI = Clamp(_pixCursorPosI, 0, dpMenu.GetWidth());
-    _pixCursorPosJ = Clamp(_pixCursorPosJ, 0, dpMenu.GetHeight());
+    _pixCursorPosI = Clamp(_pixCursorPosI, (PIX)0, dpMenu.GetWidth());
+    _pixCursorPosJ = Clamp(_pixCursorPosJ, (PIX)0, dpMenu.GetHeight());
   // if in window
   } else {
     // use same mouse pointer as windows
@@ -3172,7 +3175,7 @@ void CGameMenu::StartMenu(void)
     // scroll it so that the wanted tem is centered
     gm_iListOffset = gm_iListWantedItem-gm_ctListVisible/2;
     // clamp the scrolling
-    gm_iListOffset = Clamp(gm_iListOffset, 0, Max(0, gm_ctListTotal-gm_ctListVisible));
+    gm_iListOffset = Clamp(gm_iListOffset, (INDEX)0, Max((INDEX)0, gm_ctListTotal-gm_ctListVisible));
 
     // fill the list
     FillListItems();
@@ -5126,8 +5129,8 @@ static void UpdateVideoOptionsButtons(INDEX iSelected)
 #ifdef SE1_D3D
   const BOOL bD3DEnabled = _pGfx->HasAPI(GAT_D3D);
   ASSERT( bOGLEnabled || bD3DEnabled); 
-#else // 
-  ASSERT( bOGLEnabled ); 
+#else //
+  ASSERT( bOGLEnabled );
 #endif // SE1_D3D
   CDisplayAdapter &da = _pGfx->gl_gaAPI[SwitchToAPI(mgDisplayAPITrigger.mg_iSelected)]
                                 .ga_adaAdapter[mgDisplayAdaptersTrigger.mg_iSelected];
@@ -5877,7 +5880,7 @@ void CNetworkStartMenu::StartMenu(void)
   extern INDEX sam_bMentalActivated;
   mgNetworkDifficulty.mg_ctTexts = sam_bMentalActivated?6:5;
 
-  mgNetworkGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), 0, ctGameTypeRadioTexts-1);
+  mgNetworkGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), (INDEX)0, ctGameTypeRadioTexts-1);
   mgNetworkGameType.ApplyCurrentSelection();
   mgNetworkDifficulty.mg_iSelected = _pShell->GetINDEX("gam_iStartDifficulty")+1;
   mgNetworkDifficulty.ApplyCurrentSelection();
@@ -5893,7 +5896,7 @@ void CNetworkStartMenu::StartMenu(void)
   mgNetworkMaxPlayers.mg_iSelected = ctMaxPlayers-2;
   mgNetworkMaxPlayers.ApplyCurrentSelection();
 
-  mgNetworkWaitAllPlayers.mg_iSelected = Clamp(_pShell->GetINDEX("gam_bWaitAllPlayers"), 0, 1);
+  mgNetworkWaitAllPlayers.mg_iSelected = Clamp(_pShell->GetINDEX("gam_bWaitAllPlayers"), (INDEX)0, (INDEX)1);
   mgNetworkWaitAllPlayers.ApplyCurrentSelection();
 
   mgNetworkVisible.mg_iSelected = _pShell->GetINDEX("ser_bEnumeration");
@@ -6349,13 +6352,13 @@ void CSplitStartMenu::StartMenu(void)
   extern INDEX sam_bMentalActivated;
   mgSplitDifficulty.mg_ctTexts = sam_bMentalActivated?6:5;
 
-  mgSplitGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), 0, ctGameTypeRadioTexts-1);
+  mgSplitGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), (INDEX)0, ctGameTypeRadioTexts-1);
   mgSplitGameType.ApplyCurrentSelection();
   mgSplitDifficulty.mg_iSelected = _pShell->GetINDEX("gam_iStartDifficulty")+1;
   mgSplitDifficulty.ApplyCurrentSelection();
 
   // clamp maximum number of players to at least 4
-  _pShell->SetINDEX("gam_ctMaxPlayers", ClampDn(_pShell->GetINDEX("gam_ctMaxPlayers"), 4));
+  _pShell->SetINDEX("gam_ctMaxPlayers", ClampDn(_pShell->GetINDEX("gam_ctMaxPlayers"), (INDEX)4));
 
   UpdateSplitLevel(0);
   CGameMenu::StartMenu();

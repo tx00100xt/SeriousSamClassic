@@ -18,9 +18,9 @@ extern HWND _hwndMain;
 
 #ifdef PLATFORM_UNIX
 extern __attribute__ ((visibility("default"))) CTString strWindow1251ToUtf8(CTString from);
-#else
-DECL_DLL extern CTString strWindow1251ToUtf8(CTString from);
-#endif
+#else  // !PLATFORM_UNIX
+extern _declspec(dllimport) CTString strWindow1251ToUtf8(CTString from);
+#endif  
 
 // init/end main window management
 void MainWindow_Init(void);

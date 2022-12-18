@@ -25,10 +25,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 BOOL _bWindowChanging = FALSE;    // ignores window messages while this is set
 HWND _hwndMain = NULL;
 
+
 static char achWindowTitle[256]; // current window title
 
 // for window reposition function
 static PIX _pixLastSizeI, _pixLastSizeJ;
+
 
 #ifdef PLATFORM_WIN32
 static HBITMAP _hbmSplash = NULL;
