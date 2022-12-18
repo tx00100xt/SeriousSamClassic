@@ -293,6 +293,14 @@ cd SeriousSamClassic-VK
 ./build-linux64demo.sh        	    # use build-linux32demo.sh for 32-bits
 ```
 
+Windows
+-------
+* This project can be compiled starting from Windows 7 and higher.
+
+1. Download and Install [Visual Studio 2015 Community Edition] or higher.
+2. Download and Install [Windows 10 SDK 10.0.14393.795] or other.
+3. Open the solution in the Sources folder, select Release x64 or Release Win32 and compile it.
+
 Supported Architectures
 ----------------------
 * `x86`
@@ -303,6 +311,7 @@ Supported OS
 -----------
 * `Linux`
 * `FreeBSD`
+* `Windows`
 * `Raspberry PI OS`
 
 License
@@ -321,3 +330,5 @@ Some of the code included with the engine sources is not licensed under the GNU 
 [Xplus TSE from Google Drive]: https://drive.google.com/file/d/1W_UIeVl7y3ZBroM39FmKdngNZuXC7DKv/view?usp=sharing "Serious Sam Classic XPLUS Mod"
 [Xplus TFE from pCloud]: https://e1.pcloud.link/publink/show?code=XZ02gRZ4nhrRGPSfV4aEL4IF8GYySafWVJX "Serious Sam Classic XPLUS Mod"
 [Xplus TSE from pCloud]: https://e1.pcloud.link/publink/show?code=XZy2gRZ3D7n8fu83SkhIdB1xRaK7y9pKiry "Serious Sam Classic XPLUS Mod"
+[Visual Studio 2015 Community Edition]: https://go.microsoft.com/fwlink/?LinkId=615448&clcid=0x409 "Visual Studio 2015 Community Edition"
+[Windows 10 SDK 10.0.14393.795]: https://go.microsoft.com/fwlink/p/?LinkId=838916 "Windows 10 SDK 10.0.14393.795"
