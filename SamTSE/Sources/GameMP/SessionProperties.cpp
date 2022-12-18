@@ -53,7 +53,7 @@ extern CTString gam_strGameAgentExtras;
 
 static void SetGameModeParameters(CSessionProperties &sp)
 {
-  sp.sp_gmGameMode = (CSessionProperties::GameMode) Clamp(INDEX(gam_iStartMode), -1, 2);
+  sp.sp_gmGameMode = (CSessionProperties::GameMode) Clamp(INDEX(gam_iStartMode), (INDEX)-1, (INDEX)2);
 
   switch (sp.sp_gmGameMode) {
   default:
@@ -79,7 +79,7 @@ static void SetDifficultyParameters(CSessionProperties &sp)
   } else {
     sp.sp_bMental = FALSE;
   }
-  sp.sp_gdGameDifficulty = (CSessionProperties::GameDifficulty) Clamp(INDEX(iDifficulty), -1, 3);
+  sp.sp_gdGameDifficulty = (CSessionProperties::GameDifficulty) Clamp(INDEX(iDifficulty), (INDEX)-1, (INDEX)3);
 
   switch (sp.sp_gdGameDifficulty) {
   case CSessionProperties::GD_TOURIST:
@@ -163,7 +163,7 @@ void CGame::SetSinglePlayerSession(CSessionProperties &sp)
   sp.sp_fExtraEnemyStrength          = 0;
   sp.sp_fExtraEnemyStrengthPerPlayer = 0;
 
-  sp.sp_iBlood = Clamp( gam_iBlood, 0, 3);
+  sp.sp_iBlood = Clamp( gam_iBlood, (INDEX)0, (INDEX)3);
   sp.sp_bGibs  = gam_bGibs;
 }
 
@@ -218,7 +218,7 @@ void CGame::SetMultiPlayerSession(CSessionProperties &sp)
   sp.sp_fExtraEnemyStrengthPerPlayer = gam_fExtraEnemyStrengthPerPlayer;
   sp.sp_iInitialMana        = gam_iInitialMana;
 
-  sp.sp_iBlood = Clamp( gam_iBlood, 0, 3);
+  sp.sp_iBlood = Clamp( gam_iBlood, (INDEX)0, (INDEX)3);
   sp.sp_bGibs  = gam_bGibs;
   sp.sp_tmSpawnInvulnerability = gam_tmSpawnInvulnerability;
 

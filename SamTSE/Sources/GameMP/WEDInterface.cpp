@@ -77,7 +77,7 @@ void CGame::QuickTest(const CTFileName &fnMapName,
   CDrawPort *pdp, CViewPort *pvp)
 {
 #ifdef PLATFORM_WIN32
-  UINT uiMessengerMsg = RegisterWindowMessage("Croteam Messenger: Incoming Message");
+  UINT uiMessengerMsg = RegisterWindowMessageA("Croteam Messenger: Incoming Message");
 #else
   UINT uiMessengerMsg = 0x7337d00d;
 #endif

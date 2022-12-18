@@ -272,8 +272,8 @@ void MessagesUpDn(INDEX ctLines)
 {
   INDEX ctMessages = _acmMessages.Count();
   _iWantedFirstMessageOnScreen += ctLines;
-  INDEX iMaxFirst = ClampDn(0, ctMessages-_ctMessagesOnScreen);
-  _iWantedFirstMessageOnScreen = Clamp(_iWantedFirstMessageOnScreen, 0, iMaxFirst);
+  INDEX iMaxFirst = ClampDn((INDEX)0, ctMessages-_ctMessagesOnScreen);
+  _iWantedFirstMessageOnScreen = Clamp(_iWantedFirstMessageOnScreen, (INDEX)0, iMaxFirst);
   _iActiveMessage = Clamp(_iActiveMessage, 
     _iWantedFirstMessageOnScreen,
     _iWantedFirstMessageOnScreen+_ctMessagesOnScreen-1);
@@ -1166,10 +1166,10 @@ void CGame::ComputerRender(CDrawPort *pdp)
       fComputerFadeValue = 0.0f;
       _pGame->gm_csComputerState   = CS_OFF;
       ComputerOff();
-
+#ifdef PLATFORM_UNIX
       if (_pInput != NULL) // rcg02042003 hack for SDL vs. Win32.
         _pInput->ClearRelativeMouseMotion();
-
+#endif
       cmp_ppenPlayer = NULL;
       // exit computer
       return;
@@ -1193,8 +1193,8 @@ void CGame::ComputerRender(CDrawPort *pdp)
   _pGfx->GetCurrentDisplayMode(dmCurrent);
   if (dmCurrent.IsFullScreen() && dmCurrent.IsDualHead()) {
     // clamp mouse pointer
-    _vpixMouse(1) = Clamp(_vpixMouse(1), 0, dpComp.GetWidth());
-    _vpixMouse(2) = Clamp(_vpixMouse(2), 0, dpComp.GetHeight());
+    _vpixMouse(1) = Clamp(_vpixMouse(1), (PIX)0, dpComp.GetWidth());
+    _vpixMouse(2) = Clamp(_vpixMouse(2), (PIX)0, dpComp.GetHeight());
   // if in window
   } else {
     // use same mouse pointer as windows
@@ -1339,8 +1339,9 @@ void CGame::ComputerForceOff()
   _pGame->gm_csComputerState = CS_OFF;
   fComputerFadeValue = 0.0f;
   _ppenPlayer = NULL;
-
+#ifdef PLATFORM_UNIX
   if (_pInput != NULL) // rcg02042003 hack for SDL vs. Win32.
     _pInput->ClearRelativeMouseMotion();
+#endif
 }
 

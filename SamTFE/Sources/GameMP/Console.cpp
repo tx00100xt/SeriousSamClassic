@@ -123,10 +123,10 @@ void CGame::ConsoleRender(CDrawPort *pdp)
       // stop
       fConsoleFadeValue = 0.0f;
       _pGame->gm_csConsoleState = CS_OFF;
-
+#ifdef PLATFORM_UNIX
       if (_pInput != NULL) // rcg02042003 hack for SDL vs. Win32.
         _pInput->ClearRelativeMouseMotion();
-
+#endif
       // if not in network
       if (!_pNetwork->IsNetworkEnabled()) {
         // don't show last lines on screen after exiting console
@@ -201,7 +201,7 @@ void CGame::ConsoleRender(CDrawPort *pdp)
   }
 
   // render previous outputs
-  con_iFirstLine = ClampDn( con_iFirstLine, 1);
+  con_iFirstLine = ClampDn( con_iFirstLine, (INDEX)1);
   pixYLine -= (PIX)(pixLineSpacing * 1.333f);
   ctConsoleLinesOnScreen = pixYLine/pixLineSpacing;
   while( pixYLine >= 0) {
@@ -531,7 +531,7 @@ static void Key_PgDn( BOOL bShift)
 {
   if( bShift) con_iFirstLine -= ctConsoleLinesOnScreen;
   else con_iFirstLine--;
-  con_iFirstLine = ClampDn( con_iFirstLine, 1);
+  con_iFirstLine = ClampDn( con_iFirstLine, (INDEX)1);
 }
 
 

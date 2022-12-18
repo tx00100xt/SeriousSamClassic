@@ -201,7 +201,7 @@ CEnableUserBreak::~CEnableUserBreak() {
 static void DumpDemoProfile(void)
 {
   CTString strFragment, strAnalyzed;
-  dem_iProfileRate = Clamp( dem_iProfileRate, 0, 60);
+  dem_iProfileRate = Clamp( dem_iProfileRate, (INDEX)0, (INDEX)60);
   strFragment = _pGame->DemoReportFragmentsProfile( dem_iProfileRate);
   strAnalyzed = _pGame->DemoReportAnalyzedProfile();
   try {
@@ -225,7 +225,7 @@ static void DumpDemoProfile(void)
 static void ReportDemoProfile(void)
 {
   CTString strFragment, strAnalyzed;
-  dem_iProfileRate = Clamp( dem_iProfileRate, 0, 60);
+  dem_iProfileRate = Clamp( dem_iProfileRate, (INDEX)0, (INDEX)60);
   strFragment = _pGame->DemoReportFragmentsProfile( dem_iProfileRate);
   strAnalyzed = _pGame->DemoReportAnalyzedProfile();
   CPrintF("%s", (const char *) strFragment);
@@ -1488,6 +1488,7 @@ SLONG CGame::PackHighScoreTable(void)
   UBYTE *pub = _aubHighScoreBuffer;
   // for each entry
   for (INDEX i=0; i<HIGHSCORE_COUNT; i++) {
+#ifdef PLATFORM_UNIX
     // make its string
     char str[MAX_HIGHSCORENAME+1];
     memset(str, 0, sizeof(str));
@@ -1518,6 +1519,23 @@ SLONG CGame::PackHighScoreTable(void)
     BYTESWAP(ival);
     memcpy(pub, &ival,      sizeof(INDEX));
     pub += sizeof(INDEX);
+#else
+	// make its string
+	char str[MAX_HIGHSCORENAME + 1];
+	memset(str, 0, sizeof(str));
+	strncpy(str, gm_ahseHighScores[i].hse_strPlayer, MAX_HIGHSCORENAME);
+	// copy the value and the string
+	memcpy(pub, str, sizeof(str));
+	pub += MAX_HIGHSCORENAME + 1;
+	memcpy(pub, &gm_ahseHighScores[i].hse_gdDifficulty, sizeof(INDEX));
+	pub += sizeof(INDEX);
+	memcpy(pub, &gm_ahseHighScores[i].hse_tmTime, sizeof(FLOAT));
+	pub += sizeof(FLOAT);
+	memcpy(pub, &gm_ahseHighScores[i].hse_ctKills, sizeof(INDEX));
+	pub += sizeof(INDEX);
+	memcpy(pub, &gm_ahseHighScores[i].hse_ctScore, sizeof(INDEX));
+	pub += sizeof(INDEX);
+#endif
   }
   // just copy it for now
   memcpy(_aubHighScorePacked, _aubHighScoreBuffer, MAX_HIGHSCORETABLESIZE);
@@ -1532,6 +1550,7 @@ void CGame::UnpackHighScoreTable(SLONG slSize)
   UBYTE *pub = _aubHighScoreBuffer;
   // for each entry
   for (INDEX i=0; i<HIGHSCORE_COUNT; i++) {
+#ifdef PLATFORM_UNIX
     gm_ahseHighScores[i].hse_strPlayer = (const char*)pub;
     pub += MAX_HIGHSCORENAME+1;
     memcpy(&gm_ahseHighScores[i].hse_gdDifficulty, pub, sizeof(INDEX));
@@ -1546,6 +1565,18 @@ void CGame::UnpackHighScoreTable(SLONG slSize)
     memcpy(&gm_ahseHighScores[i].hse_ctScore     , pub, sizeof(INDEX));
     BYTESWAP(gm_ahseHighScores[i].hse_ctScore);
     pub += sizeof(INDEX);
+#else
+	gm_ahseHighScores[i].hse_strPlayer = (const char*)pub;
+	pub += MAX_HIGHSCORENAME + 1;
+	memcpy(&gm_ahseHighScores[i].hse_gdDifficulty, pub, sizeof(INDEX));
+	pub += sizeof(INDEX);
+	memcpy(&gm_ahseHighScores[i].hse_tmTime, pub, sizeof(FLOAT));
+	pub += sizeof(FLOAT);
+	memcpy(&gm_ahseHighScores[i].hse_ctKills, pub, sizeof(INDEX));
+	pub += sizeof(INDEX);
+	memcpy(&gm_ahseHighScores[i].hse_ctScore, pub, sizeof(INDEX));
+	pub += sizeof(INDEX);
+#endif
   }
 
   // try to
@@ -1903,12 +1934,14 @@ static void PrintStats( CDrawPort *pdpDrawPort)
   }
 
   // if stats aren't required
-  hud_iStats = Clamp( hud_iStats, 0, 2);
+  hud_iStats = Clamp( hud_iStats, (INDEX)0, (INDEX)2);
   if( hud_iStats==0 || (hud_iEnableStats==0 && hud_fEnableFPS==0)) {
     // display nothing
     _iCheckNow = 0;
     _iCheckMax = 0;
+#ifdef PLATFORM_UNIX
     STAT_Enable(FALSE);
+#endif
     return;
   }
 
@@ -1956,7 +1989,9 @@ static void PrintStats( CDrawPort *pdpDrawPort)
   if( hud_iStats==2 && hud_iEnableStats)
   { // display extensive statistics
     CTString strReport;
-    STAT_Enable(TRUE);
+#ifdef PLATFORM_UNIX
+	STAT_Enable(TRUE);
+#endif
     STAT_Report(strReport);
     STAT_Reset();
 
@@ -1972,7 +2007,11 @@ static void PrintStats( CDrawPort *pdpDrawPort)
     pdpDrawPort->PutText( strFPS,    0, 40, C_WHITE|CT_OPAQUE);
     pdpDrawPort->PutText( strReport, 4, 65, C_GREEN|CT_OPAQUE);
   }
-  else STAT_Enable(FALSE);
+  else {
+#ifdef PLATFORM_UNIX
+	  STAT_Enable(FALSE);
+#endif 
+  }
 }
 
 
@@ -1996,7 +2035,7 @@ static void MakeSplitDrawports(enum CGame::SplitScreenCfg ssc, INDEX iCount, CDr
   // if observer
   if (ssc==CGame::SSC_OBSERVER) {
     // must have at least one screen
-    iCount = Clamp(iCount, 1, 4);
+    iCount = Clamp(iCount, (INDEX)1, (INDEX)4);
     // starting at first drawport
     iFirstObserver = 0;
   }
@@ -2202,10 +2241,10 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     && gm_CurrentSplitScreenCfg!=SSC_DEDICATED )
   {
 
-    INDEX ctObservers = Clamp(gam_iObserverConfig, 0, 4);
-    INDEX iObserverOffset = ClampDn(gam_iObserverOffset, 0);
+    INDEX ctObservers = Clamp(gam_iObserverConfig, (INDEX)0, (INDEX)4);
+    INDEX iObserverOffset = ClampDn(gam_iObserverOffset, (INDEX)0);
     if (gm_CurrentSplitScreenCfg==SSC_OBSERVER) {
-      ctObservers = ClampDn(ctObservers, 1);
+      ctObservers = ClampDn(ctObservers, (INDEX)1);
     }
     if (gm_CurrentSplitScreenCfg!=SSC_OBSERVER) {
       if (!gam_bEnableAdvancedObserving || !GetSP()->sp_bCooperative) {
@@ -2660,6 +2699,11 @@ INDEX FixQuicksaveDir(const CTFileName &fnmDir, INDEX ctMax)
   }
 
   // sort the list
+#ifdef _MSC_VER
+#ifndef _offsetof
+#define _offsetof offsetof
+#endif
+#endif
   lh.Sort(qsort_CompareQuickSaves_FileUp, _offsetof(QuickSave, qs_lnNode));
   INDEX ctCount = lh.Count();
 
