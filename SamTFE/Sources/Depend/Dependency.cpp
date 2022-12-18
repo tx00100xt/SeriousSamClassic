@@ -267,7 +267,7 @@ void CDependencyList::ImportASCII( CTFileName fnAsciiFile)
     // open file list for reading
     file.Open_t( fnAsciiFile);
   }
-  catch (const char *pError)
+  catch( char *pError)
   {
     FatalError( "Error opening file %s. Error: %s.", (CTString&)fnAsciiFile, pError);
   }
@@ -303,7 +303,7 @@ void CDependencyList::ImportASCII( CTFileName fnAsciiFile)
       }
     }
     // error, EOF catched
-    catch (const char *pFinished)
+    catch( char *pFinished)
     {
       if (!file.AtEOF()) {
         CPrintF("%s\n", pFinished);
@@ -351,7 +351,7 @@ void CDependencyList::ExportASCII_t( CTFileName fnAsciiFile)
     // create exporting text file
     strmFile.Create_t( fnAsciiFile);
   }
-  catch (const char *pError)
+  catch( char *pError)
   {
     FatalError( "Error creating file %s. Error: %s.", (CTString&)fnAsciiFile, pError);
   }
@@ -440,21 +440,18 @@ void CDependencyList::ExtractTranslations_t( const CTFileName &fnTranslations)
     // for each byte in file
     for(INDEX iByte=0; iByte<slSize-4; iByte++) {
       UBYTE *pub = pubFile+iByte;
-      ULONG ul = *((ULONG*)pub);
-
-      BYTESWAP(ul);
+      ULONG *pul = (ULONG*)pub;
 
       // if exe translatable string is here
-      if (ul=='SRTE') {
+      if (*pul=='SRTE') {
         // get it
         CTString str = (char*)(pub+4);
         // add it
         AddStringForTranslation(str);
       // if data translatable string is here
-      } else if (ul=='SRTD') {
+      } else if (*pul=='SRTD') {
         char achr[ 256];
         INDEX iStrLen = *(INDEX *)(pub + 4);
-        BYTESWAP(iStrLen);
         if( iStrLen > 254 || iStrLen<0) {
           continue;
         }
@@ -465,7 +462,7 @@ void CDependencyList::ExtractTranslations_t( const CTFileName &fnTranslations)
         // add it
         AddStringForTranslation(str);
       // if text translatable string is here
-      } else if (ul=='SRTT') {
+      } else if (*pul=='SRTT') {
 
         // after describing long and one space we will find file name
         char *pchrStart = (char*)pub + 4 + 1;

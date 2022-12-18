@@ -58,7 +58,7 @@ void SubMain( int argc, char *argv[])
   }
   
   // initialize engine
-  SE_InitEngine(argv[0], "");
+  SE_InitEngine("");
   // get application path from cmd line
   _fnmApplicationPath = CTString(ACHR_APP_DIR);
   // if not ending with backslash
@@ -162,7 +162,7 @@ void SubMain( int argc, char *argv[])
              }
     }
   }
-  catch (const char *pError)
+  catch( char *pError)
   {
     printf( "Error occured.\n%s\n", pError);
   }
