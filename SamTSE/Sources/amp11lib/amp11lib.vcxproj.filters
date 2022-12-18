@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{59db70c6-b035-4347-81ae-2a4ba760544f}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\binfile sources">
+      <UniqueIdentifier>{a4d3bd29-6527-4a60-9921-53bc45ede61a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{a4f2af65-b339-480a-92d6-d4f177965044}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\binfile headers">
+      <UniqueIdentifier>{d33b90e9-79fa-4ec9-a1a2-1cd7344e8ac7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{2fffc55e-1872-4930-bea4-1c95edbbbf2b}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="binfile\binfarc.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfcon.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfhttp.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfile.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfilef.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfmem.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfplnt.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfplwv.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binfstd.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="binfile\binftcp.cpp">
+      <Filter>Source Files\binfile sources</Filter>
+    </ClCompile>
+    <ClCompile Include="amp11lib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="amp1dec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="amp2dec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="amp3dec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ampdec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ampsynth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mpgsplit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="binfile\binfarc.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfcon.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfhttp.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfile.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfmem.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfpllx.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfplnt.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfplsb.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfplwv.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binfstd.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\binftcp.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="binfile\ptypes.h">
+      <Filter>Header Files\binfile headers</Filter>
+    </ClInclude>
+    <ClInclude Include="amp11lib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ampdec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mpgsplit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="amp11lib.bas">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
