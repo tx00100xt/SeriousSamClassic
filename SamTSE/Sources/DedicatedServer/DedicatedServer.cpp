@@ -51,6 +51,7 @@ HWND _hwndMain = NULL;
 
 void InitializeGame(void)
 {
+#ifdef PLATFORM_UNIX
   #ifdef STATICALLY_LINKED
     #define fnmExpanded NULL
     CPrintF(TRANSV("Loading game library '%s'...\n"), "(statically linked)");
@@ -82,6 +83,34 @@ void InitializeGame(void)
     // init game - this will load persistent symbols
     _pGame->Initialize(CTString("Data\\DedicatedServer.gms"));
   }
+#else
+	try {
+  #ifndef NDEBUG 
+  #define GAMEDLL _fnmApplicationExe.FileDir()+"Game"+_strModExt+"D.dll"
+  #else
+  #define GAMEDLL _fnmApplicationExe.FileDir()+"Game"+_strModExt+".dll"
+  #endif
+		CTFileName fnmExpanded;
+		ExpandFilePath(EFP_READ, CTString(GAMEDLL), fnmExpanded);
+
+		CPrintF(TRANS("Loading game library '%s'...\n"), (const char *)fnmExpanded);
+		HMODULE hGame = LoadLibraryA(fnmExpanded);
+		if (hGame == NULL) {
+			ThrowF_t("%s", GetWindowsError(GetLastError()));
+		}
+		CGame* (*GAME_Create)(void) = (CGame* (*)(void))GetProcAddress(hGame, "GAME_Create");
+		if (GAME_Create == NULL) {
+			ThrowF_t("%s", GetWindowsError(GetLastError()));
+		}
+		_pGame = GAME_Create();
+
+	}
+	catch (char *strError) {
+		FatalError("%s", strError);
+	}
+	// init game - this will load persistent symbols
+	_pGame->Initialize(CTString("Data\\DedicatedServer.gms"));
+#endif
 }
 
 static void QuitGame(void)
@@ -111,11 +140,14 @@ void LimitFrameRate(void)
   TIME tmCurrentDelta = (tvNow-tvLast).GetSeconds();
 
   // limit maximum frame rate
-  ded_iMaxFPS = ClampDn( ded_iMaxFPS, 1);
+  ded_iMaxFPS = ClampDn( ded_iMaxFPS, (INDEX)1);
   TIME tmWantedDelta  = 1.0f / ded_iMaxFPS;
+#ifdef PLATFORM_UNIX
   if( tmCurrentDelta<tmWantedDelta)
     _pTimer->Sleep( (DWORD) ((tmWantedDelta-tmCurrentDelta)*1000.0f) );
-  
+#else
+  if (tmCurrentDelta<tmWantedDelta) Sleep((tmWantedDelta - tmCurrentDelta)*1000.0f);
+#endif
   // remember new time
   tvLast = _pTimer->GetHighPrecisionTimer();
 }
@@ -235,7 +267,7 @@ BOOL Init(int argc, char* argv[])
   }
 
   #ifdef PLATFORM_WIN32
-    SetConsoleTitle(argv[1]);
+    SetConsoleTitleA(argv[1]);
   #else
     if (SDL_Init(0) == -1) {  // just get the basics up and running, like timers. No video, audio, input.
       fprintf(stderr, "SDL_Init(0) failed! Aborting.\n");
@@ -254,7 +286,11 @@ BOOL Init(int argc, char* argv[])
   _strLogFile = CTString("Dedicated_")+argv[1];
 
   // initialize engine
+#ifdef PLATFORM_UNIX
   SE_InitEngine(argv[0], sam_strGameName);
+#else
+  SE_InitEngine(sam_strGameName);
+#endif
 
 //  ParseCommandLine(strCmdLine);
 

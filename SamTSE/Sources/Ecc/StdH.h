@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <stdarg.h>
 #include <math.h>
 
-#ifdef PLATFORM_WIN32
+#ifdef _MSC_VER
 #include <malloc.h>
 #endif
 

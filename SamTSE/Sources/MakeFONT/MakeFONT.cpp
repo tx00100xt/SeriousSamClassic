@@ -51,8 +51,11 @@ void SubMain( int argc, char *argv[])
   }
 
   // initialize engine
+#ifdef PLATFORM_UNIX
   SE_InitEngine("","");
-
+#else
+  SE_InitEngine("");
+#endif
   // first input parameter is texture name
   CTFileName fnTextureFileName = CTString(argv[1]);
   // parameters 2 and 3 give us character dimensions
