@@ -41,9 +41,9 @@ void DoSpecularLayer(INDEX iSpeculaTexture,INDEX iSpecularColor)
   SLONG slAG = (colAmbient & CT_GMASK)>>(CT_GSHIFT-iBright);
   SLONG slAB = (colAmbient & CT_BMASK)>>(CT_BSHIFT-iBright);
   if( bOverbright) {
-    slAR = ClampUp( slAR, 127);
-    slAG = ClampUp( slAG, 127);
-    slAB = ClampUp( slAB, 127);
+    slAR = ClampUp( slAR, (SLONG)127);
+    slAG = ClampUp( slAG, (SLONG)127);
+    slAB = ClampUp( slAB, (SLONG)127);
   }
 
 
@@ -70,10 +70,9 @@ void DoSpecularLayer(INDEX iSpeculaTexture,INDEX iSpecularColor)
 
   GFXColor colSrfSpec = shaGetColor(iSpecularColor);
   colSrfSpec.AttenuateRGB( (shaGetModelColor()&CT_AMASK)>>CT_ASHIFT);
-  colSrfSpec.ub.r = ClampUp( (colSrfSpec.ub.r *slLR)>>8, 255);
-  colSrfSpec.ub.g = ClampUp( (colSrfSpec.ub.g *slLG)>>8, 255);
-  colSrfSpec.ub.b = ClampUp( (colSrfSpec.ub.b *slLB)>>8, 255);
-
+  colSrfSpec.ub.r = ClampUp( (colSrfSpec.ub.r *slLR)>>8, (SLONG)255);
+  colSrfSpec.ub.g = ClampUp( (colSrfSpec.ub.g *slLG)>>8, (SLONG)255);
+  colSrfSpec.ub.b = ClampUp( (colSrfSpec.ub.b *slLB)>>8, (SLONG)255);
   GFXColor *pcolSpec = shaGetNewColorArray();
   GFXColor *pcolBase = shaGetColorArray();;
   
@@ -134,7 +133,7 @@ void DoReflectionLayer(INDEX iReflectionTexture,INDEX iReflectionColor,BOOL bFul
 
     // map reflected vector to texture 
     // NOTE: using X and Z axes, so that singularity gets on -Y axis (where it will least probably be seen)
-    const FLOAT f1oFM = 0.5f / sqrt(2+2*fRVy);  
+    const FLOAT f1oFM = 0.5f / sqrt(2+2*fRVy);
     ptcUVMap[ivx].st.s = fRVx*f1oFM +0.5f;
     ptcUVMap[ivx].st.t = fRVz*f1oFM +0.5f;
   }

@@ -99,8 +99,8 @@ SHADER_MAIN(Detail)
   if(ctTexCoords>0) {
     for(INDEX itxc=0;itxc<ctTexCoords;itxc++)
     {
-      ptxcNew[itxc].uv.u = ptxcOld[itxc].uv.u * fMul;
-      ptxcNew[itxc].uv.v = ptxcOld[itxc].uv.v * fMul;
+		ptxcNew[itxc].uv.u = ptxcOld[itxc].uv.u * fMul;
+		ptxcNew[itxc].uv.v = ptxcOld[itxc].uv.v * fMul;
     }
     shaSetTexCoords(ptxcNew);
   }
