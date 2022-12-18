@@ -1547,7 +1547,7 @@ void CMainFrame::ManualToolTipUpdate( void)
   m_pwndToolTip->ManualUpdate();
 }
 
-void CMainFrame::OnTimer(UINT nIDEvent)
+void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 {
   POINT ptMouse;
   GetCursorPos( &ptMouse);

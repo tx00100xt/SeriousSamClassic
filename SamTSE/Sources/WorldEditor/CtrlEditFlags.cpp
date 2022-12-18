@@ -248,7 +248,7 @@ CTString CCtrlEditFlags::GetTipForArea(INDEX iArea) const
   return "Not available";
 }
 
-int CCtrlEditFlags::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
+INT_PTR CCtrlEditFlags::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
 {
   INDEX iArea=GetAreaUnderMouse( point);
   if( iArea==-1) return 0;

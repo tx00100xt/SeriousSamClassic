@@ -57,7 +57,7 @@ public:
   inline BOOL IsColorValid(void) { return !m_bMixedColor;};
   void SetOverButtonInfo( CPoint point);
   void ColorToComponents(void);
-  int OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;
+  INT_PTR OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CColoredButton)

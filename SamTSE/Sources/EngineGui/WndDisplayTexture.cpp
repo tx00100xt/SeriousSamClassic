@@ -180,7 +180,7 @@ void CWndDisplayTexture::OnPaint()
 }
 
 
-void CWndDisplayTexture::OnTimer(UINT nIDEvent) 
+void CWndDisplayTexture::OnTimer(UINT_PTR nIDEvent)
 {
 	// on our timer discard test animation window
   if( nIDEvent == 1)

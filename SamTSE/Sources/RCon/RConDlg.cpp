@@ -165,7 +165,7 @@ void CRConDlg::OnClose()
 	CDialog::OnClose();
 }
 
-void CRConDlg::OnTimer(UINT nIDEvent) 
+void CRConDlg::OnTimer(UINT_PTR nIDEvent) 
 {
   // repeat
   BOOL bChanged = FALSE;

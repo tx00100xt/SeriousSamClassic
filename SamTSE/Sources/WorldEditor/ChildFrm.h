@@ -107,7 +107,7 @@ public:
 	afx_msg void OnUpdateRenderTargets(CCmdUI* pCmdUI);
 	afx_msg void OnMoveAnchored();
 	afx_msg void OnUpdateMoveAnchored(CCmdUI* pCmdUI);
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnSceneRenderingTime();
 	afx_msg void OnUpdateSceneRenderingTime(CCmdUI* pCmdUI);
 	afx_msg void OnAutoMipLeveling();

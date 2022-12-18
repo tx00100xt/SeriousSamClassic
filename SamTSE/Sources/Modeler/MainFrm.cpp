@@ -628,7 +628,7 @@ void CMainFrame::OnFileCreateTexture()
                 pDoc->m_emEditModel.GetWidth(),
                 pDoc->m_emEditModel.GetHeight() );
     }
-    catch (const char *err_str)
+    catch( char *err_str)
     {
       AfxMessageBox( CString(err_str));
       pNewTDI = NULL;

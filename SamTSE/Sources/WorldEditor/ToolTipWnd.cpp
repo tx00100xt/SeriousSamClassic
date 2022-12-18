@@ -228,7 +228,7 @@ void CToolTipWnd::ManualOff(void)
   }
 }
 
-void CToolTipWnd::OnTimer(UINT nIDEvent) 
+void CToolTipWnd::OnTimer(UINT_PTR nIDEvent)
 {
   ASSERT( m_bManualControl == FALSE);
   if( nIDEvent == 0)

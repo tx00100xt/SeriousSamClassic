@@ -989,7 +989,7 @@ BOOL CSeriousSkaStudioView::OnAddMeshlist()
           pDoc->MarkAsChanged();
           return TRUE;
         }
-        catch (const char *strError)
+        catch(char *strError)
         {
           theApp.ErrorMessage("%s",strError);
           return FALSE;
@@ -1019,14 +1019,14 @@ BOOL CSeriousSkaStudioView::OnAddMeshlist()
         pmiSelected->AddMesh_t(fnSim);
         theApp.UpdateRootModelInstance();
       }
-      catch (const char *strError)
+      catch(char *strError)
       {
         theApp.ErrorMessage("%s",strError);
         return FALSE;
       }
     }
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     theApp.ErrorMessage("%s",strError);
     return FALSE;
@@ -1079,7 +1079,7 @@ void CSeriousSkaStudioView::OnAddSkeletonlist()
           theApp.UpdateRootModelInstance();
           pDoc->MarkAsChanged();
         }
-        catch (const char *strError)
+        catch(char *strError)
         {
           theApp.ErrorMessage("%s",strError);
           return;
@@ -1109,7 +1109,7 @@ void CSeriousSkaStudioView::OnAddSkeletonlist()
       theApp.UpdateRootModelInstance();
     }
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     theApp.ErrorMessage("%s",strError);
   }
@@ -1154,7 +1154,7 @@ void CSeriousSkaStudioView::OnAddAnimset()
           theApp.UpdateRootModelInstance();
           pDoc->MarkAsChanged();
         }
-        catch (const char *strError)
+        catch(char *strError)
         {
           theApp.ErrorMessage("%s",strError);
           return;
@@ -1182,7 +1182,7 @@ void CSeriousSkaStudioView::OnAddAnimset()
       pmiSelected->AddAnimSet_t(fnSim);
     }
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     theApp.ErrorMessage("%s",strError);
   }
@@ -1243,7 +1243,7 @@ void CSeriousSkaStudioView::OnAddChildModelInstance()
   {
     pcmi = ParseSmcFile_t(fnFull);
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     // error in parsing occured
     theApp.ErrorMessage("%s",strError);
@@ -1363,7 +1363,7 @@ void CSeriousSkaStudioView::OnAddMeshlod()
     // load it
     mshTemp.Load_t(fnMeshBin);
   }
-  catch (const char *strErr)
+  catch(char *strErr)
   {
     theApp.ErrorMessage(strErr);
     mshTemp.Clear();
@@ -1454,7 +1454,7 @@ void CSeriousSkaStudioView::OnAddSkeletonlod()
     // load it
     slTemp.Load_t(fnSklBin);
   }
-  catch (const char *strErr)
+  catch(char *strErr)
   {
     theApp.ErrorMessage(strErr);
     slTemp.Clear();
@@ -1552,7 +1552,7 @@ void CSeriousSkaStudioView::OnAddAnimation()
     // load it
     asTemp.Load_t(fnAnimSetBin);
   }
-  catch (const char *strErr)
+  catch(char *strErr)
   {
     theApp.ErrorMessage(strErr);
     asTemp.Clear();
@@ -1622,7 +1622,7 @@ void CSeriousSkaStudioView::AddTexture(CTFileName &fnFull)
   // try adding texture to model instance
   try {
     pmiSelected->AddTexture_t(fnFull,fnFull.FileName(),pmshi);
-  } catch (const char *strError) {
+  } catch(char *strError) {
     theApp.ErrorMessage(strError);
     //continue;
   }

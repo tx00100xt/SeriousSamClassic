@@ -706,7 +706,7 @@ void CChildFrame::OnUpdateMoveAnchored(CCmdUI* pCmdUI)
   pCmdUI->SetCheck( m_bAncoredMovingAllowed);
 }
 
-void CChildFrame::OnTimer(UINT nIDEvent) 
+void CChildFrame::OnTimer(UINT_PTR nIDEvent) 
 {
   // if anchored reset happend
   if( nIDEvent == m_iAnchoredResetTimerID)

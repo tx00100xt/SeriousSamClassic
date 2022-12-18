@@ -18,10 +18,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "stdafx.h"
 
-#ifdef _DEBUG
-  #define GAMEGUI_DLL_NAME "GameGUIMPD.dll"
+#ifdef FIRST_ENCOUNTER
+  #ifdef _DEBUG
+    #define GAMEGUI_DLL_NAME "GameGUID.dll"
+  #else
+    #define GAMEGUI_DLL_NAME "GameGUI.dll"
+  #endif
 #else
-  #define GAMEGUI_DLL_NAME "GameGUIMP.dll"
+  #ifdef _DEBUG
+    #define GAMEGUI_DLL_NAME "GameGUIMPD.dll"
+  #else
+    #define GAMEGUI_DLL_NAME "GameGUIMP.dll"
+  #endif
 #endif
 
 extern CGame *_pGame = NULL;
@@ -34,11 +42,19 @@ static struct GameGUI_interface _Interface;
 void Initialize(const CTFileName &fnGameSettings)
 {
   try {
+#ifdef FIRST_ENCOUNTER
+    #ifndef NDEBUG 
+      #define GAMEDLL "Bin\\Debug\\GameD.dll"
+    #else
+      #define GAMEDLL "Bin\\Game.dll"
+    #endif
+#else
     #ifndef NDEBUG 
       #define GAMEDLL "Bin\\Debug\\GameMPD.dll"
     #else
       #define GAMEDLL "Bin\\GameMP.dll"
     #endif
+#endif
     CTFileName fnmExpanded;
     ExpandFilePath(EFP_READ, CTString(GAMEDLL), fnmExpanded);
     HMODULE hGame = LoadLibraryA(fnmExpanded);
@@ -51,7 +67,7 @@ void Initialize(const CTFileName &fnGameSettings)
     }
     _pGame = GAME_Create();
 
-  } catch (const char *strError) {
+  } catch (char *strError) {
     FatalError("%s", strError);
   }
   // init game - this will load persistent symbols
@@ -120,7 +136,7 @@ static int iDialogResult;
   try {                                                           \
     _pGame->Load_t();                                             \
   }                                                               \
-  catch (const char *pError) {                                          \
+  catch( char *pError) {                                          \
     (void) pError;                                                \
   }                                                               \
   HANDLE hOldResource = AfxGetResourceHandle();                   \
@@ -132,7 +148,7 @@ static int iDialogResult;
   try {                                                           \
     _pGame->Save_t();                                             \
   }                                                               \
-  catch (const char *pError) {                                          \
+  catch( char *pError) {                                          \
     AfxMessageBox( CString(pError));                              \
     iDialogResult = IDCANCEL;                                     \
   }

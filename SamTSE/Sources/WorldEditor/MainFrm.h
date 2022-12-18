@@ -187,7 +187,7 @@ public:
 	afx_msg void OnToolRecreateTexture();
 	afx_msg void OnRecreateCurrentTexture();
 	afx_msg void OnLightAnimation();
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnHelpFinder();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

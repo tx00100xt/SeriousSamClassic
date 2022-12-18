@@ -356,7 +356,7 @@ void CColoredButton::OnMouseMove(UINT nFlags, CPoint point)
   CButton::OnMouseMove(nFlags, point);
 }
 
-int CColoredButton::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
+INT_PTR CColoredButton::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
 {
   UBYTE ubR, ubG, ubB;
   UBYTE ubH, ubS, ubV, ubA;

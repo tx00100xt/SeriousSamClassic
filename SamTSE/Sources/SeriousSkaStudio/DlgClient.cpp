@@ -382,7 +382,7 @@ void CDlgClient::OnShowWindow(BOOL bShow, UINT nStatus)
   {
     // read all shaders files
     CDynamicStackArray<CTFileName> afnShaders;
-    MakeDirList( afnShaders, CTString("Shaders\\"), "*.sha", 0);
+    MakeDirList( afnShaders, CTString("Shaders\\"), CTString("*.sha"), 0);
     cbShader->ResetContent();
     for(INDEX ifn=0; ifn<afnShaders.Count(); ifn++)
     {

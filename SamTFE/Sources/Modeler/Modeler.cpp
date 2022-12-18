@@ -382,7 +382,7 @@ BOOL CModelerApp::SubInitInstance()
     // setup simple model shadow texture
     _toSimpleModelShadow.SetData_t( fnShadowTex);
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   { // report error and continue without models
     AfxMessageBox( CString(err_str));
 
@@ -557,7 +557,7 @@ void CModelerApp::CreateNewDocument( CTFileName fnRequestedFile)
     {
       em.CreateScriptFile_t( fnRequestedFile);
     }
-    catch (const char *err_str)
+    catch( char *err_str)
     {
       AfxMessageBox( CString(err_str));
       return;
@@ -738,7 +738,7 @@ BOOL CModelerApp::AddModelerWorkingTexture( CTFileName fnTexName)
   {
     pNewWT->wt_TextureData = _pTextureStock->Obtain_t( fnTexName);
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     MessageBoxA( m_pMainWnd->m_hWnd, err_str, "Warning!", MB_OK|MB_ICONHAND|MB_SYSTEMMODAL);
     if( pNewWT != NULL) delete pNewWT;
@@ -769,7 +769,7 @@ BOOL CModelerApp::AddModelerWorkingPatch( CTFileName fnPatchName)
   {
     pNewWP->wp_TextureData = _pTextureStock->Obtain_t( pNewWP->wp_FileName);
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     MessageBoxA( m_pMainWnd->m_hWnd, err_str, "Warning!", MB_OK|MB_ICONHAND|MB_SYSTEMMODAL);
     delete pNewWP;

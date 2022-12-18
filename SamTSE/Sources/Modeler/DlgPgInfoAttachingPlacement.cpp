@@ -69,7 +69,7 @@ INDEX CDlgPgInfoAttachingPlacement::GetCurrentAttachingPlacement(void)
 void CDlgPgInfoAttachingPlacement::SetPlacementReferenceVertex(INDEX iCenter, INDEX iFront, INDEX iUp)
 {
   // patch for calling before page is refreshed
-  ASSERT(this!=NULL);
+  if(this == NULL) return;
   CModelerView *pModelerView = CModelerView::GetActiveView();
   if(pModelerView == NULL) return;
   CModelerDoc* pDoc = pModelerView->GetDocument();
@@ -351,7 +351,7 @@ BOOL CDlgPgInfoAttachingPlacement::BrowseAttachement( CAttachedModel *pam)
   {
     pam->SetModel_t( fnModel);
   }
-  catch (const char *strError)
+  catch( char *strError)
   {
     (void) strError;
     return FALSE;

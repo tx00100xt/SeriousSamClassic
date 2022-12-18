@@ -186,7 +186,6 @@ BOOL CDlgPreferences::OnInitDialog()
 #ifdef SE1_D3D
   m_ctrlGfxApi.AddString(L"DirectX");
 #endif // SE1_D3D
-
   if( IsWindow(m_ctrlGfxApi.m_hWnd))
   {
     switch(theApp.m_iApi)

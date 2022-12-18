@@ -142,7 +142,7 @@ public:
 // Operations
 public:
   void OnIdle(void);
-  int OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;
+  INT_PTR OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;
   void HideCursor(void);
   void UnhideCursor(void);
 

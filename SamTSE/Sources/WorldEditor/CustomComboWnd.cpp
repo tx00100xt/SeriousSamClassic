@@ -303,7 +303,7 @@ void CCustomComboWnd::OnDestroy()
 	CWnd::OnDestroy();
 }
 
-void CCustomComboWnd::OnTimer(UINT nIDEvent) 
+void CCustomComboWnd::OnTimer(UINT_PTR nIDEvent) 
 {
   Invalidate(FALSE);	
 	CWnd::OnTimer(nIDEvent);

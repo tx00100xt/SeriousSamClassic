@@ -201,7 +201,7 @@ void CBrushPaletteWnd::OnDestroy()
 	CWnd::OnDestroy();
 }
 
-void CBrushPaletteWnd::OnTimer(UINT nIDEvent) 
+void CBrushPaletteWnd::OnTimer(UINT_PTR nIDEvent) 
 {
   POINT pt;
   GetCursorPos( &pt);

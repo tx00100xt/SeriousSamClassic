@@ -222,7 +222,7 @@ CTFileName CEngineGUI::FileRequester(
   ofnRequestFiles.lpstrTitle = pchrTitle;
   ofnRequestFiles.Flags = OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE | OFN_HIDEREADONLY;
   // setup preview dialog
-  ofnRequestFiles.lpfnHook = &::FileOpenRequesterHook;
+  ofnRequestFiles.lpfnHook = (LPOFNHOOKPROC)&::FileOpenRequesterHook;
   ofnRequestFiles.hInstance = GetModuleHandleA(ENGINEGUI_DLL_NAME);
   ofnRequestFiles.lpTemplateName = MAKEINTRESOURCEA( IDD_GFX_FILE_REQUESTER);
   // allow multi select

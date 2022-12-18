@@ -55,7 +55,7 @@ public:
   void ApplyChange(ULONG &ulOldFlags);
   RECT GetRectForArea(INDEX iArea) const;
   INDEX GetAreaUnderMouse( CPoint point) const;
-  int OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;
+  INT_PTR OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;
 
 // Attributes
 public:

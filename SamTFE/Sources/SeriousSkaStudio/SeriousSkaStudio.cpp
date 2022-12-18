@@ -171,7 +171,7 @@ BOOL CSeriousSkaStudioApp::SubInitInstance()
   {
     toGroundTexture.SetData_t(fnGroundTexture);
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     ErrorMessage(strError);
     return FALSE;
@@ -211,7 +211,7 @@ BOOL CSeriousSkaStudioApp::SubInitInstance()
     pmiLight = ParseSmcFile_t(_fnmApplicationPath + LAMP_MODEL_FILENAME);
     pmiLight->StretchModel(FLOAT3D(.5f,.5f,.5f))  ;
   }
-  catch (const char *strError) 
+  catch(char *strError) 
   {
     if(pmiLight) pmiLight->Clear();
     ErrorMessage("%s",strError);
@@ -401,7 +401,7 @@ BOOL StartParser(CTString fnParseFile)
     fclose(yyin);
   }
   // if an error in parsing occured
-  catch (const char *strError)
+  catch(char *strError)
   {
     WarningMessage(strError);
     // AfxMessageBox(strError);
@@ -444,7 +444,7 @@ BOOL CSeriousSkaStudioApp::ConvertMesh(CTFileName fnMesh)
   {
     mesh.Save_t(fnMesh.NoExt() + ".bm");
   }
-  catch (const char *strErr)
+  catch(char *strErr)
   {
     ErrorMessage(strErr);
   }
@@ -463,7 +463,7 @@ BOOL CSeriousSkaStudioApp::ConvertMesh(CTFileName fnMesh)
     // release mesh
     _pMeshStock->Release(pMesh);
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     if(strError != NULL) ErrorMessage(strError);
     return FALSE;
@@ -489,7 +489,7 @@ BOOL CSeriousSkaStudioApp::ConvertSkeleton(CTFileName fnSkeleton)
     // save binary skeleton
     skeleton.Save_t(fnSkeleton.NoExt() + ".bs");
   }
-  catch (const char *strErr)
+  catch(char *strErr)
   {
     ErrorMessage(strErr);
   }
@@ -508,7 +508,7 @@ BOOL CSeriousSkaStudioApp::ConvertSkeleton(CTFileName fnSkeleton)
     // release skeleton
     _pSkeletonStock->Release(pSkeleton);
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     if(strError != NULL) ErrorMessage("%s",strError);
     return FALSE;
@@ -533,7 +533,7 @@ BOOL CSeriousSkaStudioApp::ConvertAnimSet(CTFileName fnAnimSet)
     // save animset as binary
     animset.Save_t(fnAnimSet.NoExt() + ".ba");
   }
-  catch (const char *strErr)
+  catch(char *strErr)
   {
     ErrorMessage(strErr);
   }
@@ -552,7 +552,7 @@ BOOL CSeriousSkaStudioApp::ConvertAnimSet(CTFileName fnAnimSet)
     // release animset
     _pAnimSetStock->Release(pAnimSet);
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     if(strError != NULL) ErrorMessage("%s",strError);
     return FALSE;
@@ -581,7 +581,7 @@ void CSeriousSkaStudioApp::SaveSmcFile(CModelInstance &mi,BOOL bSaveChildren)
   {
     fnSmc.RemoveApplicationPath_t();
   }
-  catch (const char *){}
+  catch(char *){}
 
   CTFileStream ostrFile;
   // try to save model instance
@@ -590,7 +590,7 @@ void CSeriousSkaStudioApp::SaveSmcFile(CModelInstance &mi,BOOL bSaveChildren)
     SaveModelInstance_t(pmiFirst,pmiParent,ostrFile,bSaveChildren);
     ostrFile.Close();
     NotificationMessage("Smc '%s' saved.",pmiFirst->mi_fnSourceFile); 
-  } catch (const char *strError) {
+  } catch(char *strError) {
     ErrorMessage(strError);
   }
   EnableRendering();
@@ -605,19 +605,19 @@ BOOL CSeriousSkaStudioApp::SaveMeshListFile(MeshInstance &mshi, BOOL bConvert)
   fnMeshList = fnMeshList.NoExt() + ".aml";
   try {
     fnMeshList.RemoveApplicationPath_t();
-  } catch (const char *){}
+  } catch(char *){}
   CTString strBackUp;
   try {
     // back up current mesh list file
     strBackUp.Load_t(fnMeshList);
-  } catch (const char*){}
+  } catch(char*){}
   // save mesh instance in new mesh list file
   CTFileStream ostrFile;
   try {
     ostrFile.Create_t(fnMeshList,CTStream::CM_TEXT);
     SaveMeshInstance_t(mshi,ostrFile);
     ostrFile.Close();
-  } catch (const char *strError) {
+  } catch(char *strError) {
     ErrorMessage(strError);
     EnableRendering();
     return FALSE;
@@ -631,7 +631,7 @@ BOOL CSeriousSkaStudioApp::SaveMeshListFile(MeshInstance &mshi, BOOL bConvert)
         // try returning old mesh list file
         try {
           strBackUp.Save_t(fnMeshList);
-        } catch (const char*){}
+        } catch(char*){}
       }
     }
   }
@@ -648,21 +648,21 @@ BOOL CSeriousSkaStudioApp::SaveSkeletonListFile(CSkeleton &skl, BOOL bConvert)
   try {
     fnSkeletonList.RemoveApplicationPath_t();
   }
-  catch (const char *){}
+  catch(char *){}
 
   // back up current skeleton list file
   CTString strBackUp;
   try {
     strBackUp.Load_t(fnSkeletonList);
   }
-  catch (const char*){}
+  catch(char*){}
 
   CTFileStream ostrFile;
   try {
     ostrFile.Create_t(fnSkeletonList,CTStream::CM_TEXT);
     SaveSkeletonList_t(skl,ostrFile);
     ostrFile.Close();
-  } catch (const char *strError) {
+  } catch(char *strError) {
     ErrorMessage(strError);
     EnableRendering();
     return FALSE;
@@ -676,7 +676,7 @@ BOOL CSeriousSkaStudioApp::SaveSkeletonListFile(CSkeleton &skl, BOOL bConvert)
         try {
           strBackUp.Save_t(fnSkeletonList);
         }
-        catch (const char*){}
+        catch(char*){}
       }
     }
   }
@@ -692,20 +692,20 @@ BOOL CSeriousSkaStudioApp::SaveAnimSetFile(CAnimSet &as, BOOL bConvert)
   fnAnimSet = fnAnimSet.NoExt() + ".aal";
   try {
     fnAnimSet.RemoveApplicationPath_t();
-  } catch (const char *){}
+  } catch(char *){}
 
   // back up current skeleton list file
   CTString strBackUp;
   try {
     strBackUp.Load_t(fnAnimSet); 
-  } catch (const char*){}
+  } catch(char*){}
 
   CTFileStream ostrFile;
   try {
     ostrFile.Create_t(fnAnimSet,CTStream::CM_TEXT);
     SaveAnimSet_t(as,ostrFile);
     ostrFile.Close();
-  } catch (const char *strError) {
+  } catch(char *strError) {
     ErrorMessage(strError);
     EnableRendering();
     return FALSE;
@@ -752,7 +752,7 @@ BOOL CSeriousSkaStudioApp::ConvertAnimationInAnimSet(CAnimSet *pas,Animation *pa
     // clear new animset
     as.Clear();
   }
-  catch (const char *strErr)
+  catch(char *strErr)
   {
     ErrorMessage(strErr);
     EnableRendering();
@@ -791,7 +791,7 @@ void CSeriousSkaStudioApp::ReloadRootModelInstance()
     // try parsing smc file
     try {
       pDoc->m_ModelInstance = ParseSmcFile_t(pDoc->m_ModelInstance->mi_fnSourceFile);
-    } catch (const char *strError) {
+    } catch(char *strError) {
       // error in parsing occured
       ErrorMessage("%s",strError);
       if(pDoc->m_ModelInstance != NULL) pDoc->m_ModelInstance->Clear();
@@ -998,7 +998,7 @@ void CSeriousSkaStudioApp::SaveModelInstance_t(CModelInstance *pmi,CModelInstanc
       CTFileName fnCmiSourceFile = pcmi->mi_fnSourceFile;
       try{
         fnCmiSourceFile.RemoveApplicationPath_t();
-      } catch (const char*) {}
+      } catch(char*) {}
       ostrFile.FPrintF_t(MAKESPACE(iCurSpaces));
       // include that file
       ostrFile.FPrintF_t("#INCLUDE\t\"%s\"\n",(const char*)fnCmiSourceFile);
@@ -1092,7 +1092,7 @@ void CSeriousSkaStudioApp::SaveMeshInstance_t(MeshInstance &mshi,CTFileStream &o
     CTFileName fnSource = mlod.mlod_fnSourceFile;
     CTFileName fnShaderParams = fnSource.FileDir()+fnSource.FileName()+".shp";
     try { fnSource.RemoveApplicationPath_t(); }
-    catch (const char *){}
+    catch(char *){}
     ostrFile.FPrintF_t("  #INCLUDE \"%s\"\n",(const char*)fnShaderParams);
     ostrFile.FPrintF_t("  #INCLUDE \"%s\"\n",(const char*)fnSource);
     SaveShaderParams_t(&mlod,fnShaderParams);
@@ -1111,7 +1111,7 @@ void CSeriousSkaStudioApp::SaveAnimSet_t(CAnimSet &as,CTFileStream &ostrFile)
     // try to remove app path from source
     CTFileName fnSource = an.an_fnSourceFile;
     try { fnSource.RemoveApplicationPath_t(); }
-    catch (const char *){}
+    catch(char *){}
     ostrFile.FPrintF_t("  TRESHOLD %g;\n",an.an_fTreshold);
     if(an.an_bCompresed) ostrFile.FPrintF_t("  COMPRESION TRUE;\n");
     else ostrFile.FPrintF_t("  COMPRESION FALSE;\n");
@@ -1133,7 +1133,7 @@ void CSeriousSkaStudioApp::SaveSkeletonList_t(CSkeleton &skl,CTFileStream &ostrF
     // try to remove app path from source
     CTFileName fnSource = slod.slod_fnSourceFile;
     try { fnSource.RemoveApplicationPath_t(); }
-    catch (const char *){}
+    catch(char *){}
     ostrFile.FPrintF_t("  #INCLUDE \"%s\"\n",(const char*)fnSource);
   }
   ostrFile.FPrintF_t("}\n");
@@ -1145,7 +1145,7 @@ void CSeriousSkaStudioApp::AddEmptyListsToModelInstance(CModelInstance &mi)
   CTFileName fnSmcSource = mi.mi_fnSourceFile;
   try {
     fnSmcSource.RemoveApplicationPath_t();
-  } catch (const char *) {
+  } catch(char *) {
   }
 
   CTFileName fnMeshList = fnSmcSource.NoExt() + ".aml";
@@ -1169,7 +1169,7 @@ void CSeriousSkaStudioApp::AddEmptyListsToModelInstance(CModelInstance &mi)
         // add it to selected model instance
           mi.AddMesh_t(fnMeshList);
       }
-    } catch (const char *strError) {
+    } catch(char *strError) {
       ErrorMessage("%s",strError);
     }
   }
@@ -1190,7 +1190,7 @@ void CSeriousSkaStudioApp::AddEmptyListsToModelInstance(CModelInstance &mi)
         // add it to selected model instance
           mi.AddSkeleton_t(fnSkeletonList);
       }
-    } catch (const char *strError) {
+    } catch(char *strError) {
       ErrorMessage("%s",strError);
     }
   }
@@ -1211,7 +1211,7 @@ void CSeriousSkaStudioApp::AddEmptyListsToModelInstance(CModelInstance &mi)
         // add it to selected model instance
           mi.AddAnimSet_t(fnAnimSet);
       }
-    } catch (const char *strError) {
+    } catch(char *strError) {
       ErrorMessage("%s",strError);
     }
   }
@@ -1255,7 +1255,7 @@ CModelInstance *CSeriousSkaStudioApp::OnAddNewModelInstance()
     // load new smc file
     pmi = ParseSmcFile_t(fnFull);
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     ErrorMessage("%s",strError);
     if(pmi != NULL) pmi->Clear();
@@ -1281,7 +1281,7 @@ CModelInstance *CSeriousSkaStudioApp::OnOpenExistingInstance(CTString strModelIn
     {
       pmi = ParseSmcFile_t(_fnmApplicationPath + strModelInstance);
     }
-    catch (const char *strError)
+    catch(char *strError)
     {
       // error in parsing occured
       ErrorMessage("%s",strError);
@@ -1441,7 +1441,7 @@ void CSeriousSkaStudioApp::SaveModel(CModelInstance &mi)
     // try to save mesh
     try {
       pMesh->Save_t(pMesh->ser_FileName);
-    } catch (const char *strErr) {
+    } catch(char *strErr) {
       ErrorMessage(strErr);
       bSaved = FALSE;
     }
@@ -1453,7 +1453,7 @@ void CSeriousSkaStudioApp::SaveModel(CModelInstance &mi)
     // try to save skeleton
     try {
       psklSkeleton->Save_t(psklSkeleton->ser_FileName);
-    } catch (const char *strErr) {
+    } catch(char *strErr) {
       ErrorMessage(strErr);
       bSaved = FALSE;
     }
@@ -1469,7 +1469,7 @@ void CSeriousSkaStudioApp::SaveModel(CModelInstance &mi)
     // try to save animset
     try {
       pas->Save_t(pas->ser_FileName);
-    } catch (const char *strErr) {
+    } catch(char *strErr) {
       ErrorMessage(strErr);
       bSaved = FALSE;
     }

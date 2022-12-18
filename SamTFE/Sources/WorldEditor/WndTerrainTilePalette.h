@@ -63,7 +63,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

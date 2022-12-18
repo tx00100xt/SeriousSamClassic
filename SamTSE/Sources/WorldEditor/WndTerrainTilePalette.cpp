@@ -314,7 +314,7 @@ void CWndTerrainTilePalette::OnLButtonDown(UINT nFlags, CPoint point)
 {
 }
 
-void CWndTerrainTilePalette::OnTimer(UINT nIDEvent) 
+void CWndTerrainTilePalette::OnTimer(UINT_PTR nIDEvent)
 {
   POINT pt;
   GetCursorPos( &pt);

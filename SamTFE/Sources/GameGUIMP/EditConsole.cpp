@@ -66,7 +66,7 @@ void CEditConsole::SetTextFromConsole(void)
 
   CDlgConsole *pdlgParent = (CDlgConsole *) GetParent();
   CEdit *pwndOutput = (CEdit *) pdlgParent->GetDlgItem( IDC_CONSOLE_OUTPUT);
-  pwndOutput->SetWindowText( strNew);
+  pwndOutput->SetWindowText( CString(strNew));
   pwndOutput->LineScroll(ctLines-1);
 
   FreeMemory(strNew);

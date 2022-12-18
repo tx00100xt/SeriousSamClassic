@@ -85,7 +85,7 @@ void CScriptView::OnScriptMakeModel()
   {
     fnScriptName.RemoveApplicationPath_t();
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     AfxMessageBox( CString(err_str));
     return;
@@ -146,7 +146,7 @@ void CScriptView::OnScriptMakeModel()
   {
     ((CModelerDoc *)pDocument)->m_emEditModel.CSerial::Load_t(fnIniFileName);
   }
-  catch (const char *strError)
+  catch( char *strError)
   {
     // ignore errors
     (void) strError;

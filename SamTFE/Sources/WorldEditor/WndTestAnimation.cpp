@@ -103,7 +103,7 @@ void CWndTestAnimation::OnPaint()
 }
 
 static TIME timeLastTick=TIME(0);
-void CWndTestAnimation::OnTimer(UINT nIDEvent) 
+void CWndTestAnimation::OnTimer(UINT_PTR nIDEvent) 
 {
 	// on our timer discard test animation window
   if( nIDEvent == 1)

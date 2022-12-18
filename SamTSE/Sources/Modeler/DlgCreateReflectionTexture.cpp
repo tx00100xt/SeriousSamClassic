@@ -162,7 +162,7 @@ void CDlgCreateReflectionTexture::DoDataExchange(CDataExchange* pDX)
       CreateReflectionTexture_t( CTString("temp\\ReflectionTemp.tex"));
       CTextureData *pTD = (CTextureData *) m_moModel.mo_toReflection.GetData();
       if( pTD != NULL) pTD->Reload();
-    } catch (const char *strError) { 
+    } catch( char *strError) { 
       WarningMessage( strError);
     }
     _bTimerEnabled = TRUE;
@@ -226,7 +226,7 @@ void CDlgCreateReflectionTexture::CreateReflectionTexture_t( CTFileName fnTextur
     iiF.LoadAnyGfxFormat_t(fnF);
     iiC.LoadAnyGfxFormat_t(fnC);
   }
-  catch (const char *strError)
+  catch( char *strError)
   {
     (void) strError;
     bSucesseful = FALSE;
@@ -355,7 +355,7 @@ void CDlgCreateReflectionTexture::CreateReflectionTexture_t( CTFileName fnTextur
     td.Write_t( &fsFile);
     fsFile.Close();
   }
-  catch (const char *strError)
+  catch(char *strError)
   {
     iiEnv.Detach();
     throw strError;
@@ -382,7 +382,7 @@ void CDlgCreateReflectionTexture::DrawPreview( CDrawPort *pdp)
     m_moModel.mo_toReflection.SetData_t( CTString("temp\\ReflectionTemp.tex"));
     m_moModel.mo_toSpecular.SetData_t( CTString("temp\\SpecularTemp.tex"));
   }
-  catch (const char *strError)
+  catch( char *strError)
   {
     (void) strError;
     bErrorOcured = TRUE;
@@ -520,7 +520,7 @@ BOOL CDlgCreateReflectionTexture::OnInitDialog()
 	return TRUE;
 }
 
-void CDlgCreateReflectionTexture::OnTimer(UINT nIDEvent) 
+void CDlgCreateReflectionTexture::OnTimer(UINT_PTR nIDEvent) 
 {
 	// on our timer discard preview window
   if( nIDEvent == 1 && _bTimerEnabled)
@@ -594,7 +594,7 @@ void CDlgCreateReflectionTexture::AutoSetTextures( CTFileName fnFile)
     m_toC.SetData_t( CTString("Temp\\TempC.tex"));
     m_toF.SetData_t( CTString("Temp\\TempF.tex"));
   }
-  catch (const char *strError)
+  catch( char *strError)
   {
     (void) strError;
   }
@@ -662,7 +662,7 @@ BOOL CDlgCreateReflectionTexture::PreTranslateMessage(MSG* pMsg)
     if( to.GetName() == m_toBackground.GetName()){\
       m_toBackground.SetData_t( fnBCGTexture);\
     } else { m_toBackground.SetData_t( to.GetName());};\
-  } catch (const char *strError) { (void) strError;};};
+  } catch( char *strError) { (void) strError;};};
 
   if( pMsg->message == WM_LBUTTONUP)
   {

@@ -182,7 +182,7 @@ void CDlgCreateSpecularTexture::CreateTexture( CTFileName fnTexture, FLOAT fExp)
     fsFile.Close();
   }
   // if failed
-  catch (const char *strError)
+  catch (char *strError)
   {
     // report error
     AfxMessageBox(CString(strError));
@@ -209,7 +209,7 @@ void CDlgCreateSpecularTexture::DrawPreview( CDrawPort *pdp, FLOAT fExp)
     m_moModel.mo_toTexture.SetData_t( fnTeapotTexture);
     m_moModel.mo_toSpecular.SetData_t( CTString("temp\\SpecularTemp.tex"));
   }
-  catch (const char *strError)
+  catch( char *strError)
   {
     (void) strError;
     bErrorOcured = TRUE;
@@ -392,7 +392,7 @@ BOOL CDlgCreateSpecularTexture::OnInitDialog()
 	return TRUE;
 }
 
-void CDlgCreateSpecularTexture::OnTimer(UINT nIDEvent) 
+void CDlgCreateSpecularTexture::OnTimer(UINT_PTR nIDEvent) 
 {
 	// on our timer discard preview window
   if( nIDEvent == 1)

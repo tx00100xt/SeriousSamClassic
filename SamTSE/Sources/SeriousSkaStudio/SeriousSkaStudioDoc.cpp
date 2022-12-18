@@ -127,7 +127,7 @@ BOOL CSeriousSkaStudioDoc::OnOpenDocument(LPCTSTR lpszPathName)
   CTFileName fnModelFile = CTString(CStringA(lpszPathName));
   try {
     fnModelFile.RemoveApplicationPath_t();
-  } catch (const char *err_str) {
+  } catch( char *err_str) {
     AfxMessageBox( CString(err_str));
     return FALSE;
   }

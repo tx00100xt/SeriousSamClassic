@@ -29,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 // CDlgPlayerControls dialog
 
 CDlgPlayerControls::CDlgPlayerControls(CControls &ctrlControls, CWnd* pParent /*=NULL*/)
-: CDialog(CDlgPlayerControls::IDD, pParent), m_ctrlControls(*_pGame->gm_ctrlControlsExtra)
+: CDialog(CDlgPlayerControls::IDD, pParent), m_ctrlControls(_pGame->gm_ctrlControlsExtra)
 {
   // make copy of the controls, we will change them
   m_ctrlControls = ctrlControls;

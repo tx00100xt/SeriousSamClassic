@@ -2343,7 +2343,7 @@ int CTerrainInterface::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-int CTerrainInterface::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
+INT_PTR CTerrainInterface::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
 {
   FOREACHINDYNAMICCONTAINER( dcButtons, CTIButton, ittib)
   {

@@ -90,7 +90,7 @@ BOOL CModelerDoc::CreateModelFromScriptFile( CTFileName fnScrFileName, char *str
 
     m_emEditModel.LoadFromScript_t( fnScrFileName);
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     strcpy( strError, err_str);
     pMainFrame->m_NewProgress.DestroyWindow();
@@ -141,7 +141,7 @@ BOOL CModelerDoc::OnOpenDocument(LPCTSTR lpszPathName)
   {
     fnModelFile.RemoveApplicationPath_t();
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     AfxMessageBox( CString(err_str));
     return FALSE;
@@ -151,7 +151,7 @@ BOOL CModelerDoc::OnOpenDocument(LPCTSTR lpszPathName)
   {
     m_emEditModel.Load_t( fnModelFile);
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     CMainFrame* pMainFrame = STATIC_DOWNCAST(CMainFrame, AfxGetMainWnd());
     MessageBoxA(pMainFrame->m_hWnd, err_str, "Warning! Model load failed.", MB_OK|MB_ICONHAND|MB_SYSTEMMODAL);
@@ -176,7 +176,7 @@ BOOL CModelerDoc::OnOpenDocument(LPCTSTR lpszPathName)
       {
         am.SetModel_t(fnAxis);
       }
-      catch (const char *strError)
+      catch( char *strError)
       {
         WarningMessage( strError);
       }
@@ -200,7 +200,7 @@ BOOL CModelerDoc::OnSaveDocument(LPCTSTR lpszPathName)
   {
     fnModelFile.RemoveApplicationPath_t();
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     AfxMessageBox( CString(err_str));
     return FALSE;
@@ -211,7 +211,7 @@ BOOL CModelerDoc::OnSaveDocument(LPCTSTR lpszPathName)
   	m_emEditModel.Save_t( fnModelFile);
     m_emEditModel.SaveMapping_t( fnModelFile.NoExt()+".map", 0);
   }
-  catch (const char *err_str)
+  catch( char *err_str)
   {
     MessageBoxA(pMainFrame->m_hWnd, err_str, "Warning! Model Save failed.", MB_OK|MB_ICONHAND|MB_SYSTEMMODAL);
     return FALSE;
@@ -313,7 +313,7 @@ void CModelerDoc::OnFileAddTexture()
     {
       pNewTDI =m_emEditModel.AddTexture_t( fnTexName, mexWidth, mexHeight);
     }
-    catch (const char *err_str)
+    catch( char *err_str)
     {
       pNewTDI = NULL;
       AfxMessageBox( CString(err_str));
