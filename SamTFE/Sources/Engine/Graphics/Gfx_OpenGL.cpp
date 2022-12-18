@@ -29,6 +29,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <Engine/Base/ListIterator.inl>
 
+#ifdef PLATFORM_WIN32
+#include <Engine/Graphics/Gfx_OpenGL.h>
+#endif
+
 BOOL _TBCapability = FALSE;
 
 extern INDEX ogl_iTBufferEffect;
@@ -78,7 +82,7 @@ extern GfxComp  GFX_eDepthFunc;
 extern GfxFace  GFX_eCullFace;
 extern INDEX GFX_iTexModulation[GFX_MAXTEXUNITS];
 
-BOOL  glbUsingVARs = FALSE;   // vertex_array_range
+__extern BOOL  glbUsingVARs = FALSE;   // vertex_array_range
 
 // define gl function pointers
 #define DLLFUNCTION(dll, output, name, inputs, params, required) \
@@ -248,6 +252,9 @@ void CGfxLibrary::InitContext_OGL(void)
   pglActiveTextureARB       = NULL;
   pglClientActiveTextureARB = NULL;
 
+#ifdef PLATFORM_WIN32
+#define  OGL_GetProcAddress pwglGetProcAddress
+#endif 
 // This renders badly on the current Intel Macs...my bug, probably.  !!! FIXME
 #if PLATFORM_MACOSX
     CPrintF("Forcibly disabled multitexturing for now on Mac OS X.");
@@ -260,7 +267,7 @@ void CGfxLibrary::InitContext_OGL(void)
       pglActiveTextureARB       = (void (__stdcall*)(GLenum))OGL_GetProcAddress( "glActiveTextureARB");
       pglClientActiveTextureARB = (void (__stdcall*)(GLenum))OGL_GetProcAddress( "glClientActiveTextureARB");
       ASSERT( pglActiveTextureARB!=NULL && pglClientActiveTextureARB!=NULL);
-      gl_ctTextureUnits = Min( GFX_MAXTEXUNITS, gl_ctRealTextureUnits);
+      gl_ctTextureUnits = Min((INDEX)GFX_MAXTEXUNITS, gl_ctRealTextureUnits);
     } else {
       CPrintF( TRANS("  GL_TEXTURE_ENV_COMBINE extension missing - multi-texturing cannot be used.\n"));
     }
@@ -495,7 +502,7 @@ void CGfxLibrary::EndDriver_OGL(void)
 extern void SetTBufferEffect( BOOL bEnable)
 {
   // adjust console vars
-  ogl_iTBufferEffect  = Clamp( ogl_iTBufferEffect, 0, 2);
+  ogl_iTBufferEffect  = Clamp( ogl_iTBufferEffect, (INDEX)0, (INDEX)2);
   ogl_iTBufferSamples = (1L) << FastLog2(ogl_iTBufferSamples);
   if( ogl_iTBufferSamples<2) ogl_iTBufferSamples = 4;
   // if supported

@@ -272,7 +272,7 @@ void NormalizeMixerBuffer( const FLOAT fNormStrength, const SLONG slBytes, FLOAT
   FLOAT fCurrentNormValue = fLastNormValue;
   for( i=0; i<iSamples; i++) {
     SLONG slSample = FloatToInt(pslSrc[i]*fCurrentNormValue);
-    pswDst[i] = (SWORD)Clamp( slSample, -32767, +32767);
+    pswDst[i] = (SWORD)Clamp( slSample, (SLONG)-32767, (SLONG)+32767);
     fCurrentNormValue = fCurrentNormValue+fNormAdd; // interpolate normalizer
          if( fCurrentNormValue<fNormValue && fNormAdd<0) fCurrentNormValue = fNormValue; // clamp interpolated value
     else if( fCurrentNormValue>fNormValue && fNormAdd>0) fCurrentNormValue = fNormValue;

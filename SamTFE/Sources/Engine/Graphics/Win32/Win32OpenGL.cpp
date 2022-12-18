@@ -1,6 +1,8 @@
 /* Copyright (c) 2002-2012 Croteam Ltd. All rights reserved. */
 
+#include "Engine/StdH.h"
 #include <Engine/Engine.h>
+#include <Engine/Graphics/Gfx_OpenGL.h>
 
 static void FailFunction_t(const char *strName) {
   ThrowF_t(TRANS("Required function %s not found."), strName);
@@ -44,7 +46,7 @@ BOOL CGfxLibrary::InitDriver_OGL( BOOL b3Dfx/*=FALSE*/)
     if( iRes==0) ThrowF_t(TRANS("OpenGL driver '%s' not present"), strDriverFileName);
 
     // load opengl library
-    gl_hiDriver = ::LoadLibraryA( strDriverFileName);
+    gl_hiDriver = (CDynamicLoader *)::LoadLibraryA( strDriverFileName);
 
     // if it cannot be loaded (although it is present on disk)
     if( gl_hiDriver==NONE) {
@@ -60,11 +62,11 @@ BOOL CGfxLibrary::InitDriver_OGL( BOOL b3Dfx/*=FALSE*/)
       ThrowF_t(TRANS("Cannot load OpenGL driver '%s'"), (const char *) strDriverFileName);
     }
     // prepare functions
-    OGL_SetFunctionPointers_t(gl_hiDriver);
+    OGL_SetFunctionPointers_t((HINSTANCE)gl_hiDriver);
   }
   catch (const char *strError)
   { // didn't make it :(
-    if( gl_hiDriver!=NONE) FreeLibrary(gl_hiDriver);
+    if( gl_hiDriver!=NONE) FreeLibrary((HINSTANCE)gl_hiDriver);
     gl_hiDriver = NONE;
     CPrintF( TRANS("Error starting OpenGL: %s\n"), strError);
     SetErrorMode(iOldErrorMode);
@@ -301,7 +303,7 @@ BOOL CGfxLibrary::SetupPixelFormat_OGL( HDC hdc, BOOL bReport/*=FALSE*/)
   pfd.cStencilBits = gap_iStencilBits;
 
   // must be required and works only in full screen via GDI functions
-  ogl_iTBufferEffect = Clamp( ogl_iTBufferEffect, 0L, 2L);
+  ogl_iTBufferEffect = Clamp( ogl_iTBufferEffect, (INDEX)0, (INDEX)2);
   if( ogl_iTBufferEffect>0 && pixResWidth>0 && pixResHeight>0)
   { // lets T-buffer ... :)
     //CPrintF( "TBuffer init...\n");

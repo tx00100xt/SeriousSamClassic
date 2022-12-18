@@ -407,7 +407,7 @@ void CModelData::GetAllFramesBBox( FLOATaabbox3D &MaxBB)
 FLOAT3D CModelData::GetCollisionBoxMin(INDEX iCollisionBox)
 {
   md_acbCollisionBox.Lock();
-  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, 0, md_acbCollisionBox.Count()-1);
+  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, (INDEX)0, md_acbCollisionBox.Count()-1);
   FLOAT3D vMin = md_acbCollisionBox[ iCollisionBoxClamped].mcb_vCollisionBoxMin;
   md_acbCollisionBox.Unlock();
   return vMin;
@@ -416,7 +416,7 @@ FLOAT3D CModelData::GetCollisionBoxMin(INDEX iCollisionBox)
 FLOAT3D CModelData::GetCollisionBoxMax(INDEX iCollisionBox=0)
 {
   md_acbCollisionBox.Lock();
-  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, 0, md_acbCollisionBox.Count()-1);
+  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, (INDEX)0, md_acbCollisionBox.Count()-1);
   FLOAT3D vMax = md_acbCollisionBox[ iCollisionBoxClamped].mcb_vCollisionBoxMax;
   md_acbCollisionBox.Unlock();
   return vMax;
@@ -426,7 +426,7 @@ FLOAT3D CModelData::GetCollisionBoxMax(INDEX iCollisionBox=0)
 INDEX CModelData::GetCollisionBoxDimensionEquality(INDEX iCollisionBox=0)
 {
   md_acbCollisionBox.Lock();
-  iCollisionBox = Clamp(iCollisionBox, 0, md_acbCollisionBox.Count()-1);
+  iCollisionBox = Clamp(iCollisionBox, (INDEX)0, md_acbCollisionBox.Count()-1);
   INDEX iDimEq = md_acbCollisionBox[ iCollisionBox].mcb_iCollisionBoxDimensionEquality;
   md_acbCollisionBox.Unlock();
   return iDimEq;

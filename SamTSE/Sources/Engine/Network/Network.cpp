@@ -78,11 +78,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 CNetworkLibrary *_pNetwork= NULL;
 
 extern BOOL _bNeedPretouch;
-BOOL _bMultiPlayer = FALSE;
-INDEX _ctEntities = 0;
-INDEX _ctPredictorEntities = 0;
-LevelChangePhase _lphCurrent = LCP_NOCHANGE;
-BOOL _bTempNetwork = FALSE;  // set while using temporary second network object
+__extern BOOL _bMultiPlayer = FALSE;
+__extern INDEX _ctEntities = 0;
+__extern INDEX _ctPredictorEntities = 0;
+__extern LevelChangePhase _lphCurrent = LCP_NOCHANGE;
+__extern BOOL _bTempNetwork = FALSE;  // set while using temporary second network object
 extern BOOL con_bCapture;
 extern CTString con_strCapture;
 
@@ -91,93 +91,93 @@ static FLOAT _bStopDemoRecordingNextTime = FALSE;
 static INDEX dem_iRecordedNumber = 0;
 
 // network control
-INDEX ser_bReportSyncOK   = FALSE;
-INDEX ser_bReportSyncBad  = TRUE;
-INDEX ser_bReportSyncLate = FALSE;
-INDEX ser_bReportSyncEarly = FALSE;
-INDEX ser_bPauseOnSyncBad = FALSE;
-INDEX ser_iKickOnSyncBad = 10;
-INDEX ser_bKickOnSyncLate = 1;
-INDEX ser_iRememberBehind = 3000;
-INDEX ser_iExtensiveSyncCheck = 0;
-INDEX ser_bClientsMayPause = TRUE;
-FLOAT ser_tmSyncCheckFrequency = 1.0f;
-INDEX ser_iSyncCheckBuffer = 60;
-INDEX ser_bEnumeration  = TRUE;
-INDEX ser_bPingGameAgent = TRUE;
-FLOAT ser_tmKeepAlive = 0.1f;
-FLOAT ser_tmPingUpdate = 3.0f;
-INDEX ser_bWaitFirstPlayer = 0;
-INDEX ser_iMaxAllowedBPS = 8000;
-CTString ser_strIPMask = "";
-CTString ser_strNameMask = "";
-INDEX ser_bInverseBanning = FALSE;
-CTString ser_strMOTD = "";
+__extern INDEX ser_bReportSyncOK   = FALSE;
+__extern INDEX ser_bReportSyncBad  = TRUE;
+__extern INDEX ser_bReportSyncLate = FALSE;
+__extern INDEX ser_bReportSyncEarly = FALSE;
+__extern INDEX ser_bPauseOnSyncBad = FALSE;
+__extern INDEX ser_iKickOnSyncBad = 10;
+__extern INDEX ser_bKickOnSyncLate = 1;
+__extern INDEX ser_iRememberBehind = 3000;
+__extern INDEX ser_iExtensiveSyncCheck = 0;
+__extern INDEX ser_bClientsMayPause = TRUE;
+__extern FLOAT ser_tmSyncCheckFrequency = 1.0f;
+__extern INDEX ser_iSyncCheckBuffer = 60;
+__extern INDEX ser_bEnumeration  = TRUE;
+__extern INDEX ser_bPingGameAgent = TRUE;
+__extern FLOAT ser_tmKeepAlive = 0.1f;
+__extern FLOAT ser_tmPingUpdate = 3.0f;
+__extern INDEX ser_bWaitFirstPlayer = 0;
+__extern INDEX ser_iMaxAllowedBPS = 8000;
+__extern CTString ser_strIPMask = "";
+__extern CTString ser_strNameMask = "";
+__extern INDEX ser_bInverseBanning = FALSE;
+__extern CTString ser_strMOTD = "";
 
-INDEX cli_bEmulateDesync  = FALSE;
-INDEX cli_bDumpSync       = FALSE;
-INDEX cli_bDumpSyncEachTick = FALSE;
-INDEX cli_bAutoAdjustSettings = FALSE;
-FLOAT cli_tmAutoAdjustThreshold = 2.0f;
-INDEX cli_bPrediction = FALSE;
-INDEX cli_iMaxPredictionSteps = 10;
-INDEX cli_bPredictIfServer = FALSE;
-INDEX cli_bPredictLocalPlayers = TRUE;
-INDEX cli_bPredictRemotePlayers = FALSE;
-FLOAT cli_fPredictEntitiesRange = 20.0f;
-INDEX cli_bLerpActions = FALSE;
-INDEX cli_bReportPredicted = FALSE;
-INDEX cli_iSendBehind = 3;
-INDEX cli_iPredictionFlushing = 1;
+__extern INDEX cli_bEmulateDesync  = FALSE;
+__extern INDEX cli_bDumpSync       = FALSE;
+__extern INDEX cli_bDumpSyncEachTick = FALSE;
+__extern INDEX cli_bAutoAdjustSettings = FALSE;
+__extern FLOAT cli_tmAutoAdjustThreshold = 2.0f;
+__extern INDEX cli_bPrediction = FALSE;
+__extern INDEX cli_iMaxPredictionSteps = 10;
+__extern INDEX cli_bPredictIfServer = FALSE;
+__extern INDEX cli_bPredictLocalPlayers = TRUE;
+__extern INDEX cli_bPredictRemotePlayers = FALSE;
+__extern FLOAT cli_fPredictEntitiesRange = 20.0f;
+__extern INDEX cli_bLerpActions = FALSE;
+__extern INDEX cli_bReportPredicted = FALSE;
+__extern INDEX cli_iSendBehind = 3;
+__extern INDEX cli_iPredictionFlushing = 1;
 
-INDEX cli_iBufferActions = 1;
-INDEX cli_iMaxBPS = 4000;
-INDEX cli_iMinBPS = 0;
+__extern INDEX cli_iBufferActions = 1;
+__extern INDEX cli_iMaxBPS = 4000;
+__extern INDEX cli_iMinBPS = 0;
 
-INDEX net_iCompression = 1;
-INDEX net_bLookupHostNames = FALSE;
-INDEX net_bReportPackets = FALSE;
-INDEX net_iMaxSendRetries = 10;
-FLOAT net_fSendRetryWait = 0.5f;
-INDEX net_bReportTraffic = FALSE;
-INDEX net_bReportICMPErrors = FALSE;
-INDEX net_bReportMiscErrors = FALSE;
-INDEX net_bLerping       = TRUE;
-INDEX net_iGraphBuffer = 100;
-INDEX net_iExactTimer = 2;
-INDEX net_bDumpStreamBlocks = 0;
-INDEX net_bDumpConnectionInfo = 0;
-INDEX net_iPort = 25600;
-CTString net_strLocalHost = "";
-CTString net_strLocationCode = "";
-CTString net_strConnectPassword = "";
-CTString net_strAdminPassword = "";
-CTString net_strVIPPassword = "";
-CTString net_strObserverPassword = "";
-INDEX net_iVIPReserve = 0;
-INDEX net_iMaxObservers = 16;
-INDEX net_iMaxClients = 0;
-FLOAT net_tmConnectionTimeout = 30.0f;
-FLOAT net_tmProblemsTimeout = 5.0f;
-FLOAT net_tmDisconnectTimeout = 300.0f;  // must be higher for level changing
-INDEX net_bReportCRC = FALSE;
-FLOAT net_fDropPackets = 0.0f;
-FLOAT net_tmLatency = 0.0f;
+__extern INDEX net_iCompression = 1;
+__extern INDEX net_bLookupHostNames = FALSE;
+__extern INDEX net_bReportPackets = FALSE;
+__extern INDEX net_iMaxSendRetries = 10;
+__extern FLOAT net_fSendRetryWait = 0.5f;
+__extern INDEX net_bReportTraffic = FALSE;
+__extern INDEX net_bReportICMPErrors = FALSE;
+__extern INDEX net_bReportMiscErrors = FALSE;
+__extern INDEX net_bLerping       = TRUE;
+__extern INDEX net_iGraphBuffer = 100;
+__extern INDEX net_iExactTimer = 2;
+__extern INDEX net_bDumpStreamBlocks = 0;
+__extern INDEX net_bDumpConnectionInfo = 0;
+__extern INDEX net_iPort = 25600;
+__extern CTString net_strLocalHost = "";
+__extern CTString net_strLocationCode = "";
+__extern CTString net_strConnectPassword = "";
+__extern CTString net_strAdminPassword = "";
+__extern CTString net_strVIPPassword = "";
+__extern CTString net_strObserverPassword = "";
+__extern INDEX net_iVIPReserve = 0;
+__extern INDEX net_iMaxObservers = 16;
+__extern INDEX net_iMaxClients = 0;
+__extern FLOAT net_tmConnectionTimeout = 30.0f;
+__extern FLOAT net_tmProblemsTimeout = 5.0f;
+__extern FLOAT net_tmDisconnectTimeout = 300.0f;  // must be higher for level changing
+__extern INDEX net_bReportCRC = FALSE;
+__extern FLOAT net_fDropPackets = 0.0f;
+__extern FLOAT net_tmLatency = 0.0f;
 
-INDEX ent_bReportSpawnInWall = FALSE;
+__extern INDEX ent_bReportSpawnInWall = FALSE;
 
-FLOAT cmd_tmTick = 0.0f;
-CTString cmd_cmdOnTick = "";
-CTString cmd_strChatSender = "";
-CTString cmd_strChatMessage = "";
-CTString cmd_cmdOnChat = "";
-INDEX net_ctChatMessages = 0;  // counter for incoming chat messages
+__extern FLOAT cmd_tmTick = 0.0f;
+__extern CTString cmd_cmdOnTick = "";
+__extern CTString cmd_strChatSender = "";
+__extern CTString cmd_strChatMessage = "";
+__extern CTString cmd_cmdOnChat = "";
+__extern INDEX net_ctChatMessages = 0;  // counter for incoming chat messages
 
 extern CPacketBufferStats _pbsSend;
 extern CPacketBufferStats _pbsRecv;
 
-BOOL _bPredictionActive = FALSE;
-BOOL _bPlayDemoActive = FALSE;
+__extern BOOL _bPredictionActive = FALSE;
+__extern BOOL _bPlayDemoActive = FALSE;
 
 class CGatherCRC {
 public:
@@ -194,43 +194,43 @@ CGatherCRC::~CGatherCRC() {
 }
 
 // precache control
-INDEX _precache_NONE      = PRECACHE_NONE;
-INDEX _precache_SMART     = PRECACHE_SMART;
-INDEX _precache_ALL       = PRECACHE_ALL;
-INDEX _precache_PARANOIA  = PRECACHE_PARANOIA;
-INDEX gam_iPrecachePolicy = _precache_SMART;
-INDEX _precache_bNowPrecaching = FALSE;
+__extern INDEX _precache_NONE      = PRECACHE_NONE;
+__extern INDEX _precache_SMART     = PRECACHE_SMART;
+__extern INDEX _precache_ALL       = PRECACHE_ALL;
+__extern INDEX _precache_PARANOIA  = PRECACHE_PARANOIA;
+__extern INDEX gam_iPrecachePolicy = _precache_SMART;
+__extern INDEX _precache_bNowPrecaching = FALSE;
 
-INDEX dbg_bBreak = FALSE;
-INDEX gam_bPretouch = FALSE;
+__extern INDEX dbg_bBreak = FALSE;
+__extern INDEX gam_bPretouch = FALSE;
 
-FLOAT phy_fCollisionCacheAhead  = 5.0f;
-FLOAT phy_fCollisionCacheAround = 1.5f;
-FLOAT cli_fPredictionFilter = 0.5f;
+__extern FLOAT phy_fCollisionCacheAhead  = 5.0f;
+__extern FLOAT phy_fCollisionCacheAround = 1.5f;
+__extern FLOAT cli_fPredictionFilter = 0.5f;
 
 extern INDEX shd_bCacheAll;
 
 
 // input
-INDEX inp_iKeyboardReadingMethod = 2;  // 0=getasynckey, 1=virtkeytrap, 2=scancodetrap
-INDEX inp_bAllowMouseAcceleration = TRUE;
-FLOAT inp_fMouseSensitivity = 1.0f;
-INDEX inp_bMousePrecision = FALSE;
-FLOAT inp_fMousePrecisionFactor = 4.0f;
-FLOAT inp_fMousePrecisionThreshold = 10.0f;
-FLOAT inp_fMousePrecisionTimeout = 0.25f;
-FLOAT inp_bInvertMouse = FALSE;
-INDEX inp_bFilterMouse = FALSE;
-INDEX inp_bAllowPrescan = TRUE;
+__extern INDEX inp_iKeyboardReadingMethod = 2;  // 0=getasynckey, 1=virtkeytrap, 2=scancodetrap
+__extern INDEX inp_bAllowMouseAcceleration = TRUE;
+__extern FLOAT inp_fMouseSensitivity = 1.0f;
+__extern INDEX inp_bMousePrecision = FALSE;
+__extern FLOAT inp_fMousePrecisionFactor = 4.0f;
+__extern FLOAT inp_fMousePrecisionThreshold = 10.0f;
+__extern FLOAT inp_fMousePrecisionTimeout = 0.25f;
+__extern FLOAT inp_bInvertMouse = FALSE;
+__extern INDEX inp_bFilterMouse = FALSE;
+__extern INDEX inp_bAllowPrescan = TRUE;
 
-INDEX inp_i2ndMousePort = 0; // COM no (0=disable)
-FLOAT inp_f2ndMouseSensitivity = 1.0f;
-INDEX inp_b2ndMousePrecision = FALSE;
-FLOAT inp_f2ndMousePrecisionFactor = 4.0f;
-FLOAT inp_f2ndMousePrecisionThreshold = 10.0f;
-FLOAT inp_f2ndMousePrecisionTimeout = 0.25f;
-INDEX inp_bInvert2ndMouse = FALSE;
-INDEX inp_bFilter2ndMouse = FALSE;
+__extern INDEX inp_i2ndMousePort = 0; // COM no (0=disable)
+__extern FLOAT inp_f2ndMouseSensitivity = 1.0f;
+__extern INDEX inp_b2ndMousePrecision = FALSE;
+__extern FLOAT inp_f2ndMousePrecisionFactor = 4.0f;
+__extern FLOAT inp_f2ndMousePrecisionThreshold = 10.0f;
+__extern FLOAT inp_f2ndMousePrecisionTimeout = 0.25f;
+__extern INDEX inp_bInvert2ndMouse = FALSE;
+__extern INDEX inp_bFilter2ndMouse = FALSE;
 
 extern INDEX inp_iMButton4Up;
 extern INDEX inp_iMButton4Dn;
@@ -241,7 +241,7 @@ extern INDEX inp_ctJoysticksAllowed;
 extern INDEX inp_bForceJoystickPolling;
 extern INDEX inp_bAutoDisableJoysticks;
 
-INDEX wed_bUseGenericTextureReplacement = FALSE;
+__extern INDEX wed_bUseGenericTextureReplacement = FALSE;
 
 
 extern void RendererInfo(void);

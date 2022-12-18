@@ -18,7 +18,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Models/Normals.h>
 #include <Engine/Math/Vector.h>
 
+#ifdef PLATFORM_WIN32
+extern FLOAT3D avGouraudNormals[MAX_GOURAUDNORMALS] = {
+#else
 FLOAT3D avGouraudNormals[MAX_GOURAUDNORMALS] = {
+#endif	
   FLOAT3D(  1.000000f,  0.000000f,  0.000000f),
   FLOAT3D(  0.980785f,  0.000000f,  0.195090f),
   FLOAT3D(  0.980785f,  0.195090f,  0.000000f),

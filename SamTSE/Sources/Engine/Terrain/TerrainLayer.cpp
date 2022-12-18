@@ -185,8 +185,8 @@ void CTerrainLayer::ExportLayerMask_t(CTFileName fnLayerMask)
   GFXColor *pacolImage = (GFXColor*)&iiHeightMap.ii_Picture[0];
   UBYTE    *pubMask    = &tl_aubColors[0];
   for(INDEX ipix=0;ipix<iSize;ipix++) {
-    pacolImage->ul.abgr = 0x00000000;
-    pacolImage->ub.r = *pubMask;
+	pacolImage->ul.abgr = 0x00000000;
+	pacolImage->ub.r = *pubMask;
     pacolImage++;
     pubMask++;
   }

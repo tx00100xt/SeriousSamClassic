@@ -10,7 +10,7 @@ typedef const char *LPCSTR;
 
 LONG InterlockedIncrement(LONG *Addend);
 LONG InterlockedDecrement(LONG volatile *Addend);
-unsigned long long GetCurrentThreadId();
+DWORD GetCurrentThreadId();
 HANDLE CreateEvent(void *attr, BOOL bManualReset, BOOL initial, LPCSTR lpName);
 BOOL CloseHandle(HANDLE hObject);
 BOOL ResetEvent(HANDLE hEvent);

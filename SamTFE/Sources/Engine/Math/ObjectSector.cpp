@@ -44,8 +44,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define EDX_EPSILON DOUBLE(0.00390625*mth_fCSGEpsilon) // 1/2^8
 
 // use O(nlogn) instead O(n2) algorithms for object optimization
+#ifdef PLATFORM_UNIX
 INDEX wld_bFastObjectOptimization = 1;
 FLOAT mth_fCSGEpsilon = 1.0f;
+#else
+extern INDEX wld_bFastObjectOptimization = 1.0;
+extern FLOAT mth_fCSGEpsilon = 1.0f;
+#endif
 
 /*
  * Compare two vertices.

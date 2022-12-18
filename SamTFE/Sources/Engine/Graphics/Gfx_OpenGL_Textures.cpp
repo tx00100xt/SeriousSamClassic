@@ -119,7 +119,7 @@ extern void MimicTexParams_OGL( CTexParams &tpLocal)
 
 // upload context for current texture to accelerator's memory
 // (returns format in which texture was really uploaded)
-void UploadTexture_OGL( ULONG *pulTexture, PIX pixSizeU, PIX pixSizeV,
+__extern void UploadTexture_OGL( ULONG *pulTexture, PIX pixSizeU, PIX pixSizeV,
                                GLenum eInternalFormat, BOOL bUseSubImage)
 {
   // safeties

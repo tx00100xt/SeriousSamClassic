@@ -35,8 +35,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define WORLDSTATEVERSION_SHADOWSPERMIP 7
 #define WORLDSTATEVERSION_CURRENT WORLDSTATEVERSION_NOCLASSCONTAINER
 
+#ifdef PLATFORM_WIN32
+extern CWorld *_pwoCurrentLoading = NULL;  // world that is currently loading
+extern BOOL _bReadEntitiesByID = FALSE;
+#else
 CWorld *_pwoCurrentLoading = NULL;  // world that is currently loading
 BOOL _bReadEntitiesByID = FALSE;
+#endif
 
 extern BOOL _bPortalSectorLinksPreLoaded;
 extern BOOL _bEntitySectorLinksPreLoaded;

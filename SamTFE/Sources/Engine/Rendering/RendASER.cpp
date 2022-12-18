@@ -423,13 +423,13 @@ void CRenderer::InitScanEdges(void)
 
   // set up left sentinel as left edge of screen and add it to head of active list
   re_sedLeftSentinel.sed_xI = FIX16_16(re_fbbClipBox.Min()(1)-SENTINELEDGE_EPSILON);
-  re_sedLeftSentinel.sed_xIStep = FIX16_16(0);
+  re_sedLeftSentinel.sed_xIStep = FIX16_16(0, 0);
   re_sedLeftSentinel.sed_pspo = &re_spoFarSentinel;
   re_aaceActiveEdges.Push() = CActiveEdge(&re_sedLeftSentinel);
 
   // set up right sentinel as right edge of screen and add it to tail of active list
   re_sedRightSentinel.sed_xI = FIX16_16(re_fbbClipBox.Max()(1)+SENTINELEDGE_EPSILON);
-  re_sedRightSentinel.sed_xIStep = FIX16_16(0);
+  re_sedRightSentinel.sed_xIStep = FIX16_16(0,0);
   re_sedRightSentinel.sed_pspo  = &re_spoFarSentinel;
   re_aaceActiveEdges.Push() = CActiveEdge(&re_sedRightSentinel);
 

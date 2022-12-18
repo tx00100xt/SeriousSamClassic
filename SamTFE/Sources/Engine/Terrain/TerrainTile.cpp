@@ -178,8 +178,7 @@ inline void CTerrainTile::AddTriangle(INDEX iind1,INDEX iind2,INDEX iind3)
       if(tl.tl_ltType==LT_TILE) {
         continue; // skip it
       }
-
-      COLOR ul = ttl.tl_acColors[iind1].ub.a + ttl.tl_acColors[iind2].ub.a + ttl.tl_acColors[iind3].ub.a;
+	  COLOR ul = ttl.tl_acColors[iind1].ub.a + ttl.tl_acColors[iind2].ub.a + ttl.tl_acColors[iind3].ub.a;
       if(ul>0) {
         INDEX_T *pIndices = ttl.tl_auiIndices.Push(3);
         pIndices[0] = iind1;
@@ -257,36 +256,35 @@ void CTerrainTile::AddVertex(INDEX ic, INDEX ir)
       // Set vertex color
       GFXColor &col = ttl.tl_acColors.Push();
       BYTE bAlpha = GetVertexAlpha(ic,ir,tt_iIndex,itl);
-      col.ul.abgr = 0x00FFFFFF;
-      col.ub.a = bAlpha;
+	  col.ul.abgr = 0x00FFFFFF;
+	  col.ub.a = bAlpha;
       // if this is normal layer
       if(tl.tl_ltType == LT_NORMAL) {
         // Set its texcoords
         GFXTexCoord &tc = ttl.tl_atcTexCoords.Push();
-        tc.uv.u = (FLOAT)ic;
-        tc.uv.v = (FLOAT)ir;
+		tc.uv.u = (FLOAT)ic;
+		tc.uv.v = (FLOAT)ir;
       }
     }
 
     GFXTexCoord &tcDetail = GetDetailTC().Push();
-    tcDetail.uv.u = ic * 2;
-    tcDetail.uv.v = ir * 2;
+	tcDetail.uv.u = ic * 2;
+	tcDetail.uv.v = ir * 2;
   // if tile is in lowest lod
   } else if(tt_iLod==_ptrTerrain->tr_iMaxTileLod) {
     GFXTexCoord &tc = GetTexCoords().Push();
     FLOAT fWidth = (_ptrTerrain->tr_pixHeightMapWidth-1);
     FLOAT fHeight = (_ptrTerrain->tr_pixHeightMapHeight-1);
-    tc.uv.u = vx.x / fWidth;
-    tc.uv.v = vx.z / fHeight;
+	tc.uv.u = vx.x / fWidth;
+	tc.uv.v = vx.z / fHeight;
   // tile is not in highest lod nor in lowest lod
   } else {
     GFXTexCoord &tc = GetTexCoords().Push();
-    tc.uv.u = ((vx.x - tt_iOffsetX * _ptrTerrain->GetQuadsPerTileRow()) / (_ptrTerrain->GetQuadsPerTileRow()));
-    tc.uv.v = ((vx.z - tt_iOffsetZ * _ptrTerrain->GetQuadsPerTileRow()) / (_ptrTerrain->GetQuadsPerTileRow()));
+	tc.uv.u = ((vx.x - tt_iOffsetX * _ptrTerrain->GetQuadsPerTileRow()) / (_ptrTerrain->GetQuadsPerTileRow()));
+	tc.uv.v = ((vx.z - tt_iOffsetZ * _ptrTerrain->GetQuadsPerTileRow()) / (_ptrTerrain->GetQuadsPerTileRow()));
   }
-
-  tcShadow.uv.u = vx.x / (_ptrTerrain->tr_pixHeightMapWidth-1);
-  tcShadow.uv.v = vx.z / (_ptrTerrain->tr_pixHeightMapHeight-1);
+  tcShadow.uv.u = vx.x / (_ptrTerrain->tr_pixHeightMapWidth - 1);
+  tcShadow.uv.v = vx.z / (_ptrTerrain->tr_pixHeightMapHeight - 1);
 }
 
 void CTerrainTile::ReGenerateTileLayer(INDEX iTileLayer)
@@ -347,20 +345,20 @@ void CTerrainTile::ReGenerateTileLayer(INDEX iTileLayer)
       ASSERT(iTileX<tl.tl_ctTilesInRow);
       ASSERT(iTileY<tl.tl_ctTilesInCol);
 
-      // Add four texcoords
-      ptc[ivx  ].uv.u = tl.tl_fTileU * (iTileX +   bFlipX);
-      ptc[ivx  ].uv.v = tl.tl_fTileV * (iTileY +   bFlipY);
-      ptc[ivx+1].uv.u = tl.tl_fTileU * (iTileX + 1-bFlipX);
-      ptc[ivx+1].uv.v = tl.tl_fTileV * (iTileY +   bFlipY);
-      ptc[ivx+2].uv.u = tl.tl_fTileU * (iTileX +   bFlipX);
-      ptc[ivx+2].uv.v = tl.tl_fTileV * (iTileY + 1-bFlipY);
-      ptc[ivx+3].uv.u = tl.tl_fTileU * (iTileX + 1-bFlipX);
-      ptc[ivx+3].uv.v = tl.tl_fTileV * (iTileY + 1-bFlipY);
+	  // Add four texcoords
+	  ptc[ivx].uv.u = tl.tl_fTileU * (iTileX + bFlipX);
+	  ptc[ivx].uv.v = tl.tl_fTileV * (iTileY + bFlipY);
+	  ptc[ivx + 1].uv.u = tl.tl_fTileU * (iTileX + 1 - bFlipX);
+	  ptc[ivx + 1].uv.v = tl.tl_fTileV * (iTileY + bFlipY);
+	  ptc[ivx + 2].uv.u = tl.tl_fTileU * (iTileX + bFlipX);
+	  ptc[ivx + 2].uv.v = tl.tl_fTileV * (iTileY + 1 - bFlipY);
+	  ptc[ivx + 3].uv.u = tl.tl_fTileU * (iTileX + 1 - bFlipX);
+	  ptc[ivx + 3].uv.v = tl.tl_fTileV * (iTileY + 1 - bFlipY);
 
-      if(bSwapXY) {
-        Swap(ptc[ivx+1].uv.u,ptc[ivx+2].uv.u);
-        Swap(ptc[ivx+1].uv.v,ptc[ivx+2].uv.v);
-      }
+	  if (bSwapXY) {
+		  Swap(ptc[ivx + 1].uv.u, ptc[ivx + 2].uv.u);
+		  Swap(ptc[ivx + 1].uv.v, ptc[ivx + 2].uv.v);
+	  }
 
       // if tile is visible
       if(bVisible) {

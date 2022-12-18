@@ -149,9 +149,9 @@ void StartFog( CFogParameters &fp, const FLOAT3D &vViewPosAbs, const FLOATmatrix
 
   // calculate fog table size wanted
   extern INDEX tex_iFogSize;
-  tex_iFogSize = Clamp( tex_iFogSize, 4, 8);
-  PIX pixSizeH = ClampUp( _fog_fp.fp_iSizeH, 1<<tex_iFogSize);
-  PIX pixSizeL = ClampUp( _fog_fp.fp_iSizeL, 1<<tex_iFogSize);
+  tex_iFogSize = Clamp( tex_iFogSize, (INDEX)4, (INDEX)8);
+  PIX pixSizeH = ClampUp( _fog_fp.fp_iSizeH, ((INDEX)1)<<tex_iFogSize);
+  PIX pixSizeL = ClampUp( _fog_fp.fp_iSizeL, ((INDEX)1)<<tex_iFogSize);
   BOOL bNoDiscard = TRUE;
 
   // if fog table is not allocated in right size
@@ -267,7 +267,7 @@ void StartFog( CFogParameters &fp, const FLOAT3D &vViewPosAbs, const FLOATmatrix
       FLOAT fTStep = 1.0f/pixSizeL *fFar*fDensity*fA *255;
       // fog is just clamped fog parameter in each pixel
       for( INDEX pixL=0; pixL<pixSizeL; pixL++) {
-        _fog_pubTable[pixH*pixSizeL+pixL] = Clamp( FloatToInt(fT), 0, 255);
+        _fog_pubTable[pixH*pixSizeL+pixL] = Clamp( FloatToInt(fT), (SLONG)0, (SLONG)255);
         fT += fTStep;
       } 
     } break;

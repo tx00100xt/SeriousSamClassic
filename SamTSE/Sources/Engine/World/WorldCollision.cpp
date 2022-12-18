@@ -31,6 +31,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Templates/StaticStackArray.cpp>
 #include <Engine/Terrain/TerrainMisc.h>
 
+
 // these are used for making projections for converting from X space to Y space this way:
 //  MatrixMulT(mY, mX, mXToY);
 //  VectMulT(mY, vX-vY, vXToY);
@@ -884,6 +885,19 @@ void CClipMove::ClipToNonZoningSector(CBrushSector *pbsc)
   _pfPhysicsProfile.IncrementTimerAveragingCounter(
     CPhysicsProfile::PTI_CLIPTONONZONINGSECTOR, pbsc->bsc_abpoPolygons.Count());
 
+#ifdef PLATFORM_WIN32
+  // for each polygon in the sector
+  FOREACHINSTATICARRAY(pbsc->bsc_abpoPolygons, CBrushPolygon, itbpo) {
+	  // if its bbox has no contact with bbox of movement path, or it is passable
+	  if (!itbpo->bpo_boxBoundingBox.HasContactWith(cm_boxMovementPath)
+		  || (itbpo->bpo_ulFlags&BPOF_PASSABLE)) {
+		  // skip it
+		  continue;
+	  }
+	  // clip movement to the polygon
+	  ClipMoveToBrushPolygon(itbpo);
+  }
+#else
   // for each polygon in the sector
   //FOREACHINSTATICARRAY(pbsc->bsc_abpoPolygons, CBrushPolygon, itbpo) {
   CBrushPolygon *itbpo = pbsc->bsc_abpoPolygons.sa_Array;
@@ -900,6 +914,7 @@ void CClipMove::ClipToNonZoningSector(CBrushSector *pbsc)
     // clip movement to the polygon
     ClipMoveToBrushPolygon(itbpo);
   }
+#endif
 
   _pfPhysicsProfile.StopTimer(CPhysicsProfile::PTI_CLIPTONONZONINGSECTOR);
 }

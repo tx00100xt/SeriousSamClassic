@@ -103,7 +103,7 @@ ENGINE_API inline void CIntersector::AddEdge( FLOAT fedgx1, FLOAT fedgy1, FLOAT 
 }
 
 /* rcg10042001 !!! FIXME */
-#ifdef _MSC_VER
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT)
   #define ASMOPT 1
 #endif
 

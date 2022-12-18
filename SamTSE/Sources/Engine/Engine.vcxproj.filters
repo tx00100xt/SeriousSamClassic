@@ -196,9 +196,6 @@
     <ClCompile Include="Base\Stream.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Base\Synchronization.cpp">
-      <Filter>Source Files\Base</Filter>
-    </ClCompile>
     <ClCompile Include="Base\Timer.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
@@ -750,6 +747,30 @@
     </ClCompile>
     <ClCompile Include="GameAgent\GameAgent.cpp">
       <Filter>Source Files\GameAgent</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Win32\Win32DynamicLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Win32\Win32Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Win32\Win32Synchronization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\iconvlite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Win32\Win32FileSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Win32\Win32Adapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Win32\Win32OpenGL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Win32\Win32Input.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1356,7 +1377,7 @@
     <ClInclude Include="GameShell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StdH.h">
+    <ClInclude Include="Engine/StdH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameAgent\GameAgent.h">
@@ -1367,6 +1388,27 @@
     </ClInclude>
     <ClInclude Include="Sound\ov_functions.h">
       <Filter>Header Files\Sound Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\FileSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\DynamicLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\ThreadLocalStorage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\iconvlite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\_GfxLibrary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\SystemSpecificInclude.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdH.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

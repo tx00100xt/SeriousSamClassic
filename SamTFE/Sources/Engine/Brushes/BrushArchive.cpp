@@ -37,8 +37,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 template CDynamicArray<CBrush3D>;
 #endif
 
-BOOL _bPortalSectorLinksPreLoaded = FALSE;
-BOOL _bEntitySectorLinksPreLoaded = FALSE;
+__extern BOOL _bPortalSectorLinksPreLoaded = FALSE;
+__extern BOOL _bEntitySectorLinksPreLoaded = FALSE;
 
 /*
  * Calculate bounding boxes in all brushes.

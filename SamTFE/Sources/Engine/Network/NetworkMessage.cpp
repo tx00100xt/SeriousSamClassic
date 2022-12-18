@@ -49,7 +49,11 @@ static struct ErrorCode ErrorCodes[] = {
   ERRORCODE(MSG_GAMESTREAMBLOCKS, "MSG_GAMESTREAMBLOCKS"), 
   ERRORCODE(MSG_REQUESTGAMESTREAMRESEND, "MSG_REQUESTGAMESTREAMRESEND"),
 };
+#ifdef PLATFORM_WIN32
+extern struct ErrorTable MessageTypes = ERRORTABLE(ErrorCodes);
+#else
 struct ErrorTable MessageTypes = ERRORTABLE(ErrorCodes);
+#endif
 
 /////////////////////////////////////////////////////////////////////
 // CNetworkMessage
@@ -1018,22 +1022,26 @@ CNetworkMessage &operator>>(CNetworkMessage &nm, CPlayerAction &pa)
 }
 /* Write an object into stream. */
 CTStream &operator<<(CTStream &strm, const CPlayerAction &pa)
-{
+{/*
   strm<<pa.pa_vTranslation;
   strm<<pa.pa_aRotation;
   strm<<pa.pa_aViewRotation;
   strm<<pa.pa_ulButtons;
   strm<<pa.pa_llCreated;
+*/
+  strm.Write_t(&pa,sizeof(pa));
   return strm;
 }
 /* Read an object from stream. */
 CTStream &operator>>(CTStream &strm, CPlayerAction &pa)
-{
+{/*
   strm>>pa.pa_vTranslation;
   strm>>pa.pa_aRotation;
   strm>>pa.pa_aViewRotation;
   strm>>pa.pa_ulButtons;
   strm>>pa.pa_llCreated;
+  */
+  strm.Read_t(&pa,sizeof(pa));
   return strm;
 }
 

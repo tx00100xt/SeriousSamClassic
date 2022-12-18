@@ -505,7 +505,7 @@ void WriteOffsetAndChildren(CTStream &strm, CModelInstance &mi)
 {
   strm.WriteID_t("MIOF");  // model instance offset
   // write model instance offset and parent bone
-  strm<<mi.mi_qvOffset;
+  strm.Write_t(&mi.mi_qvOffset, sizeof(QVect));
   CTString strParenBoneID = ska_GetStringFromTable(mi.mi_iParentBoneID);
   strm<<strParenBoneID;
 
@@ -658,7 +658,7 @@ void ReadModelInstanceOld_t(CTStream &strm, CModelInstance &mi)
   }
 
   // read model instance offset and parent bone
-  strm>>mi.mi_qvOffset;
+  strm.Read_t(&mi.mi_qvOffset, sizeof(QVect));
   CTString strParenBoneID;
   strm>>strParenBoneID;
   mi.mi_iParentBoneID = ska_GetIDFromStringTable(strParenBoneID);
@@ -812,7 +812,7 @@ void ReadOffsetAndChildren_t(CTStream &strm, CModelInstance &mi)
   INDEX ctcmi = 0;
   strm.ExpectID_t("MIOF");  // model instance offset
   // read model instance offset and parent bone
-  strm>>mi.mi_qvOffset;
+  strm.Read_t(&mi.mi_qvOffset, sizeof(QVect));
   CTString strParenBoneID;
   strm>>strParenBoneID;
   mi.mi_iParentBoneID = ska_GetIDFromStringTable(strParenBoneID);

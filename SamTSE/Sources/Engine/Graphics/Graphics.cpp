@@ -880,6 +880,14 @@ nextRowO:
   );
 
 #else
+
+#ifdef _MSC_VER
+#define PACKED
+#pragma pack(push,1)
+#else
+#define PACKED __attribute__ ((__packed__))
+#endif
+
   union uConv
   {
     __int64 val;
@@ -887,7 +895,12 @@ nextRowO:
     UWORD words[4];
     WORD  iwords[4];
     UBYTE bytes[8];
-  } __attribute__((packed));	//avoid optimisation and BUSERROR on Pyra build
+  } PACKED;	//avoid optimisation and BUSERROR on Pyra build
+#ifdef _MSC_VER
+#pragma pack(pop)
+#endif
+#undef PACKED
+
   for (int i=0; i<pixHeight; i++) {
     int idx = i&3;
     uConv dith;
@@ -1349,7 +1362,7 @@ void FilterBitmap( INDEX iFilter, ULONG *pulSrc, ULONG *pulDst, PIX pixWidth, PI
   }
 
   // prepare convolution matrix and row modulo
-  iFilter = Clamp( iFilter, -6, 6);
+  iFilter = Clamp( iFilter, (INDEX)-6, (INDEX)6);
   GenerateConvolutionMatrix( iFilter);
   SLONG slModulo1 = (pixCanvasWidth-pixWidth+1) *BYTES_PER_TEXEL;
   SLONG slCanvasWidth = pixCanvasWidth *BYTES_PER_TEXEL;
@@ -2578,7 +2591,7 @@ void MakeMipmapTable( PIX pixU, PIX pixV, MipmapTable &mmt)
 
 static ULONG *_pulTexture;
 static PIX    _pixTexWidth, _pixTexHeight;
-BOOL   _bSomeDarkExists = FALSE;
+__extern BOOL   _bSomeDarkExists = FALSE;
 
 
 // set texture that will be used for all subsequent triangles

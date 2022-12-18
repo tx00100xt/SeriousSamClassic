@@ -36,7 +36,7 @@ extern FLOAT net_fSendRetryWait;
 void CAddress::MakeBroadcast(void)
 {
   //adr_ulAddress = INADDR_BROADCAST;
-STUBBED("INADDR_BROADCAST?!");
+//STUBBED("INADDR_BROADCAST?!");
   extern INDEX net_iPort;
   adr_uwPort = net_iPort;
   adr_uwID = 0;

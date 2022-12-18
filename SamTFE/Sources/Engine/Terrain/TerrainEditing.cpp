@@ -128,10 +128,10 @@ void ShowSelectionInternal(CTerrain *ptrTerrain, Rect &rcExtract, CTextureData *
   Rect rcSelection;
   FLOATaabbox3D bboxSelection;
   // Clamp rect used for extraction
-  rcSelection.rc_iLeft   = Clamp(rcExtract.rc_iLeft   , 0, ptrTerrain->tr_pixHeightMapWidth);
-  rcSelection.rc_iTop    = Clamp(rcExtract.rc_iTop    , 0, ptrTerrain->tr_pixHeightMapHeight);
-  rcSelection.rc_iRight  = Clamp(rcExtract.rc_iRight  , 0, ptrTerrain->tr_pixHeightMapWidth);
-  rcSelection.rc_iBottom = Clamp(rcExtract.rc_iBottom , 0, ptrTerrain->tr_pixHeightMapHeight);
+  rcSelection.rc_iLeft   = Clamp(rcExtract.rc_iLeft   , (INDEX)0, ptrTerrain->tr_pixHeightMapWidth);
+  rcSelection.rc_iTop    = Clamp(rcExtract.rc_iTop    , (INDEX)0, ptrTerrain->tr_pixHeightMapHeight);
+  rcSelection.rc_iRight  = Clamp(rcExtract.rc_iRight  , (INDEX)0, ptrTerrain->tr_pixHeightMapWidth);
+  rcSelection.rc_iBottom = Clamp(rcExtract.rc_iBottom , (INDEX)0, ptrTerrain->tr_pixHeightMapHeight);
 
   // Prepare box for vertex selection
   bboxSelection    = FLOAT3D(rcSelection.rc_iLeft,  0, rcSelection.rc_iTop);
@@ -189,8 +189,8 @@ void ShowSelectionInternal(CTerrain *ptrTerrain, Rect &rcExtract, CTextureData *
   for(INDEX iy=0;iy<pixHeight;iy++) {
     // for each col
     for(INDEX ix=0;ix<pixWidth;ix++) {
-      pacolColor->ul.abgr = colSelection.ul.abgr;
-      pacolColor->ub.a    = (pacolBrush->ub.r*slStrength)>>8;
+	  pacolColor->ul.abgr = colSelection.ul.abgr;
+	  pacolColor->ub.a = (pacolBrush->ub.r*slStrength) >> 8;
       pacolColor++;
       pacolBrush++;
     }
@@ -302,10 +302,10 @@ UWORD *GetBufferForEditing(CTerrain *ptrTerrain, Rect &rcExtract, BufferType btB
     UWORD *puwFirstInHeightMap = &ptrTerrain->tr_auwHeightMap[0];
     // for each row
     for(PIX pixY=pixTop;pixY<pixBottom;pixY++) {
-      PIX pixRealY = Clamp(pixY,0,pixMaxHeight-1);
+      PIX pixRealY = Clamp(pixY, (PIX)0,pixMaxHeight-1);
       // for each col
       for(PIX pixX=pixLeft;pixX<pixRight;pixX++) {
-        PIX pixRealX = Clamp(pixX,0,pixMaxWidth-1);
+        PIX pixRealX = Clamp(pixX, (PIX)0,pixMaxWidth-1);
         // Copy current pixel from height map to dest buffer
         UWORD *puwHeight = &puwFirstInHeightMap[pixRealX + pixRealY*pixMaxWidth];
         *puwBufferData = *puwHeight;
@@ -319,10 +319,10 @@ UWORD *GetBufferForEditing(CTerrain *ptrTerrain, Rect &rcExtract, BufferType btB
     UBYTE *pubFirstInLayer  = &tl.tl_aubColors[0];
     // for each row
     for(PIX pixY=pixTop;pixY<pixBottom;pixY++) {
-      PIX pixRealY = Clamp(pixY,0,pixMaxHeight-1);
+      PIX pixRealY = Clamp(pixY, (PIX)0,pixMaxHeight-1);
       // for each col
       for(PIX pixX=pixLeft;pixX<pixRight;pixX++) {
-        PIX pixRealX = Clamp(pixX,0,pixMaxWidth-1);
+        PIX pixRealX = Clamp(pixX, (PIX)0,pixMaxWidth-1);
         // Copy current pixel from layer mask to dest buffer
         UBYTE *pubMaskValue = &pubFirstInLayer[pixRealX + pixRealY*pixMaxWidth];
         *puwBufferData = (*pubMaskValue)<<8|(*pubMaskValue);
@@ -335,10 +335,10 @@ UWORD *GetBufferForEditing(CTerrain *ptrTerrain, Rect &rcExtract, BufferType btB
     UBYTE *pubFirstInEdgeMap = &ptrTerrain->tr_aubEdgeMap[0];
     // for each row
     for(PIX pixY=pixTop;pixY<pixBottom;pixY++) {
-      PIX pixRealY = Clamp(pixY,0,pixMaxHeight-1);
+      PIX pixRealY = Clamp(pixY, (PIX)0,pixMaxHeight-1);
       // for each col
       for(PIX pixX=pixLeft;pixX<pixRight;pixX++) {
-        PIX pixRealX = Clamp(pixX,0,pixMaxWidth-1);
+        PIX pixRealX = Clamp(pixX, (PIX)0,pixMaxWidth-1);
         // Copy current pixel from layer mask to dest buffer
         UBYTE *pubEdgeValue = &pubFirstInEdgeMap[pixRealX + pixRealY*pixMaxWidth];
         if((*pubEdgeValue)==255) {

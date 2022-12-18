@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-#include <Engine/StdH.h>
+#include "Engine/StdH.h"
 
 #include <Engine/Entities/Entity.h>
 #include <Engine/Entities/EntityClass.h>
@@ -1011,7 +1011,11 @@ void CEntity::FallDownToFloor( void)
 
 
 extern CEntity *_penLightUpdating;
+#ifdef PLATFORM_UNIX
 BOOL _bDontDiscardLinks = FALSE;
+#else
+extern BOOL _bDontDiscardLinks = FALSE;
+#endif
 
 // internal repositioning function
 void CEntity::SetPlacement_internal(const CPlacement3D &plNew, const FLOATmatrix3D &mRotation,
@@ -1826,6 +1830,7 @@ void CEntity::FindSectorsAroundEntity(void)
   // make oriented bounding box of the entity
   FLOATobbox3D boxEntity = FLOATobbox3D(en_boxSpatialClassification, 
     en_plPlacement.pl_PositionVector, en_mRotation);
+  //DOUBLEobbox3D boxdEntity = FLOATtoDOUBLE(boxEntity);
 
   // unset spatial clasification
   en_rdSectors.Clear();
@@ -1889,6 +1894,7 @@ void CEntity::FindSectorsAroundEntityNear(void)
   // make oriented bounding box of the entity
   FLOATobbox3D oboxEntity = FLOATobbox3D(en_boxSpatialClassification, 
     en_plPlacement.pl_PositionVector, en_mRotation);
+  //DOUBLEobbox3D oboxdEntity = FLOATtoDOUBLE(oboxEntity);
 
   CListHead lhActive;
   // for each sector around this entity
@@ -1923,9 +1929,9 @@ void CEntity::FindSectorsAroundEntityNear(void)
         // (use more detailed testing for moving brushes)
         (en_RenderType!=RT_BRUSH||
           // oriented box touches box of sector
-          ((oboxEntity.HasContactWith(FLOATobbox3D(pbsc->bsc_boxBoundingBox)))&&
+          (oboxEntity.HasContactWith(FLOATobbox3D(pbsc->bsc_boxBoundingBox)))&&
           // oriented box is in bsp
-          (pbsc->bsc_bspBSPTree.TestBox(oboxEntity)>=0)));
+          (pbsc->bsc_bspBSPTree.TestBox(oboxEntity)>=0));
     // if it is not
     if (!bIn) {
       // if it has link
@@ -3279,7 +3285,7 @@ void CEntity::Read_t( CTStream *istr) // throw char *
            >>en_ulCollisionFlags
            >>en_ulSpawnFlags
            >>en_ulFlags;
-    (*istr)>>en_mRotation;
+    (*istr).Read_t(&en_mRotation, sizeof(en_mRotation));
   } else if (istr->PeekID_t()==CChunkID("ENT3")) { // entity v3
     istr->ExpectID_t("ENT3");
     (*istr)>>(ULONG &)en_RenderType
@@ -3287,7 +3293,7 @@ void CEntity::Read_t( CTStream *istr) // throw char *
            >>en_ulCollisionFlags
            >>en_ulSpawnFlags
            >>en_ulFlags;
-    (*istr)>>en_mRotation;
+    (*istr).Read_t(&en_mRotation, sizeof(en_mRotation));
   } else if (istr->PeekID_t()==CChunkID("ENT2")) { // entity v2
     istr->ExpectID_t("ENT2");
     (*istr)>>(ULONG &)en_RenderType

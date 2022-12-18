@@ -491,7 +491,11 @@ void CBrushSector::Read_t( CTStream *pistrm) // throw char *
       bpo.bpo_abptTextures[2].Read_t(*pistrm);
 
       // read other polygon properties
+#ifdef PLATFORM_UNIX
       (*pistrm)>>bpo.bpo_bppProperties;
+#else
+	  (*pistrm).Read_t(&bpo.bpo_bppProperties, sizeof(bpo.bpo_bppProperties));
+#endif
 
     } else {
       // read textures
@@ -508,7 +512,11 @@ void CBrushSector::Read_t( CTStream *pistrm) // throw char *
       // read texture mapping
       bpo.bpo_mdShadow.ReadOld_t(*pistrm);
       // read other polygon properties
+#ifdef PLATFORM_UNIX
       (*pistrm)>>bpo.bpo_bppProperties;
+#else
+	  (*pistrm).Read_t(&bpo.bpo_bppProperties, sizeof(bpo.bpo_bppProperties));
+#endif
 
       // adjust polygon and texture properties
       bpo.bpo_abptTextures[0].bpt_mdMapping = bpo.bpo_mdShadow;

@@ -384,8 +384,8 @@ void RM_DoFogAndHaze(BOOL bOpaqueSurface)
 
       // setup haze tex coords and color
       for( INDEX ivtx=0; ivtx<ctVertices; ivtx++) {
-        GetHazeMapInVertex( paVertices[ivtx], _aTexMipHazey[ivtx].st.s);
-        _aTexMipHazey[ivtx].st.t = 0.0f;
+		GetHazeMapInVertex(paVertices[ivtx], _aTexMipHazey[ivtx].st.s);
+		_aTexMipHazey[ivtx].st.t = 0.0f;
         paHazeColors[ivtx] = colHaze;
       }
       shaSetHazeUVMap(&_aTexMipHazey[0]);
@@ -718,8 +718,8 @@ void RM_AddSimpleShadow_View(CModelInstance &mi, const FLOAT fIntensity, const F
       GFXVertex &vtx = pvtx[i];
       // get distance along viewer axis and fog axis and map to texture and attenuate shadow color
       const FLOAT fH = vtx.x*_fog_vHDirView(1) + vtx.y*_fog_vHDirView(2) + vtx.z*_fog_vHDirView(3);
-      tex.st.s = -vtx.z *_fog_fMulZ;
-      tex.st.t = (fH+_fog_fAddH) *_fog_fMulH;
+	  tex.st.s = -vtx.z *_fog_fMulZ;
+	  tex.st.t = (fH + _fog_fAddH) *_fog_fMulH;
       pcol[i].AttenuateRGB(GetFogAlpha(tex)^255);
     }
   }
@@ -775,10 +775,10 @@ void RM_RenderGround(CTextureObject &to)
   vBoxVtxs[2].x = -vVtx(1); vBoxVtxs[2].y =  vVtx(2); vBoxVtxs[2].z =  vVtx(3);
   vBoxVtxs[3].x =  vVtx(1); vBoxVtxs[3].y =  vVtx(2); vBoxVtxs[3].z =  vVtx(3);
   // set ground texcoords
-  tcBoxTex[0].uv.u =  vVtx(1); tcBoxTex[0].uv.v =  0;
-  tcBoxTex[1].uv.u =        0; tcBoxTex[1].uv.v =  0;
-  tcBoxTex[2].uv.u =        0; tcBoxTex[2].uv.v =  vVtx(3);
-  tcBoxTex[3].uv.u =  vVtx(1); tcBoxTex[3].uv.v =  vVtx(3);
+  tcBoxTex[0].uv.u = vVtx(1); tcBoxTex[0].uv.v = 0;
+  tcBoxTex[1].uv.u = 0; tcBoxTex[1].uv.v = 0;
+  tcBoxTex[2].uv.u = 0; tcBoxTex[2].uv.v = vVtx(3);
+  tcBoxTex[3].uv.u = vVtx(1); tcBoxTex[3].uv.v = vVtx(3);
 
   for(INDEX ivx=0;ivx<4;ivx++) {
     TransformVertex(vBoxVtxs[ivx],_mAbsToViewer);
@@ -1058,7 +1058,7 @@ void RM_RenderBone(CModelInstance &mi,INDEX iBoneID)
 
       // all vertices by default are not visible ( have alpha set to 0 )
       for(INDEX ivx=0;ivx<ctVertices;ivx++) {
-        _aMeshColors[ivx].ub.a = 0;
+	    _aMeshColors[ivx].ub.a = 0;
       }
     
       INDEX ctwm = rmsh.rmsh_iFirstWeight+rmsh.rmsh_ctWeights;
@@ -1073,10 +1073,10 @@ void RM_RenderBone(CModelInstance &mi,INDEX iBoneID)
           // modify color and alpha value of this vertex 
           MeshVertexWeight &vw = rw.rw_pwmWeightMap->mwm_aVertexWeight[ivw];
           INDEX ivx = vw.mww_iVertex;
-          _aMeshColors[ivx].ub.r = 255;
-          _aMeshColors[ivx].ub.g = 127;
-          _aMeshColors[ivx].ub.b = 0;
-          _aMeshColors[ivx].ub.a += (UBYTE) (vw.mww_fWeight*255); // _aMeshColors[ivx].ub.a = 255;
+		  _aMeshColors[ivx].ub.r = 255;
+		  _aMeshColors[ivx].ub.g = 127;
+		  _aMeshColors[ivx].ub.b = 0;
+		  _aMeshColors[ivx].ub.a += (UBYTE)(vw.mww_fWeight * 255); // _aMeshColors[ivx].ub.a = 255;
         }
       }
 

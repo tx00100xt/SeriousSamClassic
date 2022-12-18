@@ -49,7 +49,11 @@ public:
 
 static CStaticArray<CPointerRemapping> _aprRemaps;
 static BOOL _bRemapPointersToNULLs = TRUE;
+#ifdef PLATFORM_WIN32
+extern BOOL _bReinitEntitiesWhileCopying = TRUE;
+#else
 BOOL _bReinitEntitiesWhileCopying = TRUE;
+#endif
 static BOOL _bMirrorAndStretch = FALSE;
 static FLOAT _fStretch = 1.0f;
 static enum WorldMirrorType _wmtMirror = WMT_NONE;

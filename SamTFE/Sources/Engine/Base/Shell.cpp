@@ -30,14 +30,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 template class CDynamicArray<CShellSymbol>;
 
 // shell type used for undeclared symbols
-INDEX _shell_istUndeclared = -1;
+__extern INDEX _shell_istUndeclared = -1;
 
 // pointer to global shell object
 CShell *_pShell = NULL;
 void *_pvNextToDeclare=NULL; // != NULL if declaring external symbol defined in exe code
 
 // define console variable for number of last console lines
-INDEX con_iLastLines    = 5;
+__extern INDEX con_iLastLines    = 5;
 
 extern void yy_switch_to_buffer(YY_BUFFER_STATE);
 
@@ -111,11 +111,17 @@ CDynamicStackArray<CTString> _shell_astrExtStrings;
 CDynamicStackArray<FLOAT> _shell_afExtFloats;
 
 //static const char *strCommandLine = "";
-
+#ifdef PLATFORM_WIN32
+ENGINE_API extern FLOAT tmp_af[10] = { 0 };
+ENGINE_API extern INDEX tmp_ai[10] = { 0 };
+ENGINE_API extern INDEX tmp_fAdd   = 0.0f;
+ENGINE_API extern INDEX tmp_i      = 0;
+#else
 FLOAT tmp_af[10] = { 0 };
 INDEX tmp_ai[10] = { 0 };
 INDEX tmp_fAdd   = 0;
 INDEX tmp_i      = 0;
+#endif
 
 void CShellSymbol::Clear(void)
 {
@@ -189,7 +195,7 @@ void MakeAccessViolation(void* pArgs)
   *p=1;
 }
 
-int _a=123;
+__extern int _a=123;
 void MakeStackOverflow(void* pArgs)
 {
   INDEX bDont = NEXTARGUMENT(INDEX);
@@ -222,8 +228,13 @@ extern void ReportGlobalMemoryStatus(void)
    CPrintF(TRANSV("  Virtual memory used:  %4d/%4dMB\n"), (ms.dwTotalVirtual -ms.dwAvailVirtual )/MB, ms.dwTotalVirtual /MB);
    CPrintF(TRANSV("  Memory load: %3d%%\n"), ms.dwMemoryLoad);
 
+#if (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+   SIZE_T dwMin;
+   SIZE_T dwMax;
+#else
    DWORD dwMin;
    DWORD dwMax;
+#endif  
    GetProcessWorkingSetSize(GetCurrentProcess(), &dwMin, &dwMax);
    CPrintF(TRANSV("  Process working set: %dMB-%dMB\n\n"), dwMin/(1024*1024), dwMax/(1024*1024));
 #endif

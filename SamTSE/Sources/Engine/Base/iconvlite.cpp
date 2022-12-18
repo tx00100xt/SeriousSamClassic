@@ -1,3 +1,4 @@
+#include "Engine/StdH.h"
 #include "iconvlite.h"
 
 void cp2utf1(char *out, const char *in, size_t out_size) {

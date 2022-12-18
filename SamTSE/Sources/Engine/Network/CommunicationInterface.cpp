@@ -32,6 +32,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/GameAgent/GameAgent.h>
 
 #ifdef PLATFORM_WIN32
+typedef int socklen_t;
 #pragma comment(lib, "wsock32.lib")
 #endif
 
@@ -1366,7 +1367,7 @@ void CCommunicationInterface::UpdateMasterBuffers()
 			return;    
 
     } else if (slSizeSent < ppaNewPacket->pa_slSize) {
-        STUBBED("LOST OUTGOING PACKET DATA!");
+        //STUBBED("LOST OUTGOING PACKET DATA!");
         ASSERT(0);
 
     // if all sent ok

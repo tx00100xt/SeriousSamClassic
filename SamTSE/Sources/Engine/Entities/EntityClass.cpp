@@ -22,6 +22,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Entities/Precaching.h>
 #include <Engine/Base/Translation.h>
 #include <Engine/Base/CRCTable.h>
+#include <Engine/Base/Shell.h>
+#include <Engine/Base/Console.h>
 
 #include <Engine/Templates/Stock_CAnimData.h>
 #include <Engine/Templates/Stock_CTextureData.h>
@@ -218,6 +220,54 @@ void CEntityClass::ReleaseComponents(void)
 }
 
 // overrides from CSerial /////////////////////////////////////////////////////
+#ifdef PLATFORM_WIN32
+/*
+* Load a Dynamic Link Library.
+*/
+HINSTANCE LoadDLL_t(const char *strFileName) // throw char *
+{
+	HINSTANCE hiDLL = ::LoadLibraryA(strFileName);
+
+	// if the DLL can not be loaded
+	if (hiDLL == NULL) {
+		// get the error code
+		DWORD dwMessageId = GetLastError();
+		// format the windows error message
+		LPVOID lpMsgBuf;
+		DWORD dwSuccess = FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+			NULL,
+			dwMessageId,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
+			(LPTSTR)&lpMsgBuf,
+			0,
+			NULL
+		);
+		CTString strWinError;
+		// if formatting succeeds
+		if (dwSuccess != 0) {
+			// copy the result
+			strWinError = ((char *)lpMsgBuf);
+			// free the windows message buffer
+			LocalFree(lpMsgBuf);
+		}
+		else {
+			// set our message about the failure
+			CTString strError;
+			strError.PrintF(
+				TRANS("Cannot format error message!\n"
+					"Original error code: %d,\n"
+					"Formatting error code: %d.\n"),
+				dwMessageId, GetLastError());
+			strWinError = strError;
+		}
+
+		// report error
+		ThrowF_t(TRANS("Cannot load DLL file '%s':\n%s"), strFileName, strWinError);
+	}
+	return hiDLL;
+}
+#endif
 
 /*
  * Read from stream.
@@ -229,9 +279,24 @@ void CEntityClass::Read_t( CTStream *istr) // throw char *
   fnmDLL.ReadFromText_t(*istr, "Package: ");
   CTString strClassName;
   strClassName.ReadFromText_t(*istr, "Class: ");
-
   const char *dllName = NULL;
 
+#ifdef PLATFORM_WIN32
+  // create name of dll
+  #ifndef NDEBUG
+  fnmDLL = _fnmApplicationExe.FileDir() + fnmDLL.FileName() + _strModExt + "D" + fnmDLL.FileExt();
+  #else
+  fnmDLL = _fnmApplicationExe.FileDir() + fnmDLL.FileName() + _strModExt + fnmDLL.FileExt();
+  #endif
+
+  // load the DLL
+  CTFileName fnmExpanded;
+  ExpandFilePath(EFP_READ, fnmDLL, fnmExpanded);
+  dllName = fnmExpanded;
+
+  ec_hiClassDLL = (CDynamicLoader*)LoadDLL_t(fnmExpanded);
+  //ec_hiClassDLL = CDynamicLoader::GetInstance(fnmExpanded);
+#else
     // load the DLL
   #ifdef STATICALLY_LINKED
     ec_hiClassDLL = CDynamicLoader::GetInstance(NULL);
@@ -258,16 +323,26 @@ void CEntityClass::Read_t( CTStream *istr) // throw char *
     ThrowF_t(TRANS("Cannot load DLL file '%s':\n%s"),
               (const char *) dllName, (const char *) err);
   }
-
+#endif
   ec_fnmClassDLL = fnmDLL;
 
   // get the pointer to the DLL class structure
-  ec_pdecDLLClass = (CDLLEntityClass *) ec_hiClassDLL->FindSymbol(strClassName+"_DLLClass");
-
+#ifdef PLATFORM_WIN32
+  ec_pdecDLLClass = (CDLLEntityClass *)GetProcAddress((HINSTANCE)ec_hiClassDLL, strClassName + "_DLLClass");
+  //ec_pdecDLLClass = (CDLLEntityClass *)ec_hiClassDLL->FindSymbol(strClassName + "_DLLClass");
+#else
+  ec_pdecDLLClass = (CDLLEntityClass *)ec_hiClassDLL->FindSymbol(strClassName + "_DLLClass");
+#endif
   // if class structure is not found
   if (ec_pdecDLLClass == NULL) {
     // free the library
+#ifdef PLATFORM_WIN32
+	BOOL bSuccess = FreeLibrary((HINSTANCE)ec_hiClassDLL);
+	ASSERT(bSuccess);
+	//delete ec_hiClassDLL;
+#else
     delete ec_hiClassDLL;
+#endif
     ec_hiClassDLL = NULL;
     ec_fnmClassDLL.Clear();
     // report error

@@ -792,7 +792,7 @@ void CRenderer::AddZoningSectorsAroundBox(const FLOATaabbox3D &boxNear)
          &&!((itbsc->bsc_ulFlags&BSCF_HIDDEN) && !re_bRenderingShadows)) {
           // if the sphere is inside the sector
           if (itbsc->bsc_bspBSPTree.TestSphere(
-             vSphereCenter, fSphereRadius)>=0) {
+			  vSphereCenter, fSphereRadius) >= 0) {
 
             // add that sector to active sectors
             AddActiveSector(itbsc.Current());

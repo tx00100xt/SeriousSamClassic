@@ -34,9 +34,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 //#include <Engine/Graphics/ImageInfo.h>
 //#include <Engine/Base/ErrorReporting.h>
 
+#ifdef PLATFORM_UNIX
 INDEX _ctShadowLayers=0;
 INDEX _ctShadowClusters=0;
-
+#else
+extern INDEX _ctShadowLayers=0;
+extern INDEX _ctShadowClusters=0;
+#endif
 
 // class used for making shadow layers (used only locally)
 class CLayerMaker {

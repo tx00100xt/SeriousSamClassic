@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-#include <Engine/StdH.h>
+#include "Engine/StdH.h"
 
 #include <Engine/Entities/EntityProperties.h>
 #include <Engine/Entities/Precaching.h>
@@ -96,7 +96,7 @@ void CEntity::WriteEntityPointer_t(CTStream *ostrm, CEntityPointer pen)
 void CEntity::ReadProperties_t(CTStream &istrm) // throw char *
 {
   istrm.ExpectID_t("PRPS");  // 'properties'
-  //CDLLEntityClass *pdecDLLClass = en_pecClass->ec_pdecDLLClass;
+  CDLLEntityClass *pdecDLLClass = en_pecClass->ec_pdecDLLClass;
   INDEX ctProperties;
   // read number of properties (note that this doesn't have to be same as number
   // of properties in the class (class might have changed))
@@ -104,7 +104,7 @@ void CEntity::ReadProperties_t(CTStream &istrm) // throw char *
 
   // for all saved properties
   for(INDEX iProperty=0; iProperty<ctProperties; iProperty++) {
-    //pdecDLLClass->dec_ctProperties;
+    pdecDLLClass->dec_ctProperties;
     // read packed identifier
     ULONG ulIDAndType;
     istrm>>ulIDAndType;
@@ -196,21 +196,21 @@ void CEntity::ReadProperties_t(CTStream &istrm) // throw char *
       case CEntityProperty::EPT_FLOATAABBOX3D: {
         // skip FLOATAABBOX3D
         FLOATaabbox3D boxDummy;
-        istrm>>boxDummy;
+        istrm.Read_t(&boxDummy, sizeof(FLOATaabbox3D));
                                                }
         break;
       // if it is FLOATMATRIX3D
       case CEntityProperty::EPT_FLOATMATRIX3D: {
         // skip FLOATMATRIX3D
         FLOATmatrix3D boxDummy;
-        istrm>>boxDummy;
+        istrm.Read_t(&boxDummy, sizeof(FLOATmatrix3D));
                                                }
         break;
       // if it is EPT_FLOATQUAT3D
       case CEntityProperty::EPT_FLOATQUAT3D: {
         // skip EPT_FLOATQUAT3D
         FLOATquat3D qDummy;
-        istrm>>qDummy;
+        istrm.Read_t(&qDummy, sizeof(FLOATquat3D));
                                                }
         break;
       // if it is FLOAT3D
@@ -231,7 +231,7 @@ void CEntity::ReadProperties_t(CTStream &istrm) // throw char *
       case CEntityProperty::EPT_FLOATplane3D: {
         // skip FLOATplane3D
         FLOATplane3D plDummy;
-        istrm>>plDummy;
+        istrm.Read_t(&plDummy, sizeof(plDummy));
                                               }
         break;
       // if it is MODELOBJECT
@@ -344,32 +344,32 @@ void CEntity::ReadProperties_t(CTStream &istrm) // throw char *
       // if it is FLOATAABBOX3D
       case CEntityProperty::EPT_FLOATAABBOX3D:
         // read FLOATAABBOX3D
-        istrm>>(PROPERTY(pepProperty->ep_slOffset, FLOATaabbox3D));
+        istrm.Read_t(&PROPERTY(pepProperty->ep_slOffset, FLOATaabbox3D), sizeof(FLOATaabbox3D));
         break;
       // if it is FLOATMATRIX3D
       case CEntityProperty::EPT_FLOATMATRIX3D:
         // read FLOATMATRIX3D
-        istrm>>(PROPERTY(pepProperty->ep_slOffset, FLOATmatrix3D));
+        istrm.Read_t(&PROPERTY(pepProperty->ep_slOffset, FLOATmatrix3D), sizeof(FLOATmatrix3D));
         break;
       // if it is FLOATQUAT3D
       case CEntityProperty::EPT_FLOATQUAT3D:
         // read FLOATQUAT3D
-        istrm>>(PROPERTY(pepProperty->ep_slOffset, FLOATquat3D));
+        istrm.Read_t(&PROPERTY(pepProperty->ep_slOffset, FLOATquat3D), sizeof(FLOATquat3D));
         break;
       // if it is FLOAT3D
       case CEntityProperty::EPT_FLOAT3D:
         // read FLOAT3D
-        istrm>>(PROPERTY(pepProperty->ep_slOffset, FLOAT3D));
+        istrm.Read_t(&PROPERTY(pepProperty->ep_slOffset, FLOAT3D), sizeof(FLOAT3D));
         break;
       // if it is ANGLE3D
       case CEntityProperty::EPT_ANGLE3D:
         // read ANGLE3D
-        istrm>>(PROPERTY(pepProperty->ep_slOffset, ANGLE3D));
+        istrm.Read_t(&PROPERTY(pepProperty->ep_slOffset, ANGLE3D), sizeof(ANGLE3D));
         break;
       // if it is FLOATplane3D
       case CEntityProperty::EPT_FLOATplane3D:
         // read FLOATplane3D
-        istrm>>(PROPERTY(pepProperty->ep_slOffset, FLOATplane3D));
+        istrm.Read_t(&PROPERTY(pepProperty->ep_slOffset, FLOATplane3D), sizeof(FLOATplane3D));
         break;
       // if it is MODELOBJECT
       case CEntityProperty::EPT_MODELOBJECT:
@@ -398,7 +398,7 @@ void CEntity::ReadProperties_t(CTStream &istrm) // throw char *
       // if it is CPlacement3D
       case CEntityProperty::EPT_PLACEMENT3D:
         // read CPlacement3D
-        istrm>>(PROPERTY(pepProperty->ep_slOffset, CPlacement3D));
+        istrm.Read_t(&PROPERTY(pepProperty->ep_slOffset, CPlacement3D), sizeof(CPlacement3D));
         break;
       default:
         ASSERTALWAYS("Unknown property type");
@@ -488,32 +488,32 @@ void CEntity::WriteProperties_t(CTStream &ostrm) // throw char *
       // if it is FLOATAABBOX3D
       case CEntityProperty::EPT_FLOATAABBOX3D:
         // write FLOATAABBOX3D
-        ostrm<<PROPERTY(epProperty.ep_slOffset, FLOATaabbox3D);
+        ostrm.Write_t(&PROPERTY(epProperty.ep_slOffset, FLOATaabbox3D), sizeof(FLOATaabbox3D));
         break;
       // if it is FLOATMATRIX3D
       case CEntityProperty::EPT_FLOATMATRIX3D:
         // write FLOATMATRIX3D
-        ostrm<<PROPERTY(epProperty.ep_slOffset, FLOATmatrix3D);
+        ostrm.Write_t(&PROPERTY(epProperty.ep_slOffset, FLOATmatrix3D), sizeof(FLOATmatrix3D));
         break;
       // if it is FLOATQUAT3D
       case CEntityProperty::EPT_FLOATQUAT3D:
         // write FLOATQUAT3D
-        ostrm<<PROPERTY(epProperty.ep_slOffset, FLOATquat3D);
+        ostrm.Write_t(&PROPERTY(epProperty.ep_slOffset, FLOATquat3D), sizeof(FLOATquat3D));
         break;
       // if it is ANGLE3D
       case CEntityProperty::EPT_ANGLE3D:
         // write ANGLE3D
-        ostrm<<PROPERTY(epProperty.ep_slOffset, ANGLE3D);
+        ostrm.Write_t(&PROPERTY(epProperty.ep_slOffset, ANGLE3D), sizeof(ANGLE3D));
         break;
       // if it is FLOAT3D
       case CEntityProperty::EPT_FLOAT3D:
         // write FLOAT3D
-        ostrm<<PROPERTY(epProperty.ep_slOffset, FLOAT3D);
+        ostrm.Write_t(&PROPERTY(epProperty.ep_slOffset, FLOAT3D), sizeof(FLOAT3D));
         break;
       // if it is FLOATplane3D
       case CEntityProperty::EPT_FLOATplane3D:
         // write FLOATplane3D
-        ostrm<<PROPERTY(epProperty.ep_slOffset, FLOATplane3D);
+        ostrm.Write_t(&PROPERTY(epProperty.ep_slOffset, FLOATplane3D), sizeof(FLOATplane3D));
         break;
       // if it is ENTITYPTR
       case CEntityProperty::EPT_ENTITYPTR:
@@ -543,7 +543,7 @@ void CEntity::WriteProperties_t(CTStream &ostrm) // throw char *
       // if it is CPlacement3D
       case CEntityProperty::EPT_PLACEMENT3D:
         // write CPlacement3D
-        ostrm<<PROPERTY(epProperty.ep_slOffset, CPlacement3D);
+        ostrm.Write_t(&PROPERTY(epProperty.ep_slOffset, CPlacement3D), sizeof(CPlacement3D));
         break;
       default:
         ASSERTALWAYS("Unknown property type");

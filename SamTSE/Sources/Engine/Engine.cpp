@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-#include "StdH.h"
+#include "Engine/StdH.h"
 
 #include <Engine/Build.h>
 #include <Engine/Base/Profiling.h>
@@ -26,7 +26,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Base/CRC.h>
 #include <Engine/Base/CRCTable.h>
 #include <Engine/Base/ProgressHook.h>
-#include <Engine/Base/FileSystem.h>
 #include <Engine/Sound/SoundListener.h>
 #include <Engine/Sound/SoundLibrary.h>
 #include <Engine/Graphics/GfxLibrary.h>
@@ -44,6 +43,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Templates/Stock_CShader.h>
 #include <Engine/Templates/StaticArray.cpp>
 #include <Engine/Base/IFeel.h>
+#include <Engine/Base/FileSystem.h>
 
 #if PLATFORM_UNIX
 #include "SDL.h"
@@ -62,10 +62,15 @@ ENGINE_API BOOL _bWorldEditorApp  = FALSE;
 ENGINE_API CTString _strLogFile = "";
 ENGINE_API CTFileName _fnmModLibPath;
 
+#ifdef PLATFORM_WIN32
+extern HWND _hwndMain = NULL;
+extern BOOL _bFullScreen = FALSE;
+#else
 // global handle for application windows
 // !!! FIXME rcg10072001 this needs to be abstracted.
 static HWND _hwndMain = NULL;
 static BOOL _bFullScreen = FALSE;
+#endif
 
 CTCriticalSection zip_csLock; // critical section for access to zlib functions
 
@@ -110,12 +115,21 @@ static CTString sys_strModExt  = "";
 // Path vars
 static INDEX sys_iGameBits = 0;
 ENGINE_API INDEX sys_iSysPath = 0;
+
+#ifdef PLATFORM_WIN32
+// Entities Adjesters
+ENGINE_API FLOAT _fPlayerFOVAdjuster = 1.0f;
+ENGINE_API FLOAT _fWeaponFOVAdjuster = 1.0f;
+ENGINE_API FLOAT _fArmorHeightAdjuster = 1.5f;
+ENGINE_API FLOAT _fFragScorerHeightAdjuster = 1.5f;
+#endif
+
 //
 char _path[2048];
 static int _testfiledone;
 
 // enables paranoia checks for allocation array
-BOOL _bAllocationArrayParanoiaCheck = FALSE;
+__extern BOOL _bAllocationArrayParanoiaCheck = FALSE;
 
 // rcg10072001
 #ifdef PLATFORM_WIN32
@@ -136,6 +150,7 @@ BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 }
 #endif
 
+#ifdef PLATFORM_UNIX
 static void _list_dir(const char *name, int indent, CTString strGameID)
 {
     DIR *dir;
@@ -178,6 +193,7 @@ static void _list_dir(const char *name, int indent, CTString strGameID)
     }
     closedir(dir);
 }
+#endif
 
 static void DetectCPU(void)
 {
@@ -186,7 +202,7 @@ static void DetectCPU(void)
   ULONG ulTFMS = 0;
   ULONG ulFeatures = 0;
 
-  #if (defined __MSVC_INLINE__)
+  #if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT)
   // test MMX presence and update flag
   __asm {
     xor     eax,eax           ;// request for basic id
@@ -200,7 +216,30 @@ static void DetectCPU(void)
     mov     dword ptr [ulFeatures], edx
   }
 
-  #elif (defined __GNU_INLINE_X86__)
+  #elif (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+    // test MMX presence and update flag
+
+    // eax, ebx, ecx, edx
+    int cpuidData[4];
+
+    // 0: Highest Function Parameter and CPU's manufacturer ID string
+    __cpuid(cpuidData, 0);
+    // to get string copy 12 bytes in the following order:
+    // ebx
+    memcpy(&strVendor[0], &cpuidData[1], 4);
+    // edx
+    memcpy(&strVendor[0], &cpuidData[3], 4);
+    // ecx
+    memcpy(&strVendor[0], &cpuidData[2], 4);
+
+    // 1: Processor Info and Feature Bits
+    __cpuid(cpuidData, 1);
+    // eax
+    memcpy(&ulTFMS, &cpuidData[0], 4);
+    // edx
+    memcpy(&ulFeatures, &cpuidData[3], 4);
+  
+  #elif (defined __GNU_INLINE_X86__)	  
     ULONG eax, ebx, ecx, edx;
     // test MMX presence and update flag
     __asm__ __volatile__ (
@@ -316,40 +355,72 @@ static char strDirPath[MAX_PATH] = "";
 
 static void AnalyzeApplicationPath(void)
 {
-  // rcg10072001 rewritten with abstraction layer.
-  const char *_dirsep = CFileSystem::GetDirSeparator();
-  size_t seplen = strlen(_dirsep);
-  char *dirsep = new char[seplen + 1];
-  strcpy(dirsep, _dirsep);
-  StrRev(dirsep);
+#ifdef PLATFORM_WIN32	
+	strcpy(strDirPath, "D:\\");
+	strcpy(strExePath, "D:\\TestExe.xbe");
+	char strTmpPath[MAX_PATH] = "";
+	// get full path to the exe
+	GetModuleFileNameA(NULL, strExePath, sizeof(strExePath) - 1);
+	// copy that to the path
+	strncpy(strTmpPath, strExePath, sizeof(strTmpPath) - 1);
+	strDirPath[sizeof(strTmpPath) - 1] = 0;
+	// remove name from application path
+	StrRev(strTmpPath);
+	// find last backslash
+	char *pstr = strchr(strTmpPath, '\\');
+	if (pstr == NULL) {
+		// not found - path is just "\"
+		strcpy(strTmpPath, "\\");
+		pstr = strTmpPath;
+	}
+	// remove 'debug' from app path if needed
+	if (strnicmp(pstr, "\\gubed", 6) == 0) pstr += 6;
+	if (pstr[0] = '\\') pstr++;
+	char *pstrFin = strchr(pstr, '\\');
+	if (pstrFin == NULL) {
+		strcpy(pstr, "\\");
+		pstrFin = pstr;
+	}
+	// copy that to the path
+	StrRev(pstrFin);
+	strncpy(strDirPath, pstrFin, sizeof(strDirPath) - 1);
+	strDirPath[sizeof(strDirPath) - 1] = 0;
+#else	
+	// rcg10072001 rewritten with abstraction layer.
+	const char *_dirsep = CFileSystem::GetDirSeparator();
+	size_t seplen = strlen(_dirsep);
+	char *dirsep = new char[seplen + 1];
+	strcpy(dirsep, _dirsep);
+	StrRev(dirsep);
 
-  char strTmpPath[MAX_PATH] = "";
+	char strTmpPath[MAX_PATH] = "";
 
-  _pFileSystem->GetExecutablePath(strExePath, sizeof (strExePath)-1);
-  strncpy(strTmpPath, strExePath, sizeof(strTmpPath)-1);
-  strDirPath[sizeof(strTmpPath)-1] = 0;
-  // remove name from application path
-  StrRev(strTmpPath);  
-  // find last backslash
-  char *pstr = strstr( strTmpPath, dirsep);
-  if( pstr==NULL) {
-    // not found - path is just "\"
-    strcpy( strTmpPath, dirsep);
-    pstr = strTmpPath;
-  } 
-  // remove 'debug' from app path if needed
-  if( strnicmp( pstr, (CTString(dirsep)+"gubed"), 5+seplen)==0) pstr += (5 + seplen);
-  if( strncmp(pstr, dirsep, seplen) == 0) pstr += seplen;
-  char *pstrFin = strstr( pstr, dirsep);
-  if( pstrFin==NULL) {
-    strcpy( pstr, dirsep);
-    pstrFin = pstr;
-  }
-  // copy that to the path
-  StrRev(pstrFin);
-  strncpy( strDirPath, pstrFin, sizeof(strDirPath)-1);
-  strDirPath[sizeof(strDirPath)-1] = 0;
-  delete[] dirsep;
+	_pFileSystem->GetExecutablePath(strExePath, sizeof(strExePath) - 1);
+	strncpy(strTmpPath, strExePath, sizeof(strTmpPath) - 1);
+	strDirPath[sizeof(strTmpPath) - 1] = 0;
+	// remove name from application path
+	StrRev(strTmpPath);
+	// find last backslash
+	char *pstr = strstr(strTmpPath, dirsep);
+	if (pstr == NULL) {
+		// not found - path is just "\"
+		strcpy(strTmpPath, dirsep);
+		pstr = strTmpPath;
+	}
+	// remove 'debug' from app path if needed
+	if (strnicmp(pstr, (CTString(dirsep) + "gubed"), 5 + seplen) == 0) pstr += (5 + seplen);
+	if (strncmp(pstr, dirsep, seplen) == 0) pstr += seplen;
+	char *pstrFin = strstr(pstr, dirsep);
+	if (pstrFin == NULL) {
+		strcpy(pstr, dirsep);
+		pstrFin = pstr;
+	}
+	// copy that to the path
+	StrRev(pstrFin);
+	strncpy(strDirPath, pstrFin, sizeof(strDirPath) - 1);
+	strDirPath[sizeof(strDirPath) - 1] = 0;
+	delete[] dirsep;
+#endif 
 }
 
 // rcg03242003
@@ -384,10 +455,10 @@ static void PlatformIdentification(void)
 {
 // !!! FIXME: Abstract this somehow.
 #if (defined PLATFORM_WIN32)
-  OSVERSIONINFO osv;
+  OSVERSIONINFOA osv;
   memset(&osv, 0, sizeof(osv));
   osv.dwOSVersionInfoSize = sizeof(osv);
-  if (GetVersionEx(&osv)) {
+  if (GetVersionExA(&osv)) {
     switch (osv.dwPlatformId) {
     case VER_PLATFORM_WIN32s:         sys_strOS = "Win32s";  break;
     case VER_PLATFORM_WIN32_WINDOWS:  sys_strOS = "Win9x"; break;
@@ -578,7 +649,11 @@ static void PlatformSpecificInit(void)
 }
 
 // startup engine 
+#ifdef PLATFORM_UNIX
 ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
+#else
+ENGINE_API void SE_InitEngine(CTString strGameID)
+#endif
 {
   SanityCheckTypes();
 
@@ -587,7 +662,12 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   const char *gamename = "UnknownGame";
   if (strGameID != "")
     gamename = (const char *) strGameID;
+
+#ifdef PLATFORM_UNIX
   _pFileSystem = CFileSystem::GetInstance(argv0, gamename);  // rcg10082001
+#else
+  _pFileSystem = CFileSystem::GetInstance(" ", gamename);
+#endif
 
   #pragma message(">> Remove this from SE_InitEngine : _bWorldEditorApp")
   if(strGameID=="SeriousEditor") {
@@ -597,12 +677,12 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   AnalyzeApplicationPath();
   _fnmApplicationPath = CTString(strDirPath);
   _fnmApplicationExe = CTString(strExePath);
-
+#ifdef PLATFORM_UNIX
     // rcg01012002 calculate user dir.
   char buf[MAX_PATH];
   _pFileSystem->GetUserDirectory(buf, sizeof (buf));
   _fnmUserDir = CTString(buf);
-
+#endif
   try {
     _fnmApplicationExe.RemoveApplicationPath_t();
   } catch (const char *strError) {
@@ -617,8 +697,11 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
     _strLogFile.ReplaceSubstr(CTString("-bin"), CTString(""));*/
     _strLogFile = "SeriousSam";
   }
+#ifdef PLATFORM_UNIX
   _pConsole->Initialize(_fnmUserDir+_strLogFile+".log", 90, 512);
-
+#else
+  _pConsole->Initialize(_fnmApplicationPath + _strLogFile + ".log", 90, 512);
+#endif
   _pAnimStock        = new CStock_CAnimData;
   _pTextureStock     = new CStock_CTextureData;
   _pSoundStock       = new CStock_CSoundData;
@@ -652,6 +735,7 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   sys_iGameBits  = (int)(CHAR_BIT * sizeof(void *));
   CPrintF(TRANSV("Running %d-bit version\n"), sys_iGameBits);
 
+#ifdef PLATFORM_UNIX
   int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/bin/", (size_t) 9 );
   if( _isystempath == 0 ) {
        sys_iSysPath = 1; // using system path
@@ -742,6 +826,7 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   CPrintF(TRANSV("Executable: %s\n"), (const char *) strExePath);
   CPrintF(TRANSV("Assumed engine data directory: %s\n"), (const char *) _fnmApplicationPath);
   CPrintF(TRANSV("Assumed mods library directory: %s\n"), (const char *) _fnmModLibPath);
+#endif
 
   CPrintF("\n");
 
@@ -809,7 +894,12 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
   // Path vars
   _pShell->DeclareSymbol("user const INDEX sys_iGameBits    ;", (void *) &sys_iGameBits);
   _pShell->DeclareSymbol("user const INDEX sys_iSysPath    ;", (void *) &sys_iSysPath);
-
+#ifdef PLATFORM_WIN32
+  _pShell->DeclareSymbol("user const FLOAT _fPlayerFOVAdjuster    ;", (void *) &_fPlayerFOVAdjuster);
+  _pShell->DeclareSymbol("user const FLOAT _fWeaponFOVAdjuster    ;", (void *) &_fWeaponFOVAdjuster);
+  _pShell->DeclareSymbol("user const FLOAT _fArmorHeightAdjuster    ;", (void *) &_fArmorHeightAdjuster);
+  _pShell->DeclareSymbol("user const FLOAT _fFragScorerHeightAdjuster    ;", (void *) &_fFragScorerHeightAdjuster);
+#endif
   // Stock clearing
   extern void FreeUnusedStock(void);
   _pShell->DeclareSymbol("user void FreeUnusedStock(void);", (void *) &FreeUnusedStock);
@@ -925,11 +1015,30 @@ ENGINE_API void SE_EndEngine(void)
   delete _pTimer;    _pTimer   = NULL;  
   delete _pShell;    _pShell   = NULL;  
   delete _pConsole;  _pConsole = NULL;
+#ifdef PLATFORM_UNIX
   delete _pFileSystem;  _pFileSystem = NULL;
+#endif
   extern void EndStreams(void);
   EndStreams();
 
   // shutdown profilers
+#ifdef PLATFORM_WIN32
+  _sfStats.Clear();
+  _pfGfxProfile.pf_apcCounters.Clear();
+  _pfGfxProfile.pf_aptTimers.Clear();
+  _pfModelProfile.pf_apcCounters.Clear();
+  _pfModelProfile.pf_aptTimers.Clear();
+  _pfSoundProfile.pf_apcCounters.Clear();
+  _pfSoundProfile.pf_aptTimers.Clear();
+  _pfNetworkProfile.pf_apcCounters.Clear();
+  _pfNetworkProfile.pf_aptTimers.Clear();
+  _pfRenderProfile.pf_apcCounters.Clear();
+  _pfRenderProfile.pf_aptTimers.Clear();
+  _pfWorldEditingProfile.pf_apcCounters.Clear();
+  _pfWorldEditingProfile.pf_aptTimers.Clear();
+  _pfPhysicsProfile.pf_apcCounters.Clear();
+  _pfPhysicsProfile.pf_aptTimers.Clear();
+#else
   _sfStats.Clear();
   _pfGfxProfile           .CountersClear();
   _pfGfxProfile           .TimersClear();
@@ -945,6 +1054,7 @@ ENGINE_API void SE_EndEngine(void)
   _pfWorldEditingProfile  .TimersClear();
   _pfPhysicsProfile       .CountersClear();
   _pfPhysicsProfile       .TimersClear();
+#endif
 
   // remove default fonts if needed
   if( _pfdDisplayFont != NULL) { delete _pfdDisplayFont;  _pfdDisplayFont=NULL; }
@@ -1033,7 +1143,7 @@ touchLoop:
 #endif // PLATFORM_WIN32
 
 // pretouch all memory commited by process
-BOOL _bNeedPretouch = FALSE;
+__extern BOOL _bNeedPretouch = FALSE;
 ENGINE_API extern void SE_PretouchIfNeeded(void)
 {
 #if (defined PLATFORM_WIN32)

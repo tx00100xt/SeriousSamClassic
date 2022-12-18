@@ -97,7 +97,7 @@ static UWORD _auwGammaTable[256*3];
 
 // table for clipping [-512..+1024] to [0..255]
 static UBYTE aubClipByte[256*2+ 256 +256*3];
-const UBYTE *pubClipByte = &aubClipByte[256*2];
+__extern const UBYTE *pubClipByte = &aubClipByte[256*2];
 
 // fast square root and 1/sqrt tables
 UBYTE aubSqrt[SQRTTABLESIZE];    
@@ -112,7 +112,7 @@ static BOOL GFX_bRenderingScene = FALSE;
 static ULONG GFX_ulLastDrawPortID = 0;  
 
 // last size of vertex buffers
-INDEX _iLastVertexBufferSize = 0;
+__extern INDEX _iLastVertexBufferSize = 0;
 // pretouch flag
 extern BOOL _bNeedPretouch;
 
@@ -122,185 +122,191 @@ static ULONG _ulWhite = 0xFFFFFFFF;
 
 // fast sin/cos table
 static FLOAT afSinTable[256+256+64];
-const FLOAT *pfSinTable = afSinTable +256;
-const FLOAT *pfCosTable = afSinTable +256+64;
+__extern const FLOAT *pfSinTable = afSinTable +256;
+__extern const FLOAT *pfCosTable = afSinTable +256+64;
 
 // texture/shadow control
-INDEX tex_iNormalQuality    = 00;      // 0=optimal, 1=16bit, 2=32bit, 3=compressed (1st num=opaque tex, 2nd=alpha tex)
-INDEX tex_iAnimationQuality = 11;      // 0=optimal, 1=16bit, 2=32bit, 3=compressed (1st num=opaque tex, 2nd=alpha tex)
-INDEX tex_iNormalSize     = 9;         // log2 of texture area /2 for max texture size allowed
-INDEX tex_iAnimationSize  = 7;
-INDEX tex_iEffectSize     = 7;
-INDEX tex_bDynamicMipmaps = FALSE;     // how many mipmaps will be bilineary filtered (0-15)
-INDEX tex_iDithering      = 3;         // 0=none, 1-3=low, 4-7=medium, 8-10=high
-INDEX tex_bCompressAlphaChannel = FALSE;  // for compressed textures, compress alpha channel too
-INDEX tex_bAlternateCompression = FALSE;  // basically, this is fix for GFs (compress opaque texture as translucent)
-INDEX tex_bFineEffect = FALSE;         // 32bit effect? (works only if base texture hasn't been dithered)
-INDEX tex_bFineFog    = TRUE;          // should fog be 8/32bit? (or just plain 4/16bit)
-INDEX tex_iFogSize    = 7;             // limit fog texture size 
-INDEX tex_iFiltering       =  0;       // -6 - +6; negative = sharpen, positive = blur, 0 = none
-INDEX tex_iEffectFiltering = +4;       // filtering of fire effect textures
-INDEX tex_bProgressiveFilter = FALSE;  // filter mipmaps in creation time (not afterwards)
-INDEX tex_bColorizeMipmaps   = FALSE;  // DEBUG: colorize texture's mipmap levels in various colors
+__extern INDEX tex_iNormalQuality    = 00;      // 0=optimal, 1=16bit, 2=32bit, 3=compressed (1st num=opaque tex, 2nd=alpha tex)
+__extern INDEX tex_iAnimationQuality = 11;      // 0=optimal, 1=16bit, 2=32bit, 3=compressed (1st num=opaque tex, 2nd=alpha tex)
+__extern INDEX tex_iNormalSize     = 9;         // log2 of texture area /2 for max texture size allowed
+__extern INDEX tex_iAnimationSize  = 7;
+__extern INDEX tex_iEffectSize     = 7;
+__extern INDEX tex_bDynamicMipmaps = FALSE;     // how many mipmaps will be bilineary filtered (0-15)
+__extern INDEX tex_iDithering      = 3;         // 0=none, 1-3=low, 4-7=medium, 8-10=high
+__extern INDEX tex_bCompressAlphaChannel = FALSE;  // for compressed textures, compress alpha channel too
+__extern INDEX tex_bAlternateCompression = FALSE;  // basically, this is fix for GFs (compress opaque texture as translucent)
+__extern INDEX tex_bFineEffect = FALSE;         // 32bit effect? (works only if base texture hasn't been dithered)
+__extern INDEX tex_bFineFog    = TRUE;          // should fog be 8/32bit? (or just plain 4/16bit)
+__extern INDEX tex_iFogSize    = 7;             // limit fog texture size 
+__extern INDEX tex_iFiltering       =  0;       // -6 - +6; negative = sharpen, positive = blur, 0 = none
+__extern INDEX tex_iEffectFiltering = +4;       // filtering of fire effect textures
+__extern INDEX tex_bProgressiveFilter = FALSE;  // filter mipmaps in creation time (not afterwards)
+__extern INDEX tex_bColorizeMipmaps   = FALSE;  // DEBUG: colorize texture's mipmap levels in various colors
 
-INDEX shd_iStaticSize  = 8;
-INDEX shd_iDynamicSize = 8;    
-INDEX shd_bFineQuality = FALSE; 
-INDEX shd_iFiltering = 3;     // >0 = blurring, 0 = no filtering
-INDEX shd_iDithering = 1;     // 0=none, 1,2=low, 3,4=medium, 5=high
-INDEX shd_iAllowDynamic = 1;    // 0=disallow, 1=allow on polys w/o 'NoDynamicLights' flag, 2=allow unconditionally
-INDEX shd_bDynamicMipmaps = TRUE;
-FLOAT shd_tmFlushDelay = 30.0f; // in seconds
-FLOAT shd_fCacheSize   = 8.0f;  // in megabytes
-INDEX shd_bCacheAll    = FALSE; // cache all shadowmap at the level loading time (careful - memory eater!)
-INDEX shd_bAllowFlats = TRUE;   // allow optimization of single-color shadowmaps
-INDEX shd_iForceFlats = 0;      // force all shadowmaps to be flat (internal!) - 0=don't, 1=w/o overbrighting, 2=w/ overbrighting
-INDEX shd_bShowFlats  = FALSE;  // show shadows that have been optimized as flat
-INDEX shd_bColorize   = FALSE;  // colorize shadows by size (gradieng from red=big to green=little)
+__extern INDEX shd_iStaticSize  = 8;
+__extern INDEX shd_iDynamicSize = 8;    
+__extern INDEX shd_bFineQuality = FALSE; 
+__extern INDEX shd_iFiltering = 3;     // >0 = blurring, 0 = no filtering
+__extern INDEX shd_iDithering = 1;     // 0=none, 1,2=low, 3,4=medium, 5=high
+__extern INDEX shd_iAllowDynamic = 1;    // 0=disallow, 1=allow on polys w/o 'NoDynamicLights' flag, 2=allow unconditionally
+__extern INDEX shd_bDynamicMipmaps = TRUE;
+__extern FLOAT shd_tmFlushDelay = 30.0f; // in seconds
+__extern FLOAT shd_fCacheSize   = 8.0f;  // in megabytes
+__extern INDEX shd_bCacheAll    = FALSE; // cache all shadowmap at the level loading time (careful - memory eater!)
+__extern INDEX shd_bAllowFlats = TRUE;   // allow optimization of single-color shadowmaps
+__extern INDEX shd_iForceFlats = 0;      // force all shadowmaps to be flat (internal!) - 0=don't, 1=w/o overbrighting, 2=w/ overbrighting
+__extern INDEX shd_bShowFlats  = FALSE;  // show shadows that have been optimized as flat
+__extern INDEX shd_bColorize   = FALSE;  // colorize shadows by size (gradieng from red=big to green=little)
 
 // OpenGL control
-INDEX ogl_iTextureCompressionType  = 1;    // 0=none, 1=default (ARB), 2=S3TC, 3=FXT1, 4=old S3TC
-INDEX ogl_bUseCompiledVertexArrays = 101;  // =XYZ; X=2D, Y=world, Z=models
-INDEX ogl_bAllowQuadArrays   = FALSE;
-INDEX ogl_bExclusive     = TRUE;
-INDEX ogl_bGrabDepthBuffer  = FALSE;
-INDEX ogl_iMaxBurstSize = 0;        // unlimited
-INDEX ogl_bTruformLinearNormals = TRUE;
-INDEX ogl_bAlternateClipPlane = FALSE; // signal when user clip plane requires a texture unit
+__extern INDEX ogl_iTextureCompressionType  = 1;    // 0=none, 1=default (ARB), 2=S3TC, 3=FXT1, 4=old S3TC
+__extern INDEX ogl_bUseCompiledVertexArrays = 101;  // =XYZ; X=2D, Y=world, Z=models
+__extern INDEX ogl_bAllowQuadArrays   = FALSE;
+__extern INDEX ogl_bExclusive     = TRUE;
+__extern INDEX ogl_bGrabDepthBuffer  = FALSE;
+__extern INDEX ogl_iMaxBurstSize = 0;        // unlimited
+__extern INDEX ogl_bTruformLinearNormals = TRUE;
+__extern INDEX ogl_bAlternateClipPlane = FALSE; // signal when user clip plane requires a texture unit
 
-INDEX ogl_iTBufferEffect  = 0;      // 0=none, 1=partial FSAA, 2=Motion Blur
-INDEX ogl_iTBufferSamples = 2;      // 2, 4 or 8 (for now)
-INDEX ogl_iFinish = 1;              // 0=never, 1=before rendering of next frame, 2=at the end of this frame, 3=at projection change
+__extern INDEX ogl_iTBufferEffect  = 0;      // 0=none, 1=partial FSAA, 2=Motion Blur
+__extern INDEX ogl_iTBufferSamples = 2;      // 2, 4 or 8 (for now)
+__extern INDEX ogl_iFinish = 1;              // 0=never, 1=before rendering of next frame, 2=at the end of this frame, 3=at projection change
 
 // Direct3D control
-INDEX d3d_bUseHardwareTnL = TRUE;
-INDEX d3d_bAlternateDepthReads = FALSE;  // should check delayed depth reads at the end of current frame (FALSE) or at begining of the next (TRUE)
-INDEX d3d_bOptimizeVertexBuffers = TRUE; // enables circular buffers
-INDEX d3d_iVertexBuffersSize   = 1024;   // KBs reserved for vertex buffers
-INDEX d3d_iVertexRangeTreshold = 99;     // minimum vertices in buffer that triggers range optimization
-INDEX d3d_iMaxBurstSize = 0;             // 0=unlimited
-INDEX d3d_iFinish = 0;
+__extern INDEX d3d_bUseHardwareTnL = TRUE;
+__extern INDEX d3d_bAlternateDepthReads = FALSE;  // should check delayed depth reads at the end of current frame (FALSE) or at begining of the next (TRUE)
+__extern INDEX d3d_bOptimizeVertexBuffers = TRUE; // enables circular buffers
+__extern INDEX d3d_iVertexBuffersSize   = 1024;   // KBs reserved for vertex buffers
+__extern INDEX d3d_iVertexRangeTreshold = 99;     // minimum vertices in buffer that triggers range optimization
+__extern INDEX d3d_iMaxBurstSize = 0;             // 0=unlimited
+__extern INDEX d3d_iFinish = 0;
 
 // API common controls
-INDEX gap_iUseTextureUnits = 4;
-INDEX gap_iTextureFiltering  = 21;       // bilinear by default
-INDEX gap_iTextureAnisotropy = 1;        // 1=isotropic, 2=min anisotropy
-FLOAT gap_fTextureLODBias    = 0.0f;
-INDEX gap_bOptimizeStateChanges = TRUE;
-INDEX gap_iOptimizeDepthReads = 1;        // 0=imediately, 1=after frame, 2=every 0.1 seconds
-INDEX gap_iOptimizeClipping   = 2;        // 0=no, 1=mirror plane only, 2=mirror and frustum
-INDEX gap_bAllowGrayTextures = TRUE;
-INDEX gap_bAllowSingleMipmap = TRUE;
-INDEX gap_iSwapInterval = 0;
-INDEX gap_iRefreshRate  = 0;
-INDEX gap_iDithering = 2;        // 16-bit dithering: 0=none, 1=no alpha, 2=all
-INDEX gap_bForceTruform = 0;     // 0 = only for models that allow truform, 1=for every model
-INDEX gap_iTruformLevel = 3;     // 0 = no tesselation
-INDEX gap_iDepthBits   = 0;      // 0 (as color depth), 16, 24 or 32
-INDEX gap_iStencilBits = 0;      // 0 (no stencil buffer), 4 or 8
+__extern INDEX gap_iUseTextureUnits = 4;
+__extern INDEX gap_iTextureFiltering  = 21;       // bilinear by default
+__extern INDEX gap_iTextureAnisotropy = 1;        // 1=isotropic, 2=min anisotropy
+__extern FLOAT gap_fTextureLODBias    = 0.0f;
+__extern INDEX gap_bOptimizeStateChanges = TRUE;
+__extern INDEX gap_iOptimizeDepthReads = 1;        // 0=imediately, 1=after frame, 2=every 0.1 seconds
+__extern INDEX gap_iOptimizeClipping   = 2;        // 0=no, 1=mirror plane only, 2=mirror and frustum
+__extern INDEX gap_bAllowGrayTextures = TRUE;
+__extern INDEX gap_bAllowSingleMipmap = TRUE;
+__extern INDEX gap_iSwapInterval = 0;
+__extern INDEX gap_iRefreshRate  = 0;
+__extern INDEX gap_iDithering = 2;        // 16-bit dithering: 0=none, 1=no alpha, 2=all
+__extern INDEX gap_bForceTruform = 0;     // 0 = only for models that allow truform, 1=for every model
+__extern INDEX gap_iTruformLevel = 3;     // 0 = no tesselation
+__extern INDEX gap_iDepthBits   = 0;      // 0 (as color depth), 16, 24 or 32
+__extern INDEX gap_iStencilBits = 0;      // 0 (no stencil buffer), 4 or 8
 
 // models control
-INDEX mdl_bShowTriangles    = FALSE;
-INDEX mdl_bShowStrips       = FALSE;
-INDEX mdl_bTruformWeapons   = FALSE;
-INDEX mdl_bCreateStrips     = TRUE;
-INDEX mdl_bRenderDetail     = TRUE;
-INDEX mdl_bRenderSpecular   = TRUE;
-INDEX mdl_bRenderReflection = TRUE;
-INDEX mdl_bAllowOverbright  = TRUE;
-INDEX mdl_bFineQuality      = TRUE;
-INDEX mdl_iShadowQuality    = 1;
-FLOAT mdl_fLODMul           = 1.0f;
-FLOAT mdl_fLODAdd           = 0.0f;
-INDEX mdl_iLODDisappear     = 1; // 0=never, 1=ignore bias, 2=with bias
+__extern INDEX mdl_bShowTriangles    = FALSE;
+__extern INDEX mdl_bShowStrips       = FALSE;
+__extern INDEX mdl_bTruformWeapons   = FALSE;
+__extern INDEX mdl_bCreateStrips     = TRUE;
+__extern INDEX mdl_bRenderDetail     = TRUE;
+__extern INDEX mdl_bRenderSpecular   = TRUE;
+__extern INDEX mdl_bRenderReflection = TRUE;
+__extern INDEX mdl_bAllowOverbright  = TRUE;
+__extern INDEX mdl_bFineQuality      = TRUE;
+__extern INDEX mdl_iShadowQuality    = 1;
+__extern FLOAT mdl_fLODMul           = 1.0f;
+__extern FLOAT mdl_fLODAdd           = 0.0f;
+__extern INDEX mdl_iLODDisappear     = 1; // 0=never, 1=ignore bias, 2=with bias
 
 // ska controls
-INDEX ska_bShowSkeleton     = FALSE;
-INDEX ska_bShowColision     = FALSE;
-FLOAT ska_fLODMul           = 1.0f;
-FLOAT ska_fLODAdd           = 0.0f;
+__extern INDEX ska_bShowSkeleton     = FALSE;
+__extern INDEX ska_bShowColision     = FALSE;
+__extern FLOAT ska_fLODMul           = 1.0f;
+__extern FLOAT ska_fLODAdd           = 0.0f;
 // terrain controls
-INDEX ter_bShowQuadTree     = FALSE;
-INDEX ter_bShowWireframe    = FALSE;
-INDEX ter_bLerpVertices     = TRUE;
-INDEX ter_bShowInfo         = FALSE;
-INDEX ter_bOptimizeRendering = TRUE;
-INDEX ter_bTempFreezeCast   = FALSE;
-INDEX ter_bNoRegeneration   = FALSE;
+__extern INDEX ter_bShowQuadTree     = FALSE;
+__extern INDEX ter_bShowWireframe    = FALSE;
+__extern INDEX ter_bLerpVertices     = TRUE;
+__extern INDEX ter_bShowInfo         = FALSE;
+__extern INDEX ter_bOptimizeRendering = TRUE;
+__extern INDEX ter_bTempFreezeCast   = FALSE;
+__extern INDEX ter_bNoRegeneration   = FALSE;
 
 // !!! FIXME : rcg11232001 Hhmm...I'm failing an assertion in the
 // !!! FIXME : rcg11232001 Advanced Rendering Options menu because
 // !!! FIXME : rcg11232001 Scripts/CustomOptions/GFX-AdvancedRendering.cfg
 // !!! FIXME : rcg11232001 references non-existing cvars, so I'm adding them
 // !!! FIXME : rcg11232001 here for now.
-static INDEX mdl_bRenderBump       = TRUE;
-static FLOAT ogl_fTextureAnisotropy = 0.0f;
-static FLOAT tex_fNormalSize = 0.0f;
+#if (defined _MSC_VER)
+extern INDEX mdl_bRenderBump       = TRUE;
+extern FLOAT ogl_fTextureAnisotropy = 0.0f;
+extern FLOAT tex_fNormalSize = 0.0f;
+#else
+INDEX mdl_bRenderBump       = TRUE;
+FLOAT ogl_fTextureAnisotropy = 0.0f;
+FLOAT tex_fNormalSize = 0.0f;
+#endif
 
 // rendering control
-INDEX wld_bAlwaysAddAll         = FALSE;
-INDEX wld_bRenderMirrors        = TRUE;
-INDEX wld_bRenderEmptyBrushes   = TRUE;
-INDEX wld_bRenderShadowMaps     = TRUE;
-INDEX wld_bRenderTextures       = TRUE;
-INDEX wld_bRenderDetailPolygons = TRUE;
-INDEX wld_bTextureLayers        = 111;
-INDEX wld_bShowTriangles        = FALSE;
-INDEX wld_bShowDetailTextures   = FALSE;
-INDEX wld_iDetailRemovingBias   = 3;
-FLOAT wld_fEdgeOffsetI          = 0.0f; //0.125f;
-FLOAT wld_fEdgeAdjustK          = 1.0f; //1.0001f;
+__extern INDEX wld_bAlwaysAddAll         = FALSE;
+__extern INDEX wld_bRenderMirrors        = TRUE;
+__extern INDEX wld_bRenderEmptyBrushes   = TRUE;
+__extern INDEX wld_bRenderShadowMaps     = TRUE;
+__extern INDEX wld_bRenderTextures       = TRUE;
+__extern INDEX wld_bRenderDetailPolygons = TRUE;
+__extern INDEX wld_bTextureLayers        = 111;
+__extern INDEX wld_bShowTriangles        = FALSE;
+__extern INDEX wld_bShowDetailTextures   = FALSE;
+__extern INDEX wld_iDetailRemovingBias   = 3;
+__extern FLOAT wld_fEdgeOffsetI          = 0.0f; //0.125f;
+__extern FLOAT wld_fEdgeAdjustK          = 1.0f; //1.0001f;
                                      
-INDEX gfx_bRenderWorld      = TRUE;
-INDEX gfx_bRenderParticles  = TRUE;
-INDEX gfx_bRenderModels     = TRUE;
-INDEX gfx_bRenderPredicted  = FALSE;
-INDEX gfx_bRenderFog        = TRUE;
-INDEX gfx_iLensFlareQuality = 3;   // 0=none, 1=corona only, 2=corona and reflections, 3=corona, reflections and glare 
+__extern INDEX gfx_bRenderWorld      = TRUE;
+__extern INDEX gfx_bRenderParticles  = TRUE;
+__extern INDEX gfx_bRenderModels     = TRUE;
+__extern INDEX gfx_bRenderPredicted  = FALSE;
+__extern INDEX gfx_bRenderFog        = TRUE;
+__extern INDEX gfx_iLensFlareQuality = 3;   // 0=none, 1=corona only, 2=corona and reflections, 3=corona, reflections and glare 
 
-INDEX gfx_bDecoratedText   = TRUE;
-INDEX gfx_bClearScreen = FALSE;
-FLOAT gfx_tmProbeDecay = 30.00f;  // seconds
-INDEX gfx_iProbeSize   = 256;     // in KBs
+__extern INDEX gfx_bDecoratedText   = TRUE;
+__extern INDEX gfx_bClearScreen = FALSE;
+__extern FLOAT gfx_tmProbeDecay = 30.00f;  // seconds
+__extern INDEX gfx_iProbeSize   = 256;     // in KBs
 
-INDEX gfx_ctMonitors = 0;
-INDEX gfx_bMultiMonDisabled = FALSE;
-INDEX gfx_bDisableMultiMonSupport = TRUE;
+__extern INDEX gfx_ctMonitors = 0;
+__extern INDEX gfx_bMultiMonDisabled = FALSE;
+__extern INDEX gfx_bDisableMultiMonSupport = TRUE;
 
-INDEX gfx_bDisableWindowsKeys = TRUE;
+__extern INDEX gfx_bDisableWindowsKeys = TRUE;
 
-INDEX wed_bIgnoreTJunctions = FALSE;
-INDEX wed_bUseBaseForReplacement = FALSE;
+__extern INDEX wed_bIgnoreTJunctions = FALSE;
+__extern INDEX wed_bUseBaseForReplacement = FALSE;
 
 // some nifty features
-INDEX gfx_iHueShift   = 0;       // 0-359
-FLOAT gfx_fSaturation = 1.0f;    // 0.0f = min, 1.0f = default
+__extern INDEX gfx_iHueShift   = 0;       // 0-359
+__extern FLOAT gfx_fSaturation = 1.0f;    // 0.0f = min, 1.0f = default
 // the following vars can be influenced by corresponding gfx_ vars
-INDEX tex_iHueShift   = 0;       // added to gfx_
-FLOAT tex_fSaturation = 1.0f;    // multiplied by gfx_
-INDEX shd_iHueShift   = 0;       // added to gfx_
-FLOAT shd_fSaturation = 1.0f;    // multiplied by gfx_
+__extern INDEX tex_iHueShift   = 0;       // added to gfx_
+__extern FLOAT tex_fSaturation = 1.0f;    // multiplied by gfx_
+__extern INDEX shd_iHueShift   = 0;       // added to gfx_
+__extern FLOAT shd_fSaturation = 1.0f;    // multiplied by gfx_
 
 // gamma table control
-FLOAT gfx_fBrightness = 0.0f;    // -0.9 - 0.9
-FLOAT gfx_fContrast   = 1.0f;    //  0.1 - 1.9
-FLOAT gfx_fGamma      = 1.0f;    //  0.1 - 9.0
-FLOAT gfx_fBiasR      = 1.0f;    //  0.0 - 1.0
-FLOAT gfx_fBiasG      = 1.0f;    //  0.0 - 1.0
-FLOAT gfx_fBiasB      = 1.0f;    //  0.0 - 1.0
-INDEX gfx_iLevels     = 256;     //    2 - 256
+__extern FLOAT gfx_fBrightness = 0.0f;    // -0.9 - 0.9
+__extern FLOAT gfx_fContrast   = 1.0f;    //  0.1 - 1.9
+__extern FLOAT gfx_fGamma      = 1.0f;    //  0.1 - 9.0
+__extern FLOAT gfx_fBiasR      = 1.0f;    //  0.0 - 1.0
+__extern FLOAT gfx_fBiasG      = 1.0f;    //  0.0 - 1.0
+__extern FLOAT gfx_fBiasB      = 1.0f;    //  0.0 - 1.0
+__extern INDEX gfx_iLevels     = 256;     //    2 - 256
 
 // stereo rendering control
-INDEX gfx_iStereo = 0;                  // 0=off, 1=red/cyan
-INDEX gfx_bStereoInvert = FALSE;        // is left eye RED or CYAN
-INDEX gfx_iStereoOffset = 10;           // view offset (or something:)
-FLOAT gfx_fStereoSeparation =  0.25f;   // distance between eyes
+__extern INDEX gfx_iStereo = 0;                  // 0=off, 1=red/cyan
+__extern INDEX gfx_bStereoInvert = FALSE;        // is left eye RED or CYAN
+__extern INDEX gfx_iStereoOffset = 10;           // view offset (or something:)
+__extern FLOAT gfx_fStereoSeparation =  0.25f;   // distance between eyes
 
 // cached integers for faster calculation
-SLONG _slTexSaturation = 256;  // 0 = min, 256 = default
-SLONG _slTexHueShift   = 0;
-SLONG _slShdSaturation = 256; 
-SLONG _slShdHueShift   = 0;
+__extern SLONG _slTexSaturation = 256;  // 0 = min, 256 = default
+__extern SLONG _slTexHueShift   = 0;
+__extern SLONG _slShdSaturation = 256; 
+__extern SLONG _slShdHueShift   = 0;
 
 // 'supported' console variable flags
 static INDEX sys_bHasTextureCompression = 0;
@@ -322,7 +328,7 @@ INDEX sys_bUsingDirect3D = 0;
 #define WH_KEYBOARD_LL 13
 
 #ifdef PLATFORM_WIN32
-void EnableWindowsKeys(void);
+__extern void EnableWindowsKeys(void);
 
 #pragma message(">> doublecheck me!!!")
 
@@ -621,7 +627,7 @@ static void GAPInfo(void)
       CPrintF( "- T-Buffer effect: ");
       if( _pGfx->go_ctSampleBuffers==0) CPrintF( "disabled\n");
       else {
-        ogl_iTBufferEffect = Clamp( ogl_iTBufferEffect, 0, 2);
+        ogl_iTBufferEffect = Clamp( ogl_iTBufferEffect, (INDEX)0, (INDEX)2);
         CTString strEffect = "Partial anti-aliasing";
         if( ogl_iTBufferEffect<1) strEffect = "none";
         if( ogl_iTBufferEffect>1) strEffect = "Motion blur";
@@ -811,10 +817,10 @@ extern void UncacheShadows(void)
   // prepare new saturation factors for shadowmaps
   gfx_fSaturation  = ClampDn( gfx_fSaturation, 0.0f); 
   shd_fSaturation  = ClampDn( shd_fSaturation, 0.0f); 
-  gfx_iHueShift    = Clamp(   gfx_iHueShift, 0, 359);
-  shd_iHueShift    = Clamp(   shd_iHueShift, 0, 359);
+  gfx_iHueShift    = Clamp(   gfx_iHueShift, (INDEX)0, (INDEX)359);
+  shd_iHueShift    = Clamp(   shd_iHueShift, (INDEX)0, (INDEX)359);
   _slShdSaturation = (SLONG)( gfx_fSaturation*shd_fSaturation*256.0f);
-  _slShdHueShift   = Clamp(  (gfx_iHueShift+shd_iHueShift)*255/359, 0, 255);
+  _slShdHueShift   = Clamp(  (gfx_iHueShift+shd_iHueShift)*255/359, (INDEX)0, (INDEX)255);
           
   CListHead &lhOriginal = _pGfx->gl_lhCachedShadows;
   // while there is some shadow in main list
@@ -849,10 +855,10 @@ extern void ReloadTextures(void)
   // prepare new saturation factors for textures
   gfx_fSaturation  = ClampDn( gfx_fSaturation, 0.0f); 
   tex_fSaturation  = ClampDn( tex_fSaturation, 0.0f); 
-  gfx_iHueShift    = Clamp( gfx_iHueShift, 0, 359);
-  tex_iHueShift    = Clamp( tex_iHueShift, 0, 359);
+  gfx_iHueShift    = Clamp( gfx_iHueShift, (INDEX)0, (INDEX)359);
+  tex_iHueShift    = Clamp( tex_iHueShift, (INDEX)0, (INDEX)359);
   _slTexSaturation = (SLONG)( gfx_fSaturation*tex_fSaturation*256.0f);
-  _slTexHueShift   = Clamp(  (gfx_iHueShift+tex_iHueShift)*255/359, 0, 255);
+  _slTexHueShift   = Clamp(  (gfx_iHueShift+tex_iHueShift)*255/359, (INDEX)0, (INDEX)255);
 
   // update texture settings
   UpdateTextureSettings();
@@ -930,7 +936,7 @@ static void ReloadModels(void)
 static BOOL _bLastModelQuality = -1;
 static void MdlPostFunc(void *pvVar)
 {
-  mdl_bFineQuality = Clamp( mdl_bFineQuality, 0, 1);
+  mdl_bFineQuality = Clamp( mdl_bFineQuality, (INDEX)0, (INDEX)1);
   if( _bLastModelQuality!=mdl_bFineQuality) {
     _bLastModelQuality = mdl_bFineQuality;
     ReloadModels();
@@ -946,7 +952,7 @@ static void PrepareTables(void)
 {
   INDEX i;
   // prepare array for fast clamping to 0..255
-  for( i=-256*2; i<256*4; i++) aubClipByte[i+256*2] = (UBYTE)Clamp( i, 0, 255);
+  for( i=-256*2; i<256*4; i++) aubClipByte[i+256*2] = (UBYTE)Clamp((INDEX)i, (INDEX)0, (INDEX)255);
   // prepare fast sqrt tables
   for( i=0; i<SQRTTABLESIZE; i++) aubSqrt[i]   = (UBYTE)(sqrt((FLOAT)(i*65536/SQRTTABLESIZE)));
   for( i=1; i<SQRTTABLESIZE; i++) auw1oSqrt[i] = (UWORD)(sqrt((FLOAT)(SQRTTABLESIZE-1)/i)*255.0f);
@@ -1216,8 +1222,10 @@ void CGfxLibrary::Init(void)
     // !!! FIXME : rcg11232001 references non-existing cvars, so I'm adding
     // !!! FIXME : rcg11232001 them here for now.
     // FXME: DG: so why are they commented out?
-//  _pShell->DeclareSymbol("persistent user INDEX mdl_bRenderBump;", (void *) &mdl_bRenderBump);
-//  _pShell->DeclareSymbol("persistent user FLOAT ogl_fTextureAnisotropy;", (void *) &ogl_fTextureAnisotropy);
+#ifdef PLATFORM_WIN32
+  _pShell->DeclareSymbol("persistent user INDEX mdl_bRenderBump;", (void *) &mdl_bRenderBump);
+  _pShell->DeclareSymbol("persistent user FLOAT ogl_fTextureAnisotropy;", (void *) &ogl_fTextureAnisotropy);
+#endif
   _pShell->DeclareSymbol("persistent user FLOAT tex_fNormalSize;", (void *) &tex_fNormalSize);
 
 
@@ -1507,9 +1515,14 @@ void CGfxLibrary::StopDisplayMode(void)
   }
 
   // free driver DLL
+  // free driver DLL
+#ifdef PLATFORM_WIN32
+  if (gl_hiDriver != NONE) 
+	FreeLibrary((HMODULE)gl_hiDriver);
+#else
   if (gl_hiDriver != NULL)
     delete gl_hiDriver;
-
+#endif
   gl_hiDriver = NULL;
 
   // reset some vars
@@ -1709,7 +1722,7 @@ void CGfxLibrary::DestroyWorkCanvas(CDrawPort *pdpOld)
 #define SHADOWMAXBYTES (256*256*4*4/3)
 static SLONG slCachedShadowMemory=0, slDynamicShadowMemory=0;
 static INDEX ctCachedShadows=0, ctFlatShadows=0, ctDynamicShadows=0;
-BOOL _bShadowsUpdated = TRUE;
+__extern BOOL _bShadowsUpdated = TRUE;
 
 void CGfxLibrary::ReduceShadows(void)
 {
@@ -1799,11 +1812,11 @@ void CGfxLibrary::ReduceShadows(void)
 
 
 // some vars for probing
-INDEX _ctProbeTexs = 0;
-INDEX _ctProbeShdU = 0;
-INDEX _ctProbeShdB = 0;
-INDEX _ctFullShdU  = 0;
-SLONG _slFullShdUBytes = 0;
+__extern INDEX _ctProbeTexs = 0;
+__extern INDEX _ctProbeShdU = 0;
+__extern INDEX _ctProbeShdB = 0;
+__extern INDEX _ctFullShdU  = 0;
+__extern SLONG _slFullShdUBytes = 0;
 #ifdef PLATFORM_WIN32 // only used there
 static BOOL GenerateGammaTable(void);
 #endif
@@ -1837,12 +1850,12 @@ void CGfxLibrary::SwapBuffers(CViewPort *pvp)
   gfxSetTextureBiasing( gap_fTextureLODBias);
 
   // clamp some cvars
-  gap_iDithering = Clamp( gap_iDithering, 0, 2);
-  gap_iSwapInterval = Clamp( gap_iSwapInterval, 0, 4);
-  gap_iOptimizeClipping = Clamp( gap_iOptimizeClipping, 0, 2);
-  gap_iTruformLevel = Clamp( gap_iTruformLevel, 0, _pGfx->gl_iMaxTessellationLevel);
-  ogl_iFinish = Clamp( ogl_iFinish, 0, 3);
-  d3d_iFinish = Clamp( d3d_iFinish, 0, 3);
+  gap_iDithering = Clamp( gap_iDithering, (INDEX)0, (INDEX)2);
+  gap_iSwapInterval = Clamp( gap_iSwapInterval, (INDEX)0, (INDEX)4);
+  gap_iOptimizeClipping = Clamp( gap_iOptimizeClipping, (INDEX)0, (INDEX)2);
+  gap_iTruformLevel = Clamp( gap_iTruformLevel, (INDEX)0, _pGfx->gl_iMaxTessellationLevel);
+  ogl_iFinish = Clamp( ogl_iFinish, (INDEX)0, (INDEX)3);
+  d3d_iFinish = Clamp( d3d_iFinish, (INDEX)0, (INDEX)3);
 
   // OpenGL  
   if( gl_eCurrentAPI==GAT_OGL)
@@ -1937,7 +1950,7 @@ void CGfxLibrary::SwapBuffers(CViewPort *pvp)
   GFX_bViewMatrix = TRUE;
 
   // set maximum allowed upload ammount
-  gfx_iProbeSize = Clamp( gfx_iProbeSize, 1, 16384);
+  gfx_iProbeSize = Clamp( gfx_iProbeSize, (INDEX)1, (INDEX)16384);
   gl_slAllowedUploadBurst = gfx_iProbeSize *1024; 
   _ctProbeTexs = 0;
   _ctProbeShdU = 0;
@@ -1955,7 +1968,7 @@ void CGfxLibrary::SwapBuffers(CViewPort *pvp)
   gl_ctTotalTriangles    = 0;
 
   // re-adjust multi-texturing support
-  gap_iUseTextureUnits = Clamp( gap_iUseTextureUnits, 1, _pGfx->gl_ctTextureUnits);
+  gap_iUseTextureUnits = Clamp( gap_iUseTextureUnits, (INDEX)1, _pGfx->gl_ctTextureUnits);
   ASSERT( gap_iUseTextureUnits>=1 && gap_iUseTextureUnits<=GFX_MAXTEXUNITS);
 
   // re-get usage of compiled vertex arrays
@@ -2086,7 +2099,7 @@ static BOOL GenerateGammaTable(void)
   gfx_fBrightness = Clamp( gfx_fBrightness, -0.8f, 0.8f);
   gfx_fContrast   = Clamp( gfx_fContrast,    0.2f, 4.0f);
   gfx_fGamma      = Clamp( gfx_fGamma,  0.2f, 4.0f);    
-  gfx_iLevels = Clamp( gfx_iLevels, 2,  256);
+  gfx_iLevels = Clamp( gfx_iLevels, (INDEX)2, (INDEX)256);
   gfx_fBiasR  = Clamp( gfx_fBiasR, 0.0f, 2.0f);
   gfx_fBiasG  = Clamp( gfx_fBiasG, 0.0f, 2.0f);
   gfx_fBiasB  = Clamp( gfx_fBiasB, 0.0f, 2.0f);
@@ -2116,7 +2129,7 @@ static BOOL GenerateGammaTable(void)
   // adjust brightness
   INDEX iAdd = (INDEX) (256* 256*gfx_fBrightness);
   for( i=0; i<256; i++) {
-    _auwGammaTable[i] = Clamp( _auwGammaTable[i]+iAdd, 0, 65280);
+    _auwGammaTable[i] = Clamp( _auwGammaTable[i]+iAdd, (INDEX)0, (INDEX)65280);
   }
 
   // adjust levels (posterize)
@@ -2125,7 +2138,7 @@ static BOOL GenerateGammaTable(void)
     for( i=0; i<256; i++) {
       INDEX iVal = _auwGammaTable[i];
       iVal = (INDEX) (((INDEX)(iVal/fLevels)) *fLevels);
-      _auwGammaTable[i] = ClampUp( iVal, 0xFF00);
+      _auwGammaTable[i] = ClampUp( iVal, (INDEX)0xFF00);
     }
   }
 

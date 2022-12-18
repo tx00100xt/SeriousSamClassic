@@ -26,7 +26,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <Engine/Graphics/Adapter.h>
 
-#ifndef PLATFORM_WIN32
+#ifdef PLATFORM_WIN32
+#include <intrin.h>
+#else
 #include "SDL.h"
 #endif
 
@@ -249,8 +251,11 @@ extern const CTString GetWindowsError(DWORD dwWindowsErrorCode)
 // must be in separate function to disable stupid optimizer
 extern void Breakpoint(void)
 {
-#ifdef PLATFORM_WIN32
+#if (defined _MSC_VER) && (defined  PLATFORM_32BIT)
   __asm int 0x03;
+#elif (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+  __debugbreak();
+  //__asm int 0x03;
 #else
   SDL_TriggerBreakpoint();
 #endif

@@ -342,8 +342,8 @@ static void CropMap(INDEX iNewWidth, INDEX iNewHeight, INDEX iOldWidth, INDEX iO
 {
   INDEX iWidth  = Min(iOldWidth,iNewWidth);
   INDEX iHeight = Min(iOldHeight,iNewHeight);
-  INDEX iNewStepX = ClampDn(iNewWidth-iOldWidth,0);
-  INDEX iOldStepX = ClampDn(iOldWidth-iNewWidth,0);
+  INDEX iNewStepX = ClampDn(iNewWidth-iOldWidth, (INDEX)0);
+  INDEX iOldStepX = ClampDn(iOldWidth-iNewWidth, (INDEX)0);
 
   INDEX iNew = 0;
   INDEX iOld = 0;
@@ -838,9 +838,9 @@ __forceinline void CopyPixel(COLOR *pubSrc,COLOR *pubDst,FLOAT fMaskStrength)
 {
   GFXColor *pcolSrc = (GFXColor*)pubSrc;
   GFXColor *pcolDst = (GFXColor*)pubDst;
-  pcolSrc->ub.r = Lerp(pcolSrc->ub.r,pcolDst->ub.r,fMaskStrength);
-  pcolSrc->ub.g = Lerp(pcolSrc->ub.g,pcolDst->ub.g,fMaskStrength);
-  pcolSrc->ub.b = Lerp(pcolSrc->ub.b,pcolDst->ub.b,fMaskStrength);
+  pcolSrc->ub.r = Lerp(pcolSrc->ub.r, pcolDst->ub.r, fMaskStrength);
+  pcolSrc->ub.g = Lerp(pcolSrc->ub.g, pcolDst->ub.g, fMaskStrength);
+  pcolSrc->ub.b = Lerp(pcolSrc->ub.b, pcolDst->ub.b, fMaskStrength);
   pcolSrc->ub.a = 255;
 }
 
@@ -1004,7 +1004,10 @@ void CTerrain::UpdateTopMap(INDEX iTileIndex, Rect *prcDest/*=NULL*/)
     ctGeneratedTopMaps++;
   }
 
-  FIX16_16 fiMaskDiv = 1;
+  INDEX _fiMaskDiv = 1;
+  FIX16_16 fiMaskDiv;
+  fiMaskDiv = (FIX16_16)_fiMaskDiv;
+
   INDEX iFirstInMask = 0;
   INDEX iMaskWidth = tr_pixHeightMapWidth;
   INDEX iTiling = 1;
@@ -1070,8 +1073,8 @@ void CTerrain::UpdateTopMap(INDEX iTileIndex, Rect *prcDest/*=NULL*/)
 
     // get source texture
     CTextureData *ptdSrc = tl.tl_ptdTexture;
-    INDEX iSrcMipWidth  = ClampDn( ptdSrc->GetPixWidth() /iTiling, 1);
-    INDEX iSrcMipHeight = ClampDn( ptdSrc->GetPixHeight()/iTiling, 1);
+    INDEX iSrcMipWidth  = ClampDn( ptdSrc->GetPixWidth() /iTiling, (PIX)1);
+    INDEX iSrcMipHeight = ClampDn( ptdSrc->GetPixHeight()/iTiling, (PIX)1);
 
     // Get mipmap of source texture
     INDEX immW = FastLog2( ptdSrc->GetPixWidth()  / iSrcMipWidth);
@@ -1125,11 +1128,10 @@ void CTerrain::UpdateTopMap(INDEX iTileIndex, Rect *prcDest/*=NULL*/)
         
         GFXColor *pcolSrc = (GFXColor*)pulTexDst;
         GFXColor *pcolDst = (GFXColor*)ulSrc;
-        pcolSrc->ub.r = (BYTE)( (ULONG)pcolSrc->ub.r + ((((ULONG)pcolDst->ub.r - (ULONG)pcolSrc->ub.r) * xStrength)>>16));
-        pcolSrc->ub.g = (BYTE)( (ULONG)pcolSrc->ub.g + ((((ULONG)pcolDst->ub.g - (ULONG)pcolSrc->ub.g) * xStrength)>>16));
-        pcolSrc->ub.b = (BYTE)( (ULONG)pcolSrc->ub.b + ((((ULONG)pcolDst->ub.b - (ULONG)pcolSrc->ub.b) * xStrength)>>16));
-        pcolSrc->ub.a = pubEdgeMaskRow[iMask];
-        
+		pcolSrc->ub.r = (BYTE)((ULONG)pcolSrc->ub.r + ((((ULONG)pcolDst->ub.r - (ULONG)pcolSrc->ub.r) * xStrength) >> 16));
+		pcolSrc->ub.g = (BYTE)((ULONG)pcolSrc->ub.g + ((((ULONG)pcolDst->ub.g - (ULONG)pcolSrc->ub.g) * xStrength) >> 16));
+		pcolSrc->ub.b = (BYTE)((ULONG)pcolSrc->ub.b + ((((ULONG)pcolDst->ub.b - (ULONG)pcolSrc->ub.b) * xStrength) >> 16));
+		pcolSrc->ub.a = pubEdgeMaskRow[iMask];        
         pulTexDst++;
         xMaskHPos += xHMaskStep;
       }
@@ -1168,8 +1170,8 @@ COLOR CTerrain::GetShadeColor(CShadingInfo *psi)
   ASSERT(psi!=NULL);
   ASSERT(tr_auwShadingMap!=NULL);
 
-  PIX pixShadowU = Clamp(psi->si_pixShadowU,0,GetShadingMapWidth()-2);
-  PIX pixShadowV = Clamp(psi->si_pixShadowV,0,GetShadingMapHeight()-2);
+  PIX pixShadowU = Clamp(psi->si_pixShadowU, (PIX)0,GetShadingMapWidth()-2);
+  PIX pixShadowV = Clamp(psi->si_pixShadowV, (PIX)0,GetShadingMapHeight()-2);
   FLOAT fUDRatio = psi->si_fUDRatio;
   FLOAT fLRRatio = psi->si_fLRRatio;
 

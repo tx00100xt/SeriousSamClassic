@@ -214,9 +214,9 @@ BOOL CRenderer::FindModelLights( CEntity &en, const CPlacement3D &plModel,
         }
         // special case for substract sector ambient light
         if (plsLight->ls_ulFlags&LSF_SUBSTRACTSECTORAMBIENT) {
-          ubR = (UBYTE)Clamp( (SLONG)ubR-slSAR, 0, 255);
-          ubG = (UBYTE)Clamp( (SLONG)ubG-slSAG, 0, 255);
-          ubB = (UBYTE)Clamp( (SLONG)ubB-slSAB, 0, 255);
+          ubR = (UBYTE)Clamp( (SLONG)ubR-slSAR, (SLONG)0, (SLONG)255);
+          ubG = (UBYTE)Clamp( (SLONG)ubG-slSAG, (SLONG)0, (SLONG)255);
+          ubB = (UBYTE)Clamp( (SLONG)ubB-slSAB, (SLONG)0, (SLONG)255);
         }
         // calculate light intensity
         FLOAT fShade = (ubR+ubG+ubB)*(2.0f/(3.0f*255.0f));
@@ -285,17 +285,17 @@ BOOL CRenderer::FindModelLights( CEntity &en, const CPlacement3D &plModel,
         }
       }
       // clamp ambient component
-      slSAR = Clamp( slSAR, 0, 255);
-      slSAG = Clamp( slSAG, 0, 255);
-      slSAB = Clamp( slSAB, 0, 255);
+      slSAR = Clamp( slSAR, (SLONG)0, (SLONG)255);
+      slSAG = Clamp( slSAG, (SLONG)0, (SLONG)255);
+      slSAB = Clamp( slSAB, (SLONG)0, (SLONG)255);
 
       // calculate average light properties
-      SLONG slAR = Clamp( (SLONG)FloatToInt(fTR-fDR) +slSAR, 0, 255);
-      SLONG slAG = Clamp( (SLONG)FloatToInt(fTG-fDG) +slSAG, 0, 255);
-      SLONG slAB = Clamp( (SLONG)FloatToInt(fTB-fDB) +slSAB, 0, 255);
-      SLONG slLR = Clamp( (SLONG)FloatToInt(fDR), 0, 255);
-      SLONG slLG = Clamp( (SLONG)FloatToInt(fDG), 0, 255);
-      SLONG slLB = Clamp( (SLONG)FloatToInt(fDB), 0, 255);
+      SLONG slAR = Clamp( (SLONG)FloatToInt(fTR-fDR) +slSAR, (SLONG)0, (SLONG)255);
+      SLONG slAG = Clamp( (SLONG)FloatToInt(fTG-fDG) +slSAG, (SLONG)0, (SLONG)255);
+      SLONG slAB = Clamp( (SLONG)FloatToInt(fTB-fDB) +slSAB, (SLONG)0, (SLONG)255);
+      SLONG slLR = Clamp( (SLONG)FloatToInt(fDR), (SLONG)0, (SLONG)255);
+      SLONG slLG = Clamp( (SLONG)FloatToInt(fDG), (SLONG)0, (SLONG)255);
+      SLONG slLB = Clamp( (SLONG)FloatToInt(fDB), (SLONG)0, (SLONG)255);
       colLight   = RGBToColor( slLR,slLG,slLB);
       colAmbient = RGBToColor( slAR,slAG,slAB);
 
@@ -352,7 +352,7 @@ void CRenderer::RenderOneModel( CEntity &en, CModelObject &moModel, const CPlace
   }
 
   // let the entity adjust shading parameters if it wants to
-  mdl_iShadowQuality = Clamp( mdl_iShadowQuality, 0, 3);
+  mdl_iShadowQuality = Clamp( mdl_iShadowQuality, (INDEX)0, (INDEX)3);
   const BOOL bAllowShadows = en.AdjustShadingParameters( vTotalLightDirection, colLight, colAmbient);
   bRenderModelShadow = (bRenderModelShadow && bAllowShadows && bRenderShadow && mdl_iShadowQuality>0);
   
@@ -479,7 +479,7 @@ void CRenderer::RenderOneSkaModel( CEntity &en, const CPlacement3D &plModel,
   }
 
   // let the entity adjust shading parameters if it wants to
-  mdl_iShadowQuality = Clamp( mdl_iShadowQuality, 0, 3);
+  mdl_iShadowQuality = Clamp( mdl_iShadowQuality, (INDEX)0, (INDEX)3);
   const BOOL bAllowShadows = en.AdjustShadingParameters( vTotalLightDirection, colLight, colAmbient);
   bRenderModelShadow = (bRenderModelShadow && bAllowShadows && bRenderShadow && mdl_iShadowQuality>0);
 
@@ -767,7 +767,7 @@ void CRenderer::RenderLensFlares(void)
   re_pdpDrawPort->SetOrtho(); 
 
   // if there are no flares or flares are off, do nothing
-  gfx_iLensFlareQuality = Clamp( gfx_iLensFlareQuality, 0, 3);
+  gfx_iLensFlareQuality = Clamp( gfx_iLensFlareQuality, (INDEX)0, (INDEX)3);
   if( gfx_iLensFlareQuality==0 || re_alfiLensFlares.Count()==0) return;
 
   // get drawport ID
@@ -956,9 +956,9 @@ void CRenderer::RenderLensFlares(void)
         fGlareR *= fBrightFactor;
         fGlareG *= fBrightFactor;
         fGlareB *= fBrightFactor;
-        ULONG ulGlareR = ClampUp( FloatToInt(fGlareR), 255);
-        ULONG ulGlareG = ClampUp( FloatToInt(fGlareG), 255);
-        ULONG ulGlareB = ClampUp( FloatToInt(fGlareB), 255);
+        ULONG ulGlareR = ClampUp( FloatToInt(fGlareR), (SLONG)255);
+        ULONG ulGlareG = ClampUp( FloatToInt(fGlareG), (SLONG)255);
+        ULONG ulGlareB = ClampUp( FloatToInt(fGlareB), (SLONG)255);
         // add the glare to screen blending
         re_pdpDrawPort->dp_ulBlendingRA += ulGlareR*ulGlareA;
         re_pdpDrawPort->dp_ulBlendingGA += ulGlareG*ulGlareA;

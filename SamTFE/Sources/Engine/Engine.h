@@ -19,13 +19,39 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
-#include <Engine/Base/Base.h>
-
 // set this to 1 to enable checks whether somethig is deleted while iterating some array/container
 #define CHECKARRAYLOCKING 0
 
 #include <Engine/Base/SystemSpecificInclude.h>
 
+#ifdef _WIN32
+  #ifndef PLATFORM_WIN32
+    #define PLATFORM_WIN32 1
+  #endif
+#endif
+
+#include <stdlib.h>
+#include <malloc.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+#include <stddef.h>
+#include <time.h>
+#include <math.h>
+#include <search.h>   // for qsort
+#include <float.h>    // for FPU control
+
+/* rcg10042001 !!! FIXME: Move these somewhere. */
+#if (defined PLATFORM_WIN32)
+#include <conio.h>
+#include <crtdbg.h>
+#include <winsock2.h>
+#include <windows.h>
+#include <mmsystem.h> // for timers
+#include <Intrin.h>
+#endif
+
+#include <Engine/Base/Base.h>
 #include <Engine/Base/Types.h>
 
 #include <Engine/Base/Input.h>
@@ -48,11 +74,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Base/ProgressHook.h>
 #include <Engine/Base/Registry.h>
 #include <Engine/Base/IFeel.h>
-
+#ifdef PLATFORM_UNIX
 #include <Engine/Base/DynamicLoader.h>  // rcg10082001
 #include <Engine/Base/FileSystem.h>  // rcg10082001
 #include <Engine/Base/ThreadLocalStorage.h>  // rcg10242001
-
+#endif
 #include <Engine/Entities/EntityClass.h>
 #include <Engine/Entities/EntityCollision.h>
 #include <Engine/Entities/EntityProperties.h>
@@ -150,26 +176,38 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Templates/Selection.h>
 #include <Engine/Templates/Selection.cpp>
 
+
 // some global stuff
 
 // rcg10072001 (argv0) is, literally, argv[0] from your mainline. We need this
 //  on some platforms to determine where the program is running from in the
 //  filesystem.
+#ifdef PLATFORM_UNIX
 ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID);
+#else
+ENGINE_API void SE_InitEngine(CTString strGameID);
+#endif
 ENGINE_API void SE_EndEngine(void);
 ENGINE_API void SE_LoadDefaultFonts(void);
 ENGINE_API void SE_UpdateWindowHandle( HWND hwndWindowed);
 ENGINE_API void SE_PretouchIfNeeded(void);
 
-ENGINE_API extern CTString _strEngineBuild;  // not valid before InitEngine()!
-ENGINE_API extern ULONG _ulEngineBuildMajor;
-ENGINE_API extern ULONG _ulEngineBuildMinor;
+extern ENGINE_API CTString _strEngineBuild;  // not valid before InitEngine()!
+extern ENGINE_API ULONG _ulEngineBuildMajor;
+extern ENGINE_API ULONG _ulEngineBuildMinor;
 
-ENGINE_API extern BOOL _bDedicatedServer;
-ENGINE_API extern BOOL _bWorldEditorApp; // is this world editor app
-ENGINE_API extern CTString _strLogFile;
-ENGINE_API extern CTFileName _fnmModLibPath;
-ENGINE_API extern INDEX sys_iSysPath;
+extern ENGINE_API BOOL _bDedicatedServer;
+extern ENGINE_API BOOL _bWorldEditorApp; // is this world edtior app
+extern ENGINE_API CTString _strLogFile;
+extern ENGINE_API CTFileName _fnmModLibPath;
+extern ENGINE_API INDEX sys_iSysPath;
+#ifdef PLATFORM_WIN32
+//
+extern ENGINE_API FLOAT _fPlayerFOVAdjuster;
+extern ENGINE_API FLOAT _fWeaponFOVAdjuster;
+extern ENGINE_API FLOAT _fArmorHeightAdjuster;
+extern ENGINE_API FLOAT _fFragScorerHeightAdjuster;
+#endif
 
 // temporary vars for adjustments
 ENGINE_API extern FLOAT tmp_af[10];

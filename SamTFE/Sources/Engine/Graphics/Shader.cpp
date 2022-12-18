@@ -191,7 +191,7 @@ void shaCalculateLight(void)
       colAmbient = 0xFFFFFFFF;
     }
     colConstant.MultiplyRGBA(colLight,colAmbient);
-    shaSetConstantColor(ByteSwap(colConstant.ul.abgr));
+	shaSetConstantColor(ByteSwap(colConstant.ul.abgr));
     // no vertex colors
     return;
   }
@@ -213,9 +213,9 @@ void shaCalculateLight(void)
   SLONG slab = colAmbient.ub.b;
 
   if(shaOverBrightningEnabled()) {
-    slar = ClampUp(slar,127);
-    slag = ClampUp(slag,127);
-    slab = ClampUp(slab,127);
+    slar = ClampUp(slar, (SLONG)127);
+    slag = ClampUp(slag, (SLONG)127);
+    slab = ClampUp(slab, (SLONG)127);
     ubColShift = 8;
   } else {
     slar*=2;
@@ -231,11 +231,10 @@ void shaCalculateLight(void)
     FLOAT fDot = vNorm % _vLightDir;
     fDot = Clamp(fDot,0.0f,1.0f);
     SLONG slDot = NormFloatToByte(fDot);
-
-    _acolVtxColors[ivx].ub.r = ClampUp(colModel.ub.r * (slar + ((colLight.ub.r * slDot)>>ubColShift))>>8,255);
-    _acolVtxColors[ivx].ub.g = ClampUp(colModel.ub.g * (slag + ((colLight.ub.g * slDot)>>ubColShift))>>8,255);
-    _acolVtxColors[ivx].ub.b = ClampUp(colModel.ub.b * (slab + ((colLight.ub.b * slDot)>>ubColShift))>>8,255);
-    _acolVtxColors[ivx].ub.a = colModel.ub.a;//slDot;
+	_acolVtxColors[ivx].ub.r = ClampUp(colModel.ub.r * (slar + ((colLight.ub.r * slDot) >> ubColShift)) >> (SLONG)8, (SLONG)255);
+	_acolVtxColors[ivx].ub.g = ClampUp(colModel.ub.g * (slag + ((colLight.ub.g * slDot) >> ubColShift)) >> (SLONG)8, (SLONG)255);
+	_acolVtxColors[ivx].ub.b = ClampUp(colModel.ub.b * (slab + ((colLight.ub.b * slDot) >> ubColShift)) >> (SLONG)8, (SLONG)255);
+	_acolVtxColors[ivx].ub.a = colModel.ub.a;//slDot;
   }
   // Set current vertex color array 
   _pcolVtxColors = &_acolVtxColors[0];
@@ -262,9 +261,9 @@ void shaCalculateLightForSpecular(void)
   SLONG slab = colAmbient.ub.b;
 
   if(shaOverBrightningEnabled()) {
-    slar = ClampUp(slar,127);
-    slag = ClampUp(slag,127);
-    slab = ClampUp(slab,127);
+    slar = ClampUp(slar, (SLONG)127);
+    slag = ClampUp(slag, (SLONG)127);
+    slab = ClampUp(slab, (SLONG)127);
     ubColShift = 8;
   } else {
     slar*=2;
@@ -281,10 +280,10 @@ void shaCalculateLightForSpecular(void)
     fDot = Clamp(fDot,0.0f,1.0f);
     SLONG slDot = NormFloatToByte(fDot);
 
-    _acolVtxColors[ivx].ub.r = ClampUp(colModel.ub.r * (slar + ((colLight.ub.r * slDot)>>ubColShift))>>8,255);
-    _acolVtxColors[ivx].ub.g = ClampUp(colModel.ub.g * (slag + ((colLight.ub.g * slDot)>>ubColShift))>>8,255);
-    _acolVtxColors[ivx].ub.b = ClampUp(colModel.ub.b * (slab + ((colLight.ub.b * slDot)>>ubColShift))>>8,255);
-    _acolVtxColors[ivx].ub.a = slDot;//colModel.ub.a;//slDot;
+	_acolVtxColors[ivx].ub.r = ClampUp(colModel.ub.r * (slar + ((colLight.ub.r * slDot) >> ubColShift)) >> (SLONG)8, (SLONG)255);
+	_acolVtxColors[ivx].ub.g = ClampUp(colModel.ub.g * (slag + ((colLight.ub.g * slDot) >> ubColShift)) >> (SLONG)8, (SLONG)255);
+	_acolVtxColors[ivx].ub.b = ClampUp(colModel.ub.b * (slab + ((colLight.ub.b * slDot) >> ubColShift)) >> (SLONG)8, (SLONG)255);
+	_acolVtxColors[ivx].ub.a = slDot;//colModel.ub.a;//slDot;
   }
   // Set current wertex array 
   _pcolVtxColors = &_acolVtxColors[0];

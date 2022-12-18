@@ -64,9 +64,9 @@ CSoundLibrary *_pSound = NULL;
 
 
 // console variables
-FLOAT snd_tmMixAhead  = 0.2f; // mix-ahead in seconds
-FLOAT snd_fSoundVolume = 1.0f;   // master volume for sound playing [0..1]
-FLOAT snd_fMusicVolume = 1.0f;   // master volume for music playing [0..1]
+__extern FLOAT snd_tmMixAhead  = 0.2f; // mix-ahead in seconds
+__extern FLOAT snd_fSoundVolume = 1.0f;   // master volume for sound playing [0..1]
+__extern FLOAT snd_fMusicVolume = 1.0f;   // master volume for music playing [0..1]
 // NOTES: 
 // - these 3d sound parameters have been set carefully, take extreme if changing !
 // - ears distance of 20cm causes phase shift of up to 0.6ms which is very noticable
@@ -74,17 +74,18 @@ FLOAT snd_fMusicVolume = 1.0f;   // master volume for music playing [0..1]
 // - pan strength needs not to be very strong, since lrfilter has panning-like influence also
 // - if down filter is too large, it makes too much influence even on small elevation changes
 //   and messes the situation completely
-FLOAT snd_fDelaySoundSpeed   = 1E10;   // sound speed used for delay [m/s]
-FLOAT snd_fDopplerSoundSpeed = 330.0f; // sound speed used for doppler [m/s]
-FLOAT snd_fEarsDistance = 0.2f;   // distance between listener's ears
-FLOAT snd_fPanStrength  = 0.1f;   // panning modifier (0=none, 1= full)
-FLOAT snd_fLRFilter = 3.0f;   // filter for left-right
-FLOAT snd_fBFilter  = 5.0f;   // filter for back
-FLOAT snd_fUFilter  = 1.0f;   // filter for up
-FLOAT snd_fDFilter  = 3.0f;   // filter for down
+__extern FLOAT snd_fDelaySoundSpeed   = 1E10;   // sound speed used for delay [m/s]
+__extern FLOAT snd_fDopplerSoundSpeed = 330.0f; // sound speed used for doppler [m/s]
+__extern FLOAT snd_fEarsDistance = 0.2f;   // distance between listener's ears
+__extern FLOAT snd_fPanStrength  = 0.1f;   // panning modifier (0=none, 1= full)
+__extern FLOAT snd_fLRFilter = 3.0f;   // filter for left-right
+__extern FLOAT snd_fBFilter  = 5.0f;   // filter for back
+__extern FLOAT snd_fUFilter  = 1.0f;   // filter for up
+__extern FLOAT snd_fDFilter  = 3.0f;   // filter for down
 
-ENGINE_API INDEX snd_iFormat = 3;
-INDEX snd_bMono = FALSE;
+ENGINE_API __extern INDEX snd_iFormat = 3;
+__extern INDEX snd_bMono = FALSE;
+
 static INDEX snd_iDevice = -1;
 static INDEX snd_iInterface = 2;   // 0=WaveOut, 1=DirectSound, 2=EAX
 static INDEX snd_iMaxOpenRetries = 3;
@@ -442,8 +443,8 @@ static void SndPostFunc(void *pArgs)
   // clamp variables
   snd_tmMixAhead = Clamp( snd_tmMixAhead, 0.1f, 0.9f);
   snd_iFormat    = Clamp( snd_iFormat, (INDEX)CSoundLibrary::SF_NONE, (INDEX)CSoundLibrary::SF_44100_16);
-  snd_iDevice    = Clamp( snd_iDevice, -1, 15);
-  snd_iInterface = Clamp( snd_iInterface, 0, 2);
+  snd_iDevice    = Clamp( snd_iDevice, (INDEX)-1, (INDEX)15);
+  snd_iInterface = Clamp( snd_iInterface, (INDEX)0, (INDEX)2);
   // if any variable has been changed
   if( _tmLastMixAhead!=snd_tmMixAhead || _iLastFormat!=snd_iFormat
    || _iLastDevice!=snd_iDevice || _iLastAPI!=snd_iInterface) {
@@ -977,9 +978,9 @@ static void SetFormat_internal( CSoundLibrary &sl, CSoundLibrary::SoundFormat Es
 
   // set wave format from library format
   SetWaveFormat( EsfNew, sl.sl_SwfeFormat);
-  snd_iDevice    = Clamp( snd_iDevice, -1, (INDEX)(sl.sl_ctWaveDevices-1));
+  snd_iDevice    = Clamp( snd_iDevice, (INDEX)-1, (INDEX)(sl.sl_ctWaveDevices-1));
   snd_tmMixAhead = Clamp( snd_tmMixAhead, 0.1f, 0.9f);
-  snd_iInterface = Clamp( snd_iInterface, 0, 2);
+  snd_iInterface = Clamp( snd_iInterface, (INDEX)0, (INDEX)2);
 
   BOOL bSoundOK = FALSE;
 #ifdef PLATFORM_WIN32
@@ -1245,7 +1246,7 @@ void CSoundLibrary::Mute(void)
 
 #ifdef PLATFORM_WIN32
   // erase direct sound buffer (waveout will shut-up by itself), but skip if there's no more sound library
-  if(!sl_bUsingDirectSound) return;
+  if( this==NULL || !sl_bUsingDirectSound) return;
 
   // synchronize access to sounds
   CTSingleLock slSounds(&sl_csSound, TRUE);

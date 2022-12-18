@@ -71,8 +71,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /* End: Define _CRTIMP */
 
   // this breakpoint doesn't cause exceptions if not in debugger
-  #ifdef _MSC_VER /* rcg10042001 */
+  #if (defined __MSVC_INLINE__) /* rcg10042001 */
     #define SAFEBREAKPOINT try { _asm { int 3 }; } catch(...) {;}
+  #elif (defined _MSC_VER) && (defined  PLATFORM_64BIT)  
+    #define SAFEBREAKPOINT try { __debugbreak(); } catch(...) {;}
   #endif
 
   #ifdef PLATFORM_UNIX /* rcg10042001 */

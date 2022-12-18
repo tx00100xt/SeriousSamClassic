@@ -44,6 +44,8 @@ public:
 
   /* Add a given object to container. */
   void Add(Type *ptNewObject);
+  /* Insert a given object to container at specified index. */
+  void Insert(Type *ptNewObject, const INDEX iPos=0);
   /* Remove a given object from container. */
   void Remove(Type *ptOldObject);
   /* Remove all objects, and reset the container to initial (empty) state. */

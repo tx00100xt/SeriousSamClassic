@@ -283,7 +283,7 @@ void CLayerMixer::AddAmbientPoint(void)
   _slLightMax<<=7;
   _slLightStep>>=1;
 
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __asm {
     // prepare interpolants
     movd    mm0,D [_slL2Row]
@@ -484,7 +484,7 @@ void CLayerMixer::AddAmbientMaskPoint( UBYTE *pubMask, UBYTE ubMask)
   _slLightStep>>=1;
 
 
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __asm {
     // prepare interpolants
     movd    mm0,D [_slL2Row]
@@ -706,7 +706,7 @@ void CLayerMixer::AddDiffusionPoint(void)
   _slLightMax<<=7;
   _slLightStep>>=1;
 
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __asm {
     // prepare interpolants
     movd    mm0,D [_slL2Row]
@@ -907,7 +907,7 @@ void CLayerMixer::AddDiffusionMaskPoint( UBYTE *pubMask, UBYTE ubMask)
   _slLightMax<<=7;
   _slLightStep>>=1;
 
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT)
   __asm {
     // prepare interpolants
     movd    mm0,D [_slL2Row]
@@ -1173,7 +1173,7 @@ BOOL CLayerMixer::PrepareOneLayerPoint( CBrushShadowLayer *pbsl, BOOL bNoMask)
   FLOAT fDL2oDV     = fDDL2oDV + 2*(lm_vStepV%v00);
   //_v00 = v00;
 
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __asm {
     fld     D [fDDL2oDU]
     fadd    D [fDDL2oDU]
@@ -1286,7 +1286,7 @@ void CLayerMixer::AddOneLayerGradient( CGradientParameters &gp)
   _pulLayer  = lm_pulShadowMap;
   FLOAT fStart = Clamp( fGr00-(fDGroDJ+fDGroDI)*0.5f, 0.0f, 1.0f);
 
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __int64 mmRowAdv;
   SLONG fixGRow  = (fGr00-(fDGroDJ+fDGroDI)*0.5f)*32767.0f; // 16:15
   SLONG slModulo = (lm_pixCanvasSizeU-lm_pixPolygonSizeU) *BYTES_PER_TEXEL;
@@ -1484,7 +1484,7 @@ rowDone:
 // apply directional light or ambient to layer
 void CLayerMixer::AddDirectional(void)
 {
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   ULONG ulLight = ByteSwap( lm_colLight);
   __asm {
     // prepare pointers and variables
@@ -1583,7 +1583,7 @@ rowNext:
 // apply directional light thru mask to layer
 void CLayerMixer::AddMaskDirectional( UBYTE *pubMask, UBYTE ubMask)
 {
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   ULONG ulLight = ByteSwap( lm_colLight);
   // prepare some local variables
   __asm {
@@ -1747,7 +1747,7 @@ void CLayerMixer::AddOneLayerDirectional( CBrushShadowLayer *pbsl, UBYTE *pubMas
 // clamper helper
 static INDEX GetDither(void)
 {
-  shd_iDithering = Clamp( shd_iDithering, 0, 5);
+  shd_iDithering = Clamp( shd_iDithering, (INDEX)0, (INDEX)5);
   INDEX iDither  = shd_iDithering;
   if( iDither>2) iDither++;
   return iDither;
@@ -1781,7 +1781,7 @@ void CLayerMixer::MixOneMipmap(CBrushShadowMap *pbsm, INDEX iMipmap)
     }
   } // set initial color
 
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __asm {
     cld
     mov     ebx,D [this]
@@ -1884,7 +1884,7 @@ void CLayerMixer::MixOneMipmap(CBrushShadowMap *pbsm, INDEX iMipmap)
   if( bHasGradient && gpGradient.gp_bDark) AddOneLayerGradient( gpGradient);
 
   // do eventual filtering of shadow layer
-  shd_iFiltering = Clamp( shd_iFiltering, 0, 6);
+  shd_iFiltering = Clamp( shd_iFiltering, (INDEX)0, (INDEX)6);
   if( shd_iFiltering>0) {
     FilterBitmap( shd_iFiltering, lm_pulShadowMap, lm_pulShadowMap,
                   lm_pixPolygonSizeU, lm_pixPolygonSizeV, lm_pixCanvasSizeU, lm_pixCanvasSizeV);
@@ -1903,7 +1903,7 @@ void CLayerMixer::MixOneMipmap(CBrushShadowMap *pbsm, INDEX iMipmap)
 // copy from static shadow map to dynamic layer
 __forceinline void CLayerMixer::CopyShadowLayer(void)
 {
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __asm {
     cld
     mov     ebx,D [this]
@@ -1935,7 +1935,7 @@ __forceinline void CLayerMixer::CopyShadowLayer(void)
 // copy from static shadow map to dynamic layer
 __forceinline void CLayerMixer::FillShadowLayer( COLOR col)
 {
-#if (defined __MSVC_INLINE__)
+#if (defined __MSVC_INLINE__) && (defined  PLATFORM_32BIT) 
   __asm {
     cld
     mov     ebx,D [this]

@@ -310,8 +310,8 @@ void CDrawPort::RecalculateDimensions(void)
 void CDrawPort::SetOrtho(void) const
 {
   // finish all pending render-operations (if required)
-  ogl_iFinish = Clamp( ogl_iFinish, 0, 3);
-  d3d_iFinish = Clamp( d3d_iFinish, 0, 3);
+  ogl_iFinish = Clamp( ogl_iFinish, (INDEX)0, (INDEX)3);
+  d3d_iFinish = Clamp( d3d_iFinish, (INDEX)0, (INDEX)3);
   if( (ogl_iFinish==3 && _pGfx->gl_eCurrentAPI==GAT_OGL) 
 #ifdef SE1_D3D
    || (d3d_iFinish==3 && _pGfx->gl_eCurrentAPI==GAT_D3D)
@@ -341,8 +341,8 @@ void CDrawPort::SetOrtho(void) const
 void CDrawPort::SetProjection(CAnyProjection3D &apr) const
 {
   // finish all pending render-operations (if required)
-  ogl_iFinish = Clamp( ogl_iFinish, 0, 3);
-  d3d_iFinish = Clamp( d3d_iFinish, 0, 3);
+  ogl_iFinish = Clamp( ogl_iFinish, (INDEX)0, (INDEX)3);
+  d3d_iFinish = Clamp( d3d_iFinish, (INDEX)0, (INDEX)3);
   if( (ogl_iFinish==3 && _pGfx->gl_eCurrentAPI==GAT_OGL) 
 #ifdef SE1_D3D
    || (d3d_iFinish==3 && _pGfx->gl_eCurrentAPI==GAT_D3D)
@@ -856,12 +856,14 @@ void CDrawPort::Fill( COLOR col) const
   }
 
 #ifdef PLATFORM_WIN32 // Direct3D
+#ifdef SE1_D3D
   else if( eAPI==GAT_D3D)
   {
     const ULONG d3dColor = rgba2argb(col);
     HRESULT hr = _pGfx->gl_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET, d3dColor,0,0);
     D3D_CHECKERROR(hr);
   }
+#endif
 #endif
 
 }
@@ -1279,7 +1281,7 @@ void CDrawPort::PutText( const CTString &strText, PIX pixX0, PIX pixY0, const CO
       // flash?
       case 'f':
         chrCurrent = strText[++iChar];
-        if( bParse) iFlash = 1+ 2* Clamp( (INDEX)(chrCurrent-'0'), 0, 9);
+        if( bParse) iFlash = 1+ 2* Clamp( (INDEX)(chrCurrent-'0'), (INDEX)0, (INDEX)9);
         continue;
       // reset all?
       case 'r':

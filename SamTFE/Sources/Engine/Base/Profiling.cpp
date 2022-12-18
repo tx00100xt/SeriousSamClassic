@@ -41,6 +41,12 @@ static inline __int64 ReadTSC_profile(void)
   }
   return mmRet;
 
+#elif (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+	unsigned __int64 i;
+	i = __rdtsc();
+
+	return i;
+
 #elif (defined __GNU_INLINE_X86_32__)
   __int64 mmRet;
   __asm__ __volatile__ (

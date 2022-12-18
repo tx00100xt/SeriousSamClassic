@@ -57,7 +57,7 @@ void Stereo_AdjustProjection(CProjection3D &pr, INDEX iEye, FLOAT fFactor)
   // prepare and clamp
   CPerspectiveProjection3D &ppr = (CPerspectiveProjection3D &)pr;
   gfx_fStereoSeparation = Clamp( gfx_fStereoSeparation, 0.01f, 1.0f);
-  gfx_iStereoOffset     = Clamp( gfx_iStereoOffset, -100, 100);
+  gfx_iStereoOffset     = Clamp( gfx_iStereoOffset, (INDEX)-100, (INDEX)100);
   // apply!
   if (iEye==STEREO_BOTH || gfx_iStereo==0) {
     NOTHING;

@@ -23,6 +23,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // !!! FIXME : rcg10162001 Need this anymore, since _findfirst() is abstracted?
 #ifdef PLATFORM_WIN32
 #include <io.h>
+#include <direct.h>
+#include <DbgHelp.h>
 #endif
 
 #include <Engine/Base/Protection.h>
@@ -48,8 +50,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // default size of page used for stream IO operations (4Kb)
 ULONG _ulPageSize = 0;
-// maximum length of file that can be saved (default: 128Mb)
+// maximum lenght of file that can be saved (default: 128Mb)
 ULONG _ulMaxLenghtOfSavingFile = (1UL<<20)*128;
+#ifdef PLATFORM_UNIX
 INDEX fil_bPreferZips = FALSE;
 
 // set if current thread has currently enabled stream handling
@@ -58,6 +61,17 @@ THREADLOCAL(BOOL, _bThreadCanHandleStreams, FALSE);
 ULONG _ulVirtuallyAllocatedSpace = 0;
 ULONG _ulVirtuallyAllocatedSpaceTotal = 0;
 THREADLOCAL(CListHead *, _plhOpenedStreams, NULL);
+#else
+extern INDEX fil_bPreferZips = FALSE;
+
+// set if current thread has currently enabled stream handling
+static _declspec(thread) BOOL _bThreadCanHandleStreams = FALSE;
+// list of currently opened streams
+static _declspec(thread) CListHead *_plhOpenedStreams = NULL;
+
+ULONG _ulVirtuallyAllocatedSpace = 0;
+ULONG _ulVirtuallyAllocatedSpaceTotal = 0;
+#endif
 
 // global string with application path (utf-8)
 CTFileName _fnmApplicationPath;
@@ -292,6 +306,52 @@ void CTStream::DisableStreamHandling(void)
   _plhOpenedStreams = NULL;
 }
 
+#ifdef PLATFORM_WIN32
+int CTStream::ExceptionFilter(DWORD dwCode, _EXCEPTION_POINTERS *pExceptionInfoPtrs)
+{
+  // If the exception is not a page fault, exit.
+  if( dwCode != EXCEPTION_ACCESS_VIOLATION)
+  {
+    return EXCEPTION_CONTINUE_SEARCH;
+  }
+
+  // obtain access violation virtual address
+  UBYTE *pIllegalAdress = (UBYTE *)pExceptionInfoPtrs->ExceptionRecord->ExceptionInformation[1];
+
+  CTStream *pstrmAccessed = NULL;
+
+  // search for stream that was accessed
+  FOREACHINLIST( CTStream, strm_lnListNode, (*_plhOpenedStreams), itStream)
+  {
+    // if access violation happened inside curently testing stream
+    if(itStream.Current().PointerInStream(pIllegalAdress))
+    {
+      // remember accesed stream ptr
+      pstrmAccessed = &itStream.Current();
+      // stream found, stop searching
+      break;
+    }
+  }
+
+  // if none of our streams was accessed, real access violation occured
+  if( pstrmAccessed == NULL)
+  {
+    // so continue default exception handling
+    return EXCEPTION_CONTINUE_SEARCH;
+  }
+
+  // Continue execution where the page fault occurred
+  return EXCEPTION_CONTINUE_EXECUTION;
+}
+
+/*
+ * Static function to report fatal exception error.
+ */
+void CTStream::ExceptionFatalError(void)
+{
+  FatalError( GetWindowsError( GetLastError()) );
+}
+#endif
 /*
  * Throw an exception of formatted string.
  */
@@ -1006,6 +1066,8 @@ void CTFileStream::Close(void)
     UNZIPClose(fstrm_iZipHandle);
     fstrm_iZipHandle = -1;
     delete[] fstrm_pubZipBuffer;
+    //VirtualFree(fstrm_pubZipBuffer, 0, MEM_RELEASE);
+
     _ulVirtuallyAllocatedSpace -= fstrm_slZipSize;
     //CPrintF("Freed virtual memory with size ^c00ff00%d KB^C (now %d KB)\n", (fstrm_slZipSize / 1000), (_ulVirtuallyAllocatedSpace / 1000));
   }
@@ -1581,6 +1643,9 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
   CTFileName fnmFileAbsolute = fnmFile;
   fnmFileAbsolute.SetAbsolutePath();
 
+#ifdef PLATFORM_WIN32
+  _fnmApplicationPathTMP = _fnmApplicationPath;
+#else
 //#######################################################################################################################
 //###############                             users files in home dir                ####################################
 //#######################################################################################################################
@@ -1625,7 +1690,7 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
   }
 
 //#######################################################################################################################
-
+#endif
   // if writing
   if (ulType&EFP_WRITE) {
     // if should write to mod dir
@@ -1633,14 +1698,18 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
       // do that
       fnmExpanded = _fnmApplicationPathTMP + _fnmMod + convertWindow1251ToUtf8(fnmFileAbsolute);
       fnmExpanded.SetAbsolutePath();
+#ifdef PLATFORM_UNIX
       VerifyDirsExist(fnmExpanded.FileDir());
+#endif
       return EFP_FILE;
     // if should not write to mod dir
     } else {
       // write to base dir
       fnmExpanded = _fnmApplicationPathTMP + convertWindow1251ToUtf8(fnmFileAbsolute);
       fnmExpanded.SetAbsolutePath();
+#ifdef PLATFORM_UNIX
       VerifyDirsExist(fnmExpanded.FileDir());
+#endif
       return EFP_FILE;
     }
 
@@ -1676,3 +1745,4 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
   fnmExpanded.SetAbsolutePath();
   return EFP_NONE;
 }
+

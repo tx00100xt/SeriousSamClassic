@@ -61,7 +61,22 @@ static void SetAsRenderTarget_D3D( CViewPort *pvp)
   D3DRELEASE( pColorSurface, TRUE);
 }
 #endif // SE1_D3D
+#ifdef PLATFORM_WIN32
+// helper for OGL
 
+CTempDC::CTempDC(HWND hWnd)
+{
+  ASSERT(hWnd!=NULL);
+  hwnd = hWnd;
+  hdc = GetDC(hwnd);
+  ASSERT(hdc!=NULL);
+}
+
+CTempDC::~CTempDC(void)
+{
+  ReleaseDC(hwnd, hdc);
+}
+#endif
 
 /*
  *   ViewPort functions
@@ -91,21 +106,6 @@ CViewPort::~CViewPort(void)
 
 
 #ifdef PLATFORM_WIN32
-
-CTempDC::CTempDC(HWND hWnd)
-{
-  ASSERT(hWnd!=NULL);
-  hwnd = hWnd;
-  hdc = GetDC(hwnd);
-  ASSERT(hdc!=NULL);
-}
-
-CTempDC::~CTempDC(void)
-{
-  ReleaseDC(hwnd, hdc);
-}
-
-
 #define CViewPortCLASS "ViewPort Window"
 static BOOL _bClassRegistered = FALSE;
 
@@ -124,11 +124,14 @@ LRESULT CALLBACK CViewPortCLASS_WindowProc(
     // send it to parent
     HWND hWndParent = GetParent(hWnd);
     ASSERT(hWndParent!=NULL);
-    return CallWindowProc( (WNDPROC)GetWindowLong(hWndParent, GWL_WNDPROC),
+    return CallWindowProc( (WNDPROC)GetWindowLongPtr(hWndParent, GWLP_WNDPROC),
                            hWndParent, Msg, wParam, lParam);
   }
 
-  return DefWindowProc(hWnd, Msg, wParam, lParam);
+  LRESULT r = DefWindowProc( hWnd, Msg, wParam, lParam );
+
+  // UGLY fix! For some reason DefWindowProc returns 0
+  return TRUE;
 }
 #endif
 
@@ -184,14 +187,13 @@ void CViewPort::OpenCanvas(void)
 	  0,0,  // window size
 	  vp_hWndParent,
 	  NULL,
-	  (HINSTANCE)GetWindowLong(vp_hWndParent, GWL_HINSTANCE),
+	  (HINSTANCE)GetWindowLongPtr(vp_hWndParent, GWLP_HINSTANCE),
 	  NULL);
   ASSERT( vp_hWnd!=NULL);
 #ifdef SE1_D3D
   // prepare new swap chain for D3D
   if( _pGfx->gl_eCurrentAPI==GAT_D3D && !bFullScreen) CreateSwapChain_D3D( this, pixWinSizeI, pixWinSizeJ);
 #endif // SE1_D3D
-
   // resize raster
   Resize();
   ShowWindow( vp_hWnd, SW_SHOW);
@@ -201,7 +203,7 @@ void CViewPort::OpenCanvas(void)
 #endif // SE1_D3D
 
 #else  // !PLATFORM_WIN32
-   vp_hWnd = vp_hWndParent;
+  vp_hWnd = vp_hWndParent;
 #endif
 }
 
@@ -216,9 +218,10 @@ void CViewPort::CloseCanvas( BOOL bRelease/*=FALSE*/)
     if( vp_pSurfDepth!=NULL) D3DRELEASE( vp_pSurfDepth, TRUE);
   }
 #endif // SE1_D3D
-  // destroy window
 
-#ifdef PLATFORM_WINDOWS
+
+  // destroy window
+#ifdef PLATFORM_WIN32
   if( vp_hWnd!=NULL && IsWindow(vp_hWnd)) {
     BOOL bRes = DestroyWindow(vp_hWnd);
     ASSERT(bRes);
@@ -264,8 +267,8 @@ void CViewPort::Resize(void)
     CreateSwapChain_D3D( this, pixNewWidth, pixNewHeight);
     SetAsRenderTarget_D3D(this);
   }
-#endif
-#endif
+#endif // SE1_D3D
+#endif // PLATFORM_WIN32
 }
 
 

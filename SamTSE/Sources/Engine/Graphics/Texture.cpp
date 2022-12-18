@@ -44,7 +44,6 @@ extern INDEX tex_iFiltering;
 extern INDEX gap_bAllowSingleMipmap;
 extern FLOAT gfx_tmProbeDecay;
 
-
 // special mode flag when loading texture for exporting
 static BOOL _bExport = FALSE;
 
@@ -101,7 +100,7 @@ extern void UpdateTextureSettings(void)
   { // OpenGL
     extern INDEX ogl_iTextureCompressionType;  // 0=none, 1=default (ARB), 2=S3TC, 3=FXT1, 4=legacy S3TC
     INDEX &iTC = ogl_iTextureCompressionType;
-    iTC = Clamp( iTC, 0, 4);
+    iTC = Clamp( iTC, (INDEX)0, (INDEX)4);
     if( iTC==3 && !(ulGfxFlags&GLF_EXTC_FXT1)) iTC = 2;
     if( iTC==2 && !(ulGfxFlags&GLF_EXTC_S3TC)) iTC = 3;
     if((iTC==2 || iTC==3) && !((ulGfxFlags&GLF_EXTC_FXT1) || (ulGfxFlags&GLF_EXTC_S3TC))) iTC = 1;
@@ -167,8 +166,8 @@ extern void UpdateTextureSettings(void)
   tex_iNormalQuality    = TS.ts_iNormQualityO*10 + TS.ts_iNormQualityA;
   tex_iAnimationQuality = TS.ts_iAnimQualityO*10 + TS.ts_iAnimQualityA;
   // clamp texture size
-  tex_iNormalSize    = Clamp( tex_iNormalSize,    5, 11);
-  tex_iAnimationSize = Clamp( tex_iAnimationSize, 5,  9);
+  tex_iNormalSize    = Clamp( tex_iNormalSize, (INDEX)5, (INDEX)11);
+  tex_iAnimationSize = Clamp( tex_iAnimationSize, (INDEX)5, (INDEX)9);
   TS.ts_pixNormSize = 1L<<(tex_iNormalSize   *2);
   TS.ts_pixAnimSize = 1L<<(tex_iAnimationSize*2);
 
@@ -921,7 +920,7 @@ void CTextureData::Read_t( CTStream *inFile)
   }
   // generate texture mip-maps for each frame (in version 4 they're no longer kept in file)
   // and eventually adjust texture saturation, do filtering and/or dithering
-  tex_iFiltering = Clamp( tex_iFiltering, -6, 6);
+  tex_iFiltering = Clamp( tex_iFiltering, (INDEX)-6, (INDEX)6);
   INDEX iTexFilter = tex_iFiltering;
   if( _bExport || (td_ulFlags&TEX_CONSTANT)) iTexFilter = 0; // don't filter constants and textures for exporting
   if( iTexFilter) td_ulFlags |= TEX_FILTERED;
@@ -980,7 +979,7 @@ void CTextureData::Read_t( CTStream *inFile)
 
   // prepare dithering type
   td_ulInternalFormat = DetermineInternalFormat(this);
-  tex_iDithering = Clamp( tex_iDithering, 0, 10);
+  tex_iDithering = Clamp( tex_iDithering, (INDEX)0, (INDEX)10);
   INDEX iDitherType = 0;
   if( !(td_ulFlags&TEX_STATIC) || !(td_ulFlags&TEX_CONSTANT)) { // only non-static-constant textures can be dithered
     extern INDEX AdjustDitheringType_OGL(    GLenum eFormat, INDEX iDitheringType);
@@ -1212,7 +1211,7 @@ void CTextureData::SetAsCurrent( INDEX iFrameNo/*=0*/, BOOL bForceUpload/*=FALSE
     ASSERT( iFrameNo==0); // effect texture must have only one frame
     // get max allowed effect texture dimension
     PIX pixClampAreaSize = 1L<<16L;
-    tex_iEffectSize = Clamp( tex_iEffectSize, 4, 8);
+    tex_iEffectSize = Clamp( tex_iEffectSize, (INDEX)4, (INDEX)8);
     if( !(td_ulFlags&TEX_CONSTANT)) pixClampAreaSize = 1L<<(tex_iEffectSize*2);
     INDEX iWantedMipLevel = td_iFirstMipLevel
                           + ClampTextureSize( pixClampAreaSize, _pGfx->gl_pixMaxTextureDimension, pixWidth, pixHeight);
@@ -1287,7 +1286,7 @@ void CTextureData::SetAsCurrent( INDEX iFrameNo/*=0*/, BOOL bForceUpload/*=FALSE
   extern INDEX tex_bDynamicMipmaps;
   extern INDEX tex_iEffectFiltering; 
   if( tex_bDynamicMipmaps) tex_bDynamicMipmaps = 1;
-  tex_iEffectFiltering = Clamp( tex_iEffectFiltering, -6, 6);
+  tex_iEffectFiltering = Clamp( tex_iEffectFiltering, (INDEX)-6, (INDEX)6);
 
   // determine whether texture has single mipmap
   if( gap_bAllowSingleMipmap) {

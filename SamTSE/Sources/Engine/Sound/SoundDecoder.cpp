@@ -34,7 +34,7 @@ static void FailFunction_t(const char *strName) {
 // ------------------------------------ AMP11
 
 // amp11lib vars
-BOOL _bAMP11Enabled = FALSE;
+__extern BOOL _bAMP11Enabled = FALSE;
 
 static CDynamicLoader *_hAmp11lib = NULL;
 
@@ -103,7 +103,7 @@ public:
 #endif
 
 // vorbis vars
-BOOL _bOVEnabled = FALSE;
+__extern BOOL _bOVEnabled = FALSE;
 static CDynamicLoader *_hOV = NULL;
 
 class CDecodeData_OGG {
@@ -148,7 +148,7 @@ static size_t ogg_read_func  (void *ptr, size_t size, size_t nmemb, void *dataso
   // calculate how much can be read at most
   SLONG slToRead = size*nmemb;
   SLONG slCurrentPos = ftell(pogg->ogg_fFile)-pogg->ogg_slOffset;
-  SLONG slSizeLeft = ClampDn(pogg->ogg_slSize-slCurrentPos, 0);
+  SLONG slSizeLeft = ClampDn(pogg->ogg_slSize-slCurrentPos, (SLONG)0);
   slToRead = ClampUp(slToRead, slSizeLeft);
 
   // rounded down to the block size
@@ -210,7 +210,7 @@ void CSoundDecoder::InitPlugins(void)
     // load vorbis
     if (_hOV==NULL) {
        #if ((defined PLATFORM_WIN32) && (defined NDEBUG))
-         #define VORBISLIB "vorbisfile_d"
+         #define VORBISLIB "libvorbisfile"
        #else
          #ifdef USE_TREMOR
           #define VORBISLIB "vorbisidec"

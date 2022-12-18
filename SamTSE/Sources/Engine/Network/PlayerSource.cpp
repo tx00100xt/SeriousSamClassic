@@ -208,7 +208,7 @@ void CPlayerSource::WriteActionPacket(CNetworkMessage &nm)
   // get sendbehind parameters
   extern INDEX cli_iSendBehind;
   extern INDEX cli_bPredictIfServer;
-  cli_iSendBehind = Clamp(cli_iSendBehind, 0, 3);
+  cli_iSendBehind = Clamp(cli_iSendBehind, (INDEX)0, (INDEX)3);
   INDEX iSendBehind = cli_iSendBehind;
 
   // disable if server

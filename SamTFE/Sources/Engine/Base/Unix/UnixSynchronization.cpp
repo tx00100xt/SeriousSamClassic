@@ -57,9 +57,9 @@ LONG InterlockedDecrement(LONG volatile *Addend) {
   return __sync_sub_and_fetch(Addend, 1);
 }
 
-unsigned long long GetCurrentThreadId() {
+DWORD GetCurrentThreadId() {
   static_assert(sizeof(pthread_t) == sizeof(size_t), "");
-  return (unsigned long long) pthread_self();
+  return (DWORD) pthread_self();
 }
 
 HANDLE CreateEvent(void *attr, BOOL bManualReset, BOOL initial, LPCSTR lpName) {

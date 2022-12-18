@@ -426,6 +426,16 @@ int qsort_ArchiveCTFileName_reverse(const void *elem1, const void *elem2 )
   // get the filenames
   const CTFileName &fnm1 = *(CTFileName *)elem1;
   const CTFileName &fnm2 = *(CTFileName *)elem2;
+
+#ifdef PLATFORM_WIN32
+  // find if any is in a mod or on CD
+  BOOL bMod1 = fnm1.HasPrefix(_fnmApplicationPath+"Mods\\");
+  BOOL bCD1 = fnm1.HasPrefix(_fnmCDPath);
+  BOOL bModCD1 = fnm1.HasPrefix(_fnmCDPath+"Mods\\");
+  BOOL bMod2 = fnm2.HasPrefix(_fnmApplicationPath+"Mods\\");
+  BOOL bCD2 = fnm2.HasPrefix(_fnmCDPath);
+  BOOL bModCD2 = fnm2.HasPrefix(_fnmCDPath+"Mods\\");
+#else
   // find if any is in a mod or on CD
   BOOL bMod1 = fnm1.HasPrefix(_fnmApplicationPath+"Mods/");
   BOOL bCD1 = fnm1.HasPrefix(_fnmCDPath);
@@ -433,6 +443,7 @@ int qsort_ArchiveCTFileName_reverse(const void *elem1, const void *elem2 )
   BOOL bMod2 = fnm2.HasPrefix(_fnmApplicationPath+"Mods/");
   BOOL bCD2 = fnm2.HasPrefix(_fnmCDPath);
   BOOL bModCD2 = fnm2.HasPrefix(_fnmCDPath+"Mods/");
+#endif
 
   // calculate priorities based on location of gro file
   INDEX iPriority1 = 0;

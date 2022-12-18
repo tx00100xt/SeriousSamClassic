@@ -374,6 +374,7 @@ struct CBrushPolygonProperties {
   UWORD bpp_uwPretenderDistance;  // distance for pretender switching [m]
   /* Default constructor. */
   CBrushPolygonProperties(void) { memset(this, 0, sizeof(*this)); };
+#ifdef PLATFORM_UNIX
   friend __forceinline CTStream &operator>>(CTStream &strm, CBrushPolygonProperties &cbpp)
   {
     strm>>cbpp.bpp_ubSurfaceType;
@@ -396,6 +397,7 @@ struct CBrushPolygonProperties {
     strm<<cbpp.bpp_uwPretenderDistance;
     return strm;
   }
+#endif
 };
 class ENGINE_API CBrushPolygon {
 public:

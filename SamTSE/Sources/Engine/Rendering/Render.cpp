@@ -90,12 +90,21 @@ extern INDEX gfx_iLensFlareQuality;
 extern BOOL _bMultiPlayer;
 
 // variables for selection on rendering
+#ifdef PLATFORM_UNIX
 CBrushVertexSelection *_pselbvxtSelectOnRender = NULL;
 CStaticStackArray<PIX2D> *_pavpixSelectLasso = NULL;
 CEntitySelection *_pselenSelectOnRender = NULL;
 PIX2D _vpixSelectNearPoint = PIX2D(0,0);
 BOOL _bSelectAlternative   = FALSE;
 PIX _pixDeltaAroundVertex  = 10;
+#else
+extern CBrushVertexSelection *_pselbvxtSelectOnRender = NULL;
+extern CStaticStackArray<PIX2D> *_pavpixSelectLasso = NULL;
+extern CEntitySelection *_pselenSelectOnRender = NULL;
+extern PIX2D _vpixSelectNearPoint = PIX2D(0,0);
+extern BOOL _bSelectAlternative   = FALSE;
+extern PIX _pixDeltaAroundVertex  = 10;
+#endif
 
 // shading info for viewer of last rendered view
 FLOAT3D _vViewerLightDirection;
@@ -710,8 +719,8 @@ void CRenderer::Render(void)
 
   // force finishing of all OpenGL pending operations, if required
   ChangeStatsMode(CStatForm::STI_SWAPBUFFERS);
-  extern INDEX ogl_iFinish;  ogl_iFinish = Clamp( ogl_iFinish, 0, 3);
-  extern INDEX d3d_iFinish;  d3d_iFinish = Clamp( d3d_iFinish, 0, 3);
+  extern INDEX ogl_iFinish;  ogl_iFinish = Clamp( ogl_iFinish, (INDEX)0, (INDEX)3);
+  extern INDEX d3d_iFinish;  d3d_iFinish = Clamp( d3d_iFinish, (INDEX)0, (INDEX)3);
   if( (ogl_iFinish==1 && _pGfx->gl_eCurrentAPI==GAT_OGL) 
 #ifdef SE1_D3D
    || (d3d_iFinish==1 && _pGfx->gl_eCurrentAPI==GAT_D3D)

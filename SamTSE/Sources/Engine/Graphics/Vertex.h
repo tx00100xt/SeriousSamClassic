@@ -43,10 +43,10 @@ struct GFXNormal3
 
 struct GFXTexCoord
 {
-  union {
-    struct { FLOAT u,v; } uv;
-    struct { FLOAT s,t; } st;
-  };
+	union {
+		struct { FLOAT u, v; } uv;
+		struct { FLOAT s, t; } st;
+	};
 };
 
 
@@ -58,10 +58,10 @@ struct GFXTexCoord4
 
 struct GFXColor
 {
-  union {
-    struct { UBYTE r,g,b,a; } ub;
-    struct { ULONG abgr;    } ul;  // reverse order - use ByteSwap()!
-  };
+	union {
+		struct { UBYTE r, g, b, a; } ub;
+		struct { ULONG abgr; } ul;  // reverse order - use ByteSwap()!
+	};
 
   GFXColor() {};
 
@@ -71,7 +71,7 @@ struct GFXColor
  *  simple class. It works for MSVC, though,
  *  so we'll keep it.
  */
-#if (defined _MSC_VER)
+#if (defined __MSVC_INLINE__)
   GFXColor( COLOR col) {
     _asm mov   ecx,dword ptr [this]
     _asm mov   eax,dword ptr [col]
@@ -123,6 +123,20 @@ struct GFXColor
 
 
 #define GFXVertex GFXVertex4
+
+#if (defined _MSC_VER)
+struct GFXVertex4
+{
+  GFXVertex4()
+  {
+  }
+  FLOAT x,y,z;
+  union {
+    struct { struct GFXColor col; };
+    struct { SLONG shade; };
+  };
+};
+#else
 /*
  * rcg10042001 Removed the union; objects with constructors can't be
  *  safely unioned, and there's not a whole lot of memory lost here anyhow.
@@ -137,6 +151,7 @@ struct GFXVertex4 {
   SLONG shade;
   void Clear(void) {};
 };
+#endif
 
 
 #define GFXNormal GFXNormal4

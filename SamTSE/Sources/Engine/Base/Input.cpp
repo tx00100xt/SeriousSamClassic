@@ -114,6 +114,86 @@ void CInput::SetKeyNames( void)
   }
 }
 
+#ifdef PLATFORM_WIN32
+// check if a joystick exists
+BOOL CInput::CheckJoystick(INDEX iJoy)
+{
+  CPrintF(TRANS("  joy %d:"), iJoy+1);
+
+  JOYCAPS jc;
+  // seek for capabilities of requested joystick
+  MMRESULT mmResult = joyGetDevCaps( JOYSTICKID1+iJoy,	&jc, sizeof(JOYCAPS));
+  // report possible errors
+  if( mmResult == MMSYSERR_NODRIVER) {
+    CPrintF(TRANS(" joystick driver is not present\n"));
+    return FALSE;
+  } else if( mmResult == MMSYSERR_INVALPARAM) {
+    CPrintF(TRANS(" invalid parameter\n"));
+    return FALSE;
+  } else if( mmResult != JOYERR_NOERROR) {
+    CPrintF(TRANS("  error 0x%08x\n"), mmResult);
+    return FALSE;
+  }
+  CPrintF(" '%s'\n", jc.szPname);
+
+  CPrintF(TRANS("    %d axes\n"), jc.wNumAxes);
+  CPrintF(TRANS("    %d buttons\n"), jc.wNumButtons);
+  if (jc.wCaps&JOYCAPS_HASPOV) {
+    CPrintF(TRANS("    POV hat present\n"));
+    inp_abJoystickHasPOV[iJoy] = TRUE;
+  } else {
+    inp_abJoystickHasPOV[iJoy] = FALSE;
+  }
+
+  // read joystick state
+  JOYINFOEX ji;
+  ji.dwFlags = JOY_RETURNBUTTONS|JOY_RETURNCENTERED|JOY_RETURNPOV|JOY_RETURNR|
+    JOY_RETURNX|JOY_RETURNY|JOY_RETURNZ|JOY_RETURNU|JOY_RETURNV;
+  ji.dwSize = sizeof( JOYINFOEX);
+  mmResult = joyGetPosEx( JOYSTICKID1+iJoy, &ji);
+
+  // if some error
+  if( mmResult != JOYERR_NOERROR) {
+    // fail
+    CPrintF(TRANS("    Cannot read the joystick!\n"));
+    return FALSE;
+  }
+
+  // for each axis
+  for(INDEX iAxis=0; iAxis<MAX_AXES_PER_JOYSTICK; iAxis++) {
+    ControlAxisInfo &cai= inp_caiAllAxisInfo[ FIRST_JOYAXIS+iJoy*MAX_AXES_PER_JOYSTICK+iAxis];
+    // remember min/max info
+    switch( iAxis) {
+    case 0: 
+      cai.cai_slMin = jc.wXmin; cai.cai_slMax = jc.wXmax; 
+      cai.cai_bExisting = TRUE;
+      break;
+    case 1: 
+      cai.cai_slMin = jc.wYmin; cai.cai_slMax = jc.wYmax; 
+      cai.cai_bExisting = TRUE;
+      break;
+    case 2: 
+      cai.cai_slMin = jc.wZmin; cai.cai_slMax = jc.wZmax; 
+      cai.cai_bExisting = jc.wCaps&JOYCAPS_HASZ;
+      break;
+    case 3: 
+      cai.cai_slMin = jc.wRmin; cai.cai_slMax = jc.wRmax; 
+      cai.cai_bExisting = jc.wCaps&JOYCAPS_HASR;
+      break;
+    case 4: 
+      cai.cai_slMin = jc.wUmin; cai.cai_slMax = jc.wUmax; 
+      cai.cai_bExisting = jc.wCaps&JOYCAPS_HASU;
+      break;
+    case 5: 
+      cai.cai_slMin = jc.wVmin; cai.cai_slMax = jc.wVmax; 
+      cai.cai_bExisting = jc.wCaps&JOYCAPS_HASV;
+      break;
+    }
+  }
+
+  return TRUE;
+}
+#endif
 
 // adds axis and buttons for given joystick
 void CInput::AddJoystickAbbilities(INDEX iJoy)

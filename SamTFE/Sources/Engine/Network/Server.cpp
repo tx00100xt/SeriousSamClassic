@@ -381,8 +381,8 @@ void CServer::SendGameStreamBlocks(INDEX iClient)
   INDEX ctMinBytes = sso.sso_sspParams.ssp_iMinBPS/20;
   INDEX ctMaxBytes = sso.sso_sspParams.ssp_iMaxBPS/20;
   // make sure outgoing message doesn't overflow UDP size
-  ctMinBytes = Clamp(ctMinBytes, 0, 1000);
-  ctMaxBytes = Clamp(ctMaxBytes, 0, 1000);
+  ctMinBytes = Clamp(ctMinBytes, (INDEX)0, (INDEX)1000);
+  ctMaxBytes = Clamp(ctMaxBytes, (INDEX)0, (INDEX)1000);
   // limit the clients BPS by server's local settings
   extern INDEX ser_iMaxAllowedBPS;
   ctMinBytes = ClampUp(ctMinBytes, (INDEX) ( ser_iMaxAllowedBPS/20L - MAX_HEADER_SIZE));
@@ -743,7 +743,7 @@ void CServer::ServerLoop(void)
     if (srv_fServerStep>=1.0f) {
     
       // find how many ticks were stepped
-      INDEX iSpeed = ClampDn(INDEX(srv_fServerStep), 1);
+      INDEX iSpeed = ClampDn(INDEX(srv_fServerStep), (INDEX)1);
       srv_fServerStep -= iSpeed;
 
       // for each tick
@@ -911,8 +911,8 @@ void CServer::ConnectRemoteSessionState(INDEX iClient, CNetworkMessage &nm)
   INDEX ctMaxAllowedVIPPlayers = 0;
   INDEX ctMaxAllowedVIPClients = 0;
   if (net_iVIPReserve>0 && net_strVIPPassword!="") {
-    ctMaxAllowedVIPPlayers = ClampDn(net_iVIPReserve-GetVIPPlayersCount(), 0);
-    ctMaxAllowedVIPClients = ClampDn(net_iVIPReserve-GetVIPClientsCount(), 0);
+    ctMaxAllowedVIPPlayers = ClampDn(net_iVIPReserve-GetVIPPlayersCount(), (INDEX)0);
+    ctMaxAllowedVIPClients = ClampDn(net_iVIPReserve-GetVIPClientsCount(), (INDEX)0);
   }
   INDEX ctMaxAllowedObservers = net_iMaxObservers;
 
@@ -940,8 +940,8 @@ void CServer::ConnectRemoteSessionState(INDEX iClient, CNetworkMessage &nm)
   // if the user is not authorised as a VIP
   if (!bAutorizedAsVIP) {
     // artificially decrease allowed number of players and clients
-    ctMaxAllowedPlayers = ClampDn(ctMaxAllowedPlayers-ctMaxAllowedVIPPlayers, 0);
-    ctMaxAllowedClients = ClampDn(ctMaxAllowedClients-ctMaxAllowedVIPClients, 0);
+    ctMaxAllowedPlayers = ClampDn(ctMaxAllowedPlayers-ctMaxAllowedVIPPlayers, (INDEX)0);
+    ctMaxAllowedClients = ClampDn(ctMaxAllowedClients-ctMaxAllowedVIPClients, (INDEX)0);
   }
 
   // if too many clients or players

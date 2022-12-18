@@ -44,7 +44,7 @@ inline void CRC_AddLONG( ULONG &ulCRC, ULONG ul)
   CRC_AddBYTE(ulCRC, UBYTE(ul>> 0));
 };
 
-inline void CRC_AddLONGLONG( ULONG &ulCRC, __uint64 x)
+inline void CRC_AddLONGLONG( ULONG &ulCRC, unsigned long long x)
 {
   CRC_AddBYTE(ulCRC, UBYTE(x>>56));
   CRC_AddBYTE(ulCRC, UBYTE(x>>48));

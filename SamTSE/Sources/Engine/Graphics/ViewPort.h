@@ -24,10 +24,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <d3d8.h>
 #endif // SE1_D3D
 
+
 /*
  *  ViewPort
  */
 
+/* rcg !!! FIXME: This will need to go away. */
 #ifdef PLATFORM_WIN32
 class CTempDC {
 public:
@@ -49,6 +51,7 @@ public:
 	LPDIRECT3DSWAPCHAIN8 vp_pSwapChain;  // swap chain for D3D
 	LPDIRECT3DSURFACE8   vp_pSurfDepth;  // z-buffer for D3D
 #endif // SE1_D3D
+
   INDEX vp_ctDisplayChanges;    // number of display driver
 
   // open/close canvas window

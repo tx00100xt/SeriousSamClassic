@@ -500,9 +500,9 @@ inline ENGINE_API FLOAT Sin(ANGLE a) { return sinf(a*(PI/ANGLE_180)); };
 inline ENGINE_API FLOAT Cos(ANGLE a) { return cosf(a*(PI/ANGLE_180)); };
 inline ENGINE_API FLOAT Tan(ANGLE a) { return tanf(a*(PI/ANGLE_180)); };
 #else
-inline ENGINE_API FLOAT Sin(ANGLE a) { return sin(a*(PI/ANGLE_180)); };
-inline ENGINE_API FLOAT Cos(ANGLE a) { return cos(a*(PI/ANGLE_180)); };
-inline ENGINE_API FLOAT Tan(ANGLE a) { return tan(a*(PI/ANGLE_180)); };
+inline ENGINE_API FLOAT Sin(ANGLE a) { return (FLOAT)sin(a*(PI/ANGLE_180)); };
+inline ENGINE_API FLOAT Cos(ANGLE a) { return (FLOAT)cos(a*(PI/ANGLE_180)); };
+inline ENGINE_API FLOAT Tan(ANGLE a) { return (FLOAT)tan(a*(PI/ANGLE_180)); };
 #endif
 
 #ifdef __arm__

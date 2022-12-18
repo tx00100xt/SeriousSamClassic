@@ -30,8 +30,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // maximum length of file that can be saved (default: 8Mb)
 ENGINE_API extern ULONG _ulMaxLengthOfSavingFile;
 
+#ifdef PLATFORM_WIN32
+#define CTSTREAM_BEGIN CTStream::EnableStreamHandling(); __try
+#define CTSTREAM_END __except( CTStream::ExceptionFilter( GetExceptionCode(),\
+                                                          GetExceptionInformation()) )\
+  {\
+     CTStream::ExceptionFatalError();\
+  }; CTStream::DisableStreamHandling();
+#else  
 #define CTSTREAM_BEGIN CTStream::EnableStreamHandling();
 #define CTSTREAM_END CTStream::DisableStreamHandling();
+#endif 
 
 /*
  * Chunk ID class
@@ -115,6 +124,14 @@ public:
   /* Static function disable stream handling. */
   static void DisableStreamHandling(void);
 
+#ifdef PLATFORM_WIN32 /* rcg10042001 !!! FIXME */
+  /* Static function to filter exceptions and intercept access violation */
+  static int ExceptionFilter(DWORD dwCode, _EXCEPTION_POINTERS *pExceptionInfoPtrs);
+
+  /* Static function to report fatal exception error. */
+  static void ExceptionFatalError(void);
+#endif
+
   /* Default constructor. */
   CTStream(void);
   /* Destruction. */
@@ -149,6 +166,7 @@ public:
   inline CTString &GetDescription(void) { return strm_strStreamDescription; };
 
   /* Read an object from stream. */
+  /* Read an object from stream. */
   inline CTStream &operator>>(UBYTE &ub)  { Read_t(&ub, sizeof(ub)); return *this; } // throw char *
   inline CTStream &operator>>(SBYTE &sb)  { Read_t(&sb, sizeof(sb)); return *this; } // throw char *
   inline CTStream &operator>>(float  &f)  { Read_t( &f, sizeof( f)); BYTESWAP( f); return *this; } // throw char *
@@ -157,7 +175,9 @@ public:
   inline CTStream &operator>>(SLONG &sl)  { Read_t(&sl, sizeof(sl)); BYTESWAP(sl); return *this; } // throw char *
   inline CTStream &operator>>(UWORD &uw)  { Read_t(&uw, sizeof(uw)); BYTESWAP(uw); return *this; } // throw char *
   inline CTStream &operator>>(SWORD &sw)  { Read_t(&sw, sizeof(sw)); BYTESWAP(sw); return *this; } // throw char *
-  //inline CTStream &operator>>(BOOL   &b)  { Read_t( &b, sizeof( b)); BYTESWAP( b); return *this; } // throw char *
+#ifdef PLATFORM_WIN32
+  inline CTStream &operator>>(BOOL   &b)  { Read_t( &b, sizeof( b)); BYTESWAP( b); return *this; } // throw char *
+#endif
   inline CTStream &operator>>(__int64 i)  { Read_t( &i, sizeof( i)); BYTESWAP( i); return *this; } // throw char *
   inline CTStream &operator>>(__uint64 i) { Read_t( &i, sizeof( i)); BYTESWAP( i); return *this; } // throw char *
   /* Write an object into stream. */
@@ -169,10 +189,13 @@ public:
   inline CTStream &operator<<(SLONG sl)  { BYTESWAP(sl); Write_t(&sl, sizeof(sl)); return *this; } // throw char *
   inline CTStream &operator<<(UWORD uw)  { BYTESWAP(uw); Write_t(&uw, sizeof(uw)); return *this; } // throw char *
   inline CTStream &operator<<(SWORD sw)  { BYTESWAP(sw); Write_t(&sw, sizeof(sw)); return *this; } // throw char *
-  //inline CTStream &operator<<(BOOL   b)  { BYTESWAP( b); Write_t( &b, sizeof( b)); return *this; } // throw char *
+#ifdef PLATFORM_WIN32
+  inline CTStream &operator<<(BOOL   b)  { BYTESWAP( b); Write_t( &b, sizeof( b)); return *this; } // throw char *
+#endif
   inline CTStream &operator<<(__int64 i) { BYTESWAP( i); Write_t( &i, sizeof( i)); return *this; } // throw char *
   inline CTStream &operator<<(__uint64 i) { BYTESWAP( i); Write_t( &i, sizeof( i)); return *this; } // throw char *
 
+  // CTFileName reading/writing
   // CTFileName reading/writing
   ENGINE_API friend CTStream &operator>>(CTStream &strmStream, CTFileName &fnmFileName);
   ENGINE_API friend CTStream &operator<<(CTStream &strmStream, const CTFileName &fnmFileName);

@@ -43,6 +43,7 @@ static BOOL EntityIsInside(CEntity *pen)
     const FLOAT3D &v = pen->en_plPlacement.pl_PositionVector;
     const FLOATmatrix3D &m = pen->en_mRotation;
     FLOATobbox3D boxEntity = FLOATobbox3D(pen->en_boxSpatialClassification, v, m);
+    //DOUBLEobbox3D boxdEntity = FLOATtoDOUBLE(boxEntity);
 
     // if the box touches the sector's BSP
     if (boxEntity.HasContactWith(FLOATobbox3D(_pbsc->bsc_boxBoundingBox)) &&

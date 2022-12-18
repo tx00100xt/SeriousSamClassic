@@ -182,14 +182,14 @@ ColisionBox &CModelInstance::GetColisionBox(INDEX icb)
 
 FLOAT3D CModelInstance::GetCollisionBoxMin(INDEX iCollisionBox/*=0*/)
 {
-  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, 0, mi_cbAABox.Count()-1);
+  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, (INDEX)0, mi_cbAABox.Count()-1);
   FLOAT3D vMin = mi_cbAABox[ iCollisionBoxClamped].Min();
   return vMin;
 };
 
 FLOAT3D CModelInstance::GetCollisionBoxMax(INDEX iCollisionBox/*=0*/)
 {
-  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, 0, mi_cbAABox.Count()-1);
+  INDEX iCollisionBoxClamped = Clamp(iCollisionBox, (INDEX)0, mi_cbAABox.Count()-1);
   FLOAT3D vMax = mi_cbAABox[ iCollisionBoxClamped].Max();
   return vMax;
 };

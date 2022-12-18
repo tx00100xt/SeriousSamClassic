@@ -481,7 +481,7 @@ void CShadowMap::Prepare(void)
   BOOL bUseProbe = ProbeMode(sm_tvLastDrawn);
 
   // determine and clamp to max allowed shadow dimension
-  shd_iStaticSize = Clamp( shd_iStaticSize, 5, 8);
+  shd_iStaticSize = Clamp( shd_iStaticSize, (INDEX)5, (INDEX)8);
   PIX pixClampAreaSize = 1L<<(shd_iStaticSize*2);
   // determine largest allowed mip level
   INDEX iFinestMipLevel = sm_iFirstMipLevel + 

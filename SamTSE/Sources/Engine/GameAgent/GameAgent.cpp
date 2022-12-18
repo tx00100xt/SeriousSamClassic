@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-#include <Engine/StdH.h>
+#include "Engine/StdH.h"
 
 #include <Engine/Engine.h>
 #include <Engine/CurrentVersion.h>
@@ -178,13 +178,13 @@ rhea.333networks.com
 rhea.333networks.com
 
 */
-//CTString ga_strServer = "master1.croteam.org";
-CTString ga_strServer = "sam.ostap.eu";
-//CTString ga_strMSLegacy = "master1.croteam.org";
-CTString ga_strMSLegacy = "sam.ostap.eu";
+//extern CTString ga_strServer = "master1.croteam.org";
+extern CTString ga_strServer = "sam.ostap.eu";
+//extern CTString ga_strMSLegacy = "master1.croteam.org";
+extern CTString ga_strMSLegacy = "sam.ostap.eu";
 
-BOOL ga_bMSLegacy = TRUE;
-//BOOL ga_bMSLegacy = FALSE;
+extern BOOL ga_bMSLegacy = TRUE;
+//extern BOOL ga_bMSLegacy = FALSE;
 
 #ifdef WIN32
 void DateTime(char *datetime){
@@ -968,13 +968,16 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
 
     strcpy(cMS,ga_strMSLegacy);
 
-    #if PLATFORM_WIN32
+    #ifdef PLATFORM_WIN32
     WSADATA wsadata;
     if(WSAStartup(MAKEWORD(2,2), &wsadata) != 0) {
         DateTime(_datetime);
         CPrintF("[%s] Error initializing winsock!\n", _datetime);
         return;
-    }
+    } else {
+		DateTime(_datetime);
+		CPrintF("[%s] Initializing winsock - Done.\n", _datetime);
+	}
     #endif
 
 /* Open a socket and connect to the Master server */
@@ -999,10 +1002,14 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
         CPrintF("[%s] Error creating TCP socket!\n", _datetime);
         WSACleanup();
         return;
-    }
+	} else {
+		DateTime(_datetime);
+		CPrintF("[%s]  Creating TCP socket - Done.\n", _datetime);
+	}
 
 /* Set non-blocking  */
 
+#ifdef PLATFORM_UNIX
     if( (arg = fcntl(_sock, F_GETFL, NULL)) < 0) {
         DateTime(_datetime); 
         CPrintF("[%s] Error fcntl(..., F_GETFL) (%s)\n", _datetime, strerror(errno)); 
@@ -1015,7 +1022,19 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
         CPrintF("[%s] Error fcntl(..., F_SETFL) (%s)\n", _datetime, strerror(errno)); 
         CLEANMSSRUFF1;
         return;
-    } 
+    }
+#else
+/*
+// Set nonblocked mode
+	BOOL l1 = TRUE;
+	if (SOCKET_ERROR == ioctlsocket(_sock, FIONBIO, (unsigned long*)&l1))
+	{
+		DateTime(_datetime);
+		CPrintF("[%s] Error ioctlsocket(..., FIONBIO) (%s)\n", _datetime, strerror(errno));
+		CLEANMSSRUFF1;
+		return;
+	}*/
+#endif
 
 /* Trying to connect with timeout   */
 
@@ -1039,7 +1058,7 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
              else if (res > 0) { 
                 // Socket selected for write 
                 lon = sizeof(int); 
-                if (getsockopt(_sock, SOL_SOCKET, SO_ERROR, (void*)(&valopt), &lon) < 0) { 
+                if (getsockopt(_sock, SOL_SOCKET, SO_ERROR, (char*)(&valopt), &lon) < 0) { 
                    DateTime(_datetime);
                    CPrintF("[%s] Error in getsockopt() %d - %s\n", _datetime, errno, strerror(errno)); 
                    CLEANMSSRUFF1;
@@ -1069,6 +1088,7 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
           return;
        } 
     } 
+#ifdef PLATFORM_UNIX
     // Set to blocking mode again... 
     if( (arg = fcntl(_sock, F_GETFL, NULL)) < 0) {
        DateTime(_datetime); 
@@ -1082,18 +1102,23 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
        CPrintF("[%s] Error fcntl(..., F_SETFL) (%s)\n", _datetime, strerror(errno)); 
        CLEANMSSRUFF1;
        return;
-    } 
-/*
-    if(connect(_sock, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
-        DateTime(_datetime);
-        CPrintF("[%s] Error connecting to TCP socket!\n", _datetime);
-        CLEANMSSRUFF1;
-        return;
     }
-*/
+#else
+/*
+// Set nonblocked mode again... 
+BOOL l2 = TRUE;
+if (SOCKET_ERROR == ioctlsocket(_sock, FIONBIO, (unsigned long*)&l2))
+{
+	DateTime(_datetime);
+	CPrintF("[%s] Error ioctlsocket(..., FIONBIO) (%s)\n", _datetime, strerror(errno));
+	CLEANMSSRUFF1;
+	return;
+}*/
+#endif
 
 /* setsockopt */
 
+#ifdef PLATFORM_UNIX
     if (setsockopt(_sock, SOL_SOCKET, SO_LINGER, (char *)&ling,
                 sizeof (ling)) < 0) {
         DateTime(_datetime);
@@ -1101,20 +1126,21 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
         CLEANMSSRUFF1;
         return;
     }
-    if (setsockopt (_sock, SOL_SOCKET, SO_RCVTIMEO, &timeout_tcp,
+    if (setsockopt (_sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout_tcp,
                 sizeof (timeout_tcp)) < 0) {
         DateTime(_datetime);
         CPrintF("[%s] Error setsockopt SO_RCVTIMEO to TCP socket!\n", _datetime);
         CLEANMSSRUFF1;
         return;
     }
-    if (setsockopt (_sock, SOL_SOCKET, SO_SNDTIMEO, &timeout_tcp,
+    if (setsockopt (_sock, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout_tcp,
                 sizeof (timeout_tcp)) < 0) {
         DateTime(_datetime);
         CPrintF("[%s] Error setsockopt SO_SNDTIMEO to TCP socket!\n", _datetime);
         CLEANMSSRUFF1;
         return;
     }
+#endif
 
 /* Allocate memory for a buffer and get a pointer to it */
 
@@ -1256,8 +1282,11 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
         }
     }
     CPrintF(" %u bytes\n", iLen);
-    //close(_sock);
-    close(_sock);
+#ifdef PLATFORM_WIN32
+	closesocket(_sock);
+#else
+	close(_sock);
+#endif
     //DateTime(_datetime);
     //CPrintF("[%s] Received encoded data after sending the string (Validate key) - done", _datetime);
     CLEANMSSRUFF1;

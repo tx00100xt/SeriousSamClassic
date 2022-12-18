@@ -3,7 +3,7 @@
 /* rcg10072001 Implemented. */
 
 // !!! FIXME: rcg10142001 This should really be using CTStrings...
-
+#include "Engine/StdH.h"
 #include <io.h>
 
 #include <Engine/Engine.h>
@@ -42,11 +42,13 @@ BOOL CFileSystem::IsDummyFile(const char *fname)
 BOOL CFileSystem::Exists(const char *fname)
 {
     ASSERTALWAYS("Write me!");
+	return 0;
 }
 
 BOOL CFileSystem::IsDirectory(const char *fname)
 {
     ASSERTALWAYS("Write me!");
+	return 0;
 }
 
 CFileSystem *CFileSystem::GetInstance(const char *argv0, const char *gamename)
@@ -57,11 +59,11 @@ CFileSystem *CFileSystem::GetInstance(const char *argv0, const char *gamename)
 
 CWin32FileSystem::CWin32FileSystem(const char *argv0, const char *gamename)
     : exePath(NULL),
-    : userDir(NULL)
+     userDir(NULL)
 {
     char buf[MAX_PATH];
     memset(buf, '\0', sizeof (buf));
-    GetModuleFileName(NULL, buf, sizeof (buf) - 1);
+    GetModuleFileNameA(NULL, buf, sizeof (buf) - 1);
 
     exePath = new char[strlen(buf) + 1];
     strcpy(exePath, buf);
@@ -93,7 +95,7 @@ void CWin32FileSystem::GetUserDirectory(char *buf, ULONG bufSize)
 }
 
 
-CDynamicArray<CTString> CWin32FileSystem::FindFiles(const char *dir,
+CDynamicArray<CTString> *CWin32FileSystem::FindFiles(const char *dir,
                                                     const char *wildcard)
 {
     CDynamicArray<CTString> *retval = new CDynamicArray<CTString>;
@@ -103,7 +105,7 @@ CDynamicArray<CTString> CWin32FileSystem::FindFiles(const char *dir,
         str += "\\";
 
     struct _finddata_t c_file;
-    long hFile = _findfirst( (const char *)(str+wildcard), &c_file );
+    intptr_t hFile = _findfirst( (const char *)(str+wildcard), &c_file );
 
     for (BOOL bFileExists = hFile!=-1;
          bFileExists;

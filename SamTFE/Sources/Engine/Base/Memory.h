@@ -27,9 +27,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 ENGINE_API extern SLONG GetFreeMemory( void );
 
 /* Allocate a block of memory - fatal error if not enough memory. */
-ENGINE_API extern void *AllocMemory( SLONG memsize );
-ENGINE_API extern void *_debug_AllocMemory( SLONG memsize, int iType, const char *strFile, int iLine);
-ENGINE_API extern void *AllocMemoryAligned( SLONG memsize, SLONG slAlignPow2);
+#if (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+ENGINE_API extern void *AllocMemory(UINT64 memsize );
+ENGINE_API extern void *AllocMemoryAligned(UINT64 memsize, UINT64 slAlignPow2);
+#else
+ENGINE_API extern void *AllocMemory(SLONG memsize);
+ENGINE_API extern void *AllocMemoryAligned(SLONG memsize, SLONG slAlignPow2);
+#endif
+ENGINE_API extern void *_debug_AllocMemory(SLONG memsize, int iType, const char *strFile, int iLine);
 /* Free a block of memory. */
 ENGINE_API extern void FreeMemory( void *memory);
 ENGINE_API extern void FreeMemoryAligned( void *memory);

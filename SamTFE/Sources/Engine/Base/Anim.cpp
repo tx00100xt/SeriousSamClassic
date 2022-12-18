@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-#include <Engine/StdH.h>
+#include "Engine/StdH.h"
 
 #include <Engine/Base/Anim.h>
 
@@ -478,7 +478,7 @@ void CAnimData::ExportAnimationNames_t( CTStream *ostrFile, CTString strAnimatio
   for( INDEX iAnimation=0; iAnimation<ad_NumberOfAnims; iAnimation++)
   {
     // prepare one #define line (add prefix)
-    sprintf( chrLine, "#define %s%s %d", (const char *) strAnimationPrefix, ad_Anims[ iAnimation].oa_Name,
+    sprintf( chrLine, "#define %s%s %d", (const char *) strAnimationPrefix.str_String, ad_Anims[ iAnimation].oa_Name,
              iAnimation);
     // put it into file
     ostrFile->PutLine_t( chrLine);
@@ -1100,12 +1100,12 @@ void CAnimObject::GetFrame( INDEX &iFrame0, INDEX &iFrame1, FLOAT &fRatio) const
       INDEX iAnim = ao_iCurrentAnim;
       ((CAnimObject*)this)->ao_iCurrentAnim = ao_iLastAnim;
       float fFrameNow = tmCurrentRelative/pOA0->oa_SecsPerFrame+pOA0->oa_NumberOfFrames;
-	    iFrame0 = pOA0->oa_FrameIndices[ Clamp(SLONG(fFrameNow),  0, pOA0->oa_NumberOfFrames-1)];
+	    iFrame0 = pOA0->oa_FrameIndices[ Clamp(SLONG(fFrameNow), (SLONG)0, pOA0->oa_NumberOfFrames-1)];
       INDEX iFrameNext = SLONG(fFrameNow+1);
       if (iFrameNext>=pOA0->oa_NumberOfFrames) {
 	      iFrame1 = pOA1->oa_FrameIndices[0];
       } else {
-	      iFrame1 = pOA0->oa_FrameIndices[ Clamp(iFrameNext,  0, pOA0->oa_NumberOfFrames-1)];
+	      iFrame1 = pOA0->oa_FrameIndices[ Clamp(iFrameNext,  (INDEX)0, pOA0->oa_NumberOfFrames-1)];
       }
       ((CAnimObject*)this)->ao_iCurrentAnim = iAnim;
       fRatio = fFrameNow - (float)floor(fFrameNow);

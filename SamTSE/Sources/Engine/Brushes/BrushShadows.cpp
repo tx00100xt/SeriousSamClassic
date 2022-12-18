@@ -126,9 +126,9 @@ void CBrushPolygon::InitializeShadowMap(void)
   // calculate dimensions in pixels and eventually reduce shadowmap size
   PIX pixSizeU  = mexSizeU>>iMipLevel;
   PIX pixSizeV  = mexSizeV>>iMipLevel;
-  INDEX iMipAdj = ClampTextureSize( MAX_SHADOWMAP_SIZE, _pGfx->gl_pixMaxTextureDimension, pixSizeU, pixSizeV);
-  pixSizeU   = ClampDn( pixSizeU>>iMipAdj, 1);
-  pixSizeV   = ClampDn( pixSizeV>>iMipAdj, 1);
+  INDEX iMipAdj = ClampTextureSize( (PIX)MAX_SHADOWMAP_SIZE, _pGfx->gl_pixMaxTextureDimension, pixSizeU, pixSizeV);
+  pixSizeU   = ClampDn( pixSizeU>>iMipAdj, (INDEX)1);
+  pixSizeV   = ClampDn( pixSizeV>>iMipAdj, (INDEX)1);
   iMipLevel += iMipAdj;
 
   // move shadow map offset for the sake of dark corners
@@ -533,10 +533,10 @@ void CBrushShadowMap::FindLightRectangle(CLightSource &ls, class CLightRectangle
     // pixMaxU = Min( Max(pixMaxU, 0L), sm_mexWidth >>iMipLevel);
     // pixMaxV = Min( Max(pixMaxV, 0L), sm_mexHeight>>iMipLevel);
     // clamp the rectangle to the size of polygon
-    pixMinU = Min( Max(pixMinU, 0), Min(sm_pixPolygonSizeU+16, sm_mexWidth >>iMipLevel));
-    pixMinV = Min( Max(pixMinV, 0), Min(sm_pixPolygonSizeV+16, sm_mexHeight>>iMipLevel));
-    pixMaxU = Min( Max(pixMaxU, 0), Min(sm_pixPolygonSizeU+16, sm_mexWidth >>iMipLevel));
-    pixMaxV = Min( Max(pixMaxV, 0), Min(sm_pixPolygonSizeV+16, sm_mexHeight>>iMipLevel));
+    pixMinU = Min( Max(pixMinU, (PIX)0), Min(sm_pixPolygonSizeU+16, sm_mexWidth >>iMipLevel));
+    pixMinV = Min( Max(pixMinV, (PIX)0), Min(sm_pixPolygonSizeV+16, sm_mexHeight>>iMipLevel));
+    pixMaxU = Min( Max(pixMaxU, (PIX)0), Min(sm_pixPolygonSizeU+16, sm_mexWidth >>iMipLevel));
+    pixMaxV = Min( Max(pixMaxV, (PIX)0), Min(sm_pixPolygonSizeV+16, sm_mexHeight>>iMipLevel));
   }
   // all done
   lr.lr_pixMinU = pixMinU;
@@ -599,7 +599,7 @@ BOOL CBrushShadowMap::IsShadowFlat( COLOR &colFlat)
   // fail if flat shadows are not allowed
   extern INDEX shd_bAllowFlats;
   extern INDEX shd_iForceFlats;
-  shd_iForceFlats = Clamp( shd_iForceFlats, 0, 2);
+  shd_iForceFlats = Clamp( shd_iForceFlats, (INDEX)0, (INDEX)2);
   if( !shd_bAllowFlats && shd_iForceFlats<1) return FALSE;
 
   COLOR col;
@@ -711,9 +711,9 @@ BOOL CBrushShadowMap::IsShadowFlat( COLOR &colFlat)
     }
   }
   // done - phew, layer is flat
-  slR = Clamp( slR, 0, 255);
-  slG = Clamp( slG, 0, 255);
-  slB = Clamp( slB, 0, 255);
+  slR = Clamp( slR, (SLONG)0, (SLONG)255);
+  slG = Clamp( slG, (SLONG)0, (SLONG)255);
+  slB = Clamp( slB, (SLONG)0, (SLONG)255);
   colFlat = RGBToColor(slR,slG,slB);
   return TRUE;
 }
