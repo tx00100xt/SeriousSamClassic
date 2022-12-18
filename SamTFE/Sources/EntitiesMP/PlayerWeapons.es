@@ -73,8 +73,8 @@ extern const INDEX aiWeaponsRemap[19] = { 0,  1,  10,  2,  3,  4,  5,  6,  7,
 extern "C" __attribute__ ((visibility("default"))) FLOAT _fWeaponFOVAdjuster;
 extern "C" __attribute__ ((visibility("default"))) FLOAT _fGlobalFOV;
 #else
-DECL_DLL extern FLOAT _fWeaponFOVAdjuster;
-DECL_DLL extern FLOAT _fGlobalFOV;
+extern __declspec(dllimport) FLOAT _fWeaponFOVAdjuster;
+extern __declspec(dllimport) FLOAT _fGlobalFOV;
 #endif
 
 %}
@@ -1328,7 +1328,7 @@ functions:
         _toCrosshair.SetData_t( fnCrosshair);
       } catch (const char *strError) { 
         // didn't make it! - reset crosshair
-        CPrintF( strError);
+        CPrintF("%s\n", (const char *)strError);
         iCrossHair = 0;
         return;
       }

@@ -1111,7 +1111,7 @@ FLOAT GetGameDamageMultiplier(void)
   FLOAT fExtraStrengthPerPlayer = GetSP()->sp_fExtraEnemyStrengthPerPlayer;
   if (fExtraStrengthPerPlayer>0) {
     INDEX ctPlayers = _pNetwork->ga_sesSessionState.GetPlayersCount();
-    fGameDamageMultiplier*=1.0f/(1+fExtraStrengthPerPlayer*ClampDn(ctPlayers-1, 0));
+    fGameDamageMultiplier*=1.0f/(1+fExtraStrengthPerPlayer*ClampDn(ctPlayers-1, (INDEX)0));
   }
   return fGameDamageMultiplier;
 }

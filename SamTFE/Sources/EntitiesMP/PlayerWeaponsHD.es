@@ -73,8 +73,8 @@ extern const INDEX aiWeaponsRemap[19] = { 0,  1,  10,  2,  3,  4,  5,  6,  7,
 extern "C" __attribute__ ((visibility("default"))) FLOAT _fWeaponFOVAdjuster;
 extern "C" __attribute__ ((visibility("default"))) FLOAT _fGlobalFOV;
 #else
-DECL_DLL extern FLOAT _fWeaponFOVAdjuster;
-DECL_DLL extern FLOAT _fGlobalFOV;
+extern __declspec(dllimport) FLOAT _fWeaponFOVAdjuster;
+extern __declspec(dllimport) FLOAT _fGlobalFOV;
 #endif
 
 %}

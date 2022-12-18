@@ -43,8 +43,8 @@ extern INDEX hud_bShowWeapon;
 extern "C" __attribute__ ((visibility("default"))) FLOAT _fWeaponFOVAdjuster;
 extern "C" __attribute__ ((visibility("default"))) FLOAT _fGlobalFOV;
 #else
-DECL_DLL extern FLOAT _fWeaponFOVAdjuster;
-DECL_DLL extern FLOAT _fGlobalFOV;
+extern __declspec(dllimport) FLOAT _fWeaponFOVAdjuster;
+extern __declspec(dllimport) FLOAT _fGlobalFOV;
 #endif
 
 %}

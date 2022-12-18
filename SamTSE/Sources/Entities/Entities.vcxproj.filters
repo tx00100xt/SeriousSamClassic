@@ -67,9 +67,6 @@
     <ClCompile Include="Common\Common.cpp">
       <Filter>Source Files\Common sources</Filter>
     </ClCompile>
-    <ClCompile Include="Common\EmanatingParticles.cpp">
-      <Filter>Source Files\Common sources</Filter>
-    </ClCompile>
     <ClCompile Include="Common\HUD.cpp">
       <Filter>Source Files\Common sources</Filter>
     </ClCompile>
@@ -81,12 +78,6 @@
     </ClCompile>
     <ClCompile Include="StdH\StdH.cpp">
       <Filter>Source Files\Common sources</Filter>
-    </ClCompile>
-    <ClCompile Include="AirElemental.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AirShockwave.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AirWave.cpp">
       <Filter>Source Files</Filter>
@@ -101,9 +92,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AnimationHub.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AreaMarker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArmorItem.cpp">
@@ -145,16 +133,7 @@
     <ClCompile Include="CannonBall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CannonRotating.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CannonStatic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Catman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChainsawFreak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Copier.cpp">
@@ -163,13 +142,7 @@
     <ClCompile Include="Counter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CrateBus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CrateRider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CreditsHolder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cyborg.cpp">
@@ -182,12 +155,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debris.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugEntityStatesDisplay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Demon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DestroyableArchitecture.cpp">
@@ -244,25 +211,10 @@
     <ClCompile Include="EnvironmentMarker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnvironmentParticlesHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Eruptor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExotechLarva.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExotechLarvaBattery.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExotechLarvaCharger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Eyeman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Fireworks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Fish.cpp">
@@ -295,15 +247,6 @@
     <ClCompile Include="GravityRouter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Grunt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GruntSka.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Guffy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HazeMarker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -316,16 +259,10 @@
     <ClCompile Include="Huanman.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HudPicHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LarvaOffspring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
@@ -352,9 +289,6 @@
     <ClCompile Include="MessageItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MeteorShower.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MirrorMarker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -365,9 +299,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ModelHolder2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelHolder3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MovingBrush.cpp">
@@ -389,9 +320,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pendulum.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhotoAlbum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pipebomb.cpp">
@@ -418,9 +346,6 @@
     <ClCompile Include="PlayerWeaponsEffects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PowerUpItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -442,16 +367,7 @@
     <ClCompile Include="RollingStone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Santa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scorpman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScrollHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SeriousBomb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Ship.cpp">
@@ -460,46 +376,16 @@
     <ClCompile Include="ShipMarker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shooter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoundHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpawnerProjectile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Spinner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StormController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Summoner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SummonerMarker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Switch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TacticsChanger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TacticsHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Teleport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextFXHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TouchField.cpp">
@@ -567,18 +453,6 @@
     <ClInclude Include="Common\WeaponPositions.h">
       <Filter>Header Files\Common headers</Filter>
     </ClInclude>
-    <ClInclude Include="AirElemental.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AirElemental_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AirShockwave.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AirShockwave_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AirWave.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -607,12 +481,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AnimationHub_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AreaMarker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AreaMarker_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArmorItem.h">
@@ -687,28 +555,10 @@
     <ClInclude Include="CannonBall_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CannonRotating.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CannonRotating_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CannonStatic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CannonStatic_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Catman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Catman_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChainsawFreak.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChainsawFreak_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Copier.h">
@@ -723,22 +573,10 @@
     <ClInclude Include="Counter_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CrateBus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CrateBus_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CrateRider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CrateRider_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CreditsHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CreditsHolder_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cyborg.h">
@@ -763,18 +601,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Debris_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugEntityStatesDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugEntityStatesDisplay_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Demon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Demon_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DestroyableArchitecture.h">
@@ -888,46 +714,16 @@
     <ClInclude Include="EnvironmentMarker_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnvironmentParticlesHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnvironmentParticlesHolder_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Eruptor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Eruptor_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExotechLarva.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExotechLarva_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExotechLarvaBattery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExotechLarvaBattery_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExotechLarvaCharger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExotechLarvaCharger_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Eyeman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Eyeman_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Fireworks.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Fireworks_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fish.h">
@@ -990,24 +786,6 @@
     <ClInclude Include="GravityRouter_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Grunt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Grunt_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GruntSka.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GruntSka_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Guffy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Guffy_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HazeMarker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1032,12 +810,6 @@
     <ClInclude Include="Huanman_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HudPicHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HudPicHolder_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1048,12 +820,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyItem_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LarvaOffspring.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LarvaOffspring_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
@@ -1104,12 +870,6 @@
     <ClInclude Include="MessageItem_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MeteorShower.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MeteorShower_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MirrorMarker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1125,19 +885,13 @@
     <ClInclude Include="ModelHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModelHolder_tables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ModelHolder2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ModelHolder2_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelHolder3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelHolder3_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelHolder_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MovingBrush.h">
@@ -1180,12 +934,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pendulum_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhotoAlbum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhotoAlbum_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pipebomb.h">
@@ -1236,12 +984,6 @@
     <ClInclude Include="PlayerWeaponsEffects_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PowerUpItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PowerUpItem_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1284,28 +1026,10 @@
     <ClInclude Include="RollingStone_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Santa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Santa_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scorpman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scorpman_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScrollHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScrollHolder_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SeriousBomb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SeriousBomb_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ship.h">
@@ -1320,28 +1044,10 @@
     <ClInclude Include="ShipMarker_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shooter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shooter_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SoundHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SoundHolder_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpawnerProjectile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpawnerProjectile_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Spinner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Spinner_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StormController.h">
@@ -1350,58 +1056,16 @@
     <ClInclude Include="StormController_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Summoner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Summoner_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SummonerMarker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SummonerMarker_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Switch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Switch_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TacticsChanger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TacticsChanger_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TacticsHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TacticsHolder_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Teleport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Teleport_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextFXHolder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextFXHolder_tables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeController_tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TouchField.h">
@@ -1496,15 +1160,6 @@
     <CustomBuild Include="Reminder.es">
       <Filter>Class Files\AI</Filter>
     </CustomBuild>
-    <CustomBuild Include="Spinner.es">
-      <Filter>Class Files\AI</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TacticsChanger.es">
-      <Filter>Class Files\AI</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TacticsHolder.es">
-      <Filter>Class Files\AI</Filter>
-    </CustomBuild>
     <CustomBuild Include="Watcher.es">
       <Filter>Class Files\AI</Filter>
     </CustomBuild>
@@ -1532,9 +1187,6 @@
     <CustomBuild Include="ShipMarker.es">
       <Filter>Class Files\Brushes</Filter>
     </CustomBuild>
-    <CustomBuild Include="Terrain.es">
-      <Filter>Class Files\Brushes</Filter>
-    </CustomBuild>
     <CustomBuild Include="WorldBase.es">
       <Filter>Class Files\Brushes</Filter>
     </CustomBuild>
@@ -1556,16 +1208,7 @@
     <CustomBuild Include="Effector.es">
       <Filter>Class Files\Effects</Filter>
     </CustomBuild>
-    <CustomBuild Include="Fireworks.es">
-      <Filter>Class Files\Effects</Filter>
-    </CustomBuild>
     <CustomBuild Include="Lightning.es">
-      <Filter>Class Files\Effects</Filter>
-    </CustomBuild>
-    <CustomBuild Include="MeteorShower.es">
-      <Filter>Class Files\Effects</Filter>
-    </CustomBuild>
-    <CustomBuild Include="PhotoAlbum.es">
       <Filter>Class Files\Effects</Filter>
     </CustomBuild>
     <CustomBuild Include="PyramidSpaceShip.es">
@@ -1580,14 +1223,8 @@
     <CustomBuild Include="StormController.es">
       <Filter>Class Files\Effects</Filter>
     </CustomBuild>
-    <CustomBuild Include="TimeController.es">
-      <Filter>Class Files\Effects</Filter>
-    </CustomBuild>
     <CustomBuild Include="WorldSettingsController.es">
       <Filter>Class Files\Effects</Filter>
-    </CustomBuild>
-    <CustomBuild Include="AirElemental.es">
-      <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
     <CustomBuild Include="Beast.es">
       <Filter>Class Files\Enemies</Filter>
@@ -1598,22 +1235,7 @@
     <CustomBuild Include="Boneman.es">
       <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
-    <CustomBuild Include="CannonRotating.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CannonStatic.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ChainsawFreak.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CrateBus.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
     <CustomBuild Include="CrateRider.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Demon.es">
       <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
     <CustomBuild Include="Devil.es">
@@ -1646,15 +1268,6 @@
     <CustomBuild Include="EnemySpawner.es">
       <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
-    <CustomBuild Include="ExotechLarva.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ExotechLarvaBattery.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ExotechLarvaCharger.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
     <CustomBuild Include="Eyeman.es">
       <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
@@ -1664,31 +1277,10 @@
     <CustomBuild Include="Gizmo.es">
       <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
-    <CustomBuild Include="Grunt.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="GruntSka.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Guffy.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
     <CustomBuild Include="Headman.es">
       <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
-    <CustomBuild Include="Santa.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
     <CustomBuild Include="Scorpman.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Shooter.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="Summoner.es">
-      <Filter>Class Files\Enemies</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SummonerMarker.es">
       <Filter>Class Files\Enemies</Filter>
     </CustomBuild>
     <CustomBuild Include="Walker.es">
@@ -1704,9 +1296,6 @@
       <Filter>Class Files\Environment</Filter>
     </CustomBuild>
     <CustomBuild Include="EnvironmentMarker.es">
-      <Filter>Class Files\Environment</Filter>
-    </CustomBuild>
-    <CustomBuild Include="EnvironmentParticlesHolder.es">
       <Filter>Class Files\Environment</Filter>
     </CustomBuild>
     <CustomBuild Include="AmmoItem.es">
@@ -1728,9 +1317,6 @@
       <Filter>Class Files\Items</Filter>
     </CustomBuild>
     <CustomBuild Include="MessageItem.es">
-      <Filter>Class Files\Items</Filter>
-    </CustomBuild>
-    <CustomBuild Include="PowerUpItem.es">
       <Filter>Class Files\Items</Filter>
     </CustomBuild>
     <CustomBuild Include="WeaponItem.es">
@@ -1763,9 +1349,6 @@
     <CustomBuild Include="AnimationHub.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
-    <CustomBuild Include="AreaMarker.es">
-      <Filter>Class Files\Tools</Filter>
-    </CustomBuild>
     <CustomBuild Include="BackgroundViewer.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
@@ -1781,13 +1364,7 @@
     <CustomBuild Include="Counter.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
-    <CustomBuild Include="CreditsHolder.es">
-      <Filter>Class Files\Tools</Filter>
-    </CustomBuild>
     <CustomBuild Include="Damager.es">
-      <Filter>Class Files\Tools</Filter>
-    </CustomBuild>
-    <CustomBuild Include="DebugEntityStatesDisplay.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
     <CustomBuild Include="DoorController.es">
@@ -1811,9 +1388,6 @@
     <CustomBuild Include="HazeMarker.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
-    <CustomBuild Include="HudPicHolder.es">
-      <Filter>Class Files\Tools</Filter>
-    </CustomBuild>
     <CustomBuild Include="Light.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
@@ -1835,9 +1409,6 @@
     <CustomBuild Include="ModelHolder2.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
-    <CustomBuild Include="ModelHolder3.es">
-      <Filter>Class Files\Tools</Filter>
-    </CustomBuild>
     <CustomBuild Include="MusicChanger.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
@@ -1847,9 +1418,6 @@
     <CustomBuild Include="ParticlesHolder.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
-    <CustomBuild Include="ScrollHolder.es">
-      <Filter>Class Files\Tools</Filter>
-    </CustomBuild>
     <CustomBuild Include="SoundHolder.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
@@ -1857,9 +1425,6 @@
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
     <CustomBuild Include="Teleport.es">
-      <Filter>Class Files\Tools</Filter>
-    </CustomBuild>
-    <CustomBuild Include="TextFXHolder.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
     <CustomBuild Include="TouchField.es">
@@ -1874,9 +1439,6 @@
     <CustomBuild Include="WorldLink.es">
       <Filter>Class Files\Tools</Filter>
     </CustomBuild>
-    <CustomBuild Include="AirShockwave.es">
-      <Filter>Class Files\Weapons</Filter>
-    </CustomBuild>
     <CustomBuild Include="Bullet.es">
       <Filter>Class Files\Weapons</Filter>
     </CustomBuild>
@@ -1889,16 +1451,7 @@
     <CustomBuild Include="Flame.es">
       <Filter>Class Files\Weapons</Filter>
     </CustomBuild>
-    <CustomBuild Include="LarvaOffspring.es">
-      <Filter>Class Files\Weapons</Filter>
-    </CustomBuild>
     <CustomBuild Include="Projectile.es">
-      <Filter>Class Files\Weapons</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SeriousBomb.es">
-      <Filter>Class Files\Weapons</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SpawnerProjectile.es">
       <Filter>Class Files\Weapons</Filter>
     </CustomBuild>
     <CustomBuild Include="Twister.es">
@@ -1970,13 +1523,7 @@
     <CustomBuild Include="..\..\Flesh\Classes\CannonBall.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\flesh\Classes\CannonStatic.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\Catman.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\Classes\ChainSawFreak.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\Copier.ecl">
@@ -1998,9 +1545,6 @@
       <Filter>Links To Package</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\Debris.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\Classes\Demon.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\DestroyableArchitecture.ecl">
@@ -2091,12 +1635,6 @@
       <Filter>Links To Package</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\GravityRouter.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\Classes\Grunt.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\Classes\Guffy.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\HazeMarker.ecl">
@@ -2198,9 +1736,6 @@
     <CustomBuild Include="..\..\Flesh\Classes\PlayerWeaponsEffects.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\FLESH\Classes\PowerUpItem.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\Projectile.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
@@ -2225,9 +1760,6 @@
     <CustomBuild Include="..\..\Flesh\Classes\RollingStone.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\Flesh\Classes\Santa.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\Scorpman.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
@@ -2235,9 +1767,6 @@
       <Filter>Links To Package</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\ShipMarker.ecl">
-      <Filter>Links To Package</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\Classes\Shooter.ecl">
       <Filter>Links To Package</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Classes\SoundHolder.ecl">
@@ -2306,9 +1835,6 @@
     <CustomBuild Include="..\..\Flesh\Data\Messages\Enemies\Bull.txt">
       <Filter>Messages</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\flesh\DataMP\Messages\Enemies\ChainsawFreak.txt">
-      <Filter>Messages</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Data\Messages\Enemies\Devil.txt">
       <Filter>Messages</Filter>
     </CustomBuild>
@@ -2328,15 +1854,6 @@
       <Filter>Messages</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Data\Messages\Enemies\Gizmo.txt">
-      <Filter>Messages</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\DataMP\Messages\Enemies\GruntCommander.txt">
-      <Filter>Messages</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\DataMP\Messages\Enemies\GruntSoldier.txt">
-      <Filter>Messages</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\flesh\DataMP\Messages\Enemies\Guffy.txt">
       <Filter>Messages</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Data\Messages\Enemies\Kamikaze.txt">
@@ -2359,6 +1876,51 @@
     </CustomBuild>
     <CustomBuild Include="..\..\Flesh\Data\Messages\Enemies\Woman.txt">
       <Filter>Messages</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Acid.es">
+      <Filter>Class Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AirWave.es">
+      <Filter>Class Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Catman.es">
+      <Filter>Class Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Cyborg.es">
+      <Filter>Class Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CyborgBike.es">
+      <Filter>Class Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Fishman.es">
+      <Filter>Class Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GhostBusterRay.es">
+      <Filter>Class Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Huanman.es">
+      <Filter>Class Files\AI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="LightStyle.es">
+      <Filter>Class Files\AI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Mamut.es">
+      <Filter>Class Files\AI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Mamutman.es">
+      <Filter>Class Files\AI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Mantaman.es">
+      <Filter>Class Files\AI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RobotDriving.es">
+      <Filter>Class Files\AI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RobotFixed.es">
+      <Filter>Class Files\AI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RobotFlying.es">
+      <Filter>Class Files\AI</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
