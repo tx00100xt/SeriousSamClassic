@@ -237,7 +237,7 @@ void CGfxLibrary::InitAPIs(void)
   // shutdown DX8 (we'll start it again if needed)
   D3DRELEASE( gl_pD3D, TRUE);
 ////#endif
-  if( gl_hiDriver!=NONE) FreeLibrary(gl_hiDriver);
+  if( gl_hiDriver!=NONE) FreeLibrary((HMODULE)gl_hiDriver);
   gl_hiDriver = NONE;
 #endif // SE1_D3D
 }
