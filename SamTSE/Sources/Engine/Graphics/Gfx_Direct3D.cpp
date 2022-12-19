@@ -374,7 +374,7 @@ extern void SetupIndexArray_D3D( INDEX ctIndices)
 BOOL CGfxLibrary::InitDriver_D3D(void)
 {
   // check for presence of DirectX 8
-  gl_hiDriver = LoadLibraryA( "D3D8.DLL");
+  gl_hiDriver = (CDynamicLoader *)LoadLibraryA( "D3D8.DLL");
   if( gl_hiDriver==NONE) {
     // not present - BUAHHAHAHAHAR :)
     CPrintF( "DX8 error: API not installed.\n");
@@ -384,11 +384,11 @@ BOOL CGfxLibrary::InitDriver_D3D(void)
 
   // query DX8 interface
   IDirect3D8* (WINAPI *pDirect3DCreate8)(UINT SDKVersion);
-  pDirect3DCreate8 = (IDirect3D8* (WINAPI *)(UINT SDKVersion))GetProcAddress( gl_hiDriver, "Direct3DCreate8");
+  pDirect3DCreate8 = (IDirect3D8* (WINAPI *)(UINT SDKVersion))GetProcAddress((HMODULE)gl_hiDriver, "Direct3DCreate8");
   if( pDirect3DCreate8==NULL) {
     // cannot init
     CPrintF( "DX8 error: Cannot get entry procedure address.\n");
-    FreeLibrary(gl_hiDriver);
+    FreeLibrary((HMODULE)gl_hiDriver);
     gl_hiDriver = NONE;
     return FALSE; 
   }
@@ -398,7 +398,7 @@ BOOL CGfxLibrary::InitDriver_D3D(void)
   if( gl_pD3D==NULL) {
     // cannot start
     CPrintF( "DX8 error: Cannot be initialized.\n");
-    FreeLibrary(gl_hiDriver);
+    FreeLibrary((HMODULE)gl_hiDriver);
     gl_hiDriver = NONE;
     return FALSE;
   }
@@ -649,7 +649,7 @@ void CGfxLibrary::InitContext_D3D()
     // check everything that is required for multi-texturing
     if( !(d3dCaps.TextureOpCaps&D3DTOP_MODULATE2X)) CPrintF( TRANS("Texture operation MODULATE2X missing - multi-texturing cannot be used.\n"));
     else if( gl_ctMaxStreams<=ctMinStreams)         CPrintF( TRANS("Not enough streams - multi-texturing cannot be used.\n"));
-    else gl_ctTextureUnits = Min( GFX_MAXTEXUNITS, Min( gl_ctRealTextureUnits, 1+gl_ctMaxStreams-ctMinStreams));
+    else gl_ctTextureUnits = Min( (INDEX)GFX_MAXTEXUNITS, Min( gl_ctRealTextureUnits, (INDEX)1+gl_ctMaxStreams-ctMinStreams));
   }
 
   // setup fog and haze textures
@@ -717,6 +717,7 @@ void CGfxLibrary::InitContext_D3D()
   GFX_ctVertices = 0;
   // reset locking flags
   _dwVtxLockFlags = D3DLOCK_DISCARD;
+  INDEX i;
   for( i=0; i<GFX_MAXLAYERS; i++) _dwColLockFlags[i] = _dwTexLockFlags[i] = D3DLOCK_DISCARD;
 
   // set default texture filtering/biasing

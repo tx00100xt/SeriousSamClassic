@@ -180,6 +180,9 @@ __extern INDEX d3d_iVertexBuffersSize   = 1024;   // KBs reserved for vertex buf
 __extern INDEX d3d_iVertexRangeTreshold = 99;     // minimum vertices in buffer that triggers range optimization
 __extern INDEX d3d_iMaxBurstSize = 0;             // 0=unlimited
 __extern INDEX d3d_iFinish = 0;
+#ifdef SE1_D3D
+__extern INDEX d3d_bFastUpload = TRUE;            // use internal format conversion routines
+#endif // SE1_D3D
 
 // API common controls
 __extern INDEX gap_iUseTextureUnits = 4;
@@ -1179,6 +1182,9 @@ void CGfxLibrary::Init(void)
   _pShell->DeclareSymbol("persistent user INDEX d3d_bAlternateDepthReads;", (void *) &d3d_bAlternateDepthReads);
   _pShell->DeclareSymbol("persistent user INDEX d3d_bOptimizeVertexBuffers;", (void *) &d3d_bOptimizeVertexBuffers);
   _pShell->DeclareSymbol("persistent user INDEX d3d_iFinish;", (void *) &d3d_iFinish);
+#ifdef SE1_D3D
+  _pShell->DeclareSymbol("persistent      INDEX d3d_bFastUpload;", &d3d_bFastUpload); // ### added
+#endif // SE1_D3D
 
   _pShell->DeclareSymbol("persistent user INDEX gap_iUseTextureUnits;", (void *) &gap_iUseTextureUnits);
   _pShell->DeclareSymbol("persistent user INDEX gap_iTextureFiltering;", (void *) &gap_iTextureFiltering);
