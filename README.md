@@ -289,7 +289,7 @@ Type this in your terminal:
 
 ```
 git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
-cd SeriousSamClassic-VK
+cd SeriousSamClassic
 ./build-linux64demo.sh        	    # use build-linux32demo.sh for 32-bits
 ```
 
