@@ -62,7 +62,7 @@ static void AMP11_SetFunctionPointers_t(void) {
   // get amp11lib function pointers
   const char *strName;
 
-  #ifdef PLATFORM_WIN32
+  #if (defined PLATFORM_WIN32) && (!defined PLATFORM_64BIT)
     #define DLLFUNCTION(dll, output, name, inputs, params, required) \
       strName = "_" #name "@" #params;  \
       p##name = (output (__stdcall*) inputs) _hAmp11lib->FindSymbol(strName); \
