@@ -1513,12 +1513,7 @@ void BSPTree<Type, iDimensions>::Read_t(CTStream &strm) // throw char *
   for(INDEX iNode=0; iNode<ctNodes; iNode++) {
     BSPNode<Type, iDimensions> &bn = bt_abnNodes[iNode];
     // read it from disk
-    //strm.Read_t(&(Plane<Type, iDimensions>&)bn, sizeof(Plane<Type, iDimensions>));
-    //strm >> ((Plane<Type, iDimensions>&)bn);
-    Plane<DOUBLE, iDimensions> tmp;
-    strm >> tmp;
-    ((Plane<FLOAT, iDimensions> &)bn) = DOUBLEtoFLOAT(tmp);
-
+    strm.Read_t(&(Plane<Type, iDimensions>&)bn, sizeof(Plane<Type, iDimensions>));
     strm>>(INDEX&)bn.bn_bnlLocation;
 
     INDEX iFront;
@@ -1568,8 +1563,7 @@ void BSPTree<Type, iDimensions>::Write_t(CTStream &strm) // throw char *
   for(INDEX iNode=0; iNode<ctNodes; iNode++) {
     BSPNode<Type, iDimensions> &bn = bt_abnNodes[iNode];
     // write it to disk
-    //strm.Write_t(&(Plane<Type, iDimensions>&)bn, sizeof(Plane<Type, iDimensions>));
-    strm << ((Plane<Type, iDimensions>&)bn);
+    strm.Write_t(&(Plane<Type, iDimensions>&)bn, sizeof(Plane<Type, iDimensions>));
     strm<<(INDEX&)bn.bn_bnlLocation;
 
     INDEX iFront;

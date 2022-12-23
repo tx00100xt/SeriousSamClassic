@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 //template CDynamicArray<CBrushVertex>;
 
 CBrushSector::CBrushSector(const CBrushSector &c) 
-: bsc_bspBSPTree(*new FLOATbsptree3D)
+: bsc_bspBSPTree(*new DOUBLEbsptree3D)
 { 
   ASSERT(FALSE);
 };
@@ -54,7 +54,7 @@ CBrushSector::CBrushSector(void)
 , bsc_ulTempFlags(0)
 , bsc_ulVisFlags(0)
 , bsc_strName("")
-, bsc_bspBSPTree(*new FLOATbsptree3D)
+, bsc_bspBSPTree(*new DOUBLEbsptree3D)
 {
 
 };
@@ -140,7 +140,7 @@ void CBrushSector::CalculateBoundingBoxes(CSimpleProjection3D_DOUBLE &prRelative
       ((pen->en_ulFlags&ENF_ZONING) || pen->en_RenderType==CEntity::RT_FIELDBRUSH) ) {
       // create an array of bsp polygons for sector polygons
       INDEX ctPolygons = bsc_abpoPolygons.Count();
-      CDynamicArray< BSPPolygon<FLOAT, 3> > arbpoPolygons;
+      CDynamicArray< BSPPolygon<DOUBLE, 3> > arbpoPolygons;
       arbpoPolygons.New(ctPolygons);
 
       // for all polygons in this sector
@@ -148,7 +148,7 @@ void CBrushSector::CalculateBoundingBoxes(CSimpleProjection3D_DOUBLE &prRelative
       {for(INDEX iPolygon=0; iPolygon<ctPolygons; iPolygon++){
         // create a BSP polygon from the brush polygon
         CBrushPolygon         &brpo = bsc_abpoPolygons[iPolygon];
-        BSPPolygon<FLOAT, 3> &bspo = arbpoPolygons[iPolygon];
+        BSPPolygon<DOUBLE, 3> &bspo = arbpoPolygons[iPolygon];
         brpo.CreateBSPPolygon(bspo);
       }}
       arbpoPolygons.Unlock();
@@ -234,14 +234,14 @@ void CBrushSector::FindEntitiesInSector(void)
       
       // if the sphere is inside the sector
       if (bsc_bspBSPTree.TestSphere(
-          vSphereCenter, fSphereRadius)>=0) {
+          FLOATtoDOUBLE(vSphereCenter), FLOATtoDOUBLE(fSphereRadius))>=0) {
         // make oriented bounding box of the entity
         FLOATobbox3D boxEntity(iten->en_boxSpatialClassification, 
           iten->en_plPlacement.pl_PositionVector, iten->en_mRotation);
 
         // if the box is inside the sector
         if (boxSector.HasContactWith(boxEntity) &&
-          bsc_bspBSPTree.TestBox(boxEntity)>=0) {
+          bsc_bspBSPTree.TestBox(FLOATtoDOUBLE(boxEntity))>=0) {
           // relate the entity to the sector
           if (iten->en_RenderType==CEntity::RT_BRUSH
             ||iten->en_RenderType==CEntity::RT_FIELDBRUSH

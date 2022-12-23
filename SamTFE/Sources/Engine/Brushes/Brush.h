@@ -399,6 +399,7 @@ struct CBrushPolygonProperties {
   }
 #endif
 };
+
 class ENGINE_API CBrushPolygon {
 public:
 // implementation:
@@ -496,6 +497,7 @@ inline CBrushPolygon *CBrushShadowMap::GetBrushPolygon(void) {
   return(NULL);
 }
 
+
 // selection of brush polygons
 typedef CSelection<CBrushPolygon, BPOF_SELECTED>       CBrushPolygonSelection;
 // selection of brush polygons used for CSG
@@ -571,7 +573,7 @@ public:
   FLOATaabbox3D bsc_boxBoundingBox;                   // bounding box in absolute space
   FLOATaabbox3D bsc_boxRelative;                      // bounding box in relative space
   CListNode bsc_lnInActiveSectors; // node in sectors active in some operation (e.g. rendering)
-  FLOATbsptree3D &bsc_bspBSPTree;  // the local bsp tree of the sector
+  DOUBLEbsptree3D &bsc_bspBSPTree;  // the local bsp tree of the sector
   CRelationDst bsc_rdOtherSidePortals;  // relation to portals pointing to this sector
   CRelationSrc bsc_rsEntities;     // relation to all entities in this sector
   CTString bsc_strName;   // sector name

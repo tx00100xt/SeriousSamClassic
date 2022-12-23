@@ -283,7 +283,7 @@ MY_STATIC_ASSERT(size_tSize, sizeof(size_t) == sizeof(void*));
     }
 
     typedef uint64_t __uint64;
-    #if (!defined __INTEL_COMPILER)
+    #if (!defined __INTEL_COMPILER) && (!defined PLATFORM_FREEBSD)
       typedef int64_t __int64;
     #endif
 

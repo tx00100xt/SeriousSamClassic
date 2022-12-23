@@ -1830,7 +1830,7 @@ void CEntity::FindSectorsAroundEntity(void)
   // make oriented bounding box of the entity
   FLOATobbox3D boxEntity = FLOATobbox3D(en_boxSpatialClassification, 
     en_plPlacement.pl_PositionVector, en_mRotation);
-  //DOUBLEobbox3D boxdEntity = FLOATtoDOUBLE(boxEntity);
+  DOUBLEobbox3D boxdEntity = FLOATtoDOUBLE(boxEntity);
 
   // unset spatial clasification
   en_rdSectors.Clear();
@@ -1854,10 +1854,10 @@ void CEntity::FindSectorsAroundEntity(void)
           
           // if the sphere is inside the sector
           if (itbsc->bsc_bspBSPTree.TestSphere(
-              vSphereCenter, fSphereRadius)>=0) {
+              FLOATtoDOUBLE(vSphereCenter), FLOATtoDOUBLE(fSphereRadius))>=0) {
 
             // if the box is inside the sector
-            if (itbsc->bsc_bspBSPTree.TestBox(boxEntity)>=0) {
+            if (itbsc->bsc_bspBSPTree.TestBox(boxdEntity)>=0) {
               // relate the entity to the sector
               if (en_RenderType==RT_BRUSH
                 ||en_RenderType==RT_FIELDBRUSH
@@ -1894,7 +1894,7 @@ void CEntity::FindSectorsAroundEntityNear(void)
   // make oriented bounding box of the entity
   FLOATobbox3D oboxEntity = FLOATobbox3D(en_boxSpatialClassification, 
     en_plPlacement.pl_PositionVector, en_mRotation);
-  //DOUBLEobbox3D oboxdEntity = FLOATtoDOUBLE(oboxEntity);
+  DOUBLEobbox3D oboxdEntity = FLOATtoDOUBLE(oboxEntity);
 
   CListHead lhActive;
   // for each sector around this entity
@@ -1925,13 +1925,13 @@ void CEntity::FindSectorsAroundEntityNear(void)
         (pbsc->bsc_boxBoundingBox.HasContactWith(boxEntity))&&
         // the sphere is inside the sector
         (pbsc->bsc_bspBSPTree.TestSphere(
-              vSphereCenter, fSphereRadius)>=0)&&
+			FLOATtoDOUBLE(vSphereCenter), fSphereRadius)>=0)&&
         // (use more detailed testing for moving brushes)
         (en_RenderType!=RT_BRUSH||
           // oriented box touches box of sector
           (oboxEntity.HasContactWith(FLOATobbox3D(pbsc->bsc_boxBoundingBox)))&&
           // oriented box is in bsp
-          (pbsc->bsc_bspBSPTree.TestBox(oboxEntity)>=0));
+          (pbsc->bsc_bspBSPTree.TestBox(oboxdEntity)>=0));
     // if it is not
     if (!bIn) {
       // if it has link
@@ -2870,7 +2870,7 @@ CBrushSector *CEntity::GetSectorFromPoint(const FLOAT3D &vPointAbs)
   // for each sector around entity
   {FOREACHSRCOFDST(en_rdSectors, CBrushSector, bsc_rsEntities, pbsc)
     // if point is in this sector
-    if( pbsc->bsc_bspBSPTree.TestSphere(vPointAbs, 0.01)>=0) {
+    if( pbsc->bsc_bspBSPTree.TestSphere(FLOATtoDOUBLE(vPointAbs), 0.01)>=0) {
       // return that
       return pbsc;
     }

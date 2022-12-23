@@ -43,11 +43,11 @@ static BOOL EntityIsInside(CEntity *pen)
     const FLOAT3D &v = pen->en_plPlacement.pl_PositionVector;
     const FLOATmatrix3D &m = pen->en_mRotation;
     FLOATobbox3D boxEntity = FLOATobbox3D(pen->en_boxSpatialClassification, v, m);
-    //DOUBLEobbox3D boxdEntity = FLOATtoDOUBLE(boxEntity);
+    DOUBLEobbox3D boxdEntity = FLOATtoDOUBLE(boxEntity);
 
     // if the box touches the sector's BSP
     if (boxEntity.HasContactWith(FLOATobbox3D(_pbsc->bsc_boxBoundingBox)) &&
-      _pbsc->bsc_bspBSPTree.TestBox(boxEntity)<=0) {
+      _pbsc->bsc_bspBSPTree.TestBox(boxdEntity)<=0) {
 
       // for each collision sphere
       CStaticArray<CMovingSphere> &absSpheres = pen->en_pciCollisionInfo->ci_absSpheres;
@@ -56,7 +56,7 @@ static BOOL EntityIsInside(CEntity *pen)
         ms.ms_vRelativeCenter0 = ms.ms_vCenter*m+v;
         // if the sphere is in the sector
         if (_pbsc->bsc_bspBSPTree.TestSphere(
-          ms.ms_vRelativeCenter0, ms.ms_fR)<=0) {
+          FLOATtoDOUBLE(ms.ms_vRelativeCenter0), ms.ms_fR)<=0) {
           return TRUE;
         }
       }

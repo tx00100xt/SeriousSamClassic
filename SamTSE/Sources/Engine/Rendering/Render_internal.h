@@ -287,10 +287,8 @@ public:
   CEntity           *re_penViewer;    // entity that is viewed from
   CDynamicContainer<CScreenPolygon> *re_pcspoViewPolygons;  // polygons that is viewed from (for mirrors)
   CAnyProjection3D   re_prProjection; // projection to viewer space
-  FLOAT3D re_vdViewSphere;
-  FLOAT   re_dViewSphereR;
-  // DOUBLE3D re_vdViewSphere;
-  // DOUBLE   re_dViewSphereR;
+   DOUBLE3D re_vdViewSphere;
+   DOUBLE   re_dViewSphereR;
 
   // used for fixing problems with extra trapezoids generated on t-junctions
   FLOAT re_fEdgeOffsetI;

@@ -899,8 +899,8 @@ functions:
       }
 
       // get min/max parameters of entity inside sector
-      float dMin, dMax;
-      bsc.bsc_bspBSPTree.FindLineMinMax(vMin, vMax, dMin, dMax);
+      double dMin, dMax;
+      bsc.bsc_bspBSPTree.FindLineMinMax(FLOATtoDOUBLE(vMin), FLOATtoDOUBLE(vMax), dMin, dMax);
 
       // if sector content is not default
       INDEX iContent = bsc.GetContentType();

@@ -37,8 +37,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 template CDynamicArray<CBrush3D>;
 #endif
 
-__extern BOOL _bPortalSectorLinksPreLoaded = FALSE;
-__extern BOOL _bEntitySectorLinksPreLoaded = FALSE;
+#ifdef _MSC_VER
+extern BOOL _bPortalSectorLinksPreLoaded = FALSE;
+extern BOOL _bEntitySectorLinksPreLoaded = FALSE;
+#else
+BOOL _bPortalSectorLinksPreLoaded = FALSE;
+BOOL _bEntitySectorLinksPreLoaded = FALSE;
+#endif
 
 /*
  * Calculate bounding boxes in all brushes.
@@ -150,10 +155,10 @@ void CBrushArchive::LinkPortalsAndSectors(void)
                 }
                 // create a BSP polygon from the brush polygon
                 CBrushPolygon        &brpo2 = *itbpo2;
-                BSPPolygon<FLOAT, 3> bspo2;
+                BSPPolygon<DOUBLE, 3> bspo2;
                 brpo2.CreateBSPPolygonNonPrecise(bspo2);
                 // split the polygon with the BSP of the sector
-                FLOATbspcutter3D bcCutter(bspo2, *itbsc1->bsc_bspBSPTree.bt_pbnRoot);
+                DOUBLEbspcutter3D bcCutter(bspo2, *itbsc1->bsc_bspBSPTree.bt_pbnRoot);
                 // if anything remains on the border looking outside
                 if (bcCutter.bc_abedInside.Count()>0
                   ||bcCutter.bc_abedBorderInside.Count()>0

@@ -662,7 +662,7 @@ void CRenderer::AddZoningSectorsAroundEntity(CEntity *pen, const FLOAT3D &vEyesP
   ASSERT(!(pen->en_ulFlags&ENF_ZONING));
 
   // make parameters for minimum sphere to add
-  re_vdViewSphere = vEyesPos;
+  re_vdViewSphere = FLOATtoDOUBLE(vEyesPos);
   re_dViewSphereR = re_prProjection->NearClipDistanceR()*1.5f;
 
   CListHead lhToAdd;
@@ -751,7 +751,7 @@ void CRenderer::AddZoningSectorsAroundBox(const FLOATaabbox3D &boxNear)
   FLOAT3D vSphereCenter = boxNear.Center();
 
   re_dViewSphereR = re_prProjection->NearClipDistanceR()*1.5f;
-  re_vdViewSphere = vSphereCenter;
+  re_vdViewSphere = FLOATtoDOUBLE(vSphereCenter);
 
   // for all entities in world
   FOREACHINDYNAMICCONTAINER(re_pwoWorld->wo_cenEntities, CEntity, iten) {
@@ -792,7 +792,7 @@ void CRenderer::AddZoningSectorsAroundBox(const FLOATaabbox3D &boxNear)
          &&!((itbsc->bsc_ulFlags&BSCF_HIDDEN) && !re_bRenderingShadows)) {
           // if the sphere is inside the sector
           if (itbsc->bsc_bspBSPTree.TestSphere(
-			  vSphereCenter, fSphereRadius) >= 0) {
+			  FLOATtoDOUBLE(vSphereCenter), FLOATtoDOUBLE(fSphereRadius)) >= 0) {
 
             // add that sector to active sectors
             AddActiveSector(itbsc.Current());
