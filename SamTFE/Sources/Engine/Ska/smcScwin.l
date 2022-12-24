@@ -1,24 +1,17 @@
-%option prefix="engine_ska_yy"
+%option prefix="syy"
 %{
+#include "ParsingSmbs.h"
+#include "smcPars.h"
+
 #include <Engine/Base/CTString.h>
 #include <Engine/Base/CTString.inl>
 #include <Engine/Base/FileName.h>
 #include <Engine/Base/ErrorReporting.h>
 
 #include <Engine/Templates/DynamicStackArray.cpp>
-
-#include "ParsingSmbs.h"
-#include "smcPars.h"
-
 extern CTFileName _fnmApplicationPath;
 
-YYSTYPE engine_ska_yylval;
-
-#ifdef __cplusplus
-extern "C" { int engine_ska_yywrap(void); }
-#endif
-
-int engine_ska_yywrap(void)
+int syywrap(void)
 {
   // no more buffers
   return 1;
@@ -45,13 +38,13 @@ void SMCPushBuffer(const char *strName, const char *strBuffer, BOOL bParserEnd)
   _abseBufferStack[_ibsBufferStackTop].bse_iLineCt = 1;
   _abseBufferStack[_ibsBufferStackTop].bse_bParserEnd = bParserEnd;
 
-  _abseBufferStack[_ibsBufferStackTop].bse_bs = engine_ska_yy_scan_string((char*)(const char*)strBuffer);
+  _abseBufferStack[_ibsBufferStackTop].bse_bs = syy_scan_string((char*)(const char*)strBuffer);
 
-  engine_ska_yy_switch_to_buffer(_abseBufferStack[_ibsBufferStackTop].bse_bs);
+  syy_switch_to_buffer(_abseBufferStack[_ibsBufferStackTop].bse_bs);
 }
 BOOL SMCPopBuffer(void)
 {
-  engine_ska_yy_delete_buffer( _abseBufferStack[_ibsBufferStackTop].bse_bs);
+  syy_delete_buffer( _abseBufferStack[_ibsBufferStackTop].bse_bs);
   free((void*)_abseBufferStack[_ibsBufferStackTop].bse_strName);
   free((void*)_abseBufferStack[_ibsBufferStackTop].bse_strContents);
   BOOL bParserEnd = _abseBufferStack[_ibsBufferStackTop].bse_bParserEnd;
@@ -59,7 +52,7 @@ BOOL SMCPopBuffer(void)
   _ibsBufferStackTop--;
 
   if (_ibsBufferStackTop>=0) {
-    engine_ska_yy_switch_to_buffer(_abseBufferStack[_ibsBufferStackTop].bse_bs);
+    syy_switch_to_buffer(_abseBufferStack[_ibsBufferStackTop].bse_bs);
   }
   return bParserEnd;
 }
@@ -129,7 +122,7 @@ EXP_FLT (({DIGIT}+("."({DIGIT}*)?)?)("E"|"e")("+"|"-")?{DIGIT}+)
     strIncludeFile.Load_t(CTString(strFileName));
     SMCPushBuffer(strFileName, strIncludeFile, FALSE);
 
-  } catch (const char *strError) {
+  } catch(char *strError) {
     (void)strError;
     ThrowF_t("File '%s'\n Could not open '%s' (line %d)",SMCGetBufferName(), strFileName, SMCGetBufferLineNumber());
   }
@@ -152,16 +145,16 @@ EXP_FLT (({DIGIT}+("."({DIGIT}*)?)?)("E"|"e")("+"|"-")?{DIGIT}+)
 
  /* constants */
 
-"-"?{DIGIT}+                  { engine_ska_yylval.i = atoi(yytext); return(c_int); }
-"0x"{HEXDIGIT}+               { engine_ska_yylval.i = strtoul(yytext+2, NULL, 16); return(c_int);}
-"-"?{NONEXP_FLT}("f"|"F")?    { engine_ska_yylval.f = (float) atof(yytext); return(c_float); }
-"-"?{EXP_FLT}("f"|"F")?       { engine_ska_yylval.f = (float) atof(yytext); return(c_float); }
+"-"?{DIGIT}+                  { syylval.i = atoi(yytext); return(c_int); }
+"0x"{HEXDIGIT}+               { syylval.i = strtoul(yytext+2, NULL, 16); return(c_int);}
+"-"?{NONEXP_FLT}("f"|"F")?    { syylval.f = (float) atof(yytext); return(c_float); }
+"-"?{EXP_FLT}("f"|"F")?       { syylval.f = (float) atof(yytext); return(c_float); }
 "\""{STRINGCONTENT}*"\""  { 
   char *strNew;
   // remove double-quotes
   yytext[strlen(yytext)-1] = 0;
   strNew = yytext+1;
-  engine_ska_yylval.str = (const char*)strNew;
+  syylval.str = (const char*)strNew;
   return(c_string); 
 }
 

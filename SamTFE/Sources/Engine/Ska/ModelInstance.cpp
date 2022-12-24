@@ -84,7 +84,11 @@ void ParseSmcFile_t(CModelInstance &mi, const CTString &fnSmcFile)
 
   _yy_mi = &mi;
   SMCPushBuffer(fnFileName, strIncludeFile, TRUE);
+#ifdef __GNUC__
   engine_ska_yyparse();
+#else
+  syyparse();
+#endif
 }
 
 // Create model instance and parse smc file in it

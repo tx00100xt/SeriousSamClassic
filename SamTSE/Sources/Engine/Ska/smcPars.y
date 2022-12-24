@@ -8,9 +8,11 @@
 #include <Engine/Templates/DynamicContainer.cpp>
 
 // for static linking mojo...
+#ifdef __GNUC__
 #define yyparse engine_ska_yyparse
 #define yyerror engine_ska_yyerror
 #define yylex engine_ska_yylex
+#endif
 #include "ParsingSmbs.h"
 
 extern BOOL bRememberSourceFN;
@@ -26,7 +28,11 @@ BOOL bOffsetAllreadySet = FALSE;
 #define YYERROR_VERBOSE 0
 
 // if error occurs in parsing
+#ifdef __GNUC__
 void yyerror(const char *str)
+#else
+void syyerror(const char *str)
+#endif
 {
   //_pShell->ErrorF("%s", str);
   _pShell->ErrorF("File '%s'\n %s (line %d)",SMCGetBufferName(), str, SMCGetBufferLineNumber());

@@ -1421,17 +1421,6 @@ del %(RootDir)%(Directory)\smcPars.c /q</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\smcPars.cpp;%(RootDir)%(Directory)\smcPars.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)\smcPars.cpp;%(RootDir)%(Directory)\smcPars.h;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="Ska\smcScan.l">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -o%(RootDir)%(Directory)\smcScan.cpp -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScan.l</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex -o%(RootDir)%(Directory)\smcScan.cpp -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScan.l</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex -o%(RootDir)%(Directory)\smcScan.cpp -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScan.l</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex -o%(RootDir)%(Directory)\smcScan.cpp -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScan.l</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
-    </CustomBuild>
     <CustomBuild Include="Classes\BaseEvents.es">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd $(SolutionDir)
@@ -1529,6 +1518,19 @@ ecc Engine/Classes/%(Filename).es </Command>
     </CustomBuild>
     <CustomBuild Include="ReadMe.txt" />
     <CustomBuild Include="..\..\Flesh\Help\ShellSymbols.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Ska\smcScwin.l">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex -o%(RootDir)%(Directory)\smcScan.cpp -Psyy -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScwin.l</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex -o%(RootDir)%(Directory)\smcScan.cpp -Psyy -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScwin.l</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -o%(RootDir)%(Directory)\smcScan.cpp -Psyy -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScwin.l</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex -o%(RootDir)%(Directory)\smcScan.cpp -Psyy -S%(RootDir)%(Directory)\smcFlex.skl %(RootDir)%(Directory)\smcScwin.l</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\smcScan.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

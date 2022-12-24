@@ -14,10 +14,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
 // needed for parser and scanner
+#ifdef __GNUC__
 extern int engine_ska_yylex(void);
 extern void engine_ska_yyerror(const char *s);
 extern int engine_ska_yyparse(void);
 extern void engine_ska_yyrestart(FILE *f);
+#else
+extern int yylex(void);
+extern void yyerror(const char *s);
+extern int syyparse(void);
+extern void syyrestart(FILE *f);
+#endif
 
 #define YY_NEVER_INTERACTIVE 1
 

@@ -1448,9 +1448,6 @@
     <CustomBuild Include="Ska\smcPars.y">
       <Filter>Grammar Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="Ska\smcScan.l">
-      <Filter>Grammar Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="Classes\BaseEvents.es">
       <Filter>Entity Class Files</Filter>
     </CustomBuild>
@@ -1468,5 +1465,8 @@
     </CustomBuild>
     <CustomBuild Include="ReadMe.txt" />
     <CustomBuild Include="..\..\Flesh\Help\ShellSymbols.txt" />
+    <CustomBuild Include="Ska\smcScwin.l">
+      <Filter>Grammar Files</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
