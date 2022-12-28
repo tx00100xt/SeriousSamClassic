@@ -1,4 +1,6 @@
 /* Copyright (c) 2002-2012 Croteam Ltd. 
+Copyright (c) 2021 by ZCaliptium.
+
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -32,6 +34,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <Engine/Templates/StaticArray.cpp>
 #include <Engine/Templates/DynamicArray.cpp>
+
+#if  (defined _MSC_VER) 
+#include <xmmintrin.h>
+#endif
 
 // asm shortcuts
 #define O offset
@@ -160,7 +166,17 @@ inline void CLayerMixer::AddToCluster( UBYTE *pub, SLONG slIntensity)
   IncrementByteWithClip(pub[2], (long) (((UBYTE*)&lm_colLight)[1] *slIntensity)>>16);
 }
 
+#if  (defined _MSC_VER) 
+inline UBYTE SaturateSignedWordToUnsignedByte(SLONG sl)
+{
+  if (sl <= -1) {
+    return 0;
+  }
   
+  return sl >= 256 ? 255 : sl;
+}
+#endif
+
 // remember general data
 void CLayerMixer::CalculateData( CBrushShadowMap *pbsm, INDEX iMipmap)
 {
@@ -431,8 +447,152 @@ skipPixel:
         : FPU_REGS, MMX_REGS, "eax", "ecx", "edi", "cc", "memory"
   );
 
-#else
+#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+  // prepare color
+  __m64 tmp_mm7;
 
+  #ifdef SE_MMXINTOPT
+  __m64 tmp_mm0;
+
+  tmp_mm7.m64_u64 = 0;
+  tmp_mm7.m64_i64 = ulLightRGB;
+  tmp_mm0.m64_u64 = 0;
+  tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
+  tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
+  _mm_empty(); // emms
+
+  #else
+
+  // punpcklbw
+  tmp_mm7.m64_u16[0] = (ulLightRGB & 0x000000FF);
+  tmp_mm7.m64_u16[1] = (ulLightRGB & 0x0000FF00) >> 8;
+  tmp_mm7.m64_u16[2] = (ulLightRGB & 0x00FF0000) >> 16;
+  tmp_mm7.m64_u16[3] = (ulLightRGB & 0xFF000000) >> 24;
+
+  // psllw
+  tmp_mm7.m64_u16[0] <<= 1;
+  tmp_mm7.m64_u16[1] <<= 1;
+  tmp_mm7.m64_u16[2] <<= 1;
+  tmp_mm7.m64_u16[3] <<= 1;
+  #endif
+
+  PIX pixV = _iRowCt;
+  UBYTE *pubLayer = (UBYTE *)_pulLayer; // temp carret
+
+  // row loop
+  do {
+    PIX pixU = _iPixCt;  
+    
+    SLONG slL2Point = _slL2Row;
+    SLONG slDL2oDU = _slDL2oDURow;
+    
+    // pixel loop
+    do {
+      // if the point is not masked
+      if (slL2Point < FTOX)
+      {
+        SLONG slL = (slL2Point >> SHIFTX) & (SQRTTABLESIZE - 1);  // and is just for degenerate cases
+        SLONG slIntensity = _slLightMax;
+        slL = aubSqrt[slL];
+        if (slL > _slHotSpot) {
+          slIntensity = ((255 - slL) * _slLightStep);
+        }
+
+        ULONG *pulPixel = (ULONG *)pubLayer;
+        ULONG ulPixel = *pulPixel;
+
+        // mix underlaying pixels with the calculated one
+        __m64 tmp_mm6;
+        
+        #ifdef SE_MMXINTOPT
+        tmp_mm6.m64_u64 = 0;
+        tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
+        tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
+        tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
+        tmp_mm6 = _mm_mulhi_pi16(tmp_mm6, tmp_mm7);     // _m_pmulhw
+        _mm_empty(); // emms
+        
+        #else
+        
+        // punpcklwd & punpckldq
+        tmp_mm6.m64_u16[0] = slIntensity;
+        tmp_mm6.m64_u16[1] = slIntensity;
+        tmp_mm6.m64_u16[2] = slIntensity;
+        tmp_mm6.m64_u16[3] = slIntensity;
+
+        // pmulhw   mm7, mm6
+        tmp_mm6.m64_u16[0] = (tmp_mm6.m64_i16[0] * tmp_mm7.m64_i16[0]) >> 16;
+        tmp_mm6.m64_u16[1] = (tmp_mm6.m64_i16[1] * tmp_mm7.m64_i16[1]) >> 16;
+        tmp_mm6.m64_u16[2] = (tmp_mm6.m64_i16[2] * tmp_mm7.m64_i16[2]) >> 16;
+        tmp_mm6.m64_u16[3] = (tmp_mm6.m64_i16[3] * tmp_mm7.m64_i16[3]) >> 16;
+        #endif
+
+        __m64 tmp_mm5;
+
+        // add light pixel to underlying pixel
+        #ifdef SE_MMXINTOPT
+        tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        ulPixel = _mm_cvtsi64_si32(tmp_mm5);
+        _mm_empty(); // emms
+        
+        #else
+          
+        // punpcklbw
+        tmp_mm5.m64_u16[0] = (ulPixel & 0x000000FF);
+        tmp_mm5.m64_u16[1] = (ulPixel & 0x0000FF00) >> 8;
+        tmp_mm5.m64_u16[2] = (ulPixel & 0x00FF0000) >> 16;
+        tmp_mm5.m64_u16[3] = (ulPixel & 0xFF000000) >> 24;
+
+        // paddw
+        tmp_mm5.m64_i16[0] += tmp_mm6.m64_i16[0];
+        tmp_mm5.m64_i16[1] += tmp_mm6.m64_i16[1];
+        tmp_mm5.m64_i16[2] += tmp_mm6.m64_i16[2];
+        tmp_mm5.m64_i16[3] += tmp_mm6.m64_i16[3];
+
+        // packuswb
+        tmp_mm5.m64_u8[0] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[0]);
+        tmp_mm5.m64_u8[1] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[1]);
+        tmp_mm5.m64_u8[2] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[2]);
+        tmp_mm5.m64_u8[3] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[3]);
+
+        ulPixel = tmp_mm5.m64_u32[0];
+        #endif
+
+        *pulPixel = ulPixel;
+      }
+      
+      // advance to next pixel
+      // add     edi, 4
+      pubLayer += 4;
+
+      // movd    eax, mm3
+      // add     ebx, eax
+      slL2Point += slDL2oDU;
+
+      // paddd   mm3, Q [mmDDL2oDU]
+      slDL2oDU += _slDDL2oDU;
+      pixU--;
+    } while (pixU > 0);
+  
+    // advance to the next row
+    pubLayer += _slModulo; // add     edi, D [_slModulo]
+
+    // paddd   mm1, mm2
+    // MM1 = _slDL2oDURow | _slL2Row
+    // MM2 = _slDDL2oDUoDV | _slDL2oDV
+    _slL2Row += _slDL2oDV;
+    _slDL2oDURow += _slDDL2oDUoDV;
+    
+    // paddd   mm2, Q [mmDDL2oDV]
+    _slDL2oDV += _slDDL2oDV; 
+    
+    pixV--;
+  } while (pixV > 0);
+
+#else
     // !!! FIXME WARNING: I have not checked this code, and it could be
     // !!! FIXME           totally and utterly wrong.  --ryan.
 //  STUBBED("may not work");
@@ -463,7 +623,6 @@ skipPixel:
     _slDL2oDV    += _slDDL2oDV;
     _slDL2oDURow += _slDDL2oDUoDV;
   }
-
 #endif
 }
 
@@ -647,8 +806,162 @@ skipPixel:
           "cc", "memory"
   );
 
-#else   // Portable C version...
+#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+  // prepare color
+  __m64 tmp_mm7;
 
+  #ifdef SE_MMXINTOPT
+  __m64 tmp_mm0;
+
+  tmp_mm7.m64_u64 = 0;
+  tmp_mm7.m64_i64 = ulLightRGB;
+  tmp_mm0.m64_u64 = 0;
+  tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
+  tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
+  _mm_empty(); // emms
+
+  #else
+
+  // punpcklbw
+  tmp_mm7.m64_u16[0] = (ulLightRGB & 0x000000FF);
+  tmp_mm7.m64_u16[1] = (ulLightRGB & 0x0000FF00) >> 8;
+  tmp_mm7.m64_u16[2] = (ulLightRGB & 0x00FF0000) >> 16;
+  tmp_mm7.m64_u16[3] = (ulLightRGB & 0xFF000000) >> 24;
+
+  // psllw
+  tmp_mm7.m64_u16[0] <<= 1;
+  tmp_mm7.m64_u16[1] <<= 1;
+  tmp_mm7.m64_u16[2] <<= 1;
+  tmp_mm7.m64_u16[3] <<= 1;
+  #endif
+
+  PIX pixV = _iRowCt;
+  UBYTE *pubLayer = (UBYTE *)_pulLayer; // temp carret
+
+  // row loop
+  do {
+    PIX pixU = _iPixCt;  
+    
+    SLONG slL2Point = _slL2Row;
+    SLONG slDL2oDU = _slDL2oDURow;
+    
+    // pixel loop
+    do {
+      // if the point is not masked
+      if ((*pubMask & ubMask) && (slL2Point < FTOX))
+      {
+        // calculate intensities and do actual drawing of shadow pixel ARGB
+        SLONG slL = (slL2Point >> SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
+        SLONG slIntensity = _slLightMax;
+        slL = aubSqrt[slL];
+
+        if (slL > _slHotSpot) {
+          slIntensity = ((255 - slL) * _slLightStep);
+        }
+
+        ULONG *pulPixel = (ULONG *)pubLayer;
+        ULONG ulPixel = *pulPixel;
+
+        // mix underlaying pixels with the calculated one
+        __m64 tmp_mm6;
+        
+        #ifdef SE_MMXINTOPT
+        tmp_mm6.m64_u64 = 0;
+        tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
+        tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
+        tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
+        tmp_mm6 = _mm_mulhi_pi16(tmp_mm6, tmp_mm7);     // _m_pmulhw
+        _mm_empty(); // emms
+        
+        #else
+        
+        // punpcklwd & punpckldq
+        tmp_mm6.m64_u16[0] = slIntensity;
+        tmp_mm6.m64_u16[1] = slIntensity;
+        tmp_mm6.m64_u16[2] = slIntensity;
+        tmp_mm6.m64_u16[3] = slIntensity;
+
+        // pmulhw   mm7, mm6
+        tmp_mm6.m64_u16[0] = (tmp_mm6.m64_i16[0] * tmp_mm7.m64_i16[0]) >> 16;
+        tmp_mm6.m64_u16[1] = (tmp_mm6.m64_i16[1] * tmp_mm7.m64_i16[1]) >> 16;
+        tmp_mm6.m64_u16[2] = (tmp_mm6.m64_i16[2] * tmp_mm7.m64_i16[2]) >> 16;
+        tmp_mm6.m64_u16[3] = (tmp_mm6.m64_i16[3] * tmp_mm7.m64_i16[3]) >> 16;
+        #endif
+
+        __m64 tmp_mm5;
+
+        // add light pixel to underlying pixel
+        #ifdef SE_MMXINTOPT
+        tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        ulPixel = _mm_cvtsi64_si32(tmp_mm5);
+        _mm_empty(); // emms
+        
+        #else
+          
+        // punpcklbw
+        tmp_mm5.m64_u16[0] = (ulPixel & 0x000000FF);
+        tmp_mm5.m64_u16[1] = (ulPixel & 0x0000FF00) >> 8;
+        tmp_mm5.m64_u16[2] = (ulPixel & 0x00FF0000) >> 16;
+        tmp_mm5.m64_u16[3] = (ulPixel & 0xFF000000) >> 24;
+
+        // paddw
+        tmp_mm5.m64_i16[0] += tmp_mm6.m64_i16[0];
+        tmp_mm5.m64_i16[1] += tmp_mm6.m64_i16[1];
+        tmp_mm5.m64_i16[2] += tmp_mm6.m64_i16[2];
+        tmp_mm5.m64_i16[3] += tmp_mm6.m64_i16[3];
+
+        // packuswb
+        tmp_mm5.m64_u8[0] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[0]);
+        tmp_mm5.m64_u8[1] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[1]);
+        tmp_mm5.m64_u8[2] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[2]);
+        tmp_mm5.m64_u8[3] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[3]);
+
+        ulPixel = tmp_mm5.m64_u32[0];
+        #endif
+
+        *pulPixel = ulPixel;
+      }
+      
+      // advance to next pixel
+      // add     edi, 4
+      pubLayer += 4;
+
+      // movd    eax, mm3
+      // add     ebx, eax
+      slL2Point += slDL2oDU;
+
+      // paddd   mm3, Q [mmDDL2oDU]
+      slDL2oDU += _slDDL2oDU;
+
+      ubMask <<= 1;
+      if (ubMask == 0)
+      {
+        pubMask++;
+        ubMask = 1;
+      }
+
+      pixU--;
+    } while (pixU > 0);
+  
+    // advance to the next row
+    pubLayer += _slModulo; // add     edi, D [_slModulo]
+
+    // paddd   mm1, mm2
+    // MM1 = _slDL2oDURow | _slL2Row
+    // MM2 = _slDDL2oDUoDV | _slDL2oDV
+    _slL2Row += _slDL2oDV;
+    _slDL2oDURow += _slDDL2oDUoDV;
+    
+    // paddd   mm2, Q [mmDDL2oDV]
+    _slDL2oDV += _slDDL2oDV; 
+    
+    pixV--;
+  } while (pixV > 0);
+
+#else   // Portable C version...
   UBYTE* pubLayer = (UBYTE*)_pulLayer;
   for( PIX pixV=0; pixV<_iRowCt; pixV++)
   {
@@ -681,7 +994,6 @@ skipPixel:
     _slDL2oDV    += _slDDL2oDV;
     _slDL2oDURow += _slDDL2oDUoDV;
   }
-
 #endif
 
 }
@@ -852,6 +1164,160 @@ skipPixel:
         : [ulLightRGB] "g" (ulLightRGB), [slMax1oL] "g" (slMax1oL)
         : FPU_REGS, MMX_REGS, "eax", "ecx", "edi", "cc", "memory"
   );
+
+#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+  // for each pixel in the shadow map
+
+  // prepare color
+  __m64 tmp_mm7;
+
+  #ifdef SE_MMXINTOPT
+  __m64 tmp_mm0;
+
+  tmp_mm7.m64_u64 = 0;
+  tmp_mm7.m64_i64 = ulLightRGB;
+  tmp_mm0.m64_u64 = 0;
+  tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
+  tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
+  _mm_empty(); // emms
+
+  #else
+
+  // punpcklbw
+  tmp_mm7.m64_u16[0] = (ulLightRGB & 0x000000FF);
+  tmp_mm7.m64_u16[1] = (ulLightRGB & 0x0000FF00) >> 8;
+  tmp_mm7.m64_u16[2] = (ulLightRGB & 0x00FF0000) >> 16;
+  tmp_mm7.m64_u16[3] = (ulLightRGB & 0xFF000000) >> 24;
+
+  // psllw
+  tmp_mm7.m64_u16[0] <<= 1;
+  tmp_mm7.m64_u16[1] <<= 1;
+  tmp_mm7.m64_u16[2] <<= 1;
+  tmp_mm7.m64_u16[3] <<= 1;
+  #endif
+
+  PIX pixV = _iRowCt;
+  UBYTE *pubLayer = (UBYTE *)_pulLayer; // temp carret
+
+  // row loop
+  do {
+    PIX pixU = _iPixCt;  
+    
+    SLONG slL2Point = _slL2Row;
+    SLONG slDL2oDU = _slDL2oDURow;
+    
+    // pixel loop
+    do {
+      // if the point is not masked
+      if (slL2Point < FTOX)
+      {
+        SLONG sl1oL = (slL2Point >> SHIFTX) & (SQRTTABLESIZE - 1);  // and is just for degenerate cases
+        sl1oL = auw1oSqrt[sl1oL];
+        
+        SLONG slIntensity = _slLightMax; // ecx, D [_slLightMax]
+        
+        // calculate intensities and do actual drawing of shadow pixel ARGB
+        if (sl1oL < slMax1oL) {
+          // mov     eax, D [sl1oL]
+          // mov     ecx, D [slIntensity]
+          // lea     ecx, [eax-256]
+          // imul    ecx, D [_slLightStep]
+          slIntensity = ((sl1oL - 256) * _slLightStep);
+        }
+
+        ULONG *pulPixel = (ULONG *)pubLayer;
+        ULONG ulPixel = *pulPixel;
+
+        // mix underlaying pixels with the calculated one
+        __m64 tmp_mm6;
+        
+        #ifdef SE_MMXINTOPT
+        tmp_mm6.m64_u64 = 0;
+        tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
+        tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
+        tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
+        tmp_mm6 = _mm_mulhi_pi16(tmp_mm6, tmp_mm7);     // _m_pmulhw
+        _mm_empty(); // emms
+        
+        #else
+        
+        // punpcklwd & punpckldq
+        tmp_mm6.m64_u16[0] = slIntensity;
+        tmp_mm6.m64_u16[1] = slIntensity;
+        tmp_mm6.m64_u16[2] = slIntensity;
+        tmp_mm6.m64_u16[3] = slIntensity;
+
+        // pmulhw   mm7, mm6
+        tmp_mm6.m64_u16[0] = (tmp_mm6.m64_i16[0] * tmp_mm7.m64_i16[0]) >> 16;
+        tmp_mm6.m64_u16[1] = (tmp_mm6.m64_i16[1] * tmp_mm7.m64_i16[1]) >> 16;
+        tmp_mm6.m64_u16[2] = (tmp_mm6.m64_i16[2] * tmp_mm7.m64_i16[2]) >> 16;
+        tmp_mm6.m64_u16[3] = (tmp_mm6.m64_i16[3] * tmp_mm7.m64_i16[3]) >> 16;
+        #endif
+
+        __m64 tmp_mm5;
+
+        // add light pixel to underlying pixel
+        #ifdef SE_MMXINTOPT
+        tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        ulPixel = _mm_cvtsi64_si32(tmp_mm5);
+        _mm_empty(); // emms
+        
+        #else
+          
+        // punpcklbw
+        tmp_mm5.m64_u16[0] = (ulPixel & 0x000000FF);
+        tmp_mm5.m64_u16[1] = (ulPixel & 0x0000FF00) >> 8;
+        tmp_mm5.m64_u16[2] = (ulPixel & 0x00FF0000) >> 16;
+        tmp_mm5.m64_u16[3] = (ulPixel & 0xFF000000) >> 24;
+
+        // paddw
+        tmp_mm5.m64_i16[0] += tmp_mm6.m64_i16[0];
+        tmp_mm5.m64_i16[1] += tmp_mm6.m64_i16[1];
+        tmp_mm5.m64_i16[2] += tmp_mm6.m64_i16[2];
+        tmp_mm5.m64_i16[3] += tmp_mm6.m64_i16[3];
+
+        // packuswb
+        tmp_mm5.m64_u8[0] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[0]);
+        tmp_mm5.m64_u8[1] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[1]);
+        tmp_mm5.m64_u8[2] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[2]);
+        tmp_mm5.m64_u8[3] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[3]);
+
+        ulPixel = tmp_mm5.m64_u32[0];
+        #endif
+
+        *pulPixel = ulPixel;
+      }
+      
+      // advance to next pixel
+      // add     edi, 4
+      pubLayer += 4;
+
+      // movd    eax, mm3
+      // add     ebx, eax
+      slL2Point += slDL2oDU;
+
+      // paddd   mm3, Q [mmDDL2oDU]
+      slDL2oDU += _slDDL2oDU;
+      pixU--;
+    } while (pixU > 0);
+  
+    // advance to the next row
+    pubLayer += _slModulo; // add     edi, D [_slModulo]
+
+    // paddd   mm1, mm2
+    // MM1 = _slDL2oDURow | _slL2Row
+    // MM2 = _slDDL2oDUoDV | _slDL2oDV
+    _slL2Row += _slDL2oDV;
+    _slDL2oDURow += _slDDL2oDUoDV;
+    
+    // paddd   mm2, Q [mmDDL2oDV]
+    _slDL2oDV += _slDDL2oDV; 
+    
+    pixV--;
+  } while (pixV > 0);
 
 #else
   // for each pixel in the shadow map
@@ -1068,6 +1534,168 @@ skipPixel:
           "cc", "memory"
   );
 
+#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+
+  // prepare color
+  __m64 tmp_mm7;
+
+  #ifdef SE_MMXINTOPT
+  __m64 tmp_mm0;
+
+  tmp_mm7.m64_u64 = 0;
+  tmp_mm7.m64_i64 = ulLightRGB;
+  tmp_mm0.m64_u64 = 0;
+  tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
+  tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
+  _mm_empty(); // emms
+
+  #else
+
+  // punpcklbw
+  tmp_mm7.m64_u16[0] = (ulLightRGB & 0x000000FF);
+  tmp_mm7.m64_u16[1] = (ulLightRGB & 0x0000FF00) >> 8;
+  tmp_mm7.m64_u16[2] = (ulLightRGB & 0x00FF0000) >> 16;
+  tmp_mm7.m64_u16[3] = (ulLightRGB & 0xFF000000) >> 24;
+
+  // psllw
+  tmp_mm7.m64_u16[0] <<= 1;
+  tmp_mm7.m64_u16[1] <<= 1;
+  tmp_mm7.m64_u16[2] <<= 1;
+  tmp_mm7.m64_u16[3] <<= 1;
+  #endif
+
+  PIX pixV = _iRowCt;
+  UBYTE *pubLayer = (UBYTE *)_pulLayer; // temp carret
+
+  // row loop
+  do {
+    PIX pixU = _iPixCt;  
+    
+    SLONG slL2Point = _slL2Row;
+    SLONG slDL2oDU = _slDL2oDURow;
+    
+    // pixel loop
+    do {
+      // if the point is not masked
+      if ((*pubMask & ubMask) && (slL2Point < FTOX))
+      {
+        SLONG sl1oL = (slL2Point >> SHIFTX) & (SQRTTABLESIZE - 1);  // and is just for degenerate cases
+        sl1oL = auw1oSqrt[sl1oL];
+        
+        SLONG slIntensity = _slLightMax; // ecx, D [_slLightMax]
+        
+        // calculate intensities and do actual drawing of shadow pixel ARGB
+        if (sl1oL < slMax1oL) {
+          // mov     eax, D [sl1oL]
+          // mov     ecx, D [slIntensity]
+          // lea     ecx, [eax-256]
+          // imul    ecx, D [_slLightStep]
+          slIntensity = ((sl1oL - 256) * _slLightStep);
+        }
+
+        ULONG *pulPixel = (ULONG *)pubLayer;
+        ULONG ulPixel = *pulPixel;
+
+        // mix underlaying pixels with the calculated one
+        __m64 tmp_mm6;
+        
+        #ifdef SE_MMXINTOPT
+
+        tmp_mm6.m64_u64 = 0;
+        tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
+        tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
+        tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
+        tmp_mm6 = _mm_mulhi_pi16(tmp_mm6, tmp_mm7);     // _m_pmulhw
+        _mm_empty(); // emms
+        
+        #else
+        
+        // punpcklwd & punpckldq
+        tmp_mm6.m64_u16[0] = slIntensity;
+        tmp_mm6.m64_u16[1] = slIntensity;
+        tmp_mm6.m64_u16[2] = slIntensity;
+        tmp_mm6.m64_u16[3] = slIntensity;
+
+        // pmulhw   mm7, mm6
+        tmp_mm6.m64_u16[0] = (tmp_mm6.m64_i16[0] * tmp_mm7.m64_i16[0]) >> 16;
+        tmp_mm6.m64_u16[1] = (tmp_mm6.m64_i16[1] * tmp_mm7.m64_i16[1]) >> 16;
+        tmp_mm6.m64_u16[2] = (tmp_mm6.m64_i16[2] * tmp_mm7.m64_i16[2]) >> 16;
+        tmp_mm6.m64_u16[3] = (tmp_mm6.m64_i16[3] * tmp_mm7.m64_i16[3]) >> 16;
+
+        #endif
+
+        __m64 tmp_mm5;
+
+        // add light pixel to underlying pixel
+        #ifdef SE_MMXINTOPT
+        tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        ulPixel = _mm_cvtsi64_si32(tmp_mm5);
+        _mm_empty(); // emms
+        
+        #else
+          
+        // punpcklbw
+        tmp_mm5.m64_u16[0] = (ulPixel & 0x000000FF);
+        tmp_mm5.m64_u16[1] = (ulPixel & 0x0000FF00) >> 8;
+        tmp_mm5.m64_u16[2] = (ulPixel & 0x00FF0000) >> 16;
+        tmp_mm5.m64_u16[3] = (ulPixel & 0xFF000000) >> 24;
+
+        // paddw
+        tmp_mm5.m64_i16[0] += tmp_mm6.m64_i16[0];
+        tmp_mm5.m64_i16[1] += tmp_mm6.m64_i16[1];
+        tmp_mm5.m64_i16[2] += tmp_mm6.m64_i16[2];
+        tmp_mm5.m64_i16[3] += tmp_mm6.m64_i16[3];
+
+        // packuswb
+        tmp_mm5.m64_u8[0] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[0]);
+        tmp_mm5.m64_u8[1] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[1]);
+        tmp_mm5.m64_u8[2] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[2]);
+        tmp_mm5.m64_u8[3] = SaturateSignedWordToUnsignedByte(tmp_mm5.m64_i16[3]);
+
+        ulPixel = tmp_mm5.m64_u32[0];
+        #endif
+
+        *pulPixel = ulPixel;
+      }
+      
+      // advance to next pixel
+      // add     edi, 4
+      pubLayer += 4;
+
+      // movd    eax, mm3
+      // add     ebx, eax
+      slL2Point += slDL2oDU;
+
+      // paddd   mm3, Q [mmDDL2oDU]
+      slDL2oDU += _slDDL2oDU;
+
+      ubMask <<= 1;
+      if (ubMask == 0)
+      {
+        pubMask++;
+        ubMask = 1;
+      }
+
+      pixU--;
+    } while (pixU > 0);
+  
+    // advance to the next row
+    pubLayer += _slModulo; // add     edi, D [_slModulo]
+
+    // paddd   mm1, mm2
+    // MM1 = _slDL2oDURow | _slL2Row
+    // MM2 = _slDDL2oDUoDV | _slDL2oDV
+    _slL2Row += _slDL2oDV;
+    _slDL2oDURow += _slDDL2oDUoDV;
+    
+    // paddd   mm2, Q [mmDDL2oDV]
+    _slDL2oDV += _slDDL2oDV; 
+    
+    pixV--;
+  } while (pixV > 0);
 #else
 
   // for each pixel in the shadow map
@@ -1104,6 +1732,7 @@ skipPixel:
     _slDL2oDV    += _slDDL2oDV;
     _slDL2oDURow += _slDDL2oDUoDV;
   }
+
 
 #endif
 
