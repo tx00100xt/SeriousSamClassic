@@ -35,8 +35,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Templates/StaticArray.cpp>
 #include <Engine/Templates/DynamicArray.cpp>
 
-#if  (defined _MSC_VER) 
+#if (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
+  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__))
 #include <xmmintrin.h>
+#endif
+
+#if defined(__GNUC__) 
+#define SE_MMXINTOPT 1
 #endif
 
 // asm shortcuts
@@ -166,7 +171,8 @@ inline void CLayerMixer::AddToCluster( UBYTE *pub, SLONG slIntensity)
   IncrementByteWithClip(pub[2], (long) (((UBYTE*)&lm_colLight)[1] *slIntensity)>>16);
 }
 
-#if  (defined _MSC_VER) 
+#if (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
+  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__))
 inline UBYTE SaturateSignedWordToUnsignedByte(SLONG sl)
 {
   if (sl <= -1) {
@@ -447,16 +453,21 @@ skipPixel:
         : FPU_REGS, MMX_REGS, "eax", "ecx", "edi", "cc", "memory"
   );
 
-#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+#elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
+  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__))
+
   // prepare color
   __m64 tmp_mm7;
 
   #ifdef SE_MMXINTOPT
   __m64 tmp_mm0;
 
-  tmp_mm7.m64_u64 = 0;
-  tmp_mm7.m64_i64 = ulLightRGB;
-  tmp_mm0.m64_u64 = 0;
+  //tmp_mm7.m64_u64 = 0;
+  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  //tmp_mm7.m64_i64 = ulLightRGB;
+  memcpy(&tmp_mm7, &ulLightRGB, 4);
+  //tmp_mm0.m64_u64 = 0;
+  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -502,10 +513,11 @@ skipPixel:
         ULONG ulPixel = *pulPixel;
 
         // mix underlaying pixels with the calculated one
-        __m64 tmp_mm6;
+        __m64 tmp_mm6, tmp_mm10;
         
         #ifdef SE_MMXINTOPT
-        tmp_mm6.m64_u64 = 0;
+        //tmp_mm6.m64_u64 = 0;
+		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -531,10 +543,11 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
+        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
-        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
-        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, tmp_mm10);      // packuswb
         ulPixel = _mm_cvtsi64_si32(tmp_mm5);
         _mm_empty(); // emms
         
@@ -806,16 +819,21 @@ skipPixel:
           "cc", "memory"
   );
 
-#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+#elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
+  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__))
+
   // prepare color
   __m64 tmp_mm7;
 
   #ifdef SE_MMXINTOPT
   __m64 tmp_mm0;
 
-  tmp_mm7.m64_u64 = 0;
-  tmp_mm7.m64_i64 = ulLightRGB;
-  tmp_mm0.m64_u64 = 0;
+  //tmp_mm7.m64_u64 = 0;
+  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  //tmp_mm7.m64_i64 = ulLightRGB;
+  memcpy(&tmp_mm7, &ulLightRGB, 4);
+  //tmp_mm0.m64_u64 = 0;
+  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -863,10 +881,11 @@ skipPixel:
         ULONG ulPixel = *pulPixel;
 
         // mix underlaying pixels with the calculated one
-        __m64 tmp_mm6;
+        __m64 tmp_mm6, tmp_mm10;
         
         #ifdef SE_MMXINTOPT
-        tmp_mm6.m64_u64 = 0;
+        //tmp_mm6.m64_u64 = 0;
+		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -892,10 +911,11 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
+        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
-        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5,tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
-        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, tmp_mm10);      // packuswb
         ulPixel = _mm_cvtsi64_si32(tmp_mm5);
         _mm_empty(); // emms
         
@@ -1165,7 +1185,9 @@ skipPixel:
         : FPU_REGS, MMX_REGS, "eax", "ecx", "edi", "cc", "memory"
   );
 
-#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+#elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
+  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__))
+
   // for each pixel in the shadow map
 
   // prepare color
@@ -1174,9 +1196,12 @@ skipPixel:
   #ifdef SE_MMXINTOPT
   __m64 tmp_mm0;
 
-  tmp_mm7.m64_u64 = 0;
-  tmp_mm7.m64_i64 = ulLightRGB;
-  tmp_mm0.m64_u64 = 0;
+  //tmp_mm7.m64_u64 = 0;
+  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  //tmp_mm7.m64_i64 = ulLightRGB;
+  memcpy(&tmp_mm7, &ulLightRGB, 4);
+  //tmp_mm0.m64_u64 = 0;
+  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -1229,10 +1254,11 @@ skipPixel:
         ULONG ulPixel = *pulPixel;
 
         // mix underlaying pixels with the calculated one
-        __m64 tmp_mm6;
+        __m64 tmp_mm6, tmp_mm10;
         
         #ifdef SE_MMXINTOPT
-        tmp_mm6.m64_u64 = 0;
+        //tmp_mm6.m64_u64 = 0;
+		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -1258,10 +1284,11 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
+        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
-        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
-        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, tmp_mm10);      // packuswb
         ulPixel = _mm_cvtsi64_si32(tmp_mm5);
         _mm_empty(); // emms
         
@@ -1534,7 +1561,8 @@ skipPixel:
           "cc", "memory"
   );
 
-#elif  (defined _MSC_VER) && (defined  PLATFORM_64BIT)
+#elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
+  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__))
 
   // prepare color
   __m64 tmp_mm7;
@@ -1542,9 +1570,12 @@ skipPixel:
   #ifdef SE_MMXINTOPT
   __m64 tmp_mm0;
 
-  tmp_mm7.m64_u64 = 0;
-  tmp_mm7.m64_i64 = ulLightRGB;
-  tmp_mm0.m64_u64 = 0;
+  //tmp_mm7.m64_u64 = 0;
+  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  //tmp_mm7.m64_i64 = ulLightRGB;
+  memcpy(&tmp_mm7, &ulLightRGB, 4);
+  //tmp_mm0.m64_u64 = 0;
+  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -1597,11 +1628,12 @@ skipPixel:
         ULONG ulPixel = *pulPixel;
 
         // mix underlaying pixels with the calculated one
-        __m64 tmp_mm6;
+        __m64 tmp_mm6, tmp_mm10;
         
         #ifdef SE_MMXINTOPT
 
-        tmp_mm6.m64_u64 = 0;
+        //tmp_mm6.m64_u64 = 0;
+		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -1628,10 +1660,11 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
+        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
-        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, { 0L });    // punpcklbw
+        tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
-        tmp_mm5 = _mm_packs_pu16(tmp_mm5, { 0L });      // packuswb
+        tmp_mm5 = _mm_packs_pu16(tmp_mm5, tmp_mm10);      // packuswb
         ulPixel = _mm_cvtsi64_si32(tmp_mm5);
         _mm_empty(); // emms
         
