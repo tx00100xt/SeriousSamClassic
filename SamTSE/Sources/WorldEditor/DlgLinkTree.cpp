@@ -182,7 +182,7 @@ void CDlgLinkTree::AddEntityPtrsRecursiv(CEntity *pen, HTREEITEM hParent, CTStri
   HTREEITEM InsertedEntity;
   InsertedEntity = m_ctrTree.InsertItem( 0, L"", 0, 0,
     TVIS_SELECTED, TVIF_STATE, 0, hParent, 0);
-  m_ctrTree.SetItemData( InsertedEntity, (ULONG)(pen));
+  m_ctrTree.SetItemData( InsertedEntity, (DWORD_PTR)(pen));
   CTString strText="";
   if( m_bClass)
   {

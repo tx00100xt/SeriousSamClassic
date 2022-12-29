@@ -614,7 +614,7 @@ BOOL CDlgPgPrimitive::OnInitDialog()
 
     INDEX iAddedAs = m_comboPrimitiveHistory.AddString(CString(
       strNo+strDescription+strPosition+strTriangularisation));
-    m_comboPrimitiveHistory.SetItemData( iAddedAs, (ULONG) &itPrim->pihb_vfpPrimitive);
+    m_comboPrimitiveHistory.SetItemData( iAddedAs, (DWORD_PTR) &itPrim->pihb_vfpPrimitive);
     iCt++;
   }
 	return TRUE;

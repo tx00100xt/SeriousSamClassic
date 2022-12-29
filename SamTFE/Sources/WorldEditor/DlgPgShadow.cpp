@@ -316,7 +316,7 @@ void CDlgPgShadow::InitComboBoxes(void)
     strIlluminationName = pDoc->m_woWorld.wo_aitIlluminationTypes[iIllumination].it_strName;
     if(strIlluminationName == "") break;
     INDEX iAddedAs = m_ComboIllumination.AddString( CString(strIlluminationName));
-    m_ComboIllumination.SetItemData( iAddedAs, (ULONG) iIllumination);
+    m_ComboIllumination.SetItemData( iAddedAs, (DWORD_PTR) iIllumination);
   }
   for(INDEX iBlend=0; iBlend<256; iBlend++)
   {

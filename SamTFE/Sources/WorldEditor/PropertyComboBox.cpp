@@ -263,7 +263,7 @@ BOOL CPropertyComboBox::OnIdle(LONG lCount)
           // add property name and shortcut key
           INDEX iAddedAs = AddString( CString(itProp->pid_strName + achrShortcutKey));
           // set ptr to property ID object
-          SetItemData( iAddedAs, (ULONG) &*itProp);
+          SetItemData( iAddedAs, (DWORD_PTR) &*itProp);
           // enable combo
           EnableWindow();
         }

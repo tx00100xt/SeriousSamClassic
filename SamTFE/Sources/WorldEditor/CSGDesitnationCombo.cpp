@@ -95,7 +95,7 @@ BOOL CCSGDesitnationCombo::OnIdle(LONG lCount)
             // add it to CSG destination combo
             INDEX iComboEntry = AddString( CString(strEntityName));
             // set item's data as ptr to current entity
-            SetItemData( iComboEntry, (ULONG)(&*iten));
+            SetItemData( iComboEntry, (DWORD_PTR)(&*iten));
             // try to select previously selected combo entry
             if( strEntityName == m_strLastSelectedName)
             {

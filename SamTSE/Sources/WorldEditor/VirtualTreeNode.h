@@ -40,7 +40,7 @@ public:
   CListNode vtn_lnInDirectory;
   CListHead vtn_lhChildren;           // valid if this is a directory
   CVirtualTreeNode *vnt_pvtnParent;   // NULL if this is root
-  ULONG vtn_Handle;                   // internaly use ULONG, later cast to HTREEITEM
+  HTREEITEM vtn_Handle;                   // internaly use ULONG, later cast to HTREEITEM
   INDEX vtn_itIconType;               // INDEX of representing icon in list of icons
   enum BrowsingMode vtn_bmBrowsingMode;// how to display items - as icons, text, ...
   BOOL vtn_bSelected;                 // (if item) is this item curently selected

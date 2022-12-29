@@ -66,7 +66,7 @@ void CPrimitiveHistoryCombo::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   }
   
   CValuesForPrimitive *pVFP = (CValuesForPrimitive *) GetItemData( iItem);
-  if( (ULONG) pVFP == CB_ERR) return;
+  if( (ULONG_PTR) pVFP == CB_ERR) return;
 
   CDC *pDC = CDC::FromHandle( lpDrawItemStruct->hDC);
   RECT rectItem = lpDrawItemStruct->rcItem;

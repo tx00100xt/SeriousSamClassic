@@ -108,7 +108,7 @@ BOOL CDlgSelectByName::OnInitDialog()
       // add it to list box
       INDEX iListEntry = m_ListBox.AddString( CString(strEntityName));
       // set item's data as ptr to current entity
-      m_ListBox.SetItemData( iListEntry, (ULONG)(&*iten));
+      m_ListBox.SetItemData( iListEntry, (DWORD_PTR)(&*iten));
       // if current entity is selected
       if( iten->IsSelected( ENF_SELECTED))
       {

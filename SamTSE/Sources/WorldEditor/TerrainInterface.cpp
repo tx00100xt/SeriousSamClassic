@@ -1352,9 +1352,9 @@ void ToggleFlag(CTIButton *ptib, CPoint pt, CDrawPort *pdp)
     CTerrainLayer *ptlLayer=GetLayer(iLayer);
     if(ptlLayer!=NULL)
     {
-      BOOL bOldValue=*(BOOL*)((UBYTE*)ptlLayer+(ULONG)ptib->tib_pfData1);
+      BOOL bOldValue=*(BOOL*)((UBYTE*)ptlLayer+(ULONG_PTR)ptib->tib_pfData1);
       bOldValue=!bOldValue;
-      *(BOOL*)((UBYTE*)ptlLayer+(ULONG)ptib->tib_pfData1)=bOldValue;
+      *(BOOL*)((UBYTE*)ptlLayer+(ULONG_PTR)ptib->tib_pfData1)=bOldValue;
     }
   }
 }
@@ -1374,7 +1374,7 @@ CTString GetNormalizedPercentageInfo(CTIButton *ptib, CPoint pt, CDrawPort *pdp,
     CTerrainLayer *ptlLayer=GetLayer(iLayer);
     if(ptlLayer!=NULL)
     {
-      FLOAT *pfNormalized=(FLOAT *)((UBYTE*)ptlLayer+(ULONG)ptib->tib_pfData1);
+      FLOAT *pfNormalized=(FLOAT *)((UBYTE*)ptlLayer+(ULONG_PTR)ptib->tib_pfData1);
       FLOAT fValue=*pfNormalized;
       strInfo.PrintF("%s: %d%%", ptib->tib_strToolTip, INDEX(floor(fValue*100.0f+0.5f)));
       return strInfo;
@@ -1391,7 +1391,7 @@ void ChangeLayerDistributionData(CTIButton *ptib, FLOAT fdx, FLOAT fdy, CDrawPor
   CTerrainLayer *ptlLayer=GetLayer(iLayer);
   if(ptlLayer==NULL) return;
   
-  FLOAT *pfNormalized=(FLOAT *)((UBYTE*)ptlLayer+(ULONG)ptib->tib_pfData1);
+  FLOAT *pfNormalized=(FLOAT *)((UBYTE*)ptlLayer+(ULONG_PTR)ptib->tib_pfData1);
   FLOAT fOldValue=*pfNormalized;
   FLOAT fAddX=ptib->tib_fDataDelta*fdx;
   FLOAT fNewValue=Clamp( fOldValue+fAddX, 0.0f, 1.0f);

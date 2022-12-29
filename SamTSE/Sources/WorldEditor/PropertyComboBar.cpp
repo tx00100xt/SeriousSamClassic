@@ -1127,7 +1127,7 @@ void CPropertyComboBar::ArrangeControls()
                   iAddedAs = m_EditEnumComboBox.AddString( L"Unnamed");
                 }
                 // set entity ptr as item's data
-                m_EditEnumComboBox.SetItemData( iAddedAs, (ULONG) &*iten);
+                m_EditEnumComboBox.SetItemData( iAddedAs, (DWORD_PTR) &*iten);
               }
             }}
 
@@ -1213,7 +1213,7 @@ void CPropertyComboBar::ArrangeControls()
                 // add animation to combo
                 INDEX iAddedAs = m_EditEnumComboBox.AddString( CString(aiInfo.ai_AnimName));
                 // set animation number as item's data
-                m_EditEnumComboBox.SetItemData( iAddedAs, (ULONG) iAnimation);
+                m_EditEnumComboBox.SetItemData( iAddedAs, (DWORD_PTR) iAnimation);
               }
             }
 
@@ -1282,7 +1282,7 @@ void CPropertyComboBar::ArrangeControls()
               // add illumination type to combo
               INDEX iAddedAs = m_EditEnumComboBox.AddString( CString(strIlluminationName));
               // set illumination type number as item's data
-              m_EditEnumComboBox.SetItemData( iAddedAs, (ULONG) iIllumination);
+              m_EditEnumComboBox.SetItemData( iAddedAs, (DWORD_PTR) iIllumination);
             }
 
             // lock selection's dynamic container

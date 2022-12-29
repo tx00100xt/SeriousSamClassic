@@ -162,8 +162,8 @@ void CBrowser::AddDirectoryRecursiv(CVirtualTreeNode *pOneDirectory, HTREEITEM h
   InsertedDir = m_TreeCtrl.InsertItem( 0, L"", 0, 0, TVIS_SELECTED, TVIF_STATE, 0,
                                        hParent, TVI_SORT );
 
-  pOneDirectory->vtn_Handle = (ULONG) InsertedDir;
-  m_TreeCtrl.SetItemData( InsertedDir, (ULONG)(pOneDirectory));
+  pOneDirectory->vtn_Handle = (HTREEITEM) InsertedDir;
+  m_TreeCtrl.SetItemData( InsertedDir, (DWORD_PTR)(pOneDirectory));
   m_TreeCtrl.SetItemText( InsertedDir, CString(pOneDirectory->vtn_strName));
   m_TreeCtrl.SetItemImage( InsertedDir, pOneDirectory->vtn_itIconType,
                            pOneDirectory->vtn_itIconType + NO_OF_ICONS);
@@ -801,15 +801,18 @@ void CBrowser::OnContextMenu(CWnd* pWnd, CPoint point)
 
 CVirtualTreeNode *CBrowser::GetSelectedDirectory(void)
 {
-  if( m_TreeCtrl.GetCount() != 0)
-  {
-    HTREEITEM pSelectedItem = m_TreeCtrl.GetSelectedItem();
-    if( pSelectedItem!=NULL)
-    {
-      return (CVirtualTreeNode *)m_TreeCtrl.GetItemData( pSelectedItem);
-    }
-  }
-  return NULL;
+	if (m_TreeCtrl.GetCount() != 0)
+	{
+		HTREEITEM pSelectedItem = m_TreeCtrl.GetSelectedItem();
+		if (pSelectedItem != NULL)
+		{
+			DWORD_PTR hItem = m_TreeCtrl.GetItemData(pSelectedItem);
+			CVirtualTreeNode * cthItem = reinterpret_cast<CVirtualTreeNode *>(hItem);
+			return cthItem;
+			//return (CVirtualTreeNode *)m_TreeCtrl.GetItemData(pSelectedItem);
+		}
+	}
+	return NULL;
 }
 
 void CBrowser::OpenSelectedDirectory(void)
