@@ -105,3 +105,9 @@ All notable changes to this project will be documented in this file.
 
 ## 2022-12-14 - 2022-12-18
 - Added support Windows.
+
+## 2022-12-22 - 2022-12-29
+- Fixed loading of the amp11lib library for the 64-bit version of the game under Windows.
+- BSP,Brushes migration from Float3D to Double3D. Now the WorldEditor is working.
+- Made the SeriousSkaStudio work.
+- Fixed incorrect x64 cpp-implementation of ASM code in lightmap.

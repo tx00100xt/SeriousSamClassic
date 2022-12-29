@@ -463,11 +463,11 @@ skipPixel:
   __m64 tmp_mm0;
 
   //tmp_mm7.m64_u64 = 0;
-  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  memset(&tmp_mm7, INDEX(0), sizeof(tmp_mm7));
   //tmp_mm7.m64_i64 = ulLightRGB;
   memcpy(&tmp_mm7, &ulLightRGB, 4);
   //tmp_mm0.m64_u64 = 0;
-  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
+  memset(&tmp_mm0, INDEX(0), sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -517,7 +517,7 @@ skipPixel:
         
         #ifdef SE_MMXINTOPT
         //tmp_mm6.m64_u64 = 0;
-		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
+		memset(&tmp_mm6, INDEX(0), sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -543,7 +543,7 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
-        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
+        memset(&tmp_mm10, INDEX(0), sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
         tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
@@ -829,11 +829,11 @@ skipPixel:
   __m64 tmp_mm0;
 
   //tmp_mm7.m64_u64 = 0;
-  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  memset(&tmp_mm7, INDEX(0), sizeof(tmp_mm7));
   //tmp_mm7.m64_i64 = ulLightRGB;
   memcpy(&tmp_mm7, &ulLightRGB, 4);
   //tmp_mm0.m64_u64 = 0;
-  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
+  memset(&tmp_mm0, INDEX(0), sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -885,7 +885,7 @@ skipPixel:
         
         #ifdef SE_MMXINTOPT
         //tmp_mm6.m64_u64 = 0;
-		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
+		memset(&tmp_mm6, INDEX(0), sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -911,7 +911,7 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
-        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
+        memset(&tmp_mm10, INDEX(0), sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
         tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5,tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
@@ -1197,11 +1197,11 @@ skipPixel:
   __m64 tmp_mm0;
 
   //tmp_mm7.m64_u64 = 0;
-  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  memset(&tmp_mm7, INDEX(0), sizeof(tmp_mm7));
   //tmp_mm7.m64_i64 = ulLightRGB;
   memcpy(&tmp_mm7, &ulLightRGB, 4);
   //tmp_mm0.m64_u64 = 0;
-  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
+  memset(&tmp_mm0, INDEX(0), sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -1258,7 +1258,7 @@ skipPixel:
         
         #ifdef SE_MMXINTOPT
         //tmp_mm6.m64_u64 = 0;
-		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
+		memset(&tmp_mm6, INDEX(0), sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -1284,7 +1284,7 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
-        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
+        memset(&tmp_mm10, INDEX(0), sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
         tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
@@ -1571,11 +1571,11 @@ skipPixel:
   __m64 tmp_mm0;
 
   //tmp_mm7.m64_u64 = 0;
-  memset(&tmp_mm7, NULL, sizeof(tmp_mm7));
+  memset(&tmp_mm7, INDEX(0), sizeof(tmp_mm7));
   //tmp_mm7.m64_i64 = ulLightRGB;
   memcpy(&tmp_mm7, &ulLightRGB, 4);
   //tmp_mm0.m64_u64 = 0;
-  memset(&tmp_mm0, NULL, sizeof(tmp_mm0));
+  memset(&tmp_mm0, INDEX(0), sizeof(tmp_mm0));
   tmp_mm7 = _m_punpcklbw(tmp_mm7, tmp_mm0); // punpcklbw
   tmp_mm7 = _m_psllwi(tmp_mm7, 1);          // psllw
   _mm_empty(); // emms
@@ -1633,7 +1633,7 @@ skipPixel:
         #ifdef SE_MMXINTOPT
 
         //tmp_mm6.m64_u64 = 0;
-		memset(&tmp_mm6, NULL, sizeof(tmp_mm6));
+		memset(&tmp_mm6, INDEX(0), sizeof(tmp_mm6));
         tmp_mm6 = _mm_cvtsi32_si64(slIntensity);
         tmp_mm6 = _mm_unpacklo_pi16(tmp_mm6, tmp_mm6);  // punpcklwd
         tmp_mm6 = _mm_unpacklo_pi32(tmp_mm6, tmp_mm6);  // punpckldq
@@ -1660,7 +1660,7 @@ skipPixel:
 
         // add light pixel to underlying pixel
         #ifdef SE_MMXINTOPT
-        memset(&tmp_mm10, NULL, sizeof(tmp_mm10));
+        memset(&tmp_mm10, INDEX(0), sizeof(tmp_mm10));
         tmp_mm5 = _mm_cvtsi32_si64(ulPixel);
         tmp_mm5 = _mm_unpacklo_pi8(tmp_mm5, tmp_mm10);    // punpcklbw
         tmp_mm5 = _mm_add_pi16(tmp_mm5, tmp_mm6);       // paddw
