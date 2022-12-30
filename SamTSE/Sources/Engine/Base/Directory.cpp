@@ -19,6 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Base/Unzip.h>
 #include <Engine/Base/FileSystem.h>
 #include <Engine/Templates/DynamicStackArray.cpp>
+#ifndef PLATFORM_UNIX
+#include <io.h>
+#endif
 
 extern CDynamicStackArray<CTFileName> _afnmBaseBrowseInc;
 extern CDynamicStackArray<CTFileName> _afnmBaseBrowseExc;
@@ -64,6 +67,7 @@ void FillDirList_internal(const CTFileName &fnmBasePath,
     
     const char *dirsep = CFileSystem::GetDirSeparator();
 
+    #ifdef PLATFORM_UNIX
     // start listing the directory
     CDynamicArray<CTString> *files;
     files = _pFileSystem->FindFiles(fnmBasePath+fnmDir, "*");
@@ -83,11 +87,30 @@ void FillDirList_internal(const CTFileName &fnmBasePath,
       CTFileName fnm = fnmDir + fname;
 
       // if it is a directory
-      #ifdef PLATFORM_UNIX
       if (_pFileSystem->IsDirectory(fnmBasePath+fnm)) {
-      #else
-      if (_pFileSystem->IsDirectory(fnm)) {
-      #endif
+    #else
+    // start listing the directory
+    struct _finddata_t c_file; intptr_t hFile;
+    hFile = _findfirst( (const char *)(fnmBasePath+fnmDir+"*"), &c_file );
+    
+    // for each file in the directory
+    for (
+      BOOL bFileExists = hFile!=-1; 
+      bFileExists; 
+      bFileExists = _findnext( hFile, &c_file )==0) {
+
+      // if dummy dir (this dir, parent dir, or any dir starting with '.')
+      if (c_file.name[0]=='.') {
+        // skip it
+        continue;
+      }
+
+      // get the file's filepath
+      CTFileName fnm = fnmDir+c_file.name;
+
+      // if it is a directory
+      if (c_file.attrib&_A_SUBDIR) {
+    #endif
         // if recursive reading
         if (bRecursive) {
           // add it to the list of directories to search
@@ -101,8 +124,9 @@ void FillDirList_internal(const CTFileName &fnmBasePath,
         afnm.Push() = fnm;
       }
     }
-
+    #ifdef PLATFORM_UNIX
     delete files;
+    #endif
   }
 }
 
