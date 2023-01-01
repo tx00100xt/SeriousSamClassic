@@ -47,7 +47,7 @@ extern SLONG  _slSharedTopMapSize = 0; // Size of shared memory allocated for to
 SLONG  _slSharedTopMapSize = 0; // Size of shared memory allocated for topmap regeneration
 #endif
 extern INDEX  _ctShadowMapUpdates;
-#pragma message(">> Create class with destructor to clear shared topmap memory")
+//#pragma message(">> Create class with destructor to clear shared topmap memory")
 
 FLOATaabbox3D _bboxDrawOne;
 FLOATaabbox3D _bboxDrawTwo;
@@ -292,7 +292,7 @@ FLOAT3D _vHitEnd;  // TEMP
 FLOAT3D _vDirection; // TEMP
 FLOAT3D _vHitExact; // TEMP
 
-#pragma message(">> Remove Rect from ExtractPolygonsInBox")
+//#pragma message(">> Remove Rect from ExtractPolygonsInBox")
 // Extract polygons in given box and returns clipped rectangle
 Rect ExtractPolygonsInBox(CTerrain *ptrTerrain, const FLOATaabbox3D &bboxExtract, GFXVertex4 **pavVtx, 
                           INDEX_T **paiInd, INDEX &ctVtx,INDEX &ctInd,BOOL bFixSize/*=FALSE*/)

@@ -499,7 +499,7 @@ class CEntityComponent *CDLLEntityClass::ComponentForTypeAndID(
   // for each component
   for (INDEX iComponent=0; iComponent<dec_ctComponents; iComponent++) {
     // if it has that same identifier
-    if (dec_aecComponents[iComponent].ec_slID==slID) {
+    if (dec_aecComponents[iComponent].ec_slID==static_cast<ULONG>(slID)) {
 
       // if it also has same type
       if (dec_aecComponents[iComponent].ec_ectType==ectType) {

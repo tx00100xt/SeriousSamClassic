@@ -18,9 +18,9 @@ CMenuGadget *_pmgLastActivatedGadget = NULL;
 //##############################################################################################################################3
 //##############################################################################################################################3
 //##############################################################################################################################3
-extern FLOAT _fGlobalTopAdjuster = 0.15f;
-extern FLOAT _fGlobalInfoAdjuster = 0.05f;
-extern FLOAT _fGlobalProfileFOVAdjuster = 90.0f;
+__extern FLOAT _fGlobalTopAdjuster = 0.15f;
+__extern FLOAT _fGlobalInfoAdjuster = 0.05f;
+__extern FLOAT _fGlobalProfileFOVAdjuster = 90.0f;
 ENGINE_API extern FLOAT _fWeaponFOVAdjuster;
 //##############################################################################################################################3
 //##############################################################################################################################3
@@ -515,7 +515,7 @@ BOOL CMGEdit::OnKeyDown( int iVKey)
   case VK_RETURN:  case VK_LBUTTON: *mg_pstrToChange = mg_strText;  Clear(); OnStringChanged();  break;
   case VK_ESCAPE:  case VK_RBUTTON:  mg_strText = *mg_pstrToChange; Clear(); OnStringCanceled(); break;
   case VK_LEFT:    if( mg_iCursorPos > 0)                  mg_iCursorPos--;  break;
-  case VK_RIGHT:   if( mg_iCursorPos < strlen(mg_strText)) mg_iCursorPos++;  break;
+  case VK_RIGHT:   if( mg_iCursorPos < static_cast<INDEX>(strlen(mg_strText))) mg_iCursorPos++;  break;
   case VK_HOME:    mg_iCursorPos = 0;                   break;
   case VK_END:     mg_iCursorPos = strlen(mg_strText);  break;
   case VK_BACK:    Key_BackDel( mg_strText, mg_iCursorPos, bShift, FALSE);  break;
@@ -1421,7 +1421,7 @@ void CMGServerList::Render(CDrawPort *pdp)
   INDEX iSession=0;
 
   INDEX ctColumns[7];
-  {for (INDEX i=0; i<ARRAYCOUNT(ctColumns); i++) {
+  {for (INDEX i=0; i < static_cast<INDEX>(ARRAYCOUNT(ctColumns)); i++) {
     ctColumns[i] = mgServerColumn[i].mg_strText.Length()+1;
   }}
 
@@ -1466,14 +1466,14 @@ void CMGServerList::Render(CDrawPort *pdp)
   mg_pixHeaderMaxJ = pixTopJ+(pixLineSize+pixCharSizeJ)*2;
   memcpy(mg_pixHeaderI, apixSeparatorI, sizeof(mg_pixHeaderI));
 
-  {for (INDEX i=0; i<ARRAYCOUNT(mgServerFilter); i++) {
+  {for (INDEX i=0; i < static_cast<INDEX>(ARRAYCOUNT(mgServerFilter)); i++) {
     mgServerColumn[i].mg_boxOnScreen = PixBoxToFloatBox(pdp, 
       PIXaabbox2D( PIX2D(apixSeparatorI[i]+pixCharSizeI/2,pixTopJ+pixLineSize*4), PIX2D(apixSeparatorI[i+1]-pixCharSizeI/2,pixTopJ+pixLineSize*4+pixCharSizeJ) ));
     mgServerFilter[i].mg_boxOnScreen = PixBoxToFloatBox(pdp, 
       PIXaabbox2D( PIX2D(apixSeparatorI[i]+pixCharSizeI/2,pixFilterTopJ), PIX2D(apixSeparatorI[i+1]-pixCharSizeI/2,pixFilterTopJ+pixCharSizeJ) ));
   }}
 
-  for (INDEX i=0; i<ARRAYCOUNT(apixSeparatorI); i++) {
+  for (INDEX i=0; i < static_cast<INDEX>(ARRAYCOUNT(apixSeparatorI)); i++) {
     pdp->DrawLine(apixSeparatorI[i], pixTopJ, apixSeparatorI[i], pixBottomJ, col|CT_OPAQUE);
   }
   pdp->DrawLine(apixSeparatorI[0], pixTopJ, apixSeparatorI[8], pixTopJ, col|CT_OPAQUE);

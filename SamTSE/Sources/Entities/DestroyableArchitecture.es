@@ -219,7 +219,7 @@ functions:
 
   void DestroyObelisk()
   {
-    for( INDEX iDebris=0; iDebris<ARRAYCOUNT(_ObeliskDebrisInfo); iDebris++)
+    for( INDEX iDebris=0; iDebris < static_cast<INDEX>(ARRAYCOUNT(_ObeliskDebrisInfo)); iDebris++)
     {
       DebrisInfo &di = _ObeliskDebrisInfo[iDebris];
       FLOAT3D vOffset = FLOAT3D( di.vOffset[0], di.vOffset[1], di.vOffset[2])*m_fStretch;
@@ -281,7 +281,7 @@ functions:
 
   void DestroyPylon()
   {
-    for( INDEX iDebris=0; iDebris<ARRAYCOUNT(_PylonDebrisInfo); iDebris++)
+    for( INDEX iDebris=0; iDebris < static_cast<INDEX>((ARRAYCOUNT(_PylonDebrisInfo))); iDebris++)
     {
       DebrisInfo &di = _PylonDebrisInfo[iDebris];
       FLOAT3D vOffset = FLOAT3D( di.vOffset[0], di.vOffset[1], di.vOffset[2])*m_fStretch;

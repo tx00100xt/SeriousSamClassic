@@ -31,6 +31,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define _offsetof offsetof
 #endif
 
+#ifdef _MSC_VER
+#define __extern extern
+#else
+#define __extern
+#endif
+
 #ifdef PLATFORM_UNIX
 #define DECL_DLL 
 #endif

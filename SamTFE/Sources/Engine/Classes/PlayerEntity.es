@@ -130,7 +130,7 @@ functions:
     strm.FPrintF_t("player: %s\n", 
       (const char *) en_pcCharacter.GetName());
     strm.FPrintF_t("GUID: ");
-    {for (INDEX i=0; i<sizeof(en_pcCharacter.pc_aubGUID); i++) {
+    {for (INDEX i=0; i<static_cast<INDEX>(sizeof(en_pcCharacter.pc_aubGUID)); i++) {
       strm.FPrintF_t("%02X", en_pcCharacter.pc_aubGUID[i]);
     }}
     strm.FPrintF_t("\n");

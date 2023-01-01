@@ -545,7 +545,7 @@ void CTerrain::ReAllocateHeightMap(PIX pixWidth, PIX pixHeight)
 void CTerrain::SetShadowMapsSize(INDEX iShadowMapAspect, INDEX iShadingMapAspect)
 {
   // TEMP
-  #pragma message(">> Clamp dn SetShadowMapsSize")
+  //#pragma message(">> Clamp dn SetShadowMapsSize")
 
   if(iShadingMapAspect<0) {
     iShadingMapAspect = 0;
@@ -1101,7 +1101,7 @@ void CTerrain::UpdateTopMap(INDEX iTileIndex, Rect *prcDest/*=NULL*/)
     ULONG *pulFirstInMipSrc = (ULONG*)&ptdSrc->td_pulFrames[iMipAdr];
   
     // for each row
-    for(UINT ir=0;ir<ptdDest->GetPixHeight();ir++)
+    for(UINT ir = 0; ir < static_cast<UINT>(ptdDest->GetPixHeight()); ir++)
     {
       // get first byte for src mip texture in this row
       ULONG *pulSrcRow = &pulFirstInMipSrc[(ir&(iSrcMipWidth-1))*iSrcMipWidth];//%
@@ -1110,7 +1110,7 @@ void CTerrain::UpdateTopMap(INDEX iTileIndex, Rect *prcDest/*=NULL*/)
       UBYTE *pubEdgeMaskRow = &ubFirstInEdgeMap[iMaskVPos];
       SLONG xMaskHPos = 0;
       // for each column
-      for(UINT ic=0;ic<ptdDest->GetPixWidth();ic++)
+      for(UINT ic = 0; ic < static_cast<UINT>(ptdDest->GetPixWidth()); ic++)
       {
         ULONG *ulSrc = &pulSrcRow[ic&(iSrcMipWidth-1)];
         INDEX iMask = (INDEX)(xMaskHPos>>16);
@@ -1142,7 +1142,7 @@ void CTerrain::UpdateTopMap(INDEX iTileIndex, Rect *prcDest/*=NULL*/)
   INDEX ctMipMaps = GetNoOfMipmaps(ptdDest->GetPixWidth(),ptdDest->GetPixHeight());
   MakeMipmaps(ctMipMaps, ptdDest->td_pulFrames, ptdDest->GetPixWidth(), ptdDest->GetPixHeight());
 
-  #pragma message(">> Fix DitherMipmaps")
+  //#pragma message(">> Fix DitherMipmaps")
   INDEX iDithering = 4;
   DitherMipmaps(iDithering,ptdDest->td_pulFrames,ptdDest->td_pulFrames,ptdDest->GetPixWidth(),ptdDest->GetPixHeight());
   // force topmap upload
@@ -1904,7 +1904,7 @@ void CTerrain::ReadVersion_t( CTStream *istrFile, INDEX iSavedVersion)
   (*istrFile).ExpectID_t("TRHM");  // 'Terrain heightmap'
 
   // read height map
-  for (ULONG i = 0; i < tr_pixHeightMapWidth*tr_pixHeightMapHeight; i++)
+  for (ULONG i = 0; i < static_cast<ULONG>(tr_pixHeightMapWidth*tr_pixHeightMapHeight); i++)
     (*istrFile)>>tr_auwHeightMap[i];
   (*istrFile).ExpectID_t("THEN");  // 'Terrain heightmap end'
 

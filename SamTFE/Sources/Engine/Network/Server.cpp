@@ -1526,7 +1526,7 @@ void CServer::Handle(INDEX iClient, CNetworkMessage &nmMessage)
         continue;
       }
       // if message is public or the client has some of destination players
-      if (ulTo==-1 || ulTo&MaskOfPlayersOnClient(iSession)) {
+      if (ulTo==-1UL || ulTo&MaskOfPlayersOnClient(iSession)) {
         // send the message to that computer
         _pNetwork->SendToClient(iSession, nmOut);
       }

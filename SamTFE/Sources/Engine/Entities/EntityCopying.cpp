@@ -163,7 +163,7 @@ void CEntity::Copy(CEntity &enOther, ULONG ulFlags)
     }
   // if this is a terrain
   } else if( enOther.en_RenderType == RT_TERRAIN) {
-    #pragma message(">> CEntity::Copy")
+    //#pragma message(">> CEntity::Copy")
     ASSERT(FALSE);
   // if this is a model
   } if ( enOther.en_RenderType == RT_MODEL || en_RenderType == RT_EDITORMODEL) {

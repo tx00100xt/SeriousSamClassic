@@ -74,7 +74,7 @@ void CInput::SetJoyPolling(BOOL bPoll)
 void CInput::SetKeyNames( void)
 {
   // set name "None" for all keys, known keys will override this default name
-  for( INDEX iKey=0; iKey<ARRAYCOUNT(inp_strButtonNames); iKey++) {
+  for( INDEX iKey=0; iKey<static_cast<INDEX>(ARRAYCOUNT(inp_strButtonNames)); iKey++) {
     inp_strButtonNames[iKey] = "None";
     inp_strButtonNamesTra[iKey] = TRANS("None");
   }

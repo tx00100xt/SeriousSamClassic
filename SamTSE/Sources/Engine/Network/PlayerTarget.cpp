@@ -135,7 +135,7 @@ void CPlayerTarget::ApplyActionPacket(const CPlayerAction &paDelta)
   // create a new action packet from last received packet and given delta
   plt_paPreLastAction = plt_paLastAction;
   __int64 llTag = plt_paLastAction.pa_llCreated += paDelta.pa_llCreated;
-  for (INDEX i=0; i<sizeof(CPlayerAction); i++) {
+  for (INDEX i = 0; i < static_cast<INDEX>(sizeof(CPlayerAction)); i++) {
     ((UBYTE*)&plt_paLastAction)[i] ^= ((UBYTE*)&paDelta)[i];
   }
   plt_paLastAction.pa_llCreated = llTag;

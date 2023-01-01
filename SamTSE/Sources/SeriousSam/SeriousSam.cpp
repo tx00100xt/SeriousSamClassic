@@ -85,39 +85,39 @@ extern FLOAT _fNoDownStartJ;
 extern FLOAT _fNoSizeJ;
 
 // application state variables
-extern BOOL _bRunning = TRUE;
-extern BOOL _bQuitScreen = TRUE;
-extern BOOL bMenuActive = FALSE;
-extern BOOL bMenuRendering = FALSE;
+__extern BOOL _bRunning = TRUE;
+__extern BOOL _bQuitScreen = TRUE;
+__extern BOOL bMenuActive = FALSE;
+__extern BOOL bMenuRendering = FALSE;
 
 extern BOOL _bDefiningKey;
 static BOOL _bReconsiderInput = FALSE;
-extern PIX  _pixDesktopWidth = 0;    // desktop width when started (for some tests)
+__extern PIX  _pixDesktopWidth = 0;    // desktop width when started (for some tests)
 
 static INDEX sam_iMaxFPSActive   = 500;
 static INDEX sam_iMaxFPSInactive = 10;
 static INDEX sam_bPauseOnMinimize = TRUE; // auto-pause when window has been minimized
-extern INDEX sam_bWideScreen = FALSE;
-extern FLOAT sam_fPlayerOffset = 0.0f;
+__extern INDEX sam_bWideScreen = FALSE;
+__extern FLOAT sam_fPlayerOffset = 0.0f;
 
 // display mode settings
-extern INDEX sam_bFullScreenActive = FALSE;
-extern INDEX sam_iScreenSizeI = 1024;  // current size of the window
-extern INDEX sam_iScreenSizeJ = 768;  // current size of the window
-extern INDEX sam_iAspectSizeI = 16;  //
-extern INDEX sam_iAspectSizeJ = 9;  //
-extern INDEX sam_iDisplayDepth  = 0;  // 0==default, 1==16bit, 2==32bit
-extern INDEX sam_iDisplayAdapter = 0;
-extern INDEX sam_iGfxAPI = 0;                                // 0==OpenGL
-extern INDEX sam_bFirstStarted = FALSE;
-extern FLOAT sam_tmDisplayModeReport = 5.0f;
-extern INDEX sam_bShowAllLevels = FALSE;
-extern INDEX sam_bMentalActivated = FALSE;
+__extern INDEX sam_bFullScreenActive = FALSE;
+__extern INDEX sam_iScreenSizeI = 1024;  // current size of the window
+__extern INDEX sam_iScreenSizeJ = 768;  // current size of the window
+__extern INDEX sam_iAspectSizeI = 16;  //
+__extern INDEX sam_iAspectSizeJ = 9;  //
+__extern INDEX sam_iDisplayDepth  = 0;  // 0==default, 1==16bit, 2==32bit
+__extern INDEX sam_iDisplayAdapter = 0;
+__extern INDEX sam_iGfxAPI = 0;                                // 0==OpenGL
+__extern INDEX sam_bFirstStarted = FALSE;
+__extern FLOAT sam_tmDisplayModeReport = 5.0f;
+__extern INDEX sam_bShowAllLevels = FALSE;
+__extern INDEX sam_bMentalActivated = FALSE;
 
 // network settings
-extern CTString sam_strNetworkSettings = "";
+__extern CTString sam_strNetworkSettings = "";
 // command line
-extern CTString sam_strCommandLine = "";
+__extern CTString sam_strCommandLine = "";
 
 // 0...app started for the first time
 // 1...all ok
@@ -126,25 +126,25 @@ static INDEX _iDisplayModeChangeFlag = 0;
 static TIME _tmDisplayModeChanged = 100.0f; // when display mode was last changed
 
 // rendering preferences for automatic settings
-extern INDEX sam_iVideoSetup = 1;  // 0==speed, 1==normal, 2==quality, 3==custom
+__extern INDEX sam_iVideoSetup = 1;  // 0==speed, 1==normal, 2==quality, 3==custom
 // automatic adjustment of audio quality
-extern BOOL sam_bAutoAdjustAudio = TRUE;
+__extern BOOL sam_bAutoAdjustAudio = TRUE;
 
-extern INDEX sam_bAutoPlayDemos = TRUE;
+__extern INDEX sam_bAutoPlayDemos = TRUE;
 static INDEX _bInAutoPlayLoop = TRUE;
 
 // menu calling
-extern INDEX sam_bMenuSave     = FALSE;
-extern INDEX sam_bMenuLoad     = FALSE;
-extern INDEX sam_bMenuControls = FALSE;
-extern INDEX sam_bMenuHiScore  = FALSE;
-extern INDEX sam_bToggleConsole = FALSE;
-extern INDEX sam_iStartCredits = FALSE;
+__extern INDEX sam_bMenuSave     = FALSE;
+__extern INDEX sam_bMenuLoad     = FALSE;
+__extern INDEX sam_bMenuControls = FALSE;
+__extern INDEX sam_bMenuHiScore  = FALSE;
+__extern INDEX sam_bToggleConsole = FALSE;
+__extern INDEX sam_iStartCredits = FALSE;
 
 // for mod re-loading
-extern CTFileName _fnmModToLoad = CTString("");
-extern CTString _strModServerJoin = CTString("");
-extern CTString _strURLToVisit = CTString("");
+__extern CTFileName _fnmModToLoad = CTString("");
+__extern CTString _strModServerJoin = CTString("");
+__extern CTString _strURLToVisit = CTString("");
 static char _strExePath[MAX_PATH] = "";
 ENGINE_API extern INDEX sys_iSysPath;
 
@@ -152,16 +152,16 @@ ENGINE_API extern INDEX sys_iSysPath;
 // 0 - nothing
 // 1 - start (invoke console)
 // 2 - console invoked, waiting for one redraw
-extern INDEX _iAddonExecState = 0;
-extern CTFileName _fnmAddonToExec = CTString("");
+__extern INDEX _iAddonExecState = 0;
+__extern CTFileName _fnmAddonToExec = CTString("");
 
 // logo textures
 static CTextureObject  _toLogoCT;
 static CTextureObject  _toLogoODI;
 static CTextureObject  _toLogoEAX;
-extern CTextureObject *_ptoLogoCT  = NULL;
-extern CTextureObject *_ptoLogoODI = NULL;
-extern CTextureObject *_ptoLogoEAX = NULL;
+__extern CTextureObject *_ptoLogoCT  = NULL;
+__extern CTextureObject *_ptoLogoODI = NULL;
+__extern CTextureObject *_ptoLogoEAX = NULL;
 
 #ifdef FIRST_ENCOUNTER  // First Encounter
 CTString sam_strVersion = "1.10";
@@ -1393,7 +1393,7 @@ int SubMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int 
       }
 
       // if toggling console
-      BOOL bConsoleKey = sam_bToggleConsole || msg.message==WM_KEYDOWN && 
+      BOOL bConsoleKey = sam_bToggleConsole || (msg.message==WM_KEYDOWN && 
             // !!! FIXME: rcg11162001 This sucks.
             // FIXME: DG: we could use SDL_SCANCODE_GRAVE ?
         #ifdef PLATFORM_UNIX
@@ -1401,7 +1401,7 @@ int SubMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int 
         #else
         (MapVirtualKey(msg.wParam, 0)==41 // scan code for '~'
         #endif
-        || msg.wParam==VK_F1 || (msg.wParam==VK_ESCAPE && _iAddonExecState==3));
+        || msg.wParam==VK_F1 || (msg.wParam==VK_ESCAPE && _iAddonExecState==3)));
       if(bConsoleKey && !_bDefiningKey)
       {
         sam_bToggleConsole = FALSE;
@@ -1571,6 +1571,9 @@ void CheckModReload(void)
     argv[2] = (const char *)"+game";
     argv[3] = (const char *)strMod;
     argv[4] = NULL;
+    argv[5] = NULL;
+    argv[6] = NULL;
+    argv[7] = NULL;
     if (_strModServerJoin!="") {
       argv[4] = (const char *)" +connect ";
       argv[5] = (const char *)_strModServerJoin;
@@ -1578,11 +1581,11 @@ void CheckModReload(void)
       argv[7] = NULL;
     }
 #ifdef PLATFORM_WIN32
-    _execl((const char *)argv[0],(const char *)argv[1],(const char *)argv[2],(const char *)argv[3],
+    _execl((const char *)argv[0],(const char *)argv[1],(const char *)argv[2],(const char *)argv[3], \
        (const char *)argv[4],(const char *)argv[5],(const char *)argv[6],(const char *)argv[7]);
     MessageBoxA(0, "Error launching the Mod!\n", "Serious Sam", MB_OK|MB_ICONERROR);
 #else
-    execl((const char *)argv[0],(const char *)argv[1],(const char *)argv[2],(const char *)argv[3],
+    execl((const char *)argv[0],(const char *)argv[1],(const char *)argv[2],(const char *)argv[3], \
        (const char *)argv[4],(const char *)argv[5],(const char *)argv[6],(const char *)argv[7]);
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                          "Serious Sam",

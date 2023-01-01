@@ -28,14 +28,14 @@ extern CTextureObject *_ptoLogoCT;
 extern CTextureObject *_ptoLogoODI;
 extern CTextureObject *_ptoLogoEAX;
 //##############################################################################################################################3
-extern FLOAT _fMenuPlayerProfileAdjuster = 0.35f;
+__extern FLOAT _fMenuPlayerProfileAdjuster = 0.35f;
 
-extern FLOAT _fGlobalListAdjuster = 0.7f;
-extern FLOAT _fGlobalTipAdjuster  = 0.90f;
-extern FLOAT _fGlobalProfileAdjuster = 0.95f;
-extern FLOAT _fGlobalModAdjuster = 0.75f;
-extern FLOAT _fGlobalOptionsAdjuster = 0.75f;
-extern FLOAT _fGlobalButtonAdjuster  = 1.0f;
+__extern FLOAT _fGlobalListAdjuster = 0.7f;
+__extern FLOAT _fGlobalTipAdjuster  = 0.90f;
+__extern FLOAT _fGlobalProfileAdjuster = 0.95f;
+__extern FLOAT _fGlobalModAdjuster = 0.75f;
+__extern FLOAT _fGlobalOptionsAdjuster = 0.75f;
+__extern FLOAT _fGlobalButtonAdjuster  = 1.0f;
 
 
 extern FLOAT _fBigStartJ; 			//Position of contents below large font title
@@ -169,15 +169,16 @@ void ControlsMenuOff()
 }
 
 // mouse cursor position
-extern PIX _pixCursorPosI = 0;
-extern PIX _pixCursorPosJ = 0;
-extern PIX _pixCursorExternPosI = 0;
-extern PIX _pixCursorExternPosJ = 0;
-extern BOOL _bMouseUsedLast = FALSE;
-extern CMenuGadget *_pmgUnderCursor =  NULL;
+__extern PIX _pixCursorPosI = 0;
+__extern PIX _pixCursorPosJ = 0;
+__extern PIX _pixCursorExternPosI = 0;
+__extern PIX _pixCursorExternPosJ = 0;
+__extern BOOL _bMouseUsedLast = FALSE;
+__extern CMenuGadget *_pmgUnderCursor =  NULL;
+__extern BOOL _bMouseRight = FALSE;
+
 extern BOOL _bDefiningKey;
 extern BOOL _bEditingString;
-extern BOOL _bMouseRight = FALSE;
 
 // thumbnail for showing in menu
 CTextureObject _toThumbnail;
@@ -2239,7 +2240,7 @@ void InitGameTypes(void)
   }
 
   // for each mode
-  for(ctGameTypeRadioTexts=0; ctGameTypeRadioTexts<ARRAYCOUNT(astrGameTypeRadioTexts); ctGameTypeRadioTexts++) {
+  for(ctGameTypeRadioTexts=0; ctGameTypeRadioTexts < static_cast<INDEX>(ARRAYCOUNT(astrGameTypeRadioTexts)); ctGameTypeRadioTexts++) {
     // get the text
     CTString (*pFunc)(INDEX) = (CTString (*)(INDEX))pss->ss_pvValue;
     CTString strMode = pFunc(ctGameTypeRadioTexts);
@@ -4085,7 +4086,7 @@ void CPlayerProfileMenu::Initialize_t(void)
   gm_lhGadgets.AddTail( mgPlayerNameLabel.mg_lnNode);
 
   // setup of player name button is done on start menu
-  mgPlayerName.mg_strText = "<???>";
+  mgPlayerName.mg_strText = "<***>";
   mgPlayerName.mg_ctMaxStringLen = 25;
   mgPlayerName.mg_boxOnScreen = BoxPlayerEdit(1.25, _fGlobalProfileAdjuster);
   mgPlayerName.mg_bfsFontSize = BFS_MEDIUM;
@@ -4103,7 +4104,7 @@ void CPlayerProfileMenu::Initialize_t(void)
   gm_lhGadgets.AddTail( mgPlayerTeamLabel.mg_lnNode);
 
   // setup of player name button is done on start menu
-  mgPlayerTeam.mg_strText = "<???>";
+  mgPlayerTeam.mg_strText = "<***>";
   mgPlayerName.mg_ctMaxStringLen = 25;
   mgPlayerTeam.mg_boxOnScreen = BoxPlayerEdit(2.25f, _fGlobalProfileAdjuster);
   mgPlayerTeam.mg_bfsFontSize = BFS_MEDIUM;
@@ -5636,7 +5637,7 @@ void CServersMenu::Initialize_t(void)
   gm_lhGadgets.AddTail(mgServerList.mg_lnNode);
 
   ASSERT(ARRAYCOUNT(mgServerColumn)==ARRAYCOUNT(mgServerFilter));
-  for (INDEX i=0; i<ARRAYCOUNT(mgServerFilter); i++) {
+  for (INDEX i=0; i < static_cast<INDEX>(ARRAYCOUNT(mgServerFilter)); i++) {
     mgServerColumn[i].mg_strText = "";
     mgServerColumn[i].mg_boxOnScreen = BoxPlayerEdit(5.0, _fGlobalProfileAdjuster);
     mgServerColumn[i].mg_bfsFontSize = BFS_SMALL;

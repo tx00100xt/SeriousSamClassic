@@ -274,7 +274,7 @@ void CGfxLibrary::InitAPIs(void)
   const int total = SDL_GetNumDisplayModes(dpy);
   for (int i = 0; i < total; i++)
   {
-    if (pda->da_ctDisplayModes >= ARRAYCOUNT(pda->da_admDisplayModes))
+    if (pda->da_ctDisplayModes >= static_cast<INDEX>(ARRAYCOUNT(pda->da_admDisplayModes)))
       break;
 
     SDL_DisplayMode mode;

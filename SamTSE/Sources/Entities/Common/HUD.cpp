@@ -15,8 +15,8 @@
 #define TOP_HEALTH 100
 
 #ifdef PLATFORM_UNIX
-extern "C" __attribute__ ((visibility("default"))) FLOAT _fArmorHeightAdjuster = 1.0f;
-extern "C" __attribute__ ((visibility("default"))) FLOAT _fFragScorerHeightAdjuster = 1.0f;
+extern "C" __attribute__ ((visibility("default"))) FLOAT _fArmorHeightAdjuster;
+extern "C" __attribute__ ((visibility("default"))) FLOAT _fFragScorerHeightAdjuster;
 #else
 extern __declspec(dllimport) FLOAT _fArmorHeightAdjuster;
 extern __declspec(dllimport) FLOAT _fFragScorerHeightAdjuster;

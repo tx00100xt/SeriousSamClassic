@@ -1058,9 +1058,9 @@ void CGame::InitInternal( void)
   _pShell->Execute(CTString("include \"")+fnmStartupScript+"\";");
 
   // check the size and pointer of player control variables that are local to each player
-  if (ctl_slPlayerControlsSize<=0
-    ||ctl_slPlayerControlsSize>sizeof(((CLocalPlayer*)NULL)->lp_ubPlayerControlsState)
-    ||ctl_pvPlayerControls==NULL) {
+  if (ctl_slPlayerControlsSize <= 0
+    || static_cast<ULONG>(ctl_slPlayerControlsSize) > sizeof(((CLocalPlayer*)NULL)->lp_ubPlayerControlsState)
+    || ctl_pvPlayerControls == NULL) {
     FatalError(TRANS("Current player controls are invalid."));
   }
 
@@ -2282,7 +2282,7 @@ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
     // timer must not occur during prescanning
     { 
 #if defined(PLATFORM_UNIX) && !defined(SINGLE_THREADED)
-      #warning "This seems to cause Race Condition, so disabled"
+      //#warning "This seems to cause Race Condition, so disabled"
 #else
       CTSingleLock csTimer(&_pTimer->tm_csHooks, TRUE);
 #endif

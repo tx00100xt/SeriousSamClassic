@@ -465,7 +465,7 @@ void RM_GetModelVertices( CModelInstance &mi, CStaticStackArray<FLOAT3D> &avVert
       avVertices.Push(ctvtx);
       // for each vertex in prepared mesh
       for(INDEX ivtx=0;ivtx<ctvtx;ivtx++) {
-        #pragma message(">> Fix this")
+        //#pragma message(">> Fix this")
         FLOAT3D vVtx = FLOAT3D(_pavFinalVertices[ivtx].x,_pavFinalVertices[ivtx].y,_pavFinalVertices[ivtx].z);
         FLOAT3D vNor = FLOAT3D(_panFinalNormals[ivtx].nx,_panFinalNormals[ivtx].ny,_panFinalNormals[ivtx].nz);
         // add vertex to given vertex array
@@ -1330,7 +1330,7 @@ static BOOL FindBone(int iBoneID, INDEX *piBoneIndex, CModelInstance *pmi,INDEX 
   // if skeleton lod is larger than lod count
   if(iSkeletonLod >= ctslods) {
     // use skeleton finest skeleton lod
-    #pragma message(">> Check if this is ok")
+    //#pragma message(">> Check if this is ok")
     iSkeletonLod = 0;
     ASSERT(FALSE);
   }
@@ -2150,7 +2150,7 @@ static void RenderMesh(RenMesh &rmsh,RenModel &rm)
       
       // if mesh is transformed to view space
       if(rmsh.rmsh_bTransToViewSpace) {
-        #pragma message(">> FIX THIS !!!")
+        //#pragma message(">> FIX THIS !!!")
         // no ObjToView matrix is needed in shader so set empty matrix
         Matrix12 mIdentity;
         MakeIdentityMatrix(mIdentity);
@@ -2383,7 +2383,7 @@ static void PrepareMeshForRendering(RenMesh &rmsh, INDEX iSkeletonlod)
     } else {
       Matrix12 &m12 = _aRenModels[rmsh.rmsh_iRenModelIndex].rm_mStrTransform;
       FLOAT gfxm[16];
-      #pragma message(">> Fix face forward meshes, when objects are left in object space")
+      //#pragma message(">> Fix face forward meshes, when objects are left in object space")
 
       // set view matrix to gfx
       gfxm[ 0] = m12[ 0];  gfxm[ 1] = m12[ 4];  gfxm[ 2] = m12[ 8];  gfxm[ 3] = 0;
@@ -2576,7 +2576,7 @@ void RM_RenderSKA(CModelInstance &mi)
     RenderSkeleton();
     gfxEnableDepthTest();
   }
-  #pragma message(">> Add ska_bShowActiveBones")
+  //#pragma message(">> Add ska_bShowActiveBones")
   if(/*ska_bShowActiveBones || */ RM_GetFlags() & RMF_SHOWACTIVEBONES) {
     gfxDisableTexture();
     gfxDisableDepthTest();

@@ -489,7 +489,7 @@ void LoadCommands(void)
 CTString ToUpper(const CTString &strResult)
 {
   char *pch = (char*)(const char *)strResult;
-  for(INDEX i=0; i<strlen(pch); i++) {
+  for(INDEX i=0; i<static_cast<INDEX>(strlen(pch)); i++) {
     pch[i]=toupper(pch[i]);
   }
   return strResult;
@@ -502,7 +502,7 @@ CTString ToUpperCfunc(void* pArgs)
 CTString ToLower(const CTString &strResult)
 {
   char *pch = (char*)(const char *)strResult;
-  for(INDEX i=0; i<strlen(pch); i++) {
+  for(INDEX i=0; i<static_cast<INDEX>(strlen(pch)); i++) {
     pch[i]=tolower(pch[i]);
   }
   return strResult;

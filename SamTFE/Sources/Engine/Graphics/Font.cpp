@@ -149,7 +149,7 @@ void CFontData::Make_t( const CTFileName &fnTexture, PIX pixCharWidth, PIX pixCh
 
   // find number of letters in line (assuming that the 1st line represents the width of every line)
   INDEX iLettersInLine=0;
-  while( (strLettersOrder[iLettersInLine]!='\n') && iLettersInLine<strlen(strLettersOrder)) iLettersInLine++;
+  while( (strLettersOrder[iLettersInLine]!='\n') && iLettersInLine < static_cast<INDEX>(strlen(strLettersOrder))) iLettersInLine++;
   if( iLettersInLine<=0) FatalError( "Invalid font definition ASCII file.");
 
   // determine pixelcheck mast depending of alpha channel usage
@@ -162,11 +162,11 @@ void CFontData::Make_t( const CTFileName &fnTexture, PIX pixCharWidth, PIX pixCh
   // for all letters in font (ranging from space to last letter that user defined)
   INDEX iLetter=0;
   INDEX iCurrentLetterLine = 0;
-  while( iLetter<strlen(strLettersOrder))
+  while( iLetter < static_cast<INDEX>(strlen(strLettersOrder)))
   { // for letters in one line
     for( INDEX iCurrentLetterColumn=0; iCurrentLetterColumn<iLettersInLine; iCurrentLetterColumn++)
     { // test if we at the end of whole array
-      if( iLetter>=strlen(strLettersOrder)) break;
+      if( iLetter >= static_cast<INDEX>(strlen(strLettersOrder))) break;
       // get char params
       unsigned char chrLetter = strLettersOrder[iLetter++];
       // reset current letter's width

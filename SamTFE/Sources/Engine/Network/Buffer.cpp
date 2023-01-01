@@ -383,7 +383,7 @@ BOOL CBlockBuffer::ReadBlock(void *pv, SLONG &slSize)
   slbhSize = ReadBytes(&bh, sizeof(bh));
 
   // if the header information is not in buffer
-  if (slbhSize < sizeof(bh)) {
+  if (static_cast<size_t>(slbhSize) < sizeof(bh)) {
     // unwind
     UnreadBytes(slbhSize);
     // nothing to receive
@@ -440,7 +440,7 @@ BOOL CBlockBuffer::ReadBlockToStream(CTStream &strm)
   slbhSize = ReadBytes(&bh, sizeof(bh));
 
   // if the header information is not in buffer
-  if (slbhSize < sizeof(bh)) {
+  if (static_cast<size_t>(slbhSize) < sizeof(bh)) {
     // unwind
     UnreadBytes(slbhSize);
     // nothing to receive
@@ -529,7 +529,7 @@ SLONG CBlockBuffer::ReadRawBlock(void *pv, SLONG slSize)
     slbhSize = ReadBytes(&bh, sizeof(bh));
 
     // if the header information is not in buffer
-    if (slbhSize < sizeof(bh)) {
+    if (static_cast<size_t>(slbhSize) < sizeof(bh)) {
       // unwind
       UnreadBytes(slbhSize);
       // nothing to receive
@@ -640,7 +640,7 @@ void CBlockBuffer::PeekBlockSize(SLONG &slExpectedSize, SLONG &slReceivedSoFar)
     UnreadBytes(slbhSize);
 
     // if the header information is not in buffer
-    if (slbhSize < sizeof(bh)) {
+    if (static_cast<size_t>(slbhSize) < sizeof(bh)) {
       // no information available
       slExpectedSize = 0;
       slReceivedSoFar = 0;

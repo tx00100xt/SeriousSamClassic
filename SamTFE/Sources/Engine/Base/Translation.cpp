@@ -200,7 +200,7 @@ ENGINE_API char *Translate(const char *str, INDEX iOffset)
 ENGINE_API const char *TranslateConst(const char *str, INDEX iOffset)
 {
   // skip first bytes
-  if (strlen(str)>=iOffset) {
+  if (static_cast<INDEX>(strlen(str))>=iOffset) {
     str+=iOffset;
   } else {
     ASSERT(FALSE);

@@ -78,7 +78,7 @@ errstat sbinfile::rawclose()
 {
   closemode();
   if (trunc)
-    ftruncate(handle, lseek(handle, 0, SEEK_CUR));
+    int x = ftruncate(handle, lseek(handle, 0, SEEK_CUR));
   ::close(handle);
   return 0;
 }

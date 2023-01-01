@@ -244,10 +244,10 @@ void ReplaceIfChanged(const char *strOld, const char *strNew)
 
       // skip #line directives
       while(strNewLine[0]=='#' && strNewLine[1]=='l' && !feof(fNew)) {
-        fgets(strNewLine, sizeof(strNewLine)-1, fNew);
+        char *str = fgets(strNewLine, sizeof(strNewLine)-1, fNew);
       }
       while(strOldLine[0]=='#' && strOldLine[1]=='l' && !feof(fOld)) {
-        fgets(strOldLine, sizeof(strOldLine)-1, fOld);
+        char *str = fgets(strOldLine, sizeof(strOldLine)-1, fOld);
       }
       if (strcmp(strNewLine, strOldLine)!=0) {
         iChanged = 1;

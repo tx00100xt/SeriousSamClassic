@@ -1104,7 +1104,7 @@ void CTFileStream::Read_t(void *pvBuffer, SLONG slSize)
     return;
   }
 
-  fread(pvBuffer, slSize, 1, fstrm_pFile);
+  size_t x = fread(pvBuffer, slSize, 1, fstrm_pFile);
 }
 
 /* Write a block of data to stream. */

@@ -119,7 +119,7 @@ void CPlayerBuffer::CreateActionPacket(CNetworkMessage *pnm, INDEX iClient)
 
   // create a new delta action packet between last sent and current action
   CPlayerAction paDelta;
-  for (INDEX i=0; i<sizeof(CPlayerAction); i++) {
+  for (INDEX i = 0; i < static_cast<INDEX>(sizeof(CPlayerAction)); i++) {
     ((UBYTE*)&paDelta)[i] = ((UBYTE*)&paCurrent)[i] ^ ((UBYTE*)&plb_paLastAction)[i];
   }
   // if the client that message is sent to owns the player

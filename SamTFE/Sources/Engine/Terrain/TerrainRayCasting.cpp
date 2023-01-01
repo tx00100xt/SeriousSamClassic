@@ -197,7 +197,7 @@ static FLOAT HitCheckQuad(const PIX ix, const PIX iz)
   return fDistance;
 }
 
-#pragma message(">> Remove defined NUMDIM, RIGHT, LEFT ...")
+//#pragma message(">> Remove defined NUMDIM, RIGHT, LEFT ...")
 #define NUMDIM	3
 #define RIGHT	  0
 #define LEFT	  1

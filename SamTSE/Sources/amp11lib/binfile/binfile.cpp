@@ -137,11 +137,13 @@ boolm binfile::invalidatebuffer(intm force)
     }
     bufdirty=0;
   }
-  if (!(mode&modeseek))
-    if (force==2)
+  if (!(mode&modeseek)) {
+    if (force==2) {
       ret=!buflen;
-    else
+    } else {
       return !buflen;
+    }
+  }
   bufstart=filepos;
   bufpos=0;
   buflen=0;
@@ -496,13 +498,16 @@ binfilepos binfile::write(const void *buf, binfilepos len)
     return l1+l2;
   }
   l1=len;
-  if (l1>=bufmax)
+  if (l1>=bufmax) {
     l1=0;
-  if (l1>(bufmax-bufpos))
-    if (!bufdirty)
+  }
+  if (l1>(bufmax-bufpos)) {
+    if (!bufdirty) {
       invalidatebuffer(0);
-    else
+    } else {
       l1=bufmax-bufpos;
+    }
+  }
   if (l1)
   {
     memcpy(buffer+bufpos, buf, l1);

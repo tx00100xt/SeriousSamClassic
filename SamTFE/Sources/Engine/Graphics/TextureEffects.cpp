@@ -692,7 +692,7 @@ void AnimateFireFall(CTextureEffectSource *ptes)
     ffp.pixV+=ffp.ubSpeed;
     // when falled down reinitialize
     if (ffp.pixV >= _pixBufferHeight) {
-      if (ff.ulPointToReinitialize == iIndex) {
+      if (static_cast<INDEX>(ff.ulPointToReinitialize) == iIndex) {
         ff.ulPointToReinitialize++;
         if (ff.ulPointToReinitialize >= FIREFALL_POINTS) ff.ulPointToReinitialize = 0;
         ffp.pixU = ff.pixU+(RNDW%ff.ulWidth);
@@ -3045,7 +3045,7 @@ pixDone:
     for( PIX pixV=1; pixV<_pixBufferHeight-1; pixV++)
     {
       ULONG ulNew = ((ULONG)pubNew[_pixBufferWidth+slOffset] + (ULONG)pubNew[_pixBufferWidth*2+slOffset]) >>1;
-      if( ulNew>slDensity) {
+      if( ulNew>static_cast<ULONG>(slDensity)) {
         ULONG ulNewDensity = RNDW&slDensity;
         ulNew -= ulNewDensity;
         SLONG slDifusion = (SLONG)asbMod3Sub1Table[ulNewDensity]; // (SLONG)(ulNewDensity%3-1);

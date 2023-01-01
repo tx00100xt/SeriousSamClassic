@@ -116,13 +116,11 @@ static CTString sys_strModExt  = "";
 static INDEX sys_iGameBits = 0;
 ENGINE_API INDEX sys_iSysPath = 0;
 
-#ifdef PLATFORM_WIN32
 // Entities Adjesters
 ENGINE_API FLOAT _fPlayerFOVAdjuster = 1.0f;
 ENGINE_API FLOAT _fWeaponFOVAdjuster = 1.0f;
 ENGINE_API FLOAT _fArmorHeightAdjuster = 1.5f;
 ENGINE_API FLOAT _fFragScorerHeightAdjuster = 1.5f;
-#endif
 
 //
 char _path[2048];
@@ -396,7 +394,7 @@ static void AnalyzeApplicationPath(void)
 	char strTmpPath[MAX_PATH] = "";
 
 	_pFileSystem->GetExecutablePath(strExePath, sizeof(strExePath) - 1);
-	strncpy(strTmpPath, strExePath, sizeof(strTmpPath) - 1);
+	strncpy(strTmpPath, strExePath, sizeof(strTmpPath));
 	strDirPath[sizeof(strTmpPath) - 1] = 0;
 	// remove name from application path
 	StrRev(strTmpPath);
@@ -669,7 +667,7 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
   _pFileSystem = CFileSystem::GetInstance(" ", gamename);
 #endif
 
-  #pragma message(">> Remove this from SE_InitEngine : _bWorldEditorApp")
+  //#pragma message(">> Remove this from SE_InitEngine : _bWorldEditorApp")
   if(strGameID=="SeriousEditor") {
     _bWorldEditorApp = TRUE;
   }
@@ -764,7 +762,7 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
 
     if( access((const char *) _fnmUserDir+_strLogFile+".cfg", F_OK) == 0 ) {
       _fd = open((const char *) _fnmUserDir+_strLogFile+".cfg", O_RDONLY,S_IRUSR);
-      read(_fd, _path, 2048);
+      size_t x = read(_fd, _path, 2048);
       _fnmUserDataPath = (CTString)_path + "/";
       close(_fd);
       CPrintF(TRANSV("Testing home path: %s\n"), (const char *) _fnmUserDataPath);
@@ -808,7 +806,7 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
           //_fnmApplicationPath = (CTFileName) _PATH + "/";
           CPrintF(TRANSV("Found home path: %s\n"), (const char *) _fnm_home_TestFile);
           _fd = open((const char *) _fnmUserDir+_strLogFile+".cfg", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
-          write(_fd, _path, 2948);
+          size_t x = write(_fd, _path, 2048);
           close(_fd);
         } else {
           CPrintF(TRANSV("ERROR: Game data not ound!\n"));

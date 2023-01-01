@@ -224,12 +224,12 @@ static INDEX _aiScancodeToKid[SDL_NUM_SCANCODES];
 static void MakeConversionTables(void)
 {
   // clear conversion tables
-  for (int i = 0; i < ARRAYCOUNT(_aiScancodeToKid); i++) {
+  for (int i = 0; i < static_cast<int>(ARRAYCOUNT(_aiScancodeToKid)); i++) {
     _aiScancodeToKid[i] = -1;
   }
 
   // for each Key
-  for (INDEX iKey=0; iKey<ARRAYCOUNT(_akcKeys); iKey++) {
+  for (INDEX iKey=0; iKey<static_cast<INDEX>(ARRAYCOUNT(_akcKeys)); iKey++) {
     const KeyConversion &kc = _akcKeys[iKey];
 
     // get codes
@@ -301,7 +301,7 @@ static void SetKeyFromEvent(const SDL_Event *event, const BOOL bDown)
     // convert virtualkey to kid
   const INDEX iKID = _aiScancodeToKid[event->key.keysym.scancode];
 
-  if (iKID>=0 && iKID<ARRAYCOUNT(_abKeysPressed)) {
+  if (iKID>=0 && iKID<static_cast<INDEX>(ARRAYCOUNT(_abKeysPressed))) {
     //CPrintF("%s: %d\n", _pInput->inp_strButtonNames[iKID], bDown);
     _abKeysPressed[iKID] = bDown;
   }
@@ -555,7 +555,7 @@ CInput::~CInput()
 BOOL CInput::PlatformSetKeyNames(void)
 {
   // for each Key
-  for (INDEX iKey=0; iKey<ARRAYCOUNT(_akcKeys); iKey++) {
+  for (INDEX iKey=0; iKey<static_cast<int>(ARRAYCOUNT(_akcKeys)); iKey++) {
     const KeyConversion &kc = _akcKeys[iKey];
     // set the name
     if (kc.kc_strName!=NULL) {
@@ -727,7 +727,7 @@ void CInput::GetInput(BOOL bPreScan)
 
     const Uint8 *keystate = SDL_GetKeyboardState(NULL);
     // for each Key
-    for (INDEX iKey=0; iKey<ARRAYCOUNT(_akcKeys); iKey++) {
+    for (INDEX iKey=0; iKey<static_cast<INDEX>(ARRAYCOUNT(_akcKeys)); iKey++) {
       const KeyConversion &kc = _akcKeys[iKey];
       // get codes
       INDEX iKID  = kc.kc_iKID;

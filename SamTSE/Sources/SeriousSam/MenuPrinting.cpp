@@ -4,15 +4,15 @@
 
 #include "MenuPrinting.h"
 
-extern FLOAT _fBigStartJ	= 0.25f;
-extern FLOAT _fBigSizeJ		= 0.066f;
-extern FLOAT _fMediumSizeJ	= 0.04f;
-extern FLOAT _fNoStartI		= 0.25f;
-extern FLOAT _fNoSizeI		= 0.04f;
-extern FLOAT _fNoSpaceI		= 0.01f;
-extern FLOAT _fNoUpStartJ	= 0.24f;
-extern FLOAT _fNoDownStartJ	= 0.44f;
-extern FLOAT _fNoSizeJ		= 0.04f;
+__extern FLOAT _fBigStartJ	= 0.25f;
+__extern FLOAT _fBigSizeJ		= 0.066f;
+__extern FLOAT _fMediumSizeJ	= 0.04f;
+__extern FLOAT _fNoStartI		= 0.25f;
+__extern FLOAT _fNoSizeI		= 0.04f;
+__extern FLOAT _fNoSpaceI		= 0.01f;
+__extern FLOAT _fNoUpStartJ	= 0.24f;
+__extern FLOAT _fNoDownStartJ	= 0.44f;
+__extern FLOAT _fNoSizeJ		= 0.04f;
 
 #ifdef SAM_VERSION_FE105
 #define _scaler_ 3.5

@@ -24,7 +24,7 @@ cp -vfr ../EntitiesMP/PlayerWeaponsHD.es ../EntitiesMP/PlayerWeapons.es
 #ninja
 
 # This is the eventual path for amd64.
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo .. $1 $2
+cmake -DCMAKE_BUILD_TYPE=Release .. $1 $2
 
 # Right now we force x86, though...
 #cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 ..

@@ -29,5 +29,5 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <errno.h>
 #include <sys/param.h>
 #include <unistd.h>
-#define _fullpath(x, y, z) realpath(y, x)
+#define _fullpath(x, y, z) char *res = realpath(y, x)
 #endif

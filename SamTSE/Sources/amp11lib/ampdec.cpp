@@ -248,13 +248,16 @@ binfilepos ampegdecoder::rawseek(binfilepos pos)
   mainbufpos=0;
   mainbuflen=0;
   atend=0;
-  if (orglay==2)
+  if (orglay==2) {
     seekinit3(discard);
-  if (extra)
-    if (discard!=(seekinitframes+extra))
+  }
+  if (extra) {
+    if (discard!=(seekinitframes+extra)) {
       ampegdecoder::decode(0);
-    else
+    } else {
       resetsynth();
+    }
+  }
   if (frpos)
   {
     if (decode(framebuf))
@@ -292,20 +295,22 @@ binfilepos ampegdecoder::rawread(void *buf, binfilepos len)
   {
     if ((framepos==framesize)&&((len-rd)>=framesize))
     {
-      if (!decode((short*)((char*)buf+rd)))
+      if (!decode((short*)((char*)buf+rd))) {
         break;
+      }
       curframe++;
       rd+=framesize;
       continue;
     }
-    if (framepos==framesize)
+    if (framepos==framesize) {
       if (decode(framebuf))
       {
         framepos=0;
         curframe++;
-      }
-      else
+      } else {
         break;
+      }
+    }
     int l=framesize-framepos;
     if (l>(len-rd))
       l=len-rd;
@@ -323,19 +328,23 @@ int ampegdecoder::decode(void *outsamp)
   {
     stream=!(file->getmode()&modeseek);
     int layer,lsf,freq,stereo;
-    if (!getheader(*file, layer, lsf, freq, stereo, rate))
-      return 0;
-    if (stream)
-      rate=0;
+    if (!getheader(*file, layer, lsf, freq, stereo, rate)) {
+      return 0; 
+    }
+    if (stream) {
+      rate=0; 
+    }
     atend=0;
   }
-  if (atend)
+  if (atend) {
     return 0;
-  if (!decodehdr(init))
+  }
+  if (!decodehdr(init)) {
     if (init)
-      return 0;
+     { return 0; }
     else
-      atend=1;
+     { atend=1; }
+  }
   if (init)
   {
     seekinitframes=0;

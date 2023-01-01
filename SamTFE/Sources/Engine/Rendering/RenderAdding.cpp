@@ -624,7 +624,7 @@ void CRenderer::AddEntitiesInBox(const FLOATaabbox3D &boxNear)
     // if this is terrain entity
     } else if( iten->en_RenderType==CEntity::RT_TERRAIN) {
       // get model's bounding box for current frame
-      #pragma message(">> Is terrain visible")
+      //#pragma message(">> Is terrain visible")
       FLOATaabbox3D boxTerrain;
       iten->GetTerrain()->GetAllTerrainBBox(boxTerrain);
       // get center and radius of the bounding sphere

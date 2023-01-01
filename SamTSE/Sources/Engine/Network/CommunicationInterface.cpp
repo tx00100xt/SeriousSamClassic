@@ -362,7 +362,7 @@ void CCommunicationInterface::PrepareForUse(BOOL bUseNetwork, BOOL bClient)
       cm_strName = net_strLocalHost;
       cm_ulLocalHost = StringToAddress(cm_strName);
       // if invalid
-      if (cm_ulLocalHost==0 || cm_ulLocalHost==-1) {
+      if (cm_ulLocalHost==0 || cm_ulLocalHost==-1UL) {
         cm_ulLocalHost=0;
         // report it
         CPrintF(TRANSV("  requested local address is invalid\n"));
@@ -1311,7 +1311,7 @@ void CCommunicationInterface::UpdateMasterBuffers()
 			// if block received
 			} else {
 				// if there is not at least one byte more in the packet than the header size
-				if (slSizeReceived <= MAX_HEADER_SIZE) {
+				if (slSizeReceived <= static_cast<SLONG>(MAX_HEADER_SIZE)) {
 					// the packet is in error
           extern INDEX net_bReportMiscErrors;          
           if (net_bReportMiscErrors) {

@@ -29,12 +29,19 @@ static inline int CompareDelayedModels( const CDelayedModel &dm0, const CDelayed
 {
   BOOL bHasAlpha0 = dm0.dm_ulFlags&DMF_HASALPHA;
   BOOL bHasAlpha1 = dm1.dm_ulFlags&DMF_HASALPHA;
-       if (! bHasAlpha0 &&  bHasAlpha1) return -1;
-  else if (  bHasAlpha0 && !bHasAlpha1) return +1;
+  if(! bHasAlpha0 &&  bHasAlpha1) {
+     return -1;
+  }  else if(  bHasAlpha0 && !bHasAlpha1) {
+     return +1;
+  }
 
-       if (dm0.dm_fDistance<dm1.dm_fDistance) return -1;
-  else if (dm0.dm_fDistance>dm1.dm_fDistance) return +1;
-  else                                        return  0;
+  if(dm0.dm_fDistance<dm1.dm_fDistance) {
+     return -1;
+  } else if(dm0.dm_fDistance>dm1.dm_fDistance) {
+     return +1;
+  } else {
+     return  0;
+  }
 }
 
 static int qsort_CompareDelayedModels( const void *ppdm0, const void *ppdm1)

@@ -1929,9 +1929,9 @@ void CEntity::FindSectorsAroundEntityNear(void)
         // (use more detailed testing for moving brushes)
         (en_RenderType!=RT_BRUSH||
           // oriented box touches box of sector
-          (oboxEntity.HasContactWith(FLOATobbox3D(pbsc->bsc_boxBoundingBox)))&&
+          ((oboxEntity.HasContactWith(FLOATobbox3D(pbsc->bsc_boxBoundingBox)))&&
           // oriented box is in bsp
-          (pbsc->bsc_bspBSPTree.TestBox(oboxdEntity)>=0));
+          (pbsc->bsc_bspBSPTree.TestBox(oboxdEntity)>=0)));
     // if it is not
     if (!bIn) {
       // if it has link

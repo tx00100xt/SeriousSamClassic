@@ -908,13 +908,13 @@ BOOL CModelInstance::HasAlpha(void)
 
 BOOL CModelInstance::IsModelVisible( FLOAT fMipFactor)
 {
-  #pragma message(">> IsModelVisible")
+  //#pragma message(">> IsModelVisible")
   return TRUE;
 }
 
 BOOL CModelInstance::HasShadow(FLOAT fMipFactor)
 {
-  #pragma message(">> HasShadow")
+  //#pragma message(">> HasShadow")
   return TRUE;
 }
 

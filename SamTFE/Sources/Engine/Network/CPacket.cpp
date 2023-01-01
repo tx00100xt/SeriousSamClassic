@@ -184,7 +184,7 @@ BOOL CPacket::ReadFromPacket(void* pv,SLONG &slExpectedSize)
 	ASSERT(pv != NULL);
 	ASSERT(pa_pubPacketData != NULL);
 
-	if (slExpectedSize < (pa_slSize - MAX_HEADER_SIZE)) {
+	if (slExpectedSize < static_cast<SLONG>((pa_slSize - MAX_HEADER_SIZE))) {
 		return FALSE;
 	}
 	

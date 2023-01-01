@@ -239,7 +239,7 @@ void PrepareSmothVertices(INDEX itt)
         // First vertex is lerped between top and bottom vertices
         Lerp(pavDst[0],pavSrc[0],pavSrc[-tt.tt_ctLodVtxX],pavSrc[tt.tt_ctLodVtxX],fLerpFactor);
         // is this odd vertex in row
-        #pragma message(">> Fix this")
+        //#pragma message(">> Fix this")
         if(((ix+iy)/2)%2) {
         // if(iFacing&1)
           // Second vertex (diagonal one) is lerped between topright and bottom left vertices
@@ -855,7 +855,7 @@ static FLOAT   _fFogAddZ, _fFogAddH;
 static FLOAT   _fHazeAdd;
 
 // check vertex against haze
-#pragma message(">> no asm in GetHazeMapInVertex and GetFogMapInVertex")
+//#pragma message(">> no asm in GetHazeMapInVertex and GetFogMapInVertex")
 static void GetHazeMapInVertex( GFXVertex4 &vtx, GFXTexCoord &txHaze)
 {
   const FLOAT fD = vtx.x*_vViewerObj(1) + vtx.y*_vViewerObj(2) + vtx.z*_vViewerObj(3);
@@ -1242,7 +1242,7 @@ void RenderTerrain(void)
 
   extern FLOATaabbox3D _bboxDrawOne;
   extern FLOATaabbox3D _bboxDrawTwo;
-  #pragma message(">> Remove gfxDrawWireBox")
+  //#pragma message(">> Remove gfxDrawWireBox")
 
   FLOATaabbox3D bboxAllTerrain;
   extern FLOAT3D _vHitBegin;

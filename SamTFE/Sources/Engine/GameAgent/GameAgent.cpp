@@ -179,11 +179,11 @@ rhea.333networks.com
 
 */
 //extern CTString ga_strServer = "master1.croteam.org";
-extern CTString ga_strServer = "sam.ostap.eu";
+__extern CTString ga_strServer = "sam.ostap.eu";
 //extern CTString ga_strMSLegacy = "master1.croteam.org";
-extern CTString ga_strMSLegacy = "sam.ostap.eu";
+__extern CTString ga_strMSLegacy = "sam.ostap.eu";
 
-extern BOOL ga_bMSLegacy = TRUE;
+__extern BOOL ga_bMSLegacy = TRUE;
 //extern BOOL ga_bMSLegacy = FALSE;
 
 #ifdef WIN32
@@ -1330,7 +1330,7 @@ extern void GameAgent_EnumUpdate(void)
         _pNetwork->ga_strEnumerationStatus = "";
 
         sIPPort* pServers = (sIPPort*)(_szBuffer + 1);
-        while(iLen - ((CHAR*)pServers - _szBuffer) >= sizeof(sIPPort)) {
+        while(iLen - ((CHAR*)pServers - _szBuffer) >= static_cast<int>(sizeof(sIPPort))) {
           sIPPort ip = *pServers;
 
           CTString strIP;

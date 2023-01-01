@@ -624,7 +624,7 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
    #ifdef PLATFORM_FREEBSD
     if( tm_TimerID==0x00) FatalError(TRANS("Cannot initialize multimedia timer!"));
    #else
-    if( tm_TimerID==NULL) FatalError(TRANS("Cannot initialize multimedia timer!"));
+    if( tm_TimerID==0x00) FatalError(TRANS("Cannot initialize multimedia timer!"));
    #endif
    #endif
 

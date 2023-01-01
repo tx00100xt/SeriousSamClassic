@@ -222,7 +222,7 @@ void ConvertSlashes(char *p)
   }
 }
 
-#define READ_ZIPFIELD(f, x) { fread(&x, sizeof(x), 1, f); BYTESWAP(x); }
+#define READ_ZIPFIELD(f, x) { size_t _size = fread(&x, sizeof(x), 1, f); BYTESWAP(x); }
 
 // read directory of a zip archive and add all files in it to active set
 void ReadZIPDirectory_t(CTFileName *pfnmZip)
@@ -248,7 +248,7 @@ void ReadZIPDirectory_t(CTFileName *pfnmZip)
     // read signature
     fseek(f, iPos, SEEK_SET);
     SLONG slSig;
-    fread(&slSig, sizeof(slSig), 1, f);
+    size_t _size = fread(&slSig, sizeof(slSig), 1, f);
     BYTESWAP(slSig);
     // if this is the sig
     if (slSig==SIGNATURE_EOD) {
@@ -295,7 +295,7 @@ void ReadZIPDirectory_t(CTFileName *pfnmZip)
   for (INDEX iFile=0; iFile<eod.eod_swEntriesInDir; iFile++) {
     // read the sig
     SLONG slSig;
-    fread(&slSig, sizeof(slSig), 1, f);
+    size_t _size = fread(&slSig, sizeof(slSig), 1, f);
     BYTESWAP(slSig);
 
     // if this is not the expected sig
@@ -333,7 +333,7 @@ void ReadZIPDirectory_t(CTFileName *pfnmZip)
     if (fh.fh_swFileNameLen<=0) {
       ThrowF_t(TRANS("%s: Invalid filepath length in zip"), (const char *) (CTString&)*pfnmZip);
     }
-    fread(strBuffer, fh.fh_swFileNameLen, 1, f);
+    _size = fread(strBuffer, fh.fh_swFileNameLen, 1, f);
 
     // skip eventual comment and extra fields
     if (fh.fh_swFileCommentLen+fh.fh_swExtraFieldLen>0) {
@@ -636,7 +636,7 @@ INDEX UNZIPOpen_t(const CTFileName &fnm)
   fseek(zh.zh_fFile, zh.zh_zeEntry.ze_slDataOffset, SEEK_SET);
   // read the sig
   SLONG slSig;
-  fread(&slSig, sizeof(slSig), 1, zh.zh_fFile);
+  size_t _size = fread(&slSig, sizeof(slSig), 1, zh.zh_fFile);
   BYTESWAP(slSig);
   // if this is not the expected sig
   if (slSig!=SIGNATURE_LFH) {
@@ -758,14 +758,14 @@ void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen)
   if (zh.zh_zeEntry.ze_bStored) {
     // just read from file
     fseek(zh.zh_fFile, zh.zh_zeEntry.ze_slDataOffset+slStart, SEEK_SET);
-    fread(pub, 1, slLen, zh.zh_fFile);
+    size_t _size = fread(pub, 1, slLen, zh.zh_fFile);
     return;
   }
 
   CTSingleLock slZip(&zip_csLock, TRUE);
 
   // if behind the current pointer
-  if (slStart<zh.zh_zstream.total_out) {
+  if (static_cast<ULONG>(slStart) < zh.zh_zstream.total_out) {
     // reset the zlib stream to beginning
     inflateReset(&zh.zh_zstream);
     zh.zh_zstream.avail_in = 0;
@@ -775,7 +775,7 @@ void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen)
   }
 
   // while ahead of the current pointer
-  while (slStart>zh.zh_zstream.total_out) {
+  while (static_cast<ULONG>(slStart) > zh.zh_zstream.total_out) {
     // if zlib has no more input
     while(zh.zh_zstream.avail_in==0) {
       // read more to it
@@ -800,7 +800,7 @@ void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen)
   }
 
   // if not streaming continuously
-  if (slStart!=zh.zh_zstream.total_out) {
+  if (static_cast<ULONG>(slStart) != zh.zh_zstream.total_out) {
     // this should not happen
     ASSERT(FALSE);
     // read empty
