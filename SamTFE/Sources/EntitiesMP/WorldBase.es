@@ -1050,14 +1050,14 @@ functions:
     ulFirst = _offsetof(CWorldBase, m_penGradient0);
     ulLast  = _offsetof(CWorldBase, m_penGradient19);
     strClass = "Gradient Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if( (static_cast<ULONG>(slPropertyOffset)>=ulFirst) && (static_cast<ULONG>(slPropertyOffset)<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
     // if gravity marker
     ulFirst = _offsetof(CWorldBase, m_penGravity0);
     ulLast  = _offsetof(CWorldBase, m_penGravity9);
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if( (static_cast<ULONG>(slPropertyOffset)>=ulFirst) && (static_cast<ULONG>(slPropertyOffset)<=ulLast) ) {
       return 
         IsDerivedFromClass(penTarget, "Gravity Marker")||
         IsDerivedFromClass(penTarget, "Gravity Router");
@@ -1067,7 +1067,7 @@ functions:
     ulFirst = _offsetof(CWorldBase, m_penMirror0);
     ulLast  = _offsetof(CWorldBase, m_penMirror4);
     strClass = "Mirror Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if( (static_cast<ULONG>(slPropertyOffset)>=ulFirst) && (static_cast<ULONG>(slPropertyOffset)<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1075,7 +1075,7 @@ functions:
     ulFirst = _offsetof(CWorldBase, m_penFog0);
     ulLast  = _offsetof(CWorldBase, m_penFog9);
     strClass = "Fog Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if( (static_cast<ULONG>(slPropertyOffset)>=ulFirst) && (static_cast<ULONG>(slPropertyOffset)<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 
@@ -1083,7 +1083,7 @@ functions:
     ulFirst = _offsetof(CWorldBase, m_penHaze0);
     ulLast  = _offsetof(CWorldBase, m_penHaze4);
     strClass = "Haze Marker";
-    if( (slPropertyOffset>=ulFirst) && (slPropertyOffset<=ulLast) ) {
+    if( (static_cast<ULONG>(slPropertyOffset)>=ulFirst) && (static_cast<ULONG>(slPropertyOffset)<=ulLast) ) {
       return (IsDerivedFromClass(penTarget, strClass));
     }
 

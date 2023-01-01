@@ -536,7 +536,7 @@ void Particles_ViewerLocal(CEntity *penView)
       // delete the cache for this EPH and this DrawPort
       INDEX iDrawPort = Particle_GetDrawPortID();
       {FORDELETELIST(CGrowthCache, cgc_Node, eph->lhCache, itCache)
-        if (itCache->ulID==iDrawPort) {
+        if (itCache->ulID==static_cast<ULONG>(iDrawPort)) {
           itCache->acgParticles.Clear();
           itCache->cgc_Node.Remove();
           delete &itCache.Current();
@@ -2603,7 +2603,7 @@ BOOL UpdateGrowthCache(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &
   // find growth cache and check if it is initialised
   CGrowthCache *cgc = NULL;
   {FOREACHINLIST(CGrowthCache, cgc_Node, eph->lhCache, itCache)
-    if (itCache->ulID==iDrawPort) cgc = itCache;
+    if (itCache->ulID==static_cast<ULONG>(iDrawPort)) cgc = itCache;
   }
   // if no cache found, create one
   if (cgc==NULL)
@@ -2780,7 +2780,7 @@ void Particles_Growth(CEntity *pen, CTextureData *ptdGrowthMap, FLOATaabbox3D &b
   // fill structures from cache
   CGrowthCache *cgc = NULL;
   {FOREACHINLIST(CGrowthCache, cgc_Node, eph->lhCache, itCache)
-    if (itCache->ulID==iDrawPort) cgc = itCache;
+    if (itCache->ulID==static_cast<ULONG>(iDrawPort)) cgc = itCache;
   }
   ASSERT(cgc!=NULL);
   static CStaticStackArray<CGrowth> acgDraw;

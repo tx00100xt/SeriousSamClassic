@@ -57,16 +57,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "EntitiesMP/HudPicHolder.h"
 
 #ifdef PLATFORM_UNIX
-extern "C" __attribute__ ((visibility("default"))) FLOAT _fWeaponFOVAdjuster = 1.0f;
-extern "C" __attribute__ ((visibility("default"))) FLOAT _fPlayerFOVAdjuster = 1.0f;
+extern "C" __attribute__ ((visibility("default"))) FLOAT _fWeaponFOVAdjuster;
+extern "C" __attribute__ ((visibility("default"))) FLOAT _fPlayerFOVAdjuster;
 #else
 extern __declspec(dllimport) FLOAT _fWeaponFOVAdjuster;
 extern __declspec(dllimport) FLOAT _fPlayerFOVAdjuster;
 #endif
 
-extern INDEX hud_bShowPing				= TRUE;
-extern INDEX hud_bShowKills				= TRUE;
-extern INDEX hud_bShowScore				= TRUE;
+INDEX hud_bShowPing	= FALSE;
+INDEX hud_bShowKills = FALSE;
+INDEX hud_bShowScore = TRUE;
 
 extern void JumpFromBouncer(CEntity *penToBounce, CEntity *penBouncer);
 // from game
@@ -2200,7 +2200,7 @@ functions:
       {
         fIntensity = 0.5f-0.5f*cos((m_tmInvisibility-tmNow)*(6.0f*3.1415927f/3.0f));
       }
-      if (_ulPlayerRenderingMask == 1<<GetMyPlayerIndex()) {
+      if (_ulPlayerRenderingMask == static_cast<ULONG>(1<<GetMyPlayerIndex())) {
         colAlpha = (colAlpha&0xffffff00)|(INDEX)(INVISIBILITY_ALPHA_LOCAL+(FLOAT)(254-INVISIBILITY_ALPHA_LOCAL)*fIntensity);
       } else if (TRUE) {
         if ((m_tmInvisibility-tmNow)<1.28f) {

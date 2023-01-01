@@ -1654,7 +1654,7 @@ void LavamanBombExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 
   // spawn smaller lava bombs
-  for( INDEX iDebris=0; iDebris<3+IRnd()%3; iDebris++)
+  for( INDEX iDebris = 0; iDebris < static_cast<INDEX>(3+IRnd()%3); iDebris++)
   {
     FLOAT fHeading = (FRnd()-0.5f)*180.0f;
     FLOAT fPitch = 10.0f+FRnd()*40.0f;
@@ -2015,7 +2015,7 @@ void BeastBigProjectileExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 
   // debris
-  for( INDEX iDebris=0; iDebris<3+IRnd()%2; iDebris++)
+  for( INDEX iDebris =0 ; iDebris < static_cast<INDEX>(3+IRnd()%2); iDebris++)
   {
     FLOAT fHeading = (FRnd()-0.5f)*180.0f;
     FLOAT fPitch = 10.0f+FRnd()*40.0f;
@@ -2254,7 +2254,7 @@ void DevilGuidedProjectileExplosion(void)
   penSpray->Initialize( eSpawnSpray);
 
   // debris
-  for( INDEX iDebris=0; iDebris<3+IRnd()%2; iDebris++)
+  for( INDEX iDebris = 0; iDebris < static_cast<INDEX>(3+IRnd()%2); iDebris++)
   {
     FLOAT fHeading = (FRnd()-0.5f)*180.0f;
     FLOAT fPitch = 10.0f+FRnd()*40.0f;

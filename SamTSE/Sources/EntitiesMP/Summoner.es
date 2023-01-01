@@ -207,8 +207,8 @@ functions:
  
   BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
   {
-    if ( slPropertyOffset >= _offsetof(CSummoner, m_penGroup01Template01) &&
-      slPropertyOffset <= _offsetof(CSummoner, m_penGroup03Template06))
+    if ( static_cast<size_t>(slPropertyOffset) >= _offsetof(CSummoner, m_penGroup01Template01) &&
+      static_cast<size_t>(slPropertyOffset) <= _offsetof(CSummoner, m_penGroup03Template06))
     {
       if (IsDerivedFromClass(penTarget, "Enemy Base")) {
         if (((CEnemyBase &)*penTarget).m_bTemplate) {

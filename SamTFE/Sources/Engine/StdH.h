@@ -35,7 +35,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <string>
+#include <string.h>
 #include <stddef.h>
 #include <time.h>
 #include <math.h>
