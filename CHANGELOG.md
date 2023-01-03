@@ -113,3 +113,8 @@ All notable changes to this project will be documented in this file.
 - Fixed incorrect x64 cpp-implementation of ASM code in lightmap.
 - Fixed 64-bit issues in the World Editor. Now the 64-bit version of the World Editor works.
 - Fixed levels load from subdirectory (for Windows).
+
+## 2023-01-02
+- Fixed macro redefinition in Float.cpp (Windows only bug). 
+  (Note: As a result of redefinition, objects inside the world are located incorrectly.
+  For Windows, you need to use the definitions from the header which is in the SDK).

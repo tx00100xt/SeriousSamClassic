@@ -17,11 +17,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <Engine/Math/Float.h>
 
+// Note: macro redefinition	for _MSC_VER
+// As a result of redefinition, objects inside the world are located incorrectly.
+// For Windows, you need to use the definitions from the header which is in the SDK.
+#if (!defined _MSC_VER)
 #define MCW_PC    0x0300
 #define _MCW_PC     MCW_PC
 #define _PC_24    0x0000
 #define _PC_53    0x0200
 #define _PC_64    0x0300
+#endif
 
 // !!! FIXME: I'd like to remove any dependency on the FPU control word from the game, asap.  --ryan.
 #if (defined _MSC_VER)
