@@ -29,9 +29,9 @@ cd ..
 cd ..
 cd SamTSE
 mv Scripts/GLSettings Scripts/GLSettings_new
-wget https://www.massassi.net/files/serious/serioussamsedemo.exe
+wget https://archive.org/download/serioussamsedemo/SeriousSamSEDemo.exe
 wget http://www.cngwireless.net/apps/Game%20Patches/secondencounterpatch107_usa.exe
-7z x serioussamsedemo.exe
+7z x SeriousSamSEDemo.exe
 7z x -y secondencounterpatch107_usa.exe
 rm -fr Scripts/GLSettings
 mv Scripts/GLSettings_new Scripts/GLSettings
