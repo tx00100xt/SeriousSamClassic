@@ -118,9 +118,7 @@ procedures:
     }
 
     // wait for sound to progress to lightning strike
-    if (_atiThunderSounds[ m_iSoundPlaying].ti_fThunderStrikeDelay>0.0f) {
     autowait( _atiThunderSounds[ m_iSoundPlaying].ti_fThunderStrikeDelay);
-    }
 
     // remember current time as lightning start time
     TIME tmNow = _pTimer->CurrentTick();
