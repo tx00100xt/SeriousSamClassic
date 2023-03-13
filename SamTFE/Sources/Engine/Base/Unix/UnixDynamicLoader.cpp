@@ -73,12 +73,15 @@ void CUnixDynamicLoader::DoOpen(const char *lib)
     int _libvorbisfile   = strncmp((const char *)fnmLibname, (const char *) "libvorbisfile", (size_t) 13 ); // skip
     if( _pShell->GetINDEX("sys_iSysPath") == 1 && _libvorbisfile !=0 ) {
         fnmLib = _fnmModLibPath + _fnmMod + fnmLib.FileName() + fnmLib.FileExt();
-    } else if (_libvorbisfile == 0) {
-        #ifndef PLATFORM_MACOSX
-        fnmLib = fnmLibname + CTString(".so.3"); // libvorbisfile.so.3
-        #endif
     }
     module = ::dlopen((const char *)fnmLib, RTLD_LAZY | RTLD_GLOBAL);
+    #ifndef PLATFORM_MACOSX
+    if (_libvorbisfile == 0 && module == NULL) { // if libvorbisfile.so not open trying libvorbisfile.so.3
+        CPrintF("Trying load libvorbisfile.so.3 ...\n");
+        fnmLib = fnmLibname + CTString(".so.3"); // libvorbisfile.so.3
+        module = ::dlopen((const char *)fnmLib, RTLD_LAZY | RTLD_GLOBAL);
+    }
+    #endif
     SetError();
 }
 
