@@ -246,7 +246,7 @@ binfilepos binfile::rawioctl(intm code, void *buf, binfilepos len)
   case ioctlrbufget: return buflen-bufpos;
   case ioctlwbufset: return (mode&modeseek)?setbuffer(len):setwbuffer(len);
   case ioctlwbufgetlen: return (mode&modeseek)?bufmax:wbufmax;
-  case ioctlwbufget: return (mode&modeseek)?bufpos:bufpos;
+  case ioctlwbufget: return (mode&modeseek)?bufpos:wbufpos;
   case ioctlrflush: return invalidatebuffer(0);
   case ioctlrflushforce: return invalidatebuffer(1);
   case ioctlrcancel: return invalidatebuffer(2);
