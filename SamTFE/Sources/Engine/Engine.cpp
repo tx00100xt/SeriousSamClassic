@@ -696,7 +696,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
     _strLogFile = "SeriousSam";
   }
 #ifdef PLATFORM_UNIX
-  _pConsole->Initialize(_fnmUserDir+_strLogFile+".log", 90, 512);
+  if (_bPortableVersion == FALSE) {
+    _pConsole->Initialize(_fnmUserDir+_strLogFile+".log", 90, 512);
+  } else {
+    _pConsole->Initialize(_fnmApplicationPath + _strLogFile + ".log", 90, 512);
+  }
 #else
   _pConsole->Initialize(_fnmApplicationPath + _strLogFile + ".log", 90, 512);
 #endif

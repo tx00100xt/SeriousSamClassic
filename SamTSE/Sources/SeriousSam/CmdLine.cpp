@@ -118,6 +118,10 @@ void ParseCommandLine(CTString strCmd)
       }
     } else if (strWord=="+cdpath") {
       _fnmCDPath = GetNextParam();
+#ifdef PLATFORM_UNIX
+    } else if (strWord=="+portable") {
+      _bPortableVersion = TRUE; // portable version (all user files stored in game dir)
+#endif
     } else if (strWord=="+password") {
       cmd_strPassword = GetNextParam();
     } else if (strWord=="+connect") {

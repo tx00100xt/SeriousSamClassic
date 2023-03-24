@@ -61,6 +61,8 @@ THREADLOCAL(BOOL, _bThreadCanHandleStreams, FALSE);
 ULONG _ulVirtuallyAllocatedSpace = 0;
 ULONG _ulVirtuallyAllocatedSpaceTotal = 0;
 THREADLOCAL(CListHead *, _plhOpenedStreams, NULL);
+// portable version (all user files stored in game dir)
+INDEX _bPortableVersion = FALSE;
 #else
 extern INDEX fil_bPreferZips = FALSE;
 
@@ -1663,20 +1665,20 @@ INDEX ExpandFilePath(ULONG ulType, const CTFileName &fnmFile, CTFileName &fnmExp
 
   //CPrintF("ExpandFilePath: %s\n",(const char *) fnmFile);
 
-  if( _savegame == 0 || _persistentsym == 0 || _gamesgms == 0 ||
-    _comsolehistory == 0 || _userdemos == 0 || _playersplr == 0 || _screenshots == 0 ) {
+  if(( _savegame == 0 || _persistentsym == 0 || _gamesgms == 0 ||
+    _comsolehistory == 0 || _userdemos == 0 || _playersplr == 0 || _screenshots == 0) && ( _bPortableVersion == FALSE)) {
        _fnmApplicationPathTMP = _fnmUserDir;
   } else {
        _fnmApplicationPathTMP = _fnmApplicationPath;
   }
 
-  if( _levelsvis == 0 ) {
+  if( _levelsvis == 0 && _bPortableVersion == FALSE) {
     if (fnmFileAbsolute.FileExt()==".vis") {
        _fnmApplicationPathTMP = _fnmUserDir;
     }
   }
 
-  if( _usercontrols == 0 ) {
+  if( _usercontrols == 0 && _bPortableVersion == FALSE) {
     CTFileName _fnSControls = fnmFileAbsolute.FileName();
     int _controls   = strncmp((const char *)_fnSControls, (const char *) "Controls", (size_t) 8 );
     if ( _controls == 0 ) {

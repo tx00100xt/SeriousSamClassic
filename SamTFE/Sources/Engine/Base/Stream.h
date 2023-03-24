@@ -406,6 +406,10 @@ ENGINE_API extern CTString _strModExt;
 ENGINE_API extern CTFileName _fnmCDPath;
 // global string with filename of the started application
 ENGINE_API extern CTFileName _fnmApplicationExe;
+#ifdef PLATFORM_UNIX
+// portable version (all user files stored in game dir)
+ENGINE_API extern INDEX _bPortableVersion;
+#endif
 
 // application path usage funtions
 ENGINE_API void UseApplicationPath(void);
