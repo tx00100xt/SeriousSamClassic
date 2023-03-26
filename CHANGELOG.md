@@ -118,3 +118,9 @@ All notable changes to this project will be documented in this file.
 - Fixed macro redefinition in Float.cpp (Windows only bug). 
   (Note: As a result of redefinition, objects inside the world are located incorrectly.
   For Windows, you need to use the definitions from the header which is in the SDK).
+
+## 2023-02-23 - 2022-03-25
+- Fixing a bug with thunder, the sound of thunder and flashes on the level of Hatshepsut.
+- Fixed loading libvorbisfile library for non-source-based distros.
+- Fixed bug with ioctlwbufget.
+- Added portable mode for command line (+portable). In portable mode, all user data is stored in the game directory.
