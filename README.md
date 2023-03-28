@@ -1,4 +1,7 @@
 ## Serious Sam Classic
+![Build status](https://github.com/tx00100xt/SeriousSamClassic/actions/workflows/cibuild.yml/badge.svg)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/tx00100xt/SeriousSamClassic)
 
 This is the source code for Serious Engine v.1.10, including the following projects:
 
