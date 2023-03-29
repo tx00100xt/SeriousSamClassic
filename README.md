@@ -317,6 +317,11 @@ Supported OS
 * `Windows`
 * `Raspberry PI OS`
 
+### Build status
+|CI|Platform|Compiler|Configurations|Platforms|Status|
+|---|---|---|---|---|---|
+|GitHub Actions|Windows, Ubuntu|MSVC, GCC|Release|x64|![GitHub Actions Build Status](https://github.com/tx00100xt/SeriousSamClassic/actions/workflows/cibuild.yml/badge.svg)
+
 License
 -------
 
