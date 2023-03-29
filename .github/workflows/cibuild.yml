@@ -40,4 +40,27 @@ jobs:
           make -j$(nproc || echo 4) 
           cd ${{github.workspace}}/SamTFE/Sources/build-x64-tfe 
           make ecc
-          make -j$(nproc || echo 4)      
+          make -j$(nproc || echo 4)  
+          
+  build-windows-x64:
+    name: Windows ${{ matrix.Configuration }} ${{ matrix.Platform }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        Configuration: [Release]
+        Platform: [x64]
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: microsoft/setup-msbuild@v1.0.2
+      with:
+        vs-version: '14.0'   
+
+    - name: MS Build SamTFE
+      working-directory: SamTFE/Sources
+      run: msbuild /m /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" SamTFE.sln
+      
+    - name: MS Build SamTSE
+      working-directory: SamTSE/Sources
+      run: msbuild /m /p:Configuration="${{ matrix.Configuration }}" /p:Platform="${{ matrix.Platform }}" SamTSE.sln     
