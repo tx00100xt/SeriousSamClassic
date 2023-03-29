@@ -102,13 +102,13 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir);$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\Bin\Debug;$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)..\Bin\Debug;$(SolutionDir)..\Tools.Win32\;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(SolutionDir)..\Bin\Debug;$(SolutionDir)..\Tools.Win32\;$(VsInstallRoot)\Common7\Tools\;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir);$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\Bin\Debug;$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)..\Bin\Debug;$(SolutionDir)..\Tools.Win32\;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(SolutionDir)..\Bin\Debug;$(SolutionDir)..\Tools.Win32\;$(VsInstallRoot)\Common7\Tools\;$(ExecutablePath)</ExecutablePath>
     <OutDir>Debug\</OutDir>
     <IntDir>Debug\</IntDir>
   </PropertyGroup>
@@ -118,13 +118,13 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir);$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\Bin;$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)..\Bin;$(SolutionDir)..\Tools.Win32\;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(SolutionDir)..\Bin;$(SolutionDir)..\Tools.Win32\;$(VsInstallRoot)\Common7\Tools\;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir);$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\Bin;$(SolutionDir)..\Tools.Win32\Libraries\DX8SDK\Lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)..\Bin;$(SolutionDir)..\Tools.Win32\;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(SolutionDir)..\Bin;$(SolutionDir)..\Tools.Win32\;$(VsInstallRoot)\Common7\Tools\;$(ExecutablePath)</ExecutablePath>
     <OutDir>Release\</OutDir>
     <IntDir>Release\</IntDir>
   </PropertyGroup>
@@ -147,7 +147,8 @@
       <ProgramDataBaseFileName>Debug\</ProgramDataBaseFileName>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DisableSpecificWarnings>4996;4603;4333</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories></AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -196,7 +197,8 @@ copy Debug\$(TargetName).map $(SolutionDir)..\Bin\Debug\ &gt;nul </Command>
       <ProgramDataBaseFileName>Debug\</ProgramDataBaseFileName>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DisableSpecificWarnings>4996;4603;4333</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories></AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -244,7 +246,8 @@ copy Debug\$(TargetName).map $(SolutionDir)..\Bin\Debug\ &gt;nul </Command>
       <ObjectFileName>Release\</ObjectFileName>
       <ProgramDataBaseFileName>Release\</ProgramDataBaseFileName>
       <DisableSpecificWarnings>4996;4603;4333</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories></AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -293,7 +296,8 @@ copy Release\$(TargetName).map $(SolutionDir)..\Bin\ &gt;nul </Command>
       <ObjectFileName>Release\</ObjectFileName>
       <ProgramDataBaseFileName>Release\</ProgramDataBaseFileName>
       <DisableSpecificWarnings>4996;4603;4333</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories></AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
