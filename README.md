@@ -320,7 +320,10 @@ Supported OS
 ### Build status
 |CI|Platform|Compiler|Configurations|Platforms|Status|
 |---|---|---|---|---|---|
-|GitHub Actions|Windows, Ubuntu|MSVC, GCC|Release|x64|![GitHub Actions Build Status](https://github.com/tx00100xt/SeriousSamClassic/actions/workflows/cibuild.yml/badge.svg)
+|GitHub Actions|Windows, Ubuntu, FreeBSD, Alpine|MSVC, GCC, Clang|Release|x86, x64|![GitHub Actions Build Status](https://github.com/tx00100xt/SeriousSamClassic/actions/workflows/cibuild.yml/badge.svg)
+
+You can download a the automatically build based on the latest commit.  
+To do this, go to the [Actions tab], select the top workflows, and then Artifacts.
 
 License
 -------
@@ -340,3 +343,4 @@ Some of the code included with the engine sources is not licensed under the GNU 
 [Xplus TSE from pCloud]: https://e1.pcloud.link/publink/show?code=XZy2gRZ3D7n8fu83SkhIdB1xRaK7y9pKiry "Serious Sam Classic XPLUS Mod"
 [Visual Studio 2015 Community Edition]: https://go.microsoft.com/fwlink/?LinkId=615448&clcid=0x409 "Visual Studio 2015 Community Edition"
 [Windows 10 SDK 10.0.14393.795]: https://go.microsoft.com/fwlink/p/?LinkId=838916 "Windows 10 SDK 10.0.14393.795"
+[Actions tab]: https://github.com/tx00100xt//SeriousSamClassic/actions "Download Artifacts"
