@@ -244,12 +244,12 @@ jobs:
           find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
           echo "*** prepare SamTSE ***"      
           cd ${{github.workspace}}/SamTSE/Sources
-          cmake -B ${{github.workspace}}/SamTSE/Sources/build-x86-tse -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE
-          cmake -B ${{github.workspace}}/SamTSE/Sources/build-x86-tse-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE
+          cmake -B ${{github.workspace}}/SamTSE/Sources/build-x86-tse -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
+          cmake -B ${{github.workspace}}/SamTSE/Sources/build-x86-tse-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
           echo "*** prepare SamTFE ***"
           cd ${{github.workspace}}/SamTFE/Sources
-          cmake -B ${{github.workspace}}/SamTFE/Sources/build-x86-tfe -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE -DTFE=TRUE
-          cmake -B ${{github.workspace}}/SamTFE/Sources/build-x86-tfe-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE -DTFE=TRUE
+          cmake -B ${{github.workspace}}/SamTFE/Sources/build-x86-tfe -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE -DTFE=TRUE
+          cmake -B ${{github.workspace}}/SamTFE/Sources/build-x86-tfe-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE -DTFE=TRUE
           
     - name: Run Build
       run: |
