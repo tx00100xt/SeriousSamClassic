@@ -31,7 +31,7 @@ cp -vfr ../EntitiesMP/PlayerWeapons_old.es ../EntitiesMP/PlayerWeapons.es
 # cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE .. $1
 if [ -n "$1" ]
 then
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-mbe32 -DCMAKE_CXX_FLAGS=-mbe32 -DUSE_I386_NASM_ASM=FALSE .. $1
+cmake -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE .. $1
 else
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 -DUSE_I386_NASM_ASM=TRUE .. $1
 fi
