@@ -199,6 +199,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
         endif()
 
 	# TODO fix these warnings
+	add_compile_options(-Wno-format-security)
 	add_compile_options(-Wno-switch)
 	add_compile_options(-Wno-char-subscripts)
 	add_compile_options(-Wno-unknown-pragmas)
