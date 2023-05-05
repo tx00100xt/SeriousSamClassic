@@ -762,4 +762,120 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz
-        path: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz          
+        path: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz  
+
+  build-ubuntu-riscv64:
+    # The host should always be linux
+    runs-on: ubuntu-22.04
+    name: Ubuntu Release ${{ matrix.arch }}
+
+    # Run steps on a matrix of 4 arch/distro combinations
+    strategy:
+      matrix:
+        include:
+          - arch: riscv64
+            distro: ubuntu22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v2
+        name: Build artifact
+        id: build
+        with:
+          arch: ${{ matrix.arch }}
+          distro: ${{ matrix.distro }}
+
+          # Not required, but speeds up builds
+          githubToken: ${{ github.token }}
+
+          # Create an artifacts directory
+          setup: |
+            mkdir -p "${PWD}/artifacts"
+
+          # Mount the artifacts directory as /artifacts in the container
+          dockerRunArgs: |
+            --volume "${PWD}/artifacts:/artifacts"
+
+          # Pass some environment variables to the container
+          env: | # YAML, but pipe character is necessary
+            artifact_name: git-${{ matrix.distro }}_${{ matrix.arch }}
+
+          # The shell to run commands with in the container
+          shell: /bin/bash
+
+          # Install some dependencies in the container. This speeds up builds if
+          # you are also using githubToken. Any dependencies installed here will
+          # be part of the container image that gets cached, so subsequent
+          # builds don't have to re-install them. The image layer is cached
+          # publicly in your project's package repository, so it is vital that
+          # no secrets are present in the container state or logs.
+          install: |
+            case "${{ matrix.distro }}" in
+              ubuntu*|jessie|stretch|buster|bullseye)
+                apt-get update -qq -y
+                apt-get install -qq -y git cmake build-essential xz-utils &&
+                apt-get install -qq -y libsdl2-dev libogg-dev libvorbis-dev &&
+                apt-get install -qq -y bison flex zlib1g-dev libxxhash-dev &&
+                apt-get install -qq -y libvulkan1 libvulkan-dev vulkan-validationlayers vulkan-validationlayers-dev    
+                ;;
+              fedora*)
+                dnf -y update
+                dnf -y install git which
+                ;;
+              alpine*)
+                apk update
+                apk add git
+                ;;
+            esac
+
+          # Produce a binary artifact and place it in the mounted volume
+          run: |
+            cd ${{github.workspace}}/SamTFE/Sources            
+            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr
+            cd ${{github.workspace}}/SamTSE/Sources
+            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr  
+            cd ${{github.workspace}}/SamTFE/Sources/build
+            make ecc
+            make -j4
+            cd ${{github.workspace}}/SamTSE/Sources/build
+            make ecc     
+            make -j4             
+
+      - name: Get current date
+        id: date
+        uses: Kaven-Universe/github-action-current-date-time@v1
+        with:
+           format: "YYYYMMDD"
+
+      - name: Show current date
+        run: |
+          echo "${{ steps.date.outputs.time }}"   
+
+      - name: Make artifact
+        # Items placed in /artifacts in the container will be in
+        # ${PWD}/artifacts on the host.
+        run: |
+            cd ${{github.workspace}}
+            mkdir riscv64 && cd riscv64
+            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTFE/Mods/XPLUS/Bin,SamTFE/Bin,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS,SamTSE/Mods/XPLUS/Bin,SamTSE/Bin}
+            cd ${{github.workspace}}
+            echo "*** Copy SamTFE Libraries and Executables ***"
+            cp -vfr SamTFE/Sources/build/Debug/*.so riscv64/SamTFE/Bin
+            cp -vfr SamTFE/Sources/build/{serioussam,serioussam-ded,serioussam-mkfont} riscv64/SamTFE/Bin
+            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libEntities.so riscv64/SamTFE/Mods/XPLUS/Bin"
+            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libGame.so riscv64/SamTFE/Mods/XPLUS/Bin"
+            echo "*** Copy SamTSE Libraries and Executables ***"
+            cp -vfr SamTSE/Sources/build/Debug/*.so riscv64/SamTSE/Bin
+            cp -vfr SamTSE/Sources/build/{serioussamse,serioussamse-ded,serioussamse-mkfont} riscv64/SamTSE/Bin
+            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libEntitiesMP.so riscv64/SamTSE/Mods/XPLUS/Bin"
+            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libGameMP.so riscv64/SamTSE/Mods/XPLUS/Bin"
+            echo "*** Copy Data files ***"
+            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} riscv64/SamTFE
+            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} riscv64/SamTSE
+            echo "*** Create archive ***"
+            tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz riscv64          
+            
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz
+          path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz                 
