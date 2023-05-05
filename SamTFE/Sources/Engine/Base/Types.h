@@ -85,8 +85,14 @@ typedef uint32_t UINT;
   #define PLATFORM_LITTLEENDIAN 1
 #endif
 
+#if defined(__riscv) && (__riscv_xlen == 64)
+  #define PLATFORM_RISCV64 1
+#else
+  #define PLATFORM_RISCV64 0
+#endif
+
 #if defined(__x86_64__) || defined(_M_X64) || defined(__aarch64__) || defined(_ARCH_PPC64) \
-    || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__)
+    || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__) || PLATFORM_RISCV64
 
   #define PLATFORM_64BIT 1
 
