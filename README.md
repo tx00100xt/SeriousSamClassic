@@ -250,7 +250,19 @@ make -j4
 cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
 Download:
-[Xplus TFE from Google Drive] or [Xplus TFE from pCloud], and unpack to  SeriousSamClassic/SamTFE/Mods directory.
+[Xplus TFE from Google Drive] or [Xplus TFE from pCloud], and unpack to  SeriousSamClassic/SamTFE/Mods directory.  
+You can also download the archive using curl or wget:
+```
+cd SeriousSamClassic
+wget https://archive.org/download/sam-tfe-xplus/SamTFE-XPLUS.tar.xz
+tar -xJvpf SamTFE-XPLUS.tar.xz -C SamTFE
+```
+or
+```
+cd SeriousSamClassic
+for var in a b c; do wget https://github.com/tx00100xt/serioussam-mods/raw/main/SamTFE-XPLUS/SamTFE-XPLUS.tar.xz.parta$var; done; cat SamTFE-XPLUS.tar.xz.part* > SamTFE-XPLUS.tar.xz
+tar -xJvpf SamTFE-XPLUS.tar.xz -C SamTFE
+```
 To start the modification, use the game menu - item Modification.
 
 ### Linux
@@ -280,7 +292,19 @@ make -j4
 cp -v Debug/*.so ../../Mods/XPLUS/Bin
 ```
 Download:
-[Xplus TSE from Google Drive] or [Xplus TSE from pCloud],, and unpack to  SeriousSamClassic/SamTSE/Mods directory.
+[Xplus TSE from Google Drive] or [Xplus TSE from pCloud],, and unpack to  SeriousSamClassic/SamTSE/Mods directory.    
+You can also download the archive using curl or wget:
+```
+cd SeriousSamClassic
+wget https://archive.org/download/sam-tse-xplus/SamTSE-XPLUS.tar.xz
+tar -xJvpf SamTSE-XPLUS.tar.xz -C SamTSE
+```
+or
+```
+cd SeriousSamClassic
+for var in a b c; do wget https://github.com/tx00100xt/serioussam-mods/raw/main/SamTSE-XPLUS/SamTSE-XPLUS.tar.xz.parta$var; done; cat SamTSE-XPLUS.tar.xz.part* > SamTSE-XPLUS.tar.xz
+tar -xJvpf SamTSE-XPLUS.tar.xz -C SamTSE
+```
 To start the modification, use the game menu - item Modification.
 
 Building demo version of the game
