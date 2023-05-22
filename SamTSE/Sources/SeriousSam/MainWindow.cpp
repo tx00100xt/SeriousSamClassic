@@ -285,7 +285,7 @@ void OpenMainWindowFullScreen( PIX pixSizeI, PIX pixSizeJ)
 #else
   SDL_snprintf( achWindowTitle, sizeof (achWindowTitle), TRANSV("Serious Sam (FullScreen %dx%d)"), pixSizeI, pixSizeJ);
   //CPrintF((const char*)"--- %s ---\n",achWindowTitle);
-  _hwndMain = SDL_CreateWindow((const char*)strWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
+  _hwndMain = SDL_CreateWindow((const char*)strWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_BORDERLESS);
   if( _hwndMain==NULL) FatalError(TRANSV("Cannot open main window!"));
   SE_UpdateWindowHandle( _hwndMain);
   _pixLastSizeI = pixSizeI;
