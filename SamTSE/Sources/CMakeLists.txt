@@ -70,6 +70,15 @@ if(CMAKE_INSTALL_PREFIX STREQUAL "/usr" ) # Only works for linux since I don't k
     set(LOCAL_INSTALL FALSE)
 endif()
 
+if(NOT LOCAL_INSTALL)
+	find_package(ImageMagick COMPONENTS convert)
+    if(ImageMagick_convert_FOUND)
+        #message(STATUS "ImageMagick convert found: ${ImageMagick_convert_EXECUTABLE}")
+    else()
+        message(FATAL_ERROR "Error! USE_SYSTEM_ZLIB is set but neccessary developer files are missing")
+    endif()
+endif()
+
 # Set internal name for not local installation
 if(TFE)
     set(INTERNAL_NAME "serioussam")
@@ -1333,10 +1342,10 @@ if(DEBUG) # RAKE! Will this work with TFE?
 else()
     install(TARGETS SeriousSam ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB}
             RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
-            LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
+            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     install(TARGETS ${ENGINELIB}
-            LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     if(BUILD_DEDICATED_SERVER)
         install(TARGETS DedicatedServer
@@ -1350,7 +1359,7 @@ else()
     endif()
     if(BUILD_AMP11LIB)
         install(TARGETS amp11lib
-                LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
+                LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
 endif()
@@ -1361,7 +1370,25 @@ endif()
 if(NOT LOCAL_INSTALL)
     install(FILES ${CMAKE_SOURCE_DIR}/../SE1_10b.gro
             DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${INTERNAL_NAME}"
-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+            PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+    install(FILES "${CMAKE_SOURCE_DIR}/../${INTERNAL_NAME}.desktop"
+            DESTINATION "${CMAKE_INSTALL_PREFIX}//share/applications"
+            PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+    set(A 16)
+    set(B 32)
+    set(C 48)
+    set(D 64)
+    set(E 128)
+    foreach(X IN LISTS A B C D E)
+        #message(STATUS "Create icon ${X}x${X}")
+        execute_process (
+            COMMAND bash -c "${ImageMagick_convert_EXECUTABLE} ${CMAKE_SOURCE_DIR}/../serioussam.png -scale ${X}x${X} ${CMAKE_SOURCE_DIR}/../${X}.png;"
+            OUTPUT_VARIABLE outVar
+       )
+       install(FILES ${CMAKE_SOURCE_DIR}/../${X}.png
+               DESTINATION "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/${X}x${X}/apps" RENAME serioussam.png
+               PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+	endforeach()
 endif()
 
 # end of CMakeLists.txt ...
