@@ -814,7 +814,7 @@ jobs:
                 apt-get update -qq -y
                 apt-get install -qq -y git cmake build-essential xz-utils &&
                 apt-get install -qq -y libsdl2-dev libogg-dev libvorbis-dev &&
-                apt-get install -qq -y bison flex zlib1g-dev libxxhash-dev &&
+                apt-get install -qq -y imagemagick bison flex zlib1g-dev libxxhash-dev &&
                 apt-get install -qq -y libvulkan1 libvulkan-dev vulkan-validationlayers vulkan-validationlayers-dev    
                 ;;
               fedora*)
