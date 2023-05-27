@@ -36,7 +36,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Templates/DynamicArray.cpp>
 
 #if (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
-  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__) || !PLATFORM_RISCV64)
+  && !PLATFORM_NOT_X86
 #include <xmmintrin.h>
 #endif
 
@@ -172,7 +172,7 @@ inline void CLayerMixer::AddToCluster( UBYTE *pub, SLONG slIntensity)
 }
 
 #if (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
-  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__) || !PLATFORM_RISCV64)
+  && !PLATFORM_NOT_X86
 inline UBYTE SaturateSignedWordToUnsignedByte(SLONG sl)
 {
   if (sl <= -1) {
@@ -454,7 +454,7 @@ skipPixel:
   );
 
 #elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
-  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__) || !PLATFORM_RISCV64)
+  && !PLATFORM_NOT_X86
 
   // prepare color
   __m64 tmp_mm7;
@@ -820,7 +820,7 @@ skipPixel:
   );
 
 #elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
-  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__) || !PLATFORM_RISCV64)
+  && !PLATFORM_NOT_X86
 
   // prepare color
   __m64 tmp_mm7;
@@ -1186,7 +1186,7 @@ skipPixel:
   );
 
 #elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
-  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__) || !PLATFORM_RISCV64)
+  && !PLATFORM_NOT_X86
 
   // for each pixel in the shadow map
 
@@ -1562,7 +1562,7 @@ skipPixel:
   );
 
 #elif (defined(__x86_64__) && defined(__GNUC__)) || (defined(PLATFORM_64BIT) && defined(_MSC_VER)) \
-  && (!defined(PLATFORM_PANDORA) || !defined(PLATFORM_PYRA) || !defined(PLATFORM_RPI4) || !defined(__e2k__) || !PLATFORM_RISCV64)
+  && !PLATFORM_NOT_X86
 
   // prepare color
   __m64 tmp_mm7;

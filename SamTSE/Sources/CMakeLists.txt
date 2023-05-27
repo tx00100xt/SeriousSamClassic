@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 2.8.12)
 project(SeriousEngine)
 
 # Set @rpath for Mac OS X shared library install names.
@@ -8,7 +8,6 @@ project(SeriousEngine)
 option(USE_SYSTEM_SDL2 "Use systems sdl2 development files" On)
 option(USE_SYSTEM_ZLIB "Use systems zlib development files" On)
 option(USE_CCACHE "Set to ON to use ccache if present in the system" ${USE_CCACHE})
-
 
 # fallback for cmake versions without add_compile_options # RAKE! Borrowed from dhewm3 project
 if(NOT COMMAND add_compile_options)
@@ -102,6 +101,92 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     SET(DEBUG TRUE)
 endif()
 
+if (LINUX)
+    set (CMAKE_OS_NAME "GNU/Linux" CACHE STRING "Operating system name" FORCE)
+    ## Check for Debian GNU/Linux
+    find_file (DEBIAN_FOUND debian_version debconf.conf
+      PATHS /etc
+      )
+    if (DEBIAN_FOUND)
+      set (CMAKE_OS_NAME "Debian" CACHE STRING "Operating system name" FORCE)
+    endif (DEBIAN_FOUND)
+    ##  Check for Fedora
+    find_file (FEDORA_FOUND fedora-release
+      PATHS /etc
+      )
+    if (FEDORA_FOUND)
+      set (CMAKE_OS_NAME "Fedora" CACHE STRING "Operating system name" FORCE)
+    endif (FEDORA_FOUND)
+    ##  Check for RedHat
+    find_file (REDHAT_FOUND redhat-release inittab.RH
+      PATHS /etc
+      )
+    if (REDHAT_FOUND)
+      set (CMAKE_OS_NAME "RedHat" CACHE STRING "Operating system name" FORCE)
+    endif (REDHAT_FOUND)   
+    ## Extra check for Ubuntu    
+    if (DEBIAN_FOUND)
+      ## At its core Ubuntu is a Debian system, with
+      ## a slightly altered configuration; hence from
+      ## a first superficial inspection a system will
+      ## be considered as Debian, which signifies an
+      ## extra check is required.
+      find_file (UBUNTU_EXTRA legal issue
+	PATHS /etc
+	)
+    if (UBUNTU_EXTRA)
+	## Scan contents of file
+	file (STRINGS ${UBUNTU_EXTRA} UBUNTU_FOUND
+	  REGEX Ubuntu
+	  )
+	## Check result of string search
+	if (UBUNTU_FOUND)
+	  set (CMAKE_OS_NAME "Ubuntu" CACHE STRING "Operating system name" FORCE)
+	  set (DEBIAN_FOUND FALSE)
+	endif (UBUNTU_FOUND)
+    endif (UBUNTU_EXTRA)      
+    endif (DEBIAN_FOUND)
+endif (LINUX)
+
+message(STATUS "Operating system name: ${CMAKE_OS_NAME}")
+
+set(CMAKE_ARCH_BITS 32)
+set(CMAKE_INSTALL_LIBDIR "/usr/lib")
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(CMAKE_ARCH_BITS 64)
+    set(CMAKE_INSTALL_LIBDIR "/usr/lib64")
+endif()
+
+message(STATUS "Arch bits: ${CMAKE_ARCH_BITS}")
+
+if(DEBIAN_FOUND OR UBUNTU_FOUND)
+    #set libdir for debian based OS
+    if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "riscv64")
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/riscv64-linux-gnu")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)")  # 32bit)
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/arm-linux-gnueabihf")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*)")
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/aarch64-linux-gnu")
+        if(NOT "${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+            message(FATAL_ERROR "invalid pointer size")
+        endif()
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(powerpc|ppc)64")
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/powerpc64-linux-gnu")
+    elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL s390x)
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/s390x-linux-gnu/")
+    elseif((CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i686|x86|AMD64") AND (CMAKE_SIZEOF_VOID_P EQUAL 4))
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/i386-linux-gnu")
+    elseif((CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64") AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/x86_64-linux-gnu")
+    elseif((CMAKE_SYSTEM_PROCESSOR MATCHES "i386") AND (CMAKE_SIZEOF_VOID_P EQUAL 8) AND (APPLE))
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/i386-linux-gnu")
+    else()
+        message(FATAL_ERROR "Unknown architecture")
+    endif()
+endif()
+
+message(STATUS "Installed libraries dir: ${CMAKE_INSTALL_LIBDIR}")
+
 ## ** RAKE! start compiler specific flags section **
 ## ** RAKE! Borrowed from dhewm3 project, need to **
 ## ** RAKE! clean up for SeriousEngine use. Also  **
@@ -121,7 +206,11 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 		    add_compile_options(-fomit-frame-pointer)
 			message(STATUS "Architecture RISCV64, -march=rv64gc")
 		else()
-			add_compile_options(-march=native)
+            if(LOCAL_INSTALL)
+			    add_compile_options(-march=native)
+            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i586|i686|x86|AMD64|x86_64")
+			    add_compile_options(-mtune=generic)
+		    endif()
 		endif()
 	endif()
 	if(NOT RPI4 AND CMAKE_SYSTEM_PROCESSOR MATCHES "^arm.*")
@@ -1244,10 +1333,10 @@ if(DEBUG) # RAKE! Will this work with TFE?
 else()
     install(TARGETS SeriousSam ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB}
             RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
-            LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/${INTERNAL_NAME}"
+            LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     install(TARGETS ${ENGINELIB}
-            LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+            LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     if(BUILD_DEDICATED_SERVER)
         install(TARGETS DedicatedServer
@@ -1261,7 +1350,7 @@ else()
     endif()
     if(BUILD_AMP11LIB)
         install(TARGETS amp11lib
-                LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/${INTERNAL_NAME}"
+                LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
 endif()

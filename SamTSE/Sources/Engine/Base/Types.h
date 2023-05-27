@@ -91,8 +91,16 @@ typedef uint32_t UINT;
   #define PLATFORM_RISCV64 0
 #endif
 
+#if defined(__aarch64__) || defined(__arm__) || PLATFORM_RISCV64 || defined(__mips__) || defined(__s390x__) || defined(__s390__) \
+    || defined(_powerpc)  || defined(__powerpc__)  || defined(__powerpc64__)  || defined(__POWERPC__)  || defined(__ppc__) \
+    || defined(__ppc64__)  || defined(__PPC__)  || defined(__PPC64__)  || defined(_ARCH_PPC)  || defined(_ARCH_PPC64) || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__)
+  #define PLATFORM_NOT_X86 1
+#else
+  #define PLATFORM_NOT_X86 0
+#endif
+
 #if defined(__x86_64__) || defined(_M_X64) || defined(__aarch64__) || defined(_ARCH_PPC64) \
-    || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__) || PLATFORM_RISCV64
+    || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__) || PLATFORM_RISCV64 || defined(__powerpc64__) || defined(__s390x__) || defined(__ppc64__)
 
   #define PLATFORM_64BIT 1
 
