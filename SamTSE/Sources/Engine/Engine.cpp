@@ -752,7 +752,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
   } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/arm-linux-gnueabihf")) {
     _fnmModLibPath = "/usr/lib/arm-linux-gnueabihf/" + strGameID + "/";
   } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/riscv64-linux-gnu")) {
-    _fnmModLibPath = "/usr/lib/riscv64-linux-gnu/" + strGameID + "/"; 
+    _fnmModLibPath = "/usr/lib/riscv64-linux-gnu/" + strGameID + "/";
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/s390x-linux-gnu")) {
+    _fnmModLibPath = "/usr/lib/s390x-linux-gnu/" + strGameID + "/"; 
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/powerpc64-linux-gnu")) {
+    _fnmModLibPath = "/usr/lib/powerpc64-linux-gnu/" + strGameID + "/"; 
   } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/x86_64-linux-gnu")) {
     _fnmModLibPath = "/usr/lib/x86_64-linux-gnu/" + strGameID + "/";
   } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/i386-linux-gnu")) {

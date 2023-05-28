@@ -124,3 +124,16 @@ All notable changes to this project will be documented in this file.
 - Fixed loading libvorbisfile library for non-source-based distros.
 - Fixed bug with ioctlwbufget.
 - Added portable mode for command line (+portable). In portable mode, all user data is stored in the game directory.
+
+## 2023-03-28 - 2022-05-28
+- Added GitGib Action for building artefacts.
+- Added optimization for Rasberry PI 3B/4 to CMakeLists.txt.
+- Add paths for non-X86 deb based OS to Engine and CMakeLists.txt.
+- Fixed building on Fedora 38.
+- Fixed incorrect path definition when box 64 is installed for non-x86 systems
+- Updated patch links for building demo version.
+- Fix to run under Gnome 44 (Gnome 44 bug on sdl2).
+- Updated platforms definitions. Added icon and desktop files.
+- Fixed install sections. Added icons and desktop files to this sections.
+- Updated building scripts.
+- Written by Wiki for the game.

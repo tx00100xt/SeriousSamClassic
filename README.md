@@ -109,13 +109,11 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTFE/Sources
-cp -vfr Entities/PlayerWeapons_old.es Entities/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
-make -j4
-cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
-cp -v Debug/*.so ../../Bin
+cmake -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE ..
+make ecc && make -j4
+make install
 ```
 
 #### Building (only for SS:TSE)
@@ -124,13 +122,12 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTSE/Sources
-cp -vfr EntitiesMP/PlayerWeapons_old.es EntitiesMP/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j4
-cp -v SeriousSam DedicatedServer MakeFONT ecc ../../Bin
-cp -v Debug/*.so ../../Bin
+make ecc && make -j4
+make install
 ```
 
 Note that the CD version of SS:TSE used MP3 for music. You will need to build / get `libamp11lib.so` and copy it inside `Bin` with the other libs to have music. Steam version uses ogg and doesn't need this library.
@@ -231,7 +228,7 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTFE/Sources
-./build-linux64xplus.sh -DTFE=TRUE	# use build-linux32xplus.sh for 32-bits
+./build-linux64.sh -DTFE=TRUE -DXPLUS=TRUE 		# use build-linux32.sh for 32-bits
 ```
 
 ### FreeBSD
@@ -242,12 +239,11 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTFE/Sources
-cp -vfr Entities/PlayerWeaponsHD.es Entities/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DTFE=TRUE ..
-make -j4
-cp -v Debug/*.so ../../Mods/XPLUS/Bin
+cmake -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DXPLUS=TRUE ..
+make ecc && make -j4
+make install
 ```
 Download:
 [Xplus TFE from Google Drive] or [Xplus TFE from pCloud], and unpack to  SeriousSamClassic/SamTFE/Mods directory.
@@ -273,7 +269,7 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTSE/Sources
-./build-linux64xplus.sh        	    # use build-linux32xplus.sh for 32-bits
+./build-linux64.sh -DXPLUS=TRUE       	    # use build-linux32.sh for 32-bits
 ```
 
 ### FreeBSD
@@ -284,12 +280,11 @@ Type this in your terminal:
 
 ```
 cd SeriousSamClassic/SamTSE/Sources
-cp -vfr EntitiesMP/PlayerWeaponsHD.es EntitiesMP/PlayerWeapons.es
 mkdir cmake-build
 cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
-make -j4
-cp -v Debug/*.so ../../Mods/XPLUS/Bin
+cmake -DCMAKE_BUILD_TYPE=Release -DXPLUS=TRUE ..
+make ecc && make -j4
+make install
 ```
 Download:
 [Xplus TSE from Google Drive] or [Xplus TSE from pCloud],, and unpack to  SeriousSamClassic/SamTSE/Mods directory.

@@ -182,7 +182,7 @@ if(DEBIAN_FOUND OR UBUNTU_FOUND)
     elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(powerpc|ppc)64")
         set(CMAKE_INSTALL_LIBDIR "/usr/lib/powerpc64-linux-gnu")
     elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL s390x)
-        set(CMAKE_INSTALL_LIBDIR "/usr/lib/s390x-linux-gnu/")
+        set(CMAKE_INSTALL_LIBDIR "/usr/lib/s390x-linux-gnu")
     elseif((CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i686|x86|AMD64") AND (CMAKE_SIZEOF_VOID_P EQUAL 4))
         set(CMAKE_INSTALL_LIBDIR "/usr/lib/i386-linux-gnu")
     elseif((CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64") AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
@@ -218,11 +218,11 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
             if(LOCAL_INSTALL)
 			    add_compile_options(-march=native)
             elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i586|i686|x86|AMD64|x86_64")
-			    add_compile_options(-mtune=generic)
+			    add_compile_options(-march=native) # set mtune=generic if nedded
 		    endif()
 		endif()
 	endif()
-	if(NOT RPI4 AND CMAKE_SYSTEM_PROCESSOR MATCHES "^arm.*")
+	if((PYRA OR PANDORA)  AND (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm.*"))
 		if(PYRA)
 		add_compile_options(-mfpu=neon-vfpv4)
 		add_compile_options(-mcpu=cortex-a15)
@@ -230,16 +230,18 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 		add_compile_options(-marm)
                 elseif(NOT (MACOSX AND CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64"))
                     add_compile_options(-mfpu=neon)
-		else()
+		elseif(PANDORA)
 		add_compile_options(-mfpu=neon)
 		endif()
 		add_compile_options(-fsigned-char)
 	endif()
-    if(RPI4 AND ${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm*")
+    if(NOT PYRA AND NOT PANDORA AND ${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm*")
         if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)")  # 32bit
             add_compile_options(-march=armv8-a+crc)
 		    add_compile_options(-mfpu=neon-fp-armv8)
-		    add_compile_options(-mcpu=cortex-a53)
+            if(RPI4) 
+		        add_compile_options(-mcpu=cortex-a72)
+            endif()
 		    add_compile_options(-mfloat-abi=hard)
 		    add_compile_options(-ftree-vectorize)
 		    add_compile_options(-fomit-frame-pointer)
@@ -249,7 +251,9 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
                 message(FATAL_ERROR "invalid pointer size")
             endif()
             add_compile_options(-march=armv8-a+crc+fp+simd)
-		    add_compile_options(-mcpu=cortex-a53)
+            if(RPI4) 
+		        add_compile_options(-mcpu=cortex-a72)
+            endif()
 		    add_compile_options(-ftree-vectorize)
 		    add_compile_options(-fomit-frame-pointer)
             message(STATUS "AARCH64, -march=armv8-a+crc+fp+simd")
@@ -436,6 +440,20 @@ else()
  set(MP "MP")
 endif()
 
+option(XPLUS "Compile a XPLUS modification" FALSE)
+if(XPLUS)
+    execute_process (
+        COMMAND bash -c "cp -fr ${CMAKE_SOURCE_DIR}/Entities${MP}/PlayerWeaponsHD.es ${CMAKE_SOURCE_DIR}/Entities${MP}/PlayerWeapons.es;"
+        OUTPUT_VARIABLE outVar
+    )
+    message(STATUS "Compile a XPLUS modification")
+else()
+    execute_process (
+        COMMAND bash -c "cp -fr ${CMAKE_SOURCE_DIR}/Entities${MP}/PlayerWeapons_old.es ${CMAKE_SOURCE_DIR}/Entities${MP}/PlayerWeapons.es;"
+        OUTPUT_VARIABLE outVar
+    )
+    message(STATUS "Compile a standard game")
+endif()
 
 # !!! FIXME: I currently force this, but you shouldn't _have_ to.
 option(USE_SINGLE_THREAD "Use Single Threaded version" FALSE)
@@ -833,6 +851,7 @@ if(MACOSX)
 endif()
 add_dependencies(${GAMEMPLIB} ParseEntities)
 
+if(NOT XPLUS)
 set(SHADERSLIB "Shaders${DEBUGSUFFIX}")
 add_library(${SHADERSLIB} SHARED
     Shaders/AddShader.cpp
@@ -860,10 +879,12 @@ if(MACOSX)
     target_link_libraries(${SHADERSLIB} "-undefined dynamic_lookup")
 endif()
 add_dependencies(${SHADERSLIB} ParseEntities)
+endif() # NOT XPLUS
 
 add_parser_and_scanner("Engine/Base/Parser" "Engine/Base/Scanner")
 add_parser_and_scanner("Engine/Ska/smcPars" "Engine/Ska/smcScan")
 
+if(NOT XPLUS)
 if (USE_I386_NASM_ASM)
     add_custom_command(
         OUTPUT "SoundMixer386.o"
@@ -1274,9 +1295,10 @@ else()
  set_target_properties(DedicatedServer  PROPERTIES OUTPUT_NAME "${INTERNAL_NAME}-ded")
  set_target_properties(MakeFONT PROPERTIES OUTPUT_NAME "${INTERNAL_NAME}-mkfont")
 endif()
+endif() # NOT XPLUS
 
 # RAKE! Install Section.
-if(LOCAL_INSTALL)
+if(LOCAL_INSTALL AND NOT XPLUS)
 if(DEBUG) # RAKE! Will this work with TFE?
     install(TARGETS SeriousSam ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB} ${ENGINELIB}
             RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
@@ -1318,7 +1340,12 @@ else()
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
 endif()
-else()
+elseif(LOCAL_INSTALL AND XPLUS)
+    install(TARGETS ${GAMEMPLIB} ${ENTITIESMPLIB}
+            LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/Mods/XPLUS/Bin"
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+# NOT LOCAL INSTALL
+elseif(NOT LOCAL_INSTALL AND NOT XPLUS)
 if(DEBUG) # RAKE! Will this work with TFE?
     install(TARGETS SeriousSam ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB} ${ENGINELIB}
             RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
@@ -1363,11 +1390,15 @@ else()
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
 endif()
+elseif(NOT LOCAL_INSTALL AND XPLUS)
+    install(TARGETS ${GAMEMPLIB} ${ENTITIESMPLIB}
+            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}/Mods/XPLUS"
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif()
 
 # RAKE! If CMAKE_INSTALL_PREFIX was set during config then its not a local install
 # and SE1_10.gro needs to be installed to Games root dir.
-if(NOT LOCAL_INSTALL)
+if(NOT LOCAL_INSTALL AND NOT XPLUS)
     install(FILES ${CMAKE_SOURCE_DIR}/../SE1_10b.gro
             DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${INTERNAL_NAME}"
             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)

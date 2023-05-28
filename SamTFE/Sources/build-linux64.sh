@@ -18,23 +18,12 @@ rm -rf cmake-build
 
 mkdir $_
 cd $_
-cp -vfr ../Entities/PlayerWeapons_old.es ../Entities/PlayerWeapons.es
-
-#cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 ..
-#ninja
 
 # This is the eventual path for amd64.
-cmake -DCMAKE_BUILD_TYPE=Release .. $1 $2
+cmake -DCMAKE_BUILD_TYPE=Release ..  $1 $2 $3 $4 $5 $6 $7 $8 $9
 
-# Right now we force x86, though...
-#cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32 ..
 echo "ECC first"
 make ecc
 echo "Then the rest..."
 make -j$NCPU
-
-cp -vfr Debug/*.so ../../Bin
-cp -vfr ecc ../../Bin
-cp -vfr DedicatedServer ../../Bin
-cp -vfr SeriousSam ../../Bin
-cp -vfr MakeFONT ../../Bin
+make install
