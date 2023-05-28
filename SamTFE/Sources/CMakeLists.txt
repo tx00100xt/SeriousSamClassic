@@ -1415,11 +1415,11 @@ if(NOT LOCAL_INSTALL AND NOT XPLUS)
     foreach(X IN LISTS A B C D E)
         #message(STATUS "Create icon ${X}x${X}")
         execute_process (
-            COMMAND bash -c "${ImageMagick_convert_EXECUTABLE} ${CMAKE_SOURCE_DIR}/../serioussam.png -scale ${X}x${X} ${CMAKE_SOURCE_DIR}/../${X}.png;"
+            COMMAND bash -c "${ImageMagick_convert_EXECUTABLE} ${CMAKE_SOURCE_DIR}/../${INTERNAL_NAME}.png -scale ${X}x${X} ${CMAKE_SOURCE_DIR}/../${X}.png;"
             OUTPUT_VARIABLE outVar
        )
        install(FILES ${CMAKE_SOURCE_DIR}/../${X}.png
-               DESTINATION "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/${X}x${X}/apps" RENAME serioussam.png
+               DESTINATION "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/${X}x${X}/apps" RENAME "${INTERNAL_NAME}.png"
                PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
 	endforeach()
 endif()
