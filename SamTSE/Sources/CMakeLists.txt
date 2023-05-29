@@ -75,7 +75,7 @@ if(NOT LOCAL_INSTALL)
     if(ImageMagick_convert_FOUND)
         #message(STATUS "ImageMagick convert found: ${ImageMagick_convert_EXECUTABLE}")
     else()
-        message(FATAL_ERROR "Error! USE_SYSTEM_ZLIB is set but neccessary developer files are missing")
+        message(FATAL_ERROR "Error! LOCAL_INSTAL is set but neccessary ImageMagick convert are missing")
     endif()
 endif()
 
