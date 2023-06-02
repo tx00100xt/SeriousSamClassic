@@ -747,26 +747,29 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
 
   // get library path for mods
   _fnmModLibPath = "";
-  if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/aarch64-linux-gnu")) {
+  if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/aarch64-linux-gnu/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/aarch64-linux-gnu/" + strGameID + "/"; 
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/arm-linux-gnueabihf")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/arm-linux-gnueabihf/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/arm-linux-gnueabihf/" + strGameID + "/";
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/riscv64-linux-gnu")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/riscv64-linux-gnu/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/riscv64-linux-gnu/" + strGameID + "/";
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/s390x-linux-gnu")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/s390x-linux-gnu/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/s390x-linux-gnu/" + strGameID + "/"; 
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/powerpc64-linux-gnu")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/powerpc64-linux-gnu/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/powerpc64-linux-gnu/" + strGameID + "/"; 
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/x86_64-linux-gnu")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/x86_64-linux-gnu/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/x86_64-linux-gnu/" + strGameID + "/";
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/i386-linux-gnu")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/i386-linux-gnu/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/i386-linux-gnu/" + strGameID + "/";
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib64")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib64/" + strGameID)) {
     _fnmModLibPath = "/usr/lib64/" + strGameID + "/";
-  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib")) {
+  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib//" + strGameID)) {
     _fnmModLibPath = "/usr/lib/" + strGameID + "/";
-  } else {
+  } else if( sys_iSysPath == 0 ) {
     _fnmModLibPath = _fnmApplicationPath;
+  } else {
+    CPrintF(TRANSV("ERROR: Game libraries not ound!\n"));
+    FatalError(TRANSV("Failed to search game libraries installed!\nPlease reinstall the game.\nSee the log for more details.\nGame log is here: ~/.local/share/Serious-Engine/%s/SeriousSam.log"),(const char *) strGameID);
   }
 
   if( sys_iSysPath == 1 ) { // search game data
@@ -825,7 +828,7 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
         } else {
           CPrintF(TRANSV("ERROR: Game data not ound!\n"));
           _fnmUserDataPath = "";
-          FatalError(TRANS("Failed to search game data!\nPlease put the game data in the paths:\n/usr/share/%s/\n or %s\n or somewhere in your home directory"),(const char *) strGameID,(const char *) _fnmUserDir);
+          FatalError(TRANSV("Failed to search game data!\nPlease put the game data in the paths:\n/usr/share/%s/\n or %s\n or somewhere in your home directory\nSee the log for more details.\nGame log is here: ~/.local/share/Serious-Engine/%s/SeriousSam.log"),(const char *) strGameID,(const char *) _fnmUserDir,(const char *) strGameID);
         }
       } 
     } else {
