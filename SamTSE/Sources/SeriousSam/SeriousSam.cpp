@@ -586,6 +586,27 @@ void SetAdjusters()
 		_fArmorHeightAdjuster		= 0.7f;
 		_fFragScorerHeightAdjuster	= 0.75f;
         _fMenuPlayerProfileAdjuster = 0.38f;
+	}else if (ratio >= 1.2f && ratio <= 1.26f) 		//5:4
+ 	{
+		_fBigSizeJ					= 0.050f;
+		_fMediumSizeJ 				= 0.03f;	//medium font row size
+ 		_fBigStartJ					= 0.40f;	//Position of the contents below large font title
+		_fNoUpStartJ				= 0.25f;	//Postiion of contents without large font title
+		_fNoDownStartJ				= 0.44f;
+		_fGlobalTopAdjuster 		= 0.12f;
+		_fGlobalListAdjuster 		= 0.55f;
+		_fGlobalTipAdjuster 		= 0.90f;
+		_fGlobalInfoAdjuster 		= 0.80f;
+		_fGlobalProfileAdjuster 	= 0.75f;
+		_fGlobalOptionsAdjuster 	= 0.45f;
+		_fGlobalModAdjuster 		= 0.55f;
+		_fGlobalButtonAdjuster  	= 1.20f;		//Menu items and buttons offset
+		_fWeaponFOVAdjuster			= 1.0f;		//Field of View for weapon
+		_fPlayerFOVAdjuster			= 1.0f;		//Field of View for player
+		_fGlobalProfileFOVAdjuster	= 33.0f;
+		_fArmorHeightAdjuster		= 0.7f;
+		_fFragScorerHeightAdjuster	= 0.75f;
+        _fMenuPlayerProfileAdjuster = 0.38f;
  	}else if (ratio >= 1.76f && ratio <= 1.78f) 	//16:9
  	{
 		_fBigSizeJ					= 0.060f;

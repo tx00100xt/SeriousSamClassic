@@ -289,7 +289,8 @@ CTString astrSplitScreenRadioTexts[] = {
 };
 PIX apixAspectRatios[][2] =
 {
-	4, 	3,
+	4, 3,
+	5, 4,
 	16, 9,
 	16, 10,
 	21, 9,
@@ -314,6 +315,11 @@ PIX apixWidths[][2] = {
   3440, 0,
   3840, 0,
   5120, 0,
+  5760, 0,
+  6016, 0,
+  7680, 0,
+  8192, 0,
+  8400, 0,
 };
 
 // ptr to current menu
