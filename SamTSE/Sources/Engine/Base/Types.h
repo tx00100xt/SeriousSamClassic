@@ -297,8 +297,10 @@ MY_STATIC_ASSERT(size_tSize, sizeof(size_t) == sizeof(void*));
     }
 
     typedef uint64_t __uint64;
-    #if (!defined __INTEL_COMPILER) && (!defined PLATFORM_FREEBSD)
+    #if (!defined __INTEL_COMPILER) && (!defined PLATFORM_FREEBSD) && (!defined PLATFORM_MACOSX)
       typedef int64_t __int64;
+    #elif (!defined PLATFORM_FREEBSD) && (!defined PLATFORM_MACOSX)
+      typedef long long int // #define __INT64_TYPE__ long long int
     #endif
 
     typedef char CHAR;
