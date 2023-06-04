@@ -1490,6 +1490,8 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
 
   // Read all model mip infos
   INDEX ctMipsRejected=0;
+  // force set mdl_bFineQuality TRUE because otherwise weapon models can break.
+  mdl_bFineQuality = TRUE;
   for( i=0; i<md_MipCt; i++) { 
     ModelMipInfo mmiDummy; // need one dummy mipmodel info in case of mip level rejection
     // reject mip model in case its even, and not last
@@ -1597,6 +1599,8 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
   }
 
   // convert model to 8-bit if requested and needed
+  // force set mdl_bFineQuality TRUE because otherwise weapon models can break.
+  mdl_bFineQuality = TRUE;
   if( !mdl_bFineQuality && (md_Flags&MF_COMPRESSED_16BIT))
   {
     // prepare 8-bit frame vertices array

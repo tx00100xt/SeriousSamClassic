@@ -940,6 +940,8 @@ static BOOL _bLastModelQuality = -1;
 static void MdlPostFunc(void *pvVar)
 {
   mdl_bFineQuality = Clamp( mdl_bFineQuality, (INDEX)0, (INDEX)1);
+  // force set mdl_bFineQuality TRUE because otherwise weapon models can break.
+  mdl_bFineQuality = TRUE;
   if( _bLastModelQuality!=mdl_bFineQuality) {
     _bLastModelQuality = mdl_bFineQuality;
     ReloadModels();
