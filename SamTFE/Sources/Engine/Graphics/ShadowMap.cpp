@@ -210,7 +210,8 @@ ULONG CShadowMap::UpdateDynamicLayers(void)
 
   // determine and clamp to max allowed dynamic shadow dimension
   const INDEX iMinSize  = Max( shd_iStaticSize-2L, 5L);
-  shd_iDynamicSize      = Clamp( shd_iDynamicSize, iMinSize, shd_iStaticSize);
+  // shd_iDynamicSize must be equal to shd_iStaticSize otherwise whole sectors are illuminated during fire.
+  shd_iDynamicSize      = shd_iStaticSize; // Clamp( shd_iDynamicSize, iMinSize, shd_iStaticSize);
   PIX pixClampAreaSize  = 1L<<(shd_iDynamicSize*2);
   INDEX iFinestMipLevel = sm_iFirstCachedMipLevel + 
                           ClampTextureSize( pixClampAreaSize, _pGfx->gl_pixMaxTextureDimension,
