@@ -119,13 +119,13 @@ All notable changes to this project will be documented in this file.
   (Note: As a result of redefinition, objects inside the world are located incorrectly.
   For Windows, you need to use the definitions from the header which is in the SDK).
 
-## 2023-02-23 - 2022-03-25
+## 2023-02-23 - 2023-03-25
 - Fixing a bug with thunder, the sound of thunder and flashes on the level of Hatshepsut.
 - Fixed loading libvorbisfile library for non-source-based distros.
 - Fixed bug with ioctlwbufget.
 - Added portable mode for command line (+portable). In portable mode, all user data is stored in the game directory.
 
-## 2023-03-28 - 2022-05-28
+## 2023-03-28 - 2023-05-28
 - Added GitGib Action for building artefacts.
 - Added optimization for Rasberry PI 3B/4 to CMakeLists.txt.
 - Add paths for non-X86 deb based OS to Engine and CMakeLists.txt.
@@ -139,13 +139,13 @@ All notable changes to this project will be documented in this file.
 - Written by Wiki for the game.
 
 
-## 2023-06-02 - 2022-06-04
+## 2023-06-02 - 2023-06-04
 - Added search for game libraries, instead of searching for the system path.
 - Added 5:4 aspect ratio, 8k resolution.
 - Added build for macOS and build in Github Action.
 - Forced mdl_bFineQuality=1 because otherwise weapon models break.
 - Forcing shd_iDynamicSize to be set to shd_iStaticSize, otherwise entire sectors may be highlighted when fire shooting.
 
-## 2023-06-07 - 2022-06-09
+## 2023-06-07 - 2023-06-09
 - Adding root CMakeLists.txt to build files for Serious Sam Classic The First Encounter and Serious Sam Classic The Second Encounter.
 - Added debian directory for building deb package using regular tools(bzr debuild) under Debian/Ubuntu.
