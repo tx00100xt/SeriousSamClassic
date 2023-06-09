@@ -427,6 +427,7 @@ PIX aPathDotsFE[][10][2] =
 BOOL ObtainMapData(void)
 {
   try {
+#ifndef FIRST_ENCOUNTER
     // the second encounter
     atoIconsSE[ 0].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Book.tex"));
     atoIconsSE[ 1].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level00.tex"));
@@ -465,7 +466,7 @@ BOOL ObtainMapData(void)
     ((CTextureData*)_toMapBcgLUSE .GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)_toMapBcgRDSE .GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)_toMapBcgRUSE .GetData())->Force(TEX_CONSTANT);
-
+#else
     // the first encounter
     atoIconsFE[ 0].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level00.tex"));
     atoIconsFE[ 1].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level01.tex"));
@@ -482,6 +483,7 @@ BOOL ObtainMapData(void)
     atoIconsFE[12].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level12.tex"));
     atoIconsFE[13].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level13.tex"));
     atoIconsFE[14].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level14.tex"));
+    _toPathDot    .SetData_t(CTFILENAME("Textures\\Computer\\Map\\PathDot.tex"));
     _toMapBcgLDFE .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgLD.tex"));
     _toMapBcgLUFE .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgLU.tex"));
     _toMapBcgRDFE .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgRD.tex"));
@@ -502,10 +504,12 @@ BOOL ObtainMapData(void)
     ((CTextureData*)atoIconsFE[12].GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)atoIconsFE[13].GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)atoIconsFE[14].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)_toPathDot    .GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)_toMapBcgLDFE .GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)_toMapBcgLUFE .GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)_toMapBcgRDFE .GetData())->Force(TEX_CONSTANT);
     ((CTextureData*)_toMapBcgRUFE .GetData())->Force(TEX_CONSTANT);
+#endif
   }
   catch (const char *strError) {
     CPrintF("%s\n", (const char *)strError);

@@ -1,0 +1,18 @@
+Source: serioussamclassic
+Section: games
+Priority: optional
+Maintainer: YOUR_NAME <YOUR_EMAIL>
+Build-Depends: debhelper-compat (= 13), cmake, flex, bison, nasm, libsdl2-dev, libvorbis-dev, zlib1g-dev, imagemagick 
+Standards-Version: 4.6.0
+Homepage: https://github.com/tx00100xt/SeriousSamClassic
+Vcs-Browser: https://salsa.debian.org/debian/serioussamclassic
+Vcs-Git: https://salsa.debian.org/debian/serioussamclassic.git
+Rules-Requires-Root: no
+
+Package: serioussamclassic
+Architecture: any
+Conflicts: serioussam, serioussamse, serioussam-vk, serioussamse-vk, serioussamclassic-vk
+Depends: ${shlibs:Depends}, ${misc:Depends}, libc6 (>= 2.28), libsdl2-2.0-0 (>= 2.0.6), libstdc++6 (>= 5), zlib1g (>= 1:1.1.4), libvorbisfile3
+Description: Linux port of Serious Sam Classic
+ Open source game engine version developed by Croteam 
+ for Serious Sam Classic with Vulkan support (Windows, Linux, FreeBSD, Raspberry Pi OS)

@@ -1,0 +1,4 @@
+These patches are only needed if using the source code for release v1.10.5. 
+If you are using the git version, then there is no need for these patches.
+
+If you use the source code for release v1.10.5, rename file series.ex to series.

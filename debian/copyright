@@ -1,0 +1,37 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: serioussamclassic
+Upstream-Contact: YOUR_NAME <YOUR_EMAIL>
+Source: https://github.com/tx00100xt/SeriousSamClassic
+
+Files: *
+Copyright: 2002-2012 Croteam Ltd. 
+License: GPL-2
+ Serious Engine is licensed under the GNU GPL v2 (see LICENSE file).
+ amp11lib is licensed under the GNU GPL v2 (see amp11lib/COPYING file).
+ .
+ Some of the code included with the engine sources is not licensed under the GNU GPL v2:
+ zlib (located in Sources/Engine/zlib) by Jean-loup Gailly and Mark Adler
+ LightWave SDK (located in Sources/LWSkaExporter/SDK) by NewTek Inc.
+ libogg/libvorbis (located in Sources/libogg and Sources/libvorbis) by Xiph.Org Foundation
+ .
+
+Files: debian/*
+Copyright: 2023 YOUR_NAME <YOUR_EMAIL>
+License: GPL-2+
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <https://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+
+

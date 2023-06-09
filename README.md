@@ -38,7 +38,7 @@ There are still many asserts in the engine. Most of them are irrelevant and shou
 Type this in your terminal:
 
 ```
-git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
+git clone https://github.com/tx00100xt/SeriousSamClassic.git
 ```
 
 #### Copy official game data (optional)
@@ -47,22 +47,17 @@ If you have access to a copy of the game (either by CD or through Steam),
 you can copy the *.gro files from the game directory to the repository.
 (SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
 
-#### Building (only for SS:TFE)
+#### Building (for SS:TFE and SS:TSE)
 
 Type this in your terminal:
 
 ```
-cd SeriousSamClassic/SamTFE/Sources
-./build-linux64.sh -DTFE=TRUE	# use build-linux32.sh for 32-bits
-```
-
-#### Building (only for SS:TSE)
-
-Type this in your terminal:
-
-```
-cd SeriousSamClassic/SamTSE/Sources
-./build-linux64.sh        	# use build-linux32.sh for 32-bits
+cd SeriousSamClassic
+mkdir build
+cd build
+cmake ..
+make -j4
+make install
 ```
 
 ### Ubuntu 
@@ -78,7 +73,7 @@ deb-src https://ppa.launchpadcontent.net/tx00100xt/serioussam/ubuntu YOUR_UBUNTU
 ```
 After adding ppa, run the commands:
 ```bash
-sudo apt install  serioussam  serioussamse  serioussam-alpha  serioussam-xplus  serioussamse-xplus
+sudo apt install serioussamclassic serioussamclassic-alpha serioussamclassic-xplus
 ```
 
 ### Gentoo
@@ -94,13 +89,12 @@ To build a game under Arch Linux you can use the package from AUR: https://aur.a
 The build for raspberry pi is similar to the build for Linux, you just need to add an additional build key.
 
 ```
-cd SeriousSamClassic/SamTFE/Sources
-./build-linux64.sh -DTFE=TRUE -DRPI4=TRUE	# use build-linux32.sh for 32-bits
-```
-for Serious Sam Classic The First Encounter, or for Serious Sam Classic The Second Encounter:
-```
-cd SeriousSamClassic/SamTSE/Sources
-./build-linux64.sh -DRPI4=TRUE           	# use build-linux32.sh for 32-bits
+cd SeriousSamClassic
+mkdir build
+cd build
+cmake -DRPI4=TRUE ..
+make -j4
+make install
 ```
 
 ### FreeBSD
@@ -110,7 +104,7 @@ cd SeriousSamClassic/SamTSE/Sources
 Type this in your terminal:
 
 ```
-git clone https://github.com/tx00100xt/SeriousSamClassic.git SeriousSamClassic
+git clone https://github.com/tx00100xt/SeriousSamClassic.git
 ```
 
 #### Copy official game data (optional)
@@ -119,39 +113,58 @@ If you have access to a copy of the game (either by CD or through Steam),
 you can copy the *.gro files from the game directory to the repository.
 (SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
 
-#### Building (only for SS:TFE)
+#### Building (for SS:TFE and SS:TSE)
 
 Type this in your terminal:
 
 ```
-cd SeriousSamClassic/SamTFE/Sources
-mkdir cmake-build
-cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE ..
-make ecc && make -j4
-make install
-```
-
-#### Building (only for SS:TSE)
-
-Type this in your terminal:
-
-```
-cd SeriousSamClassic/SamTSE/Sources
-mkdir cmake-build
-cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cd SeriousSamClassic
+mkdir build
+cd build
+cmake ..
 make -j4
-make ecc && make -j4
 make install
 ```
 
-Note that the CD version of SS:TSE used MP3 for music. You will need to build / get `libamp11lib.so` and copy it inside `Bin` with the other libs to have music. Steam version uses ogg and doesn't need this library.
+### macOS
+
+#### Install dependes
+
+```
+brew install bison flex sdl2 libogg libvorbis zlib-ng cmake git
+```
+
+#### Setting up the repository
+
+Type this in your terminal:
+
+```
+git clone https://github.com/tx00100xt/SeriousSamClassic.git
+```
+
+#### Copy official game data (optional)
+
+If you have access to a copy of the game (either by CD or through Steam),
+you can copy the *.gro files from the game directory to the repository.
+(SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
+
+#### Building (for SS:TFE and SS:TSE)
+
+Type this in your terminal:
+
+```
+cd SeriousSamClassic
+mkdir build
+cd build
+cmake ..
+make -j4
+make install
+```
 
 Running
 -------
 
-This version of the engine comes with a set of resources (`\SE1_10b.GRO`) that allow you to freely use the engine without any additional resources required. You can buy the original games on Steam, as a part of a bundle with Serious Sam Revolution ( http://store.steampowered.com/app/227780 )
+You can buy the original games on Steam, as a part of a bundle with Serious Sam Revolution ( http://store.steampowered.com/app/227780 )
 
 ## Serious Sam Classic The First Encounter
 
@@ -194,14 +207,14 @@ This version of the engine comes with a set of resources (`\SE1_10b.GRO`) that a
 
 ## Install the game in system (/usr/bin;/usr/lib/;/usr/share)
 
-1. Edit the build script by adding a parameter to the cmake command:
+1. Just add string for cmake command:
 ```
 cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr 
 ```
-2. Build game from source code with script.
+2. Build game from source code.
 3. Install the game: 
 ```
-cd cmake-build
+cd build
 sudo make install
 ```
 4.   Put game data in (Recommended):
@@ -236,84 +249,39 @@ Remark: -JD- and VITEK is author this mod for windows.
 
 ![XPLUS Sacred Yards](https://raw.githubusercontent.com/tx00100xt/SeriousSamClassic/main/Images/samxplus_3.png)
 
-### Linux
+### Linux, FreeBSD, macOS, Raspberry PI OS
 
-#### Building XPLUS (only for SS:TFE)
-
-Type this in your terminal:
-
-```
-cd SeriousSamClassic/SamTFE/Sources
-./build-linux64.sh -DTFE=TRUE -DXPLUS=TRUE 		# use build-linux32.sh for 32-bits
-```
-
-### FreeBSD
-
-#### Building XPLUS (only for SS:TFE)
+#### Building XPLUS (for SS:TFE and SS:TSE)
 
 Type this in your terminal:
 
 ```
-cd SeriousSamClassic/SamTFE/Sources
-mkdir cmake-build
-cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DXPLUS=TRUE ..
-make ecc && make -j4
+cd SeriousSamClassic
+mkdir build-xplus
+cd build-xplus
+cmake -DXPLUS=TRUE ..
+make -j4
 make install
 ```
+Note: for Raspberry Pi4 just add **-DRPI4=TRUE** for cmake command.
+
 Download:
 [Xplus TFE from Google Drive] or [Xplus TFE from pCloud], and unpack to  SeriousSamClassic/SamTFE/Mods directory.
-You can also download the archive using curl or wget:
-```
-cd SeriousSamClassic
-wget https://archive.org/download/sam-tfe-xplus/SamTFE-XPLUS.tar.xz
-tar -xJvpf SamTFE-XPLUS.tar.xz -C SamTFE
-```
-or
-```
-cd SeriousSamClassic
-for var in a b c; do wget https://github.com/tx00100xt/serioussam-mods/raw/main/SamTFE-XPLUS/SamTFE-XPLUS.tar.xz.parta$var; done; cat SamTFE-XPLUS.tar.xz.part* > SamTFE-XPLUS.tar.xz
-tar -xJvpf SamTFE-XPLUS.tar.xz -C SamTFE
-```
-To start the modification, use the game menu - item Modification.
-
-### Linux
-
-#### Building XPLUS (only for SS:TSE)
-
-Type this in your terminal:
-
-```
-cd SeriousSamClassic/SamTSE/Sources
-./build-linux64.sh -DXPLUS=TRUE       	    # use build-linux32.sh for 32-bits
-```
-
-### FreeBSD
-
-#### Building XPLUS (only for SS:TSE)
-
-Type this in your terminal:
-
-```
-cd SeriousSamClassic/SamTSE/Sources
-mkdir cmake-build
-cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release -DXPLUS=TRUE ..
-make ecc && make -j4
-make install
-```
-Download:
 [Xplus TSE from Google Drive] or [Xplus TSE from pCloud],, and unpack to  SeriousSamClassic/SamTSE/Mods directory.
 You can also download the archive using curl or wget:
 ```
 cd SeriousSamClassic
+wget https://archive.org/download/sam-tfe-xplus/SamTFE-XPLUS.tar.xz
 wget https://archive.org/download/sam-tse-xplus/SamTSE-XPLUS.tar.xz
+tar -xJvpf SamTFE-XPLUS.tar.xz -C SamTFE
 tar -xJvpf SamTSE-XPLUS.tar.xz -C SamTSE
 ```
 or
 ```
 cd SeriousSamClassic
+for var in a b c; do wget https://github.com/tx00100xt/serioussam-mods/raw/main/SamTFE-XPLUS/SamTFE-XPLUS.tar.xz.parta$var; done; cat SamTFE-XPLUS.tar.xz.part* > SamTFE-XPLUS.tar.xz
 for var in a b c; do wget https://github.com/tx00100xt/serioussam-mods/raw/main/SamTSE-XPLUS/SamTSE-XPLUS.tar.xz.parta$var; done; cat SamTSE-XPLUS.tar.xz.part* > SamTSE-XPLUS.tar.xz
+tar -xJvpf SamTFE-XPLUS.tar.xz -C SamTFE
 tar -xJvpf SamTSE-XPLUS.tar.xz -C SamTSE
 ```
 To start the modification, use the game menu - item Modification.
@@ -352,6 +320,7 @@ Supported OS
 * `FreeBSD`
 * `Windows`
 * `Raspberry PI OS`
+* `macOS`
 
 ### Build status
 |CI|Platform|Compiler|Configurations|Platforms|Status|

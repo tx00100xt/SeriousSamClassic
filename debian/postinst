@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ] ; then update-menus ; fi
+if [ "$1" = "configure" ] && [ -x "`which update-desktop-database 2>/dev/null`" ] ; then update-desktop-database ; fi

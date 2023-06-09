@@ -35,7 +35,7 @@ echo $CMAKE_ADD
 cmake -DCMAKE_BUILD_TYPE=Release $CMAKE_ADD ..  $1 $2 $3 $4 $5 $6 $7 $8 $9
 
 echo "ECC first"
-make ecc
+make ecc-se
 echo "Then the rest..."
 make -j$NCPU
 make install

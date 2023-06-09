@@ -145,3 +145,7 @@ All notable changes to this project will be documented in this file.
 - Added build for macOS and build in Github Action.
 - Forced mdl_bFineQuality=1 because otherwise weapon models break.
 - Forcing shd_iDynamicSize to be set to shd_iStaticSize, otherwise entire sectors may be highlighted when fire shooting.
+
+## 2023-06-07 - 2022-06-09
+- Adding root CMakeLists.txt to build files for Serious Sam Classic The First Encounter and Serious Sam Classic The Second Encounter.
+- Added debian directory for building deb package using regular tools(bzr debuild) under Debian/Ubuntu.

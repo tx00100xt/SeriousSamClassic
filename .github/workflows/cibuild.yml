@@ -904,9 +904,9 @@ jobs:
           # Produce a binary artifact and place it in the mounted volume
           run: |
             cd ${{github.workspace}}/SamTFE/Sources            
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr
+            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE
             cd ${{github.workspace}}/SamTSE/Sources
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr  
+            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE  
             cd ${{github.workspace}}/SamTFE/Sources/build
             make ecc
             make -j4
@@ -934,12 +934,12 @@ jobs:
             cd ${{github.workspace}}
             echo "*** Copy SamTFE Libraries and Executables ***"
             cp -vfr SamTFE/Sources/build/Debug/*.so riscv64/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build/{serioussam,serioussam-ded,serioussam-mkfont} riscv64/SamTFE/Bin
+            cp -vfr SamTFE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} riscv64/SamTFE/Bin
             echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libEntities.so riscv64/SamTFE/Mods/XPLUS/Bin"
             echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libGame.so riscv64/SamTFE/Mods/XPLUS/Bin"
             echo "*** Copy SamTSE Libraries and Executables ***"
             cp -vfr SamTSE/Sources/build/Debug/*.so riscv64/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build/{serioussamse,serioussamse-ded,serioussamse-mkfont} riscv64/SamTSE/Bin
+            cp -vfr SamTSE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} riscv64/SamTSE/Bin
             echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libEntitiesMP.so riscv64/SamTSE/Mods/XPLUS/Bin"
             echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libGameMP.so riscv64/SamTSE/Mods/XPLUS/Bin"
             echo "*** Copy Data files ***"
@@ -1020,9 +1020,9 @@ jobs:
           # Produce a binary artifact and place it in the mounted volume
           run: |
             cd ${{github.workspace}}/SamTFE/Sources            
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr
+            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE
             cd ${{github.workspace}}/SamTSE/Sources
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr  
+            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE  
             cd ${{github.workspace}}/SamTFE/Sources/build
             make ecc
             make -j4
@@ -1050,12 +1050,12 @@ jobs:
             cd ${{github.workspace}}
             echo "*** Copy SamTFE Libraries and Executables ***"
             cp -vfr SamTFE/Sources/build/Debug/*.so ppc64le/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build/{serioussam,serioussam-ded,serioussam-mkfont} ppc64le/SamTFE/Bin
+            cp -vfr SamTFE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} ppc64le/SamTFE/Bin
             echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libEntities.so ppc64le/SamTFE/Mods/XPLUS/Bin"
             echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libGame.so ppc64le/SamTFE/Mods/XPLUS/Bin"
             echo "*** Copy SamTSE Libraries and Executables ***"
             cp -vfr SamTSE/Sources/build/Debug/*.so ppc64le/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build/{serioussamse,serioussamse-ded,serioussamse-mkfont} ppc64le/SamTSE/Bin
+            cp -vfr SamTSE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} ppc64le/SamTSE/Bin
             echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libEntitiesMP.so ppc64le/SamTSE/Mods/XPLUS/Bin"
             echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libGameMP.so ppc64le/SamTSE/Mods/XPLUS/Bin"
             echo "*** Copy Data files ***"
@@ -1136,9 +1136,9 @@ jobs:
           # Produce a binary artifact and place it in the mounted volume
           run: |
             cd ${{github.workspace}}/SamTFE/Sources            
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr
+            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE
             cd ${{github.workspace}}/SamTSE/Sources
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr  
+            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE 
             cd ${{github.workspace}}/SamTFE/Sources/build
             make ecc
             make -j4
@@ -1166,12 +1166,12 @@ jobs:
             cd ${{github.workspace}}
             echo "*** Copy SamTFE Libraries and Executables ***"
             cp -vfr SamTFE/Sources/build/Debug/*.so s390x/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build/{serioussam,serioussam-ded,serioussam-mkfont} s390x/SamTFE/Bin
+            cp -vfr SamTFE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} s390x/SamTFE/Bin
             echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libEntities.so s390x/SamTFE/Mods/XPLUS/Bin"
             echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libGame.so s390x/SamTFE/Mods/XPLUS/Bin"
             echo "*** Copy SamTSE Libraries and Executables ***"
             cp -vfr SamTSE/Sources/build/Debug/*.so s390x/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build/{serioussamse,serioussamse-ded,serioussamse-mkfont} s390x/SamTSE/Bin
+            cp -vfr SamTSE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} s390x/SamTSE/Bin
             echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libEntitiesMP.so s390x/SamTSE/Mods/XPLUS/Bin"
             echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libGameMP.so s390x/SamTSE/Mods/XPLUS/Bin"
             echo "*** Copy Data files ***"
