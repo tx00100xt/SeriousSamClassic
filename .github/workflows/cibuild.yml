@@ -39,60 +39,42 @@ jobs:
     - name: Show current date
       run: |
         echo "${{ steps.date.outputs.time }}"
-        
-    - name: Run CMake
+  
+    - name: Run Prepare
       shell: alpine.sh {0}
       run: |
-        echo "*** make -mtune=generic ***"
-        cd ${{github.workspace}}
-        find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
-        echo "*** prepare SamTFE ***"
-        cd ${{github.workspace}}/SamTFE/Sources 
-        cmake -B ${{github.workspace}}/SamTFE/Sources/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE -DTFE=TRUE
-        cmake -B ${{github.workspace}}/SamTFE/Sources/build-x86-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE -DTFE=TRUE
-        echo "*** prepare SamTSE ***"
-        cd ${{github.workspace}}/SamTSE/Sources 
-        cmake -B ${{github.workspace}}/SamTSE/Sources/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
-        cmake -B ${{github.workspace}}/SamTSE/Sources/build-x86-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
-
+          cd ${{github.workspace}}
+          find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
+          mkdir x32 && mkdir x32/SamTFE && mkdir x32/SamTFE/Mods && mkdir x32/SamTFE/Mods/XPLUS
+          mkdir x32/SamTSE && mkdir x32/SamTSE/Mods && mkdir x32/SamTSE/Mods/XPLUS
+      
     - name: Run Build
       shell: alpine.sh {0}
       run: |
           cd ${{github.workspace}}
-          mkdir x32 && mkdir x32/SamTFE && mkdir x32/SamTFE/Mods && mkdir x32/SamTFE/Mods/XPLUS && mkdir x32/SamTFE/Mods/XPLUS/Bin && mkdir x32/SamTFE/Bin
-          mkdir x32/SamTSE && mkdir x32/SamTSE/Mods && mkdir x32/SamTSE/Mods/XPLUS && mkdir x32/SamTSE/Mods/XPLUS/Bin && mkdir x32/SamTSE/Bin
-          echo "*** build SamTFE ***"
-          cd ${{github.workspace}}/SamTFE/Sources/build-x86
+          cmake -B ${{github.workspace}}/build-x86 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE
+          cd ${{github.workspace}}/build-x86
           make -j$(nproc || echo 4)
-          cp -vfr Debug/*.so ../../../x32/SamTFE/Bin
-          cp -vfr DedicatedServer ../../../x32/SamTFE/Bin
-          cp -vfr MakeFONT ../../../x32/SamTFE/Bin
-          cp -vfr SeriousSam ../../../x32/SamTFE/Bin
-          echo "*** build SamTFE XPLUS ***"
-          cp -vfr ../../Sources/Entities/PlayerWeaponsHD.es ../../Sources/Entities/PlayerWeapons.es
-          cd ${{github.workspace}}/SamTFE/Sources/build-x86-xplus
+          make install
+          mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/x32/SamTFE
+          mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/x32/SamTSE
+
+    - name: Run Build XPLUS
+      shell: alpine.sh {0}
+      run: |
+          cd ${{github.workspace}}
+          cmake -B ${{github.workspace}}/build-x86-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_I386_NASM_ASM=TRUE -DXPLUS=TRUE
+          cd ${{github.workspace}}/build-x86-xplus
           make -j$(nproc || echo 4)
-          cp -vfr Debug/libEntities.so ../../../x32/SamTFE/Mods/XPLUS/Bin
-          cp -vfr Debug/libGame.so ../../../x32/SamTFE/Mods/XPLUS/Bin
-          echo "*** build SamTSE ***"
-          cd ${{github.workspace}}/SamTSE/Sources/build-x86    
-          make -j$(nproc || echo 4)
-          cp -vfr Debug/*.so ../../../x32/SamTSE/Bin
-          cp -vfr DedicatedServer ../../../x32/SamTSE/Bin
-          cp -vfr MakeFONT ../../../x32/SamTSE/Bin
-          cp -vfr SeriousSam ../../../x32/SamTSE/Bin
-          echo "*** build SamTSE XPLUS ***"
-          cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
-          cd ${{github.workspace}}/SamTSE/Sources/build-x86-xplus    
-          make -j$(nproc || echo 4)
-          cp -vfr Debug/libEntitiesMP.so ../../../x32/SamTSE/Mods/XPLUS/Bin
-          cp -vfr Debug/libGameMP.so ../../../x32/SamTSE/Mods/XPLUS/Bin
+          make install
+          mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/x32/SamTFE/Mods/XPLUS
+          mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x32/SamTSE/Mods/XPLUS
           echo "*** Create archive ***"
           cd ${{github.workspace}}
-          cp -vfr SamTFE/SE1_10b.gro x32/SamTFE
-          cp -vfr SamTFE/ModEXT.txt x32/SamTFE
-          cp -vfr SamTSE/SE1_10b.gro x32/SamTSE
-          cp -vfr SamTSE/ModEXT.txt x32/SamTSE
+          cp -fr SamTFE/SE1_10b.gro x32/SamTFE
+          cp -fr SamTFE/ModEXT.txt x32/SamTFE
+          cp -fr SamTSE/SE1_10b.gro x32/SamTSE
+          cp -fr SamTSE/ModEXT.txt x32/SamTSE
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz x32
           
     - name: Upload artifact
@@ -129,62 +111,42 @@ jobs:
     - name: Show current date
       run: |
         echo "${{ steps.date.outputs.time }}"
-        
-    - name: Run CMake
+ 
+    - name: Run Prepare
       shell: alpine.sh {0}
       run: |
-        echo "*** make -mtune=generic ***"
-        cd ${{github.workspace}}
-        find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
-        echo "*** prepare SamTFE ***"
-        cd ${{github.workspace}}/SamTFE/Sources 
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-        echo "*** prepare SamTSE ***"
-        cd ${{github.workspace}}/SamTSE/Sources 
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-        CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-        
-    - name: Run Build
+          cd ${{github.workspace}}
+          find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
+          mkdir x64 && mkdir x64/SamTFE && mkdir x64/SamTFE/Mods && mkdir x64/SamTFE/Mods/XPLUS
+          mkdir x64/SamTSE && mkdir x64/SamTSE/Mods && mkdir x64/SamTSE/Mods/XPLUS
+       
+    - name: Run Build 
       shell: alpine.sh {0}
       run: |
-          echo "*** prepare dirs ***"
           cd ${{github.workspace}}
-          mkdir x64 && mkdir x64/SamTFE && mkdir x64/SamTFE/Mods && mkdir x64/SamTFE/Mods/XPLUS && mkdir x64/SamTFE/Mods/XPLUS/Bin && mkdir x64/SamTFE/Bin
-          mkdir x64/SamTSE && mkdir x64/SamTSE/Mods && mkdir x64/SamTSE/Mods/XPLUS && mkdir x64/SamTSE/Mods/XPLUS/Bin && mkdir x64/SamTSE/Bin
-          echo "*** build SamTFE ***"
-          cd ${{github.workspace}}/SamTFE/Sources/build-x64
+          CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+          cd ${{github.workspace}}/build-x64
           make -j$(nproc || echo 4)
-          cp -vfr Debug/*.so ../../../x64/SamTFE/Bin
-          cp -vfr DedicatedServer ../../../x64/SamTFE/Bin
-          cp -vfr MakeFONT ../../../x64/SamTFE/Bin
-          cp -vfr SeriousSam ../../../x64/SamTFE/Bin
-          echo "*** build SamTFE XPLUS ***"
-          cp -vfr ../../Sources/Entities/PlayerWeaponsHD.es ../../Sources/Entities/PlayerWeapons.es
-          cd ${{github.workspace}}/SamTFE/Sources/build-x64-xplus    
-          make -j$(nproc || echo 4)
-          cp -vfr Debug/libEntities.so ../../../x64/SamTFE/Mods/XPLUS/Bin
-          cp -vfr Debug/libGame.so ../../../x64/SamTFE/Mods/XPLUS/Bin
-          echo "*** build SamTSE ***"
-          cd ${{github.workspace}}/SamTSE/Sources/build-x64    
-          make -j$(nproc || echo 4)
-          cp -vfr Debug/*.so ../../../x64/SamTSE/Bin
-          cp -vfr DedicatedServer ../../../x64/SamTSE/Bin
-          cp -vfr MakeFONT ../../../x64/SamTSE/Bin
-          cp -vfr SeriousSam ../../../x64/SamTSE/Bin
-          echo "*** build SamTSE XPLUS ***"
-          cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
-          cd ${{github.workspace}}/SamTSE/Sources/build-x64-xplus    
-          make -j$(nproc || echo 4)
-          cp -vfr Debug/libEntitiesMP.so ../../../x64/SamTSE/Mods/XPLUS/Bin
-          cp -vfr Debug/libGameMP.so ../../../x64/SamTSE/Mods/XPLUS/Bin
-          echo "*** Copy Data ***"
+          make install
+          mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/x64/SamTFE
+          mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/x64/SamTSE
+        
+    - name: Run Build XPLUS
+      shell: alpine.sh {0}
+      run: |
           cd ${{github.workspace}}
-          cp -vfr SamTFE/SE1_10b.gro x64/SamTFE
-          cp -vfr SamTFE/ModEXT.txt x64/SamTFE
-          cp -vfr SamTSE/SE1_10b.gro x64/SamTSE
-          cp -vfr SamTSE/ModEXT.txt x64/SamTSE
+          CFLAGS="-w" CXXFLAGS="-w" cmake -B ${{github.workspace}}/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DXPLUS=TRUE
+          cd ${{github.workspace}}/build-x64-xplus
+          make -j$(nproc || echo 4)
+          make install
+          mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTFE/Mods/XPLUS
+          mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTSE/Mods/XPLUS
           echo "*** Create archive ***"
+          cd ${{github.workspace}}
+          cp -fr SamTFE/SE1_10b.gro x64/SamTFE
+          cp -fr SamTFE/ModEXT.txt x64/SamTFE
+          cp -fr SamTSE/SE1_10b.gro x64/SamTSE
+          cp -fr SamTSE/ModEXT.txt x64/SamTSE
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz x64
           
     - name: Upload artifact
@@ -222,56 +184,35 @@ jobs:
       run: |
         echo "${{ steps.date.outputs.time }}"         
 
-    - name: Run CMake
+    - name: Prepare
       run: |
-          echo "*** make -mtune=generic ***"
           cd ${{github.workspace}}
           find . -name "CMakeLists.txt" -exec sed -i 's/-march=native/-mtune=generic/g' {} +
-          echo "*** prepare SamTSE ***"
-          cd ${{github.workspace}}/SamTSE/Sources
-          cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64-tse -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-          cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64-tse-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-          echo "*** prepare SamTFE ***"
-          cd ${{github.workspace}}/SamTFE/Sources
-          cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64-tfe -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-          cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64-tfe-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-          
+          mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS,}
+
     - name: Run Build
       run: |
-          echo "*** build SamTSE ***"
-          cd ${{github.workspace}}/SamTSE/Sources/build-x64-tse 
-          make -j$(nproc || echo 4) 
-          echo "*** build SamTSE XPLUS ***"
-          cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
-          cd ${{github.workspace}}/SamTSE/Sources/build-x64-tse-xplus 
-          make -j$(nproc || echo 4)
-          echo "*** build SamTFE ***"
-          cd ${{github.workspace}}/SamTFE/Sources/build-x64-tfe 
-          make -j$(nproc || echo 4)
-          echo "*** build SamTFE XPLUS ***"
-          cp -vfr ../../Sources/Entities/PlayerWeaponsHD.es ../../Sources/Entities/PlayerWeapons.es
-          cd ${{github.workspace}}/SamTFE/Sources/build-x64-tfe-xplus 
-          make -j$(nproc || echo 4) 
-
-    - name: Prepare Lib and Exec
-      run: |
-          echo "*** Prepare directories ***"
           cd ${{github.workspace}}
-          mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTFE/Mods/XPLUS/Bin,x64/SamTFE/Bin,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS,x64/SamTSE/Mods/XPLUS/Bin,x64/SamTSE/Bin}
-          echo "*** Copy SamTFE Libraries and Executables ***"
-          cp -vfr SamTFE/Sources/build-x64-tfe/Debug/*.so x64/SamTFE/Bin
-          cp -vfr SamTFE/Sources/build-x64-tfe/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTFE/Bin
-          cp -vfr SamTFE/Sources/build-x64-tfe-xplus/Debug/libEntities.so x64/SamTFE/Mods/XPLUS/Bin
-          cp -vfr SamTFE/Sources/build-x64-tfe-xplus/Debug/libGame.so x64/SamTFE/Mods/XPLUS/Bin
-          echo "*** Copy SamTSE Libraries and Executables ***"
-          cp -vfr SamTSE/Sources/build-x64-tse/Debug/*.so x64/SamTSE/Bin
-          cp -vfr SamTSE/Sources/build-x64-tse/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTSE/Bin
-          cp -vfr SamTSE/Sources/build-x64-tse-xplus/Debug/libEntitiesMP.so x64/SamTSE/Mods/XPLUS/Bin
-          cp -vfr SamTSE/Sources/build-x64-tse-xplus/Debug/libGameMP.so x64/SamTSE/Mods/XPLUS/Bin
-          echo "*** Copy Data files ***"
-          cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
-          cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
+          cmake -B ${{github.workspace}}/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+          cd ${{github.workspace}}/build-x64
+          make -j$(nproc || echo 4)
+          make install
+          mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/x64/SamTFE
+          mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/x64/SamTSE
+         
+    - name: Run Build XPLUS
+      run: |
+          cd ${{github.workspace}}
+          cmake -B ${{github.workspace}}/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DXPLUS=TRUE
+          cd ${{github.workspace}}/build-x64-xplus
+          make -j$(nproc || echo 4)
+          make install
+          mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTFE/Mods/XPLUS
+          mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTSE/Mods/XPLUS
           echo "*** Create archive ***"
+          cd ${{github.workspace}}
+          cp -fr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
+          cp -fr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-amd64-bin.tar.xz x64
 
     - name: Upload artifact
@@ -522,39 +463,30 @@ jobs:
             uname -a
             sudo pkg install -y bison flex sdl2 libogg libvorbis zlib-ng cmake vulkan-headers
             cd ${{github.workspace}}
-            mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTFE/Mods/XPLUS/Bin,x64/SamTFE/Bin,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS,x64/SamTSE/Mods/XPLUS/Bin,x64/SamTSE/Bin}
-            echo "*** Build SamTSE ***"
+            mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS}
+            echo "*** Build ***"
             cd ${{github.workspace}}/SamTFE/Sources
             awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
             cat CMakeLists.txt | grep mtune
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-            cd ${{github.workspace}}/SamTFE/Sources/build-x64
-            make -j$(sysctl -n hw.ncpu || echo 4)
-            cp -vfr ../../Sources/Entities/PlayerWeaponsHD.es ../../Sources/Entities/PlayerWeapons.es
-            cd ${{github.workspace}}/SamTFE/Sources/build-x64-xplus
-            make -j$(sysctl -n hw.ncpu || echo 4)
-            echo "*** Build SamTSE ***"
             cd ${{github.workspace}}/SamTSE/Sources
-            awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
+            awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt 
             cat CMakeLists.txt | grep mtune
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-            cd ${{github.workspace}}/SamTSE/Sources/build-x64
+            cd ${{github.workspace}}            
+            cmake -B ${{github.workspace}}/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+            cd ${{github.workspace}}/build-x64
             make -j$(sysctl -n hw.ncpu || echo 4)
-            cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
-            cd ${{github.workspace}}/SamTSE/Sources/build-x64-xplus
+            make install
+            cd ${{github.workspace}}            
+            cmake -B ${{github.workspace}}/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DXPLUS=TRUE
+            cd ${{github.workspace}}/build-x64-xplus
             make -j$(sysctl -n hw.ncpu || echo 4)
+            make install
             echo "*** Prepare Archive ***"            
-            cd ${{github.workspace}}
-            cp -vfr SamTFE/Sources/build-x64/Debug/*.so x64/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build-x64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build-x64-xplus/Debug/libEntities.so x64/SamTFE/Mods/XPLUS/Bin
-            cp -vfr SamTFE/Sources/build-x64-xplus/Debug/libGame.so x64/SamTFE/Mods/XPLUS/Bin
-            cp -vfr SamTSE/Sources/build-x64/Debug/*.so x64/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build-x64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libEntitiesMP.so x64/SamTSE/Mods/XPLUS/Bin  
-            cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libGameMP.so x64/SamTSE/Mods/XPLUS/Bin 
+            cd ${{github.workspace}}            
+            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/x64/SamTFE
+            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/x64/SamTSE
+            mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTFE/Mods/XPLUS
+            mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTSE/Mods/XPLUS 
             cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
             cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
             echo "*** Create archive ***"
@@ -592,39 +524,30 @@ jobs:
             uname -a
             brew install bison flex sdl2 libogg libvorbis zlib-ng cmake vulkan-loader vulkan-headers
             cd ${{github.workspace}}
-            mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTFE/Mods/XPLUS/Bin,x64/SamTFE/Bin,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS,x64/SamTSE/Mods/XPLUS/Bin,x64/SamTSE/Bin}
-            echo "*** Build SamTSE ***"
+            mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS}
+            echo "*** Build ***"
             cd ${{github.workspace}}/SamTFE/Sources
             awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
             cat CMakeLists.txt | grep mtune
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE
-            cd ${{github.workspace}}/SamTFE/Sources/build-x64
-            make -j$(sysctl -n hw.ncpu || echo 4)
-            cp -vfr ../../Sources/Entities/PlayerWeaponsHD.es ../../Sources/Entities/PlayerWeapons.es
-            cd ${{github.workspace}}/SamTFE/Sources/build-x64-xplus
-            make -j$(sysctl -n hw.ncpu || echo 4)
-            echo "*** Build SamTSE ***"
             cd ${{github.workspace}}/SamTSE/Sources
-            awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
+            awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt 
             cat CMakeLists.txt | grep mtune
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
-            cd ${{github.workspace}}/SamTSE/Sources/build-x64
+            cd ${{github.workspace}}            
+            cmake -B ${{github.workspace}}/build-x64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }}
+            cd ${{github.workspace}}/build-x64
             make -j$(sysctl -n hw.ncpu || echo 4)
-            cp -vfr ../../Sources/EntitiesMP/PlayerWeaponsHD.es ../../Sources/EntitiesMP/PlayerWeapons.es
-            cd ${{github.workspace}}/SamTSE/Sources/build-x64-xplus
-            make -j$(sysctl -n hw.ncpu || echo 4)
-            echo "*** Prepare Archive ***"            
+            make install
             cd ${{github.workspace}}
-            cp -vfr SamTFE/Sources/build-x64/Debug/*.dylib x64/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build-x64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build-x64-xplus/Debug/libEntities.dylib x64/SamTFE/Mods/XPLUS/Bin
-            cp -vfr SamTFE/Sources/build-x64-xplus/Debug/libGame.dylib x64/SamTFE/Mods/XPLUS/Bin
-            cp -vfr SamTSE/Sources/build-x64/Debug/*.dylib x64/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build-x64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libEntitiesMP.dylib x64/SamTSE/Mods/XPLUS/Bin  
-            cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libGameMP.dylib x64/SamTSE/Mods/XPLUS/Bin 
+            cmake -B ${{github.workspace}}/build-x64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DXPLUS=TRUE
+            cd ${{github.workspace}}/build-x64-xplus
+            make -j$(sysctl -n hw.ncpu || echo 4)
+            make install
+            echo "*** Prepare Archive ***"            
+            cd ${{github.workspace}}            
+            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/x64/SamTFE
+            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/x64/SamTSE
+            mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTFE/Mods/XPLUS
+            mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTSE/Mods/XPLUS 
             cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
             cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
             echo "*** Create archive ***"
@@ -676,33 +599,22 @@ jobs:
             apt-get install --no-install-recommends -y git bison flex cmake make gcc libc6-dev libsdl2-dev libogg-dev libvorbis-dev zlib1g-dev libvulkan1 libvulkan-dev    
             cat /proc/cpuinfo
             cat /etc/os-release
-            mkdir {x32,x32/SamTFE,x32/SamTFE/Mods,x32/SamTFE/Mods/XPLUS,x32/SamTFE/Mods/XPLUS/Bin,x32/SamTFE/Bin,x32/SamTSE,x32/SamTSE/Mods,x32/SamTSE/Mods/XPLUS,x32/SamTSE/Mods/XPLUS/Bin,x32/SamTSE/Bin}
+            mkdir {x32,x32/SamTFE,x32/SamTFE/Mods,x32/SamTFE/Mods/XPLUS,x32/SamTSE,x32/SamTSE/Mods,x32/SamTSE/Mods/XPLUS}
             uname -a
             gcc -c -Q -mcpu=native --help=target
             git clone https://github.com/tx00100xt/SeriousSamClassic.git
-            echo "*** Run cmake ***"
-            cmake SeriousSamClassic/SamTFE/Sources -B SeriousSamClassic/SamTFE/Sources/build-armv7l -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DUSE_I386_NASM_ASM=FALSE -DTFE=TRUE -DRPI4=TRUE
-            cmake SeriousSamClassic/SamTFE/Sources -B SeriousSamClassic/SamTFE/Sources/build-armv7l-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DUSE_I386_NASM_ASM=FALSE -DTFE=TRUE -DRPI4=TRUE
-            cmake SeriousSamClassic/SamTSE/Sources -B SeriousSamClassic/SamTSE/Sources/build-armv7l -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DUSE_I386_NASM_ASM=FALSE -DRPI4=TRUE
-            cmake SeriousSamClassic/SamTSE/Sources -B SeriousSamClassic/SamTSE/Sources/build-armv7l-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DUSE_I386_NASM_ASM=FALSE -DRPI4=TRUE
-            echo "*** build SamTFE ***"
-            make -j4 -C SeriousSamClassic/SamTFE/Sources/build-armv7l
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-armv7l/Debug/*.so x32/SamTFE/Bin          
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-armv7l/{DedicatedServer,MakeFONT,SeriousSam} x32/SamTFE/Bin
-            echo "*** build SamTFE XPLUS ***"
-            cp -vfr SeriousSamClassic/SamTFE/Sources/Entities/PlayerWeaponsHD.es SeriousSamClassic/SamTFE/Sources/Entities/PlayerWeapons.es
-            make -j4 -C SeriousSamClassic/SamTFE/Sources/build-armv7l-xplus
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-armv7l-xplus/Debug/libEntities.so x32/SamTFE/Mods/XPLUS/Bin
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-armv7l-xplus/Debug/libGame.so x32/SamTFE/Mods/XPLUS/Bin            
-            echo "*** build SamTSE ***"
-            make -j4 -C SeriousSamClassic/SamTSE/Sources/build-armv7l
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-armv7l/Debug/*.so x32/SamTSE/Bin            
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-armv7l/{DedicatedServer,MakeFONT,SeriousSam} x32/SamTSE/Bin
-            echo "*** build SamTSE XPLUS ***"
-            cp -vfr SeriousSamClassic/SamTSE/Sources/EntitiesMP/PlayerWeaponsHD.es SeriousSamClassic/SamTSE/Sources/EntitiesMP/PlayerWeapons.es
-            make -j4 -C SeriousSamClassic/SamTSE/Sources/build-armv7l-xplus
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-armv7l-xplus/Debug/libEntitiesMP.so x32/SamTSE/Mods/XPLUS/Bin
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-armv7l-xplus/Debug/libGameMP.so x32/SamTSE/Mods/XPLUS/Bin  
+            echo "***build ***"
+            cmake SeriousSamClassic -B SeriousSamClassic/build-armv7l -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DRPI4=TRUE      
+            make -j4 -C SeriousSamClassic/build-armv7l
+            make -C SeriousSamClassic/build-armv7l install
+            echo "*** build XPLUS ***"
+            cmake SeriousSamClassic -B SeriousSamClassic/build-armv7l-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DXPLUS=TRUE -DRPI4=TRUE
+            make -j4 -C SeriousSamClassic/build-armv7l-xplus
+            make -C SeriousSamClassic/build-armv7l-xplus install
+            mv -f SeriousSamClassic/SamTFE/Bin x32/SamTFE
+            mv -f SeriousSamClassic/SamTSE/Bin x32/SamTSE
+            mv -f SeriousSamClassic/SamTFE/Mods/XPLUS/Bin x32/SamTFE/Mods/XPLUS
+            mv -f SeriousSamClassic/SamTSE/Mods/XPLUS/Bin x32/SamTSE/Mods/XPLUS 
             echo "*** Copy Data files ***"
             cp -vfr SeriousSamClassic/{SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x32/SamTFE
             cp -vfr SeriousSamClassic/{SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x32/SamTSE            
@@ -761,33 +673,22 @@ jobs:
             apt-get install --no-install-recommends -y git bison flex cmake make gcc libc6-dev libsdl2-dev libogg-dev libvorbis-dev zlib1g-dev libvulkan1 libvulkan-dev    
             cat /proc/cpuinfo
             cat /etc/os-release
-            mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTFE/Mods/XPLUS/Bin,x64/SamTFE/Bin,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS,x64/SamTSE/Mods/XPLUS/Bin,x64/SamTSE/Bin}            
+            mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS}            
             uname -a
             gcc -c -Q -mcpu=native --help=target
             git clone https://github.com/tx00100xt/SeriousSamClassic.git
-            echo "*** Run cmake ***"
-            cmake SeriousSamClassic/SamTFE/Sources -B SeriousSamClassic/SamTFE/Sources/build-aarch64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE -DRPI4=TRUE
-            cmake SeriousSamClassic/SamTFE/Sources -B SeriousSamClassic/SamTFE/Sources/build-aarch64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DTFE=TRUE -DRPI4=TRUE
-            cmake SeriousSamClassic/SamTSE/Sources -B SeriousSamClassic/SamTSE/Sources/build-aarch64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DRPI4=TRUE                         
-            cmake SeriousSamClassic/SamTSE/Sources -B SeriousSamClassic/SamTSE/Sources/build-aarch64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DRPI4=TRUE
-            echo "*** build SamTFE ***"
-            make -j4 -C SeriousSamClassic/SamTFE/Sources/build-aarch64
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-aarch64/Debug/*.so x64/SamTFE/Bin           
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-aarch64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTFE/Bin
-            echo "*** build SamTFE XPLUS ***"
-            cp -vfr SeriousSamClassic/SamTFE/Sources/Entities/PlayerWeaponsHD.es SeriousSamClassic/SamTFE/Sources/Entities/PlayerWeapons.es
-            make -j4 -C SeriousSamClassic/SamTFE/Sources/build-aarch64-xplus
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-aarch64-xplus/Debug/libEntities.so x64/SamTFE/Mods/XPLUS/Bin
-            cp -vfr SeriousSamClassic/SamTFE/Sources/build-aarch64-xplus/Debug/libGame.so x64/SamTFE/Mods/XPLUS/Bin
-            echo "*** build SamTSE ***"
-            make -j4 -C SeriousSamClassic/SamTSE/Sources/build-aarch64
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-aarch64/Debug/*.so x64/SamTSE/Bin
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-aarch64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTSE/Bin
-            echo "*** build SamTSE XPLUS ***"
-            cp -vfr SeriousSamClassic/SamTSE/Sources/EntitiesMP/PlayerWeaponsHD.es SeriousSamClassic/SamTSE/Sources/EntitiesMP/PlayerWeapons.es
-            make -j4 -C SeriousSamClassic/SamTSE/Sources/build-aarch64-xplus
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-aarch64-xplus/Debug/libEntitiesMP.so x64/SamTSE/Mods/XPLUS/Bin
-            cp -vfr SeriousSamClassic/SamTSE/Sources/build-aarch64-xplus/Debug/libGameMP.so x64/SamTSE/Mods/XPLUS/Bin
+            echo "***build ***"
+            cmake SeriousSamClassic -B SeriousSamClassic/build-aarch64 -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DRPI4=TRUE      
+            make -j4 -C SeriousSamClassic/build-aarch64
+            make -C SeriousSamClassic/build-aarch64 install
+            echo "*** build XPLUS ***"
+            cmake SeriousSamClassic -B SeriousSamClassic/build-aarch64-xplus -DCMAKE_BUILD_TYPE=${{ matrix.Configuration }} -DXPLUS=TRUE -DRPI4=TRUE
+            make -j4 -C SeriousSamClassic/build-aarch64-xplus
+            make -C SeriousSamClassic/build-aarch64-xplus install
+            mv -f SeriousSamClassic/SamTFE/Bin x64/SamTFE
+            mv -f SeriousSamClassic/SamTSE/Bin x64/SamTSE
+            mv -f SeriousSamClassic/SamTFE/Mods/XPLUS/Bin x64/SamTFE/Mods/XPLUS
+            mv -f SeriousSamClassic/SamTSE/Mods/XPLUS/Bin x64/SamTSE/Mods/XPLUS 
             echo "*** Copy Data files ***"
             cp -vfr SeriousSamClassic/{SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
             cp -vfr SeriousSamClassic/{SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE            
@@ -871,14 +772,11 @@ jobs:
 
           # Produce a binary artifact and place it in the mounted volume
           run: |
-            cd ${{github.workspace}}/SamTFE/Sources            
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE
-            cd ${{github.workspace}}/SamTSE/Sources
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE  
-            cd ${{github.workspace}}/SamTFE/Sources/build
-            make -j4
-            cd ${{github.workspace}}/SamTSE/Sources/build    
-            make -j4             
+            cd ${{github.workspace}}         
+            cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE
+            cd ${{github.workspace}}/build
+            make -j$(nproc || echo 4)
+            make install              
 
       - name: Get current date
         id: date
@@ -896,18 +794,11 @@ jobs:
         run: |
             cd ${{github.workspace}}
             mkdir riscv64 && cd riscv64
-            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTFE/Mods/XPLUS/Bin,SamTFE/Bin,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS,SamTSE/Mods/XPLUS/Bin,SamTSE/Bin}
+            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS}
             cd ${{github.workspace}}
-            echo "*** Copy SamTFE Libraries and Executables ***"
-            cp -vfr SamTFE/Sources/build/Debug/*.so riscv64/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} riscv64/SamTFE/Bin
-            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libEntities.so riscv64/SamTFE/Mods/XPLUS/Bin"
-            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libGame.so riscv64/SamTFE/Mods/XPLUS/Bin"
-            echo "*** Copy SamTSE Libraries and Executables ***"
-            cp -vfr SamTSE/Sources/build/Debug/*.so riscv64/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} riscv64/SamTSE/Bin
-            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libEntitiesMP.so riscv64/SamTSE/Mods/XPLUS/Bin"
-            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libGameMP.so riscv64/SamTSE/Mods/XPLUS/Bin"
+            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/riscv64/SamTFE
+            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/riscv64/SamTSE 
+            echo "*** Copy Data files ***"
             echo "*** Copy Data files ***"
             cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} riscv64/SamTFE
             cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} riscv64/SamTSE
@@ -985,14 +876,11 @@ jobs:
 
           # Produce a binary artifact and place it in the mounted volume
           run: |
-            cd ${{github.workspace}}/SamTFE/Sources            
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE
-            cd ${{github.workspace}}/SamTSE/Sources
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE  
-            cd ${{github.workspace}}/SamTFE/Sources/build
-            make -j4
-            cd ${{github.workspace}}/SamTSE/Sources/build 
-            make -j4             
+            cd ${{github.workspace}}         
+            cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE
+            cd ${{github.workspace}}/build
+            make -j$(nproc || echo 4)
+            make install             
 
       - name: Get current date
         id: date
@@ -1010,18 +898,11 @@ jobs:
         run: |
             cd ${{github.workspace}}
             mkdir ppc64le && cd ppc64le
-            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTFE/Mods/XPLUS/Bin,SamTFE/Bin,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS,SamTSE/Mods/XPLUS/Bin,SamTSE/Bin}
+            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS}
             cd ${{github.workspace}}
-            echo "*** Copy SamTFE Libraries and Executables ***"
-            cp -vfr SamTFE/Sources/build/Debug/*.so ppc64le/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} ppc64le/SamTFE/Bin
-            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libEntities.so ppc64le/SamTFE/Mods/XPLUS/Bin"
-            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libGame.so ppc64le/SamTFE/Mods/XPLUS/Bin"
-            echo "*** Copy SamTSE Libraries and Executables ***"
-            cp -vfr SamTSE/Sources/build/Debug/*.so ppc64le/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} ppc64le/SamTSE/Bin
-            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libEntitiesMP.so ppc64le/SamTSE/Mods/XPLUS/Bin"
-            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libGameMP.so ppc64le/SamTSE/Mods/XPLUS/Bin"
+            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/ppc64le/SamTFE
+            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/ppc64le/SamTSE 
+            echo "*** Copy Data files ***"
             echo "*** Copy Data files ***"
             cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} ppc64le/SamTFE
             cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} ppc64le/SamTSE
@@ -1099,14 +980,11 @@ jobs:
 
           # Produce a binary artifact and place it in the mounted volume
           run: |
-            cd ${{github.workspace}}/SamTFE/Sources            
-            cmake -B ${{github.workspace}}/SamTFE/Sources/build -DCMAKE_BUILD_TYPE=Release -DTFE=TRUE -DUSE_I386_NASM_ASM=FALSE
-            cd ${{github.workspace}}/SamTSE/Sources
-            cmake -B ${{github.workspace}}/SamTSE/Sources/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE 
-            cd ${{github.workspace}}/SamTFE/Sources/build
-            make -j4
-            cd ${{github.workspace}}/SamTSE/Sources/build  
-            make -j4             
+            cd ${{github.workspace}}         
+            cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE
+            cd ${{github.workspace}}/build
+            make -j$(nproc || echo 4)
+            make install                  
 
       - name: Get current date
         id: date
@@ -1124,18 +1002,10 @@ jobs:
         run: |
             cd ${{github.workspace}}
             mkdir s390x && cd s390x
-            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTFE/Mods/XPLUS/Bin,SamTFE/Bin,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS,SamTSE/Mods/XPLUS/Bin,SamTSE/Bin}
+            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS}
             cd ${{github.workspace}}
-            echo "*** Copy SamTFE Libraries and Executables ***"
-            cp -vfr SamTFE/Sources/build/Debug/*.so s390x/SamTFE/Bin
-            cp -vfr SamTFE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} s390x/SamTFE/Bin
-            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libEntities.so s390x/SamTFE/Mods/XPLUS/Bin"
-            echo "cp -vfr SamTFE/Sources/build-xplus/Debug/libGame.so s390x/SamTFE/Mods/XPLUS/Bin"
-            echo "*** Copy SamTSE Libraries and Executables ***"
-            cp -vfr SamTSE/Sources/build/Debug/*.so s390x/SamTSE/Bin
-            cp -vfr SamTSE/Sources/build/{DedicatedServer,MakeFONT,SeriousSam} s390x/SamTSE/Bin
-            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libEntitiesMP.so s390x/SamTSE/Mods/XPLUS/Bin"
-            echo "cp -vfr SamTSE/Sources/build-xplus/Debug/libGameMP.so s390x/SamTSE/Mods/XPLUS/Bin"
+            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/s390x/SamTFE
+            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/s390x/SamTSE 
             echo "*** Copy Data files ***"
             cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} s390x/SamTFE
             cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} s390x/SamTSE
