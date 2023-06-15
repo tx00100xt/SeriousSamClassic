@@ -1034,7 +1034,8 @@ BOOL CDrawPort::IsPointVisible( PIX pixI, PIX pixJ, FLOAT fOoK, INDEX iID, INDEX
   // if the point is out or at the edge of drawport, it is not visible by default
   if( pixI<1 || pixI>dp_Width-2 || pixJ<1 || pixJ>dp_Height-2) return FALSE;
 
-  #if defined(__arm__) || defined(PLATFORM_RISCV64)
+  #if defined(__arm__) || PLATFORM_RISCV64
+  #warning PLATFORM_NOT_X86 use GLES based GPU (Lens Flare not work)
   // Assuming here that all ARM machine use GLES based GPU, were DEPTH reading is probably not available (or super slow)
   return FALSE;
   #endif

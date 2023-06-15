@@ -4,3 +4,4 @@
 1004-SamTFE-CMakeLists.patch
 1005-SamTSE-CMakeLists.patch
 1006-Fix-Install-Scripts.patch
+1007-Fixed_Platform_definition.patch

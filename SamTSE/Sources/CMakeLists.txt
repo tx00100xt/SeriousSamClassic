@@ -76,10 +76,12 @@ set(INTERNAL_NAME "serioussamse")
 
 # Define Target install dir
 string(FIND "${CMAKE_SOURCE_DIR}" "SamTFE/Sources" Found_SamTFE)
-MATH(EXPR Found_SamTFE "${Found_SamTFE}+1")
 string(FIND "${CMAKE_SOURCE_DIR}" "SamTSE/Sources" Found_SamTSE)
-MATH(EXPR Found_SamTSE "${Found_SamTSE}+1")
-MATH(EXPR Found_Sam "${Found_SamTFE}+${Found_SamTSE}")
+if(("${Found_SamTFE}" EQUAL "-1") AND ("${Found_SamTSE}" EQUAL "-1"))
+  set(Found_Sam "0")
+else()
+  set(Found_Sam "10")
+endif()
 
 if("${Found_Sam}" EQUAL "0")
   if(INTERNAL_NAME STREQUAL "serioussam")
