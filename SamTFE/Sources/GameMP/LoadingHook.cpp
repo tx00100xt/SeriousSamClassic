@@ -119,13 +119,19 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
     RemapLevelNames(iLevelNext);
 
     // first encounter
-    if(iLevel == -1) {
+    if((iLevel == -1) && (_pNetwork->md_strGameID == "serioussam") ) {
       strLevelName.ScanF("%02d_", &iLevel);
       strNextLevelName.ScanF("%02d_", &iLevelNext);
 
-      if(iLevel != -1) {
+      /*if(iLevel != -1) {
         map_bIsFirstEncounter = TRUE;
       }
+    } else {
+      map_bIsFirstEncounter = FALSE;*/
+    }
+
+    if(_pNetwork->md_strGameID == "serioussam") {
+      map_bIsFirstEncounter = TRUE;
     } else {
       map_bIsFirstEncounter = FALSE;
     }
