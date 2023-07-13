@@ -5,3 +5,4 @@
 1005-SamTSE-CMakeLists.patch
 1006-Fix-Install-Scripts.patch
 1007-Fixed_Platform_definition.patch
+1008-Fix-load-some-incorrect-custom-maps.patch
