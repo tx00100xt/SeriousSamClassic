@@ -109,6 +109,80 @@ components:
 
 
 functions:
+
+//***************************************************************
+//***************  Fixed Textures on Obelisk  *******************
+//***************************************************************
+  void FixTexturesOnObelisk(CTFileName strLevelName)
+  {
+    // for each entity in the world
+    {FOREACHINDYNAMICCONTAINER(GetWorld()->wo_cenEntities, CEntity, iten) {
+      //CEntity *pen = iten;
+      // if it is brush entity
+      if (iten->en_RenderType == CEntity::RT_BRUSH) {
+        // for each mip in its brush
+        FOREACHINLIST(CBrushMip, bm_lnInBrush, iten->en_pbrBrush->br_lhBrushMips, itbm) {
+          // for all sectors in this mip
+          FOREACHINDYNAMICARRAY(itbm->bm_abscSectors, CBrushSector, itbsc) {
+            // for all polygons in sector
+            FOREACHINSTATICARRAY(itbsc->bsc_abpoPolygons, CBrushPolygon, itbpo)
+            {
+              CTFileName strTextureName = itbpo->bpo_abptTextures[1].bpt_toTexture.GetName().FileName();
+              int _Obelisk02Light_found   = strncmp((const char *)strTextureName, (const char *) "Obelisk02Light", (size_t) 14 );
+              if (_Obelisk02Light_found == 0 ){
+                // REM Settings:
+                // itbpo->bpo_abptTextures[1].bpt_toTexture.GetName().FileName()
+                // itbpo->bpo_abptTextures[1].s.bpt_ubBlend
+                // itbpo->bpo_abptTextures[1].s.bpt_ubFlags 
+                // itbpo->bpo_abptTextures[1].s.bpt_colColor
+                if ( strLevelName=="KarnakDemo" || strLevelName=="Intro" || strLevelName=="08_Suburbs"
+                  || strLevelName=="13_Luxor" || strLevelName=="14_SacredYards") {
+                  itbpo->bpo_abptTextures[1].s.bpt_colColor = (C_WHITE| 0x5F);
+                } else if ( strLevelName=="04_ValleyOfTheKings" || strLevelName=="11_AlleyOfSphinxes" || strLevelName=="12_Karnak"){
+                  itbpo->bpo_abptTextures[1].s.bpt_colColor = (C_GRAY| 0x2F);
+                }
+              }
+            }
+          }
+        }
+      } // END if()
+    }}
+  }
+//***************************************************************
+//*********^**  Fixed Textures on Alley Of Sphinxes  ************
+//***************************************************************
+  void FixTexturesOnAlleyOfSphinxes(void)
+  {
+    // for each entity in the world
+    {FOREACHINDYNAMICCONTAINER(GetWorld()->wo_cenEntities, CEntity, iten) {
+      //CEntity *pen = iten;
+      // if it is brush entity
+      if (iten->en_RenderType == CEntity::RT_BRUSH) {
+        // for each mip in its brush
+        FOREACHINLIST(CBrushMip, bm_lnInBrush, iten->en_pbrBrush->br_lhBrushMips, itbm) {
+          // for all sectors in this mip
+          FOREACHINDYNAMICARRAY(itbm->bm_abscSectors, CBrushSector, itbsc) {
+            // for all polygons in sector
+            FOREACHINSTATICARRAY(itbsc->bsc_abpoPolygons, CBrushPolygon, itbpo)
+            {
+              CTFileName strTextureName = itbpo->bpo_abptTextures[1].bpt_toTexture.GetName().FileName();
+              int _EyeOfRa_found = strncmp((const char *)strTextureName, (const char *) "EyeOfRa", (size_t) 7 );
+              int _Wall12_found  = strncmp((const char *)strTextureName, (const char *) "Wall12",  (size_t) 6 );
+              int _Wingy02_found = strncmp((const char *)strTextureName, (const char *) "Wingy02", (size_t) 7 );
+              if (_EyeOfRa_found == 0 || _Wall12_found == 0 || _Wingy02_found == 0){
+                itbpo->bpo_abptTextures[1].s.bpt_ubBlend  = BPT_BLEND_BLEND;
+                itbpo->bpo_abptTextures[1].s.bpt_colColor = C_GRAY|0x80;
+             }
+            }
+          }
+        }
+      } // END if()
+    }}
+  }
+//***************************************************************
+//***************************************************************
+//***************************************************************
+
   // count enemies in current world
   void CountEnemies(void)
   {
@@ -293,6 +367,25 @@ procedures:
 
     // wait for game to start
     autowait(_pTimer->TickQuantum);
+
+    // Overlord Stuff
+    CTString strLevelName = _pNetwork->ga_fnmWorld.FileName();
+    //CPrintF("[strLevelName ==: %s]\n", (const char*)strLevelName);
+    CTString strModName = _pShell->GetValue("sys_strModName");
+    //CPrintF("[strModName ==: %s]\n", (const char*)strModName);
+
+    // Fix Obelisk textures
+    if ( strModName=="" ) {
+      if ( strLevelName=="04_ValleyOfTheKings" || strLevelName=="11_AlleyOfSphinxes" || strLevelName=="12_Karnak" 
+        || strLevelName=="13_Luxor" || strLevelName=="KarnakDemo" || strLevelName=="Intro" 
+        || strLevelName=="08_Suburbs" || strLevelName=="14_SacredYards") {
+        FixTexturesOnObelisk(strLevelName);
+      }
+    }
+    // Fix Alley Of Sphinxes textures
+    if ( strModName=="" && strLevelName=="11_AlleyOfSphinxes") {
+      FixTexturesOnAlleyOfSphinxes();
+    }
 
     // prepare initial music channel values
     ChangeMusicChannel(MT_LIGHT,        m_fnMusic0, m_fVolume0);
