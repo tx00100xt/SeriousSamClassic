@@ -346,7 +346,7 @@ CColoredButton::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
   rectToolTip.top = 50;
   rectToolTip.bottom = 60;
   pTI->hwnd = GetParent()->m_hWnd;
-  pTI->uId = (UINT) m_hWnd;
+  pTI->uId = (DWORD_PTR) m_hWnd;
   pTI->rect = rectToolTip;
   pTI->uFlags = TTF_IDISHWND;
   return 1;
