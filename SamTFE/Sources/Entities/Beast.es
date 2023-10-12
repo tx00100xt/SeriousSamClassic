@@ -16,7 +16,7 @@ enum BeastType {
 };
 
 %{
-static int _tmLastStandingAnim =0;  
+static FLOAT _tmLastStandingAnim =0.0f;  
 #define BEAST_STRETCH 2.0f
 #define BIG_BEAST_STRETCH 12.0f
 // info structure
