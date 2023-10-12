@@ -89,7 +89,7 @@ BOOL CDlgMarkLinkedSurfaces::OnInitDialog()
     CTString strListEntry;
     strListEntry.PrintF("%.02d %s (%d)", iSurface, ms.ms_Name, ms.ms_aiPolygons.Count());
     int iAddedAs = m_listSurfaces.AddString( CString(strListEntry));
-    m_listSurfaces.SetItemData( iAddedAs, (ULONG) &ms);
+    m_listSurfaces.SetItemData( iAddedAs, (DWORD_PTR) &ms);
     if( ms.ms_ulRenderingFlags&SRF_SELECTED) m_listSurfaces.SetCheck( iAddedAs, 1);
     else m_listSurfaces.SetCheck( iAddedAs, 0);
   }
