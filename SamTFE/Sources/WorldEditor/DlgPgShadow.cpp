@@ -499,7 +499,7 @@ void CDlgPgShadow::OnContextMenu(CWnd* pWnd, CPoint point)
 BOOL CDlgPgShadow::OnToolTipNotify( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 {
   TOOLTIPTEXT *pTTT = (TOOLTIPTEXT *)pNMHDR;
-  UINT nID =pNMHDR->idFrom;
+  DWORD_PTR nID =pNMHDR->idFrom;
   if (pTTT->uFlags & TTF_IDISHWND)
   {
     // idFrom is actually the HWND of the tool

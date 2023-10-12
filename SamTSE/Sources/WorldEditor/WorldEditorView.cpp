@@ -8066,7 +8066,7 @@ void CWorldEditorView::GetToolTipText( char *pToolTipText)
     // get description line for all properties with name
     pdecDLLClass = penEntity->GetClass()->ec_pdecDLLClass;
     pchrCursor += sprintf(pchrCursor, "Class: %-24.24s\n", pdecDLLClass->dec_strName);
-    INDEX ctLetters = strlen("Class: ")+strlen(pdecDLLClass->dec_strName);
+    size_t ctLetters = strlen("Class: ")+strlen(pdecDLLClass->dec_strName);
     memset(pchrCursor, '�', ctLetters);
     pchrCursor+=ctLetters;
     *pchrCursor = '\n';
@@ -8217,11 +8217,11 @@ else {\
       "Blend: \""+pDoc->m_woWorld.wo_atbTextureBlendings[mp.s.bpt_ubBlend].tb_strName+"\"");}
 
       CBrushPolygon &bpo = *crRayHit.cr_pbpoBrushPolygon;
-      SET_MAPPING_INFO( bpo.bpo_abptTextures[0], "Texture 1");
-      SET_MAPPING_INFO( bpo.bpo_abptTextures[1], "Texture 2");
-      SET_MAPPING_INFO( bpo.bpo_abptTextures[2], "Texture 3");
-      pchrCursor += sprintf(pchrCursor, "Polygon under mouse has %d edges\n", bpo.bpo_abpePolygonEdges.Count());
-      pchrCursor += sprintf(pchrCursor, "Shadow on polygon under mouse occupies %g kb\n", bpo.bpo_smShadowMap.GetShadowSize()/1024.0f);
+	  SET_MAPPING_INFO(bpo.bpo_abptTextures[0], (const char*)"Texture 1");
+      SET_MAPPING_INFO( bpo.bpo_abptTextures[1], (const char*)"Texture 2");
+      SET_MAPPING_INFO( bpo.bpo_abptTextures[2], (const char*)"Texture 3");
+      pchrCursor += sprintf(pchrCursor, (const char*)"Polygon under mouse has %d edges\n", bpo.bpo_abpePolygonEdges.Count());
+      pchrCursor += sprintf(pchrCursor, (const char*)"Shadow on polygon under mouse occupies %g kb\n", bpo.bpo_smShadowMap.GetShadowSize()/1024.0f);
     }
   }
 
@@ -8238,11 +8238,11 @@ else {\
         ctPlanes += itbsc->bsc_abplPlanes.Count();
       }
       pchrCursor += sprintf(pchrCursor, "%-24s %d\n%-24s %d\n%-24s %d\n%-24s %d\n%-24s %d\n%",
-        "No of sectors:", ctSectors,
-        "No of polygons:", ctPolygons,
-        "No of edges:", ctEdges,
-        "No of vertices:", ctVertices,
-        "No of planes:", ctPlanes);
+		  (const char*)"No of sectors:", ctSectors,
+		  (const char*)"No of polygons:", ctPolygons,
+		  (const char*)"No of edges:", ctEdges,
+		  (const char*)"No of vertices:", ctVertices,
+		  (const char*)"No of planes:", ctPlanes);
     }
     else
     {

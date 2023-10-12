@@ -513,7 +513,7 @@ void CDlgBrowseByClass::AddEntity( CEntity *pen)
   itItem.iSubItem = COLUMN_CLASS;
   itItem.pszText = achrTemp;
   itItem.iItem = m_listEntities.InsertItem( &itItem);
-  m_listEntities.SetItemData( itItem.iItem, (DWORD) pen);
+  m_listEntities.SetItemData( itItem.iItem, (DWORD_PTR) pen);
 
   for( INDEX iColumn=COLUMN_CLASS; iColumn<COLUMN_PROPERTY_START+_ctProperties; iColumn++)
   {
