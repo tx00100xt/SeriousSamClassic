@@ -693,7 +693,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
     _strLogFile = CTFileName(CTString(strExePath)).FileName();
     // chop off end of Unix executable filename... --ryan.
     _strLogFile.ReplaceSubstr(CTString("-bin"), CTString(""));*/
+#ifdef PLATFORM_UNIX
     _strLogFile = "SeriousSam";
+#else
+    _strLogFile = CTFileName(CTString(strExePath)).FileName();
+#endif
   }
 #ifdef PLATFORM_UNIX
   if (_bPortableVersion == FALSE) {
