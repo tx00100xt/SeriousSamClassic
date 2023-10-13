@@ -29,6 +29,11 @@ static char THIS_FILE[] = __FILE__;
 extern INDEX wed_bSaveTestGameFirstTime = TRUE;
 ENGINE_API extern INDEX snd_iFormat;
 
+extern ENGINE_API FLOAT _fPlayerFOVAdjuster;
+extern ENGINE_API FLOAT _fWeaponFOVAdjuster;
+extern ENGINE_API FLOAT _fArmorHeightAdjuster;
+extern ENGINE_API FLOAT _fFragScorerHeightAdjuster;
+
 /////////////////////////////////////////////////////////////////////////////
 // CChildFrame
 
@@ -401,6 +406,48 @@ CWorldEditorView *CChildFrame::GetPerspectiveView(void)
 
 #define APPLICATION_NAME "TestGame FullScreen"
 
+void CChildFrame::SetAdjusters(float ratio)
+{
+	//if (pdp == NULL) return;
+	//float ratio = (float)pdp->GetWidth() / (float)pdp->GetHeight();
+ 	if (ratio >= 1.30f && ratio < 1.43f) 		//4:3
+ 	{
+		_fWeaponFOVAdjuster			= 1.0f;		//Field of View for weapon
+		_fPlayerFOVAdjuster			= 1.0f;		//Field of View for player
+		_fArmorHeightAdjuster		= 0.7f;
+		_fFragScorerHeightAdjuster	= 0.75f;
+	}else if (ratio >= 1.2f && ratio < 1.30f) 	//5:4
+ 	{
+		_fWeaponFOVAdjuster			= 1.0f;		//Field of View for weapon
+		_fPlayerFOVAdjuster			= 1.0f;		//Field of View for player
+		_fArmorHeightAdjuster		= 0.7f;
+		_fFragScorerHeightAdjuster	= 0.75f;
+ 	}else if (ratio >= 1.73f && ratio < 1.8f)	//16:9
+ 	{
+		_fWeaponFOVAdjuster			= 1.25f;	//Field of View for weapon
+		_fPlayerFOVAdjuster			= 1.15f;	//Field of View for player
+		_fArmorHeightAdjuster		= 0.835f;
+		_fFragScorerHeightAdjuster	= 1.5f;
+ 	}else if (ratio >= 1.43f && ratio < 1.73f) 	//16:10
+ 	{
+		_fWeaponFOVAdjuster			= 1.15f;	//Field of View for weapon
+		_fPlayerFOVAdjuster			= 1.10f;	//Field of View for player
+		_fArmorHeightAdjuster		= 0.78f;
+		_fFragScorerHeightAdjuster	= 1.17f;
+ 	}else if (ratio >= 1.8f && ratio <= 4.2f) 	//21:9
+ 	{
+		_fWeaponFOVAdjuster			= 1.55f;	//Field of View for weapon
+		_fPlayerFOVAdjuster			= 1.35f;	//Field of View for player
+		_fArmorHeightAdjuster	    = 1.0f;
+		_fFragScorerHeightAdjuster	= 2.35f;
+	}
+	_pShell->SetFLOAT("_fWeaponFOVAdjuster", _fWeaponFOVAdjuster);
+	_pShell->SetFLOAT("_fPlayerFOVAdjuster", _fPlayerFOVAdjuster);
+	_pShell->SetFLOAT("_fArmorHeightAdjuster", _fArmorHeightAdjuster);
+	_pShell->SetFLOAT("_fFragScorerHeightAdjuster", _fFragScorerHeightAdjuster);
+	/* CPrintF("[WorlEditor] _fWeaponFOVAdjuster: %f  _fPlayerFOVAdjuster: %f  _fArmorHeightAdjuster: %f  _fFragScorerHeightAdjuster: %f\n",
+	  _fWeaponFOVAdjuster,_fPlayerFOVAdjuster, _fArmorHeightAdjuster,_fFragScorerHeightAdjuster ); */ // For Debug
+}
 
 void CChildFrame::TestGame( BOOL bFullScreen) 
 {
@@ -467,6 +514,19 @@ void CChildFrame::TestGame( BOOL bFullScreen)
   HINSTANCE hInstanceFullScreen;
   WNDCLASSEX wcFullScreen;
   char achWindowTitle[256]; // current window title
+
+  // Set Adjusters for HUD and FOV
+  FLOAT ratio;
+  if (bFullScreen) {
+	ratio = (FLOAT)theApp.m_dmFullScreen.dm_pixSizeI / (FLOAT)theApp.m_dmFullScreen.dm_pixSizeJ;
+  } else {
+	ratio = (FLOAT)pdp->GetWidth() / (FLOAT)pdp->GetHeight();
+  }
+  /*
+  CPrintF("[WorlEditor] pdp->GetWidth: %d pdp->GetHeight: %d  Ratio: %f\n",pdp->GetWidth(), pdp->GetHeight(), ratio);
+  */ // For Debug
+  SetAdjusters(ratio);
+
   if( bFullScreen) 
   {
     // get full screen display mode info

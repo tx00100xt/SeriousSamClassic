@@ -124,7 +124,7 @@ if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "
         set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/../")                        # set install path to project root directory since
     endif()                                                                        # since one wasn't set during config
     set(LOCAL_INSTALL TRUE)
-    message(STATUS "Using LOCAL Imstall")
+    message(STATUS "Using LOCAL Install")
 endif()
 if(CMAKE_INSTALL_PREFIX STREQUAL "/usr" ) # Only works for linux since I don't know what default is for windows/macos/freebsd.
     set(LOCAL_INSTALL FALSE)

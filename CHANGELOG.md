@@ -149,3 +149,18 @@ All notable changes to this project will be documented in this file.
 ## 2023-06-07 - 2023-06-09
 - Adding root CMakeLists.txt to build files for Serious Sam Classic The First Encounter and Serious Sam Classic The Second Encounter.
 - Added debian directory for building deb package using regular tools(bzr debuild) under Debian/Ubuntu.
+
+## 2023-06-15 - 2023-07-07
+- Fixed OpenGL lens flares,fix platform definition and CMakeList.
+- Fixed loading of some incorrect custom maps.
+
+## 2023-10-12 - 2023-10-13
+- Fixed Obelisk textures and Alley Of Sphinxes textures (TFE).
+- Fixed incorrect variable type in Beast.es.
+- Removed deprecated PlatformToolset from aml11lib (Win).
+- Fixed Serious Editor 64-bit crash when calling the function to show all entities <N>.
+  Now the 64-bit editor has full functionality, just like its 32-bit version.
+  The cause of the crash was the conversion of pointers to 32 bits. 
+- SeriousModeler: Fixed conversion of pointers to 32 bits (Win).
+- SeriousSkaStudio: Fixed conversion of pointers to 32 bits (Win).
+- Fixed HUD, player FOV, weapon FOV for Serious Editor.
