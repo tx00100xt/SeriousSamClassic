@@ -154,7 +154,7 @@ All notable changes to this project will be documented in this file.
 - Fixed OpenGL lens flares,fix platform definition and CMakeList.
 - Fixed loading of some incorrect custom maps.
 
-## 2023-10-12 - 2023-10-13
+## 2023-10-12 - 2023-10-14
 - Fixed Obelisk textures and Alley Of Sphinxes textures (TFE).
 - Fixed incorrect variable type in Beast.es.
 - Removed deprecated PlatformToolset from aml11lib (Win).
@@ -165,3 +165,4 @@ All notable changes to this project will be documented in this file.
 - SeriousSkaStudio: Fixed conversion of pointers to 32 bits (Win).
 - Fixed HUD, player FOV, weapon FOV for Serious Editor.
 - Restored name for Serious Editor log file.
+- Fixed some textures after Save/Load (First Encounter).
