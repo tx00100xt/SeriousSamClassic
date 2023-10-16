@@ -166,3 +166,12 @@ All notable changes to this project will be documented in this file.
 - Fixed HUD, player FOV, weapon FOV for Serious Editor.
 - Restored name for Serious Editor log file.
 - Fixed some textures after Save/Load (First Encounter).
+- Added an additional method to fix the glow of textures.
+  Now you can select the fixation method. You can choose to fix the parameters
+  of textures that emit a illumination, or a method that creates additional light sources
+  that cancel the texture illumination bug.Both methods dynamically edit the world on the
+  fly after the level is loaded, before the game starts. Loads/Saves, as well as 
+  Demo Recordings (including those made earlier) are now fixded too.
+  This fix affects the following levels: "Intro", "Karnak Demo", "Valley Of TheKings",
+  "Dunes", "Suburbs", "Metropolis", "Alley Of Sphinxes", "Karnak", "Luxor", "Sacred Yards".
+  Other levels do not have this bug.
