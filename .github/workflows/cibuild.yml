@@ -498,6 +498,76 @@ jobs:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz
 
+  build-macos-x64:
+    name: macOS ${{ matrix.Configuration }} ${{ matrix.Platform }}
+    runs-on: macos-12
+    strategy:
+      fail-fast: false
+      matrix:
+        Configuration: [Release]
+        Platform: [x64]    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get current date
+        id: date
+        uses: Kaven-Universe/github-action-current-date-time@v1
+        with:
+          format: "YYYYMMDD"
+
+      - name: Show current date
+        run: |
+          echo "${{ steps.date.outputs.time }}"
+          
+      - name: Build on macOS
+        run: |
+            uname -a
+            brew install bison flex sdl2 libogg libvorbis zlib-ng cmake vulkan-loader vulkan-headers
+            cd ${{github.workspace}}
+            mkdir {x64,x64/SamTFE,x64/SamTFE/Mods,x64/SamTFE/Mods/XPLUS,x64/SamTFE/Mods/XPLUS/Bin,x64/SamTFE/Bin,x64/SamTSE,x64/SamTSE/Mods,x64/SamTSE/Mods/XPLUS,x64/SamTSE/Mods/XPLUS/Bin,x64/SamTSE/Bin}
+            echo "*** Build SamTFE ***"
+            cd ${{github.workspace}}/SamTFE/Sources
+            awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
+            cat CMakeLists.txt | grep mtune
+            cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64 
+            cd ${{github.workspace}}/SamTFE/Sources/build-x64
+            make -j$(sysctl -n hw.ncpu || echo 4)
+            cd ${{github.workspace}}/SamTFE/Sources
+            cmake -B ${{github.workspace}}/SamTFE/Sources/build-x64-xplus -DXPLUS=TRUE
+            cd ${{github.workspace}}/SamTFE/Sources/build-x64-xplus
+            make -j$(sysctl -n hw.ncpu || echo 4)
+            echo "*** Build SamTSE ***"
+            cd ${{github.workspace}}/SamTSE/Sources
+            awk '{sub("-march=native","-mtune=generic")}1' CMakeLists.txt > CmakeTemp.txt && mv CmakeTemp.txt CMakeLists.txt
+            cat CMakeLists.txt | grep mtune
+            cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64
+            cd ${{github.workspace}}/SamTSE/Sources/build-x64
+            make -j$(sysctl -n hw.ncpu || echo 4)
+            cd ${{github.workspace}}/SamTSE/Sources
+            cmake -B ${{github.workspace}}/SamTSE/Sources/build-x64-xplus  -DXPLUS=TRUE
+            cd ${{github.workspace}}/SamTSE/Sources/build-x64-xplus
+            make -j$(sysctl -n hw.ncpu || echo 4)        
+            echo "*** Prepare Archive ***"            
+            cd ${{github.workspace}}
+            cp -vfr SamTFE/Sources/build-x64/Debug/*.dylib x64/SamTFE/Bin
+            cp -vfr SamTFE/Sources/build-x64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTFE/Bin
+            cp -vfr SamTFE/Sources/build-x64-xplus/Debug/libEntities.dylib x64/SamTFE/Mods/XPLUS/Bin
+            cp -vfr SamTFE/Sources/build-x64-xplus/Debug/libGame.dylib x64/SamTFE/Mods/XPLUS/Bin
+            cp -vfr SamTSE/Sources/build-x64/Debug/*.dylib x64/SamTSE/Bin
+            cp -vfr SamTSE/Sources/build-x64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTSE/Bin
+            cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libEntitiesMP.dylib x64/SamTSE/Mods/XPLUS/Bin  
+            cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libGameMP.dylib x64/SamTSE/Mods/XPLUS/Bin 
+            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
+            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
+            echo "*** Create archive ***"
+            XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SeriousSamClassic-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz x64
+                      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SeriousSamClassic-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz
+          path: SeriousSamClassic-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz
+
   build-raspios-armv7l:
     name: RPi OS Lite ${{ matrix.Configuration }} ${{ matrix.arch }}
     runs-on: ubuntu-latest
