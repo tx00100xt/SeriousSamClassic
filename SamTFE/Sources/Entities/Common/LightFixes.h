@@ -146,7 +146,7 @@ FLOAT _fKarnakCoordinates[42][3] {
 };
 
 // Luxor
-FLOAT _fLuxorCoordinates[51][3] {
+FLOAT _fLuxorCoordinates[52][3] {
 -85.875f,14.4375f,6.6875f,
 -75.3125f,14.8125f,-5.0625f,
 -308.562f,116.312f,-7.8125f,
@@ -197,7 +197,8 @@ FLOAT _fLuxorCoordinates[51][3] {
 183.875f,113.75f,292.188f,
 152.562f,112.5f,291.25f,
 124.562f,119.312f,206.875f,
-93.1875f,119.812f,206.562f
+93.1875f,119.812f,206.562f,
+15.0f,14.4375f,-77.1875f // grid texture
 };
 
 // Sacred Yards

@@ -108,7 +108,7 @@ properties:
 components:
   1 model   MODEL_MARKER      "Models\\Editor\\MusicHolder.mdl",
   2 texture TEXTURE_MARKER    "Models\\Editor\\MusicHolder.tex",
-  3 class CLASS_LIGHT         "Classes\\Light.ecl",
+  3 class CLASS_LIGHT         "Classes\\Light.ecl"
 
 functions:
 
@@ -264,7 +264,7 @@ functions:
     ((CLight&)*pen).m_colColor = C_GRAY;
     ((CLight&)*pen).m_ltType = LT_POINT;
     ((CLight&)*pen).m_bDarkLight = TRUE;
-    ((CLight&)*pen).m_rFallOffRange = 8.0f;
+    ((CLight&)*pen).m_rFallOffRange = 4.0f;
     ((CLight&)*pen).m_strName = "fix_texture";
     pen->en_ulSpawnFlags =0xFFFFFFFF;
     pen->Reinitialize();
@@ -290,6 +290,19 @@ functions:
       pen->en_ulSpawnFlags =0xFFFFFFFF;
       pen->Reinitialize();
     }
+    FLOAT m_fCoord1 = _fLuxorCoordinates[51][0];
+    FLOAT m_fCoord2 = _fLuxorCoordinates[51][1];
+    FLOAT m_fCoord3 = _fLuxorCoordinates[51][2];
+    pl = CPlacement3D(FLOAT3D(m_fCoord1, m_fCoord2, m_fCoord3), ANGLE3D(0, 0, 0));
+    pen = CreateEntity(pl, CLASS_LIGHT);
+    pen->Initialize();
+    ((CLight&)*pen).m_colColor = C_GRAY;
+    ((CLight&)*pen).m_ltType = LT_POINT;
+    ((CLight&)*pen).m_bDarkLight = TRUE;
+    ((CLight&)*pen).m_rFallOffRange = 1.0f;
+    ((CLight&)*pen).m_strName = "fix_texture";
+    pen->en_ulSpawnFlags =0xFFFFFFFF;
+    pen->Reinitialize();
   }
 
   void FixTexturesSacredYards(void) 
@@ -343,7 +356,7 @@ functions:
     ((CLight&)*pen).m_colColor = C_GRAY;
     ((CLight&)*pen).m_ltType = LT_POINT;
     ((CLight&)*pen).m_bDarkLight = TRUE;
-    ((CLight&)*pen).m_rFallOffRange = 8.0f;
+    ((CLight&)*pen).m_rFallOffRange = 4.0f;
     ((CLight&)*pen).m_strName = "fix_texture";
     pen->en_ulSpawnFlags =0xFFFFFFFF;
     pen->Reinitialize();
@@ -662,7 +675,7 @@ procedures:
         FixTexturesAlleyOfSphinxes();
       } else if ( strModName=="" && strLevelName=="12_Karnak") {
         FixTexturesKarnak();
-      } else if ( strModName=="" && strLevelName=="13_Luxor") {
+      } else if ( /* strModName=="" && */ strLevelName=="13_Luxor") {
         FixTexturesLuxor();
       } else if ( strModName=="" && strLevelName=="14_SacredYards") {
         FixTexturesSacredYards();

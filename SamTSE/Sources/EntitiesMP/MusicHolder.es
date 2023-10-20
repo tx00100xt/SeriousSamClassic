@@ -20,6 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "EntitiesMP/EnemySpawner.h"
 #include "EntitiesMP/Trigger.h"
 #include "EntitiesMP/Woman.h"
+#include "EntitiesMP/Light.h"
 %}
 
 
@@ -122,10 +123,51 @@ properties:
 
 components:
   1 model   MODEL_MARKER     "Models\\Editor\\MusicHolder.mdl",
-  2 texture TEXTURE_MARKER   "Models\\Editor\\MusicHolder.tex"
-
+  2 texture TEXTURE_MARKER   "Models\\Editor\\MusicHolder.tex",
+  3 class CLASS_LIGHT         "Classes\\Light.ecl"
 
 functions:
+
+  //***************************************************************
+  //****************  Fix Textures on some levels  ****************
+  //***************************************************************
+
+  // Clear Lights
+  void ClearLights(void)
+  {
+    {FOREACHINDYNAMICCONTAINER(_pNetwork->ga_World.wo_cenEntities, CEntity, pen) {
+      if(IsDerivedFromClass(pen, "Light")) {
+        if(((CLight&)*pen).m_strName == "fix_texture"){
+          pen->Destroy();
+        }
+      }
+    }}
+  }
+
+  // Fix textures
+  void FixTexturesLandOfDamned(void) 
+  {
+    ClearLights();
+    CEntity *pen = NULL;
+    CPlacement3D pl;
+    for(int i = 0; i < 4; i++) {
+      pl = CPlacement3D(FLOAT3D(7.0f, 63.0f, -268.0f), ANGLE3D(0, 0, 0));
+      pen = CreateEntity(pl, CLASS_LIGHT);
+      pen->Initialize();
+      ((CLight&)*pen).m_colColor = C_GRAY;
+      ((CLight&)*pen).m_ltType = LT_POINT;
+      ((CLight&)*pen).m_bDarkLight = TRUE;
+      ((CLight&)*pen).m_rFallOffRange = 8.0f;
+      ((CLight&)*pen).m_strName = "fix_texture";
+      pen->en_ulSpawnFlags =0xFFFFFFFF;
+      pen->Reinitialize();
+    }    
+  }
+
+  //***************************************************************
+  //***************************************************************
+  //***************************************************************
+
   // count enemies in current world
   void CountEnemies(void)
   {
@@ -320,6 +362,15 @@ procedures:
 
     // wait for game to start
     autowait(_pTimer->TickQuantum);
+
+    // Get Level Name and Mod Name
+    CTString strLevelName = _pNetwork->ga_fnmWorld.FileName();
+    CTString strModName = _pShell->GetValue("sys_strModName");
+
+    // Fix textures
+    if ( /* strModName=="" && */ strLevelName=="3_2_LandOfDamned") {
+      FixTexturesLandOfDamned();
+    }
 
     // prepare initial music channel values
     ChangeMusicChannel(MT_LIGHT,        m_fnMusic0, m_fVolume0);

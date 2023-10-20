@@ -298,6 +298,11 @@ void _FixTexturesLuxor(void)
     pl = CPlacement3D(FLOAT3D(m_fCoord1, m_fCoord2, m_fCoord3), ANGLE3D(0, 0, 0));
     _CreateLights(pl, 8.0f);
   }
+  FLOAT m_fCoord1 = _fLuxorCoordinates[51][0];
+  FLOAT m_fCoord2 = _fLuxorCoordinates[51][1];
+  FLOAT m_fCoord3 = _fLuxorCoordinates[51][2];
+  pl = CPlacement3D(FLOAT3D(m_fCoord1, m_fCoord2, m_fCoord3), ANGLE3D(0, 0, 0));
+  _CreateLights(pl, 1.0f);
 }
 
 void _FixTexturesSacredYards(void) 
@@ -450,7 +455,7 @@ void MaybeDiscardLastLines(void)
       _FixTexturesAlleyOfSphinxes();
     } else if ( strModName=="" && strLevelName=="12_Karnak") {
       _FixTexturesKarnak();
-    } else if ( strModName=="" && strLevelName=="13_Luxor") {
+    } else if (/* strModName=="" && */ strLevelName=="13_Luxor") {
       _FixTexturesLuxor();
     } else if ( strModName=="" && strLevelName=="14_SacredYards") {
       _FixTexturesSacredYards();
@@ -1685,12 +1690,10 @@ BOOL CGame::SaveGame(const CTFileName &fnGame)
     _pNetwork->Save_t( fnGame);
     CPrintF(TRANSV("Saved game: %s\n"), (const char *) fnGame);
     SaveThumbnail(fnGame.NoExt()+"Tbn.tex");
-    //MaybeDiscardLastLines();
     return TRUE;
   } catch (const char *strError) {
     // and display error
     CPrintF(TRANSV("Cannot save game: %s\n"), (const char *) strError);
-    //MaybeDiscardLastLines();
     return FALSE;
   }
 }

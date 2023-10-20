@@ -30,6 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Base/Profiling.h>
 #include <Engine/Base/Statistics.h>
 #include <Engine/CurrentVersion.h>
+#include <Engine/World/World.h>
 #include "Camera.h"
 #include "LCDDrawing.h"
 
@@ -170,9 +171,64 @@ static FLOAT gam_fChatSoundVolume = 0.25f;
 BOOL map_bIsFirstEncounter = FALSE;
 BOOL _bUserBreakEnabled = FALSE;
 
+//***************************************************************
+//****************  Fix Textures on some levels  ****************
+//***************************************************************
+
+#ifndef DECL_DLL
+#define DECL_DLL ENGINE_API
+#endif
+#include "EntitiesMP/Light.h"
+#undef DECL_DLL
+
+void _ClearLights(void)
+{
+  {FOREACHINDYNAMICCONTAINER(_pNetwork->ga_World.wo_cenEntities, CEntity, pen) {
+    if(IsDerivedFromClass(pen, "Light")) {
+      if(((CLight&)*pen).m_strName == "fix_texture"){
+        pen->Destroy();
+      }
+    }
+  }}
+}
+
+void _CreateLights(CPlacement3D pl, FLOAT _fFallOffRange)
+{
+  CEntity *pen = NULL;
+  pen = _pNetwork->ga_World.CreateEntity_t(pl, CTFILENAME("Classes\\Light.ecl"));
+  pen->Initialize();
+  ((CLight&)*pen).m_colColor = C_GRAY;
+  ((CLight&)*pen).m_ltType = LT_POINT;
+  ((CLight&)*pen).m_bDarkLight = TRUE;
+  ((CLight&)*pen).m_rFallOffRange = _fFallOffRange;
+  ((CLight&)*pen).m_strName = "fix_texture";
+  pen->en_ulSpawnFlags =0xFFFFFFFF;
+  pen->Reinitialize();
+}
+
+void _FixTexturesLandOfDamned(void) 
+{
+  _ClearLights();
+  CPlacement3D pl;
+  pl = CPlacement3D(FLOAT3D(7.0f, 63.0f, -268.0f), ANGLE3D(0, 0, 0));
+  _CreateLights(pl, 8.0f);
+}
+//***************************************************************
+//***************************************************************
+//***************************************************************
+
 // make sure that console doesn't show last lines if not playing in network
 void MaybeDiscardLastLines(void)
 {
+  // Get Level Name and Mod Name
+  CTString strLevelName = _pNetwork->ga_fnmWorld.FileName();
+  CTString strModName = _pShell->GetValue("sys_strModName");
+
+  // Fix textures
+  if ( /* strModName==" && */ strLevelName=="3_2_LandOfDamned") {
+    _FixTexturesLandOfDamned();
+  }
+
   // if not in network
   if (!_pNetwork->IsNetworkEnabled()) {
     // don't show last lines on screen after exiting console
