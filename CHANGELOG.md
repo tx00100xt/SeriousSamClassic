@@ -175,3 +175,13 @@ All notable changes to this project will be documented in this file.
   This fix affects the following levels: "Intro", "Karnak Demo", "Valley Of TheKings",
   "Dunes", "Suburbs", "Metropolis", "Alley Of Sphinxes", "Karnak", "Luxor", "Sacred Yards".
   Other levels do not have this bug.
+
+## 2023-10-20 - 2023-10-21
+- Fixed non-rendering of textures on some levels. See fix https://github.com/tx00100xt/SeriousSamClassic/issues/19
+- Fixed a bug in multiplayer when changing levels. See fix https://github.com/tx00100xt/SeriousSamClassic/issues/20
+- Add hud_bWeaponsIconScale var for scale HUD weapons icon.
+- Large weapon icons are set by default.
+- Added new Scripts and updated other.
+- Removed SE1_10b.gro, because not used now.
+- Additional light sources for XPLUS also.
+- Restored the original menu design as in TFE (grid, clouds and so on).
