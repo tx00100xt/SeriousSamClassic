@@ -658,30 +658,30 @@ procedures:
         }
       }
       // Fix Alley Of Sphinxes textures
-      if ( strModName=="" && strLevelName=="11_AlleyOfSphinxes") {
+      if (/* strModName=="" && */ strLevelName=="11_AlleyOfSphinxes") {
         FixTexturesOnAlleyOfSphinxes();
       }
     } else if(iBugFixMetod == 2) {
       // Fix textures
-      if ( strModName=="" && strLevelName=="04_ValleyOfTheKings") {
+      if (/* strModName=="" && */ strLevelName=="04_ValleyOfTheKings") {
         FixTexturesValleyOfTheKings();
-      } else if ( strModName=="" && strLevelName=="07_Dunes") {
+      } else if (/* strModName=="" && */ strLevelName=="07_Dunes") {
         FixTexturesDunes();
-      } else if ( strModName=="" && strLevelName=="08_Suburbs") {
+      } else if (/* strModName=="" && */ strLevelName=="08_Suburbs") {
         FixTexturesSuburbs();
-      } else if ( strModName=="" && strLevelName=="10_Metropolis") {
+      } else if (/* strModName=="" && */ strLevelName=="10_Metropolis") {
         FixTexturesMetropolis();
-      } else if ( strModName=="" && strLevelName=="11_AlleyOfSphinxes") {
+      } else if (/* strModName=="" && */ strLevelName=="11_AlleyOfSphinxes") {
         FixTexturesAlleyOfSphinxes();
-      } else if ( strModName=="" && strLevelName=="12_Karnak") {
+      } else if (/* strModName=="" && */ strLevelName=="12_Karnak") {
         FixTexturesKarnak();
-      } else if ( /* strModName=="" && */ strLevelName=="13_Luxor") {
+      } else if (/* strModName=="" && */ strLevelName=="13_Luxor") {
         FixTexturesLuxor();
-      } else if ( strModName=="" && strLevelName=="14_SacredYards") {
+      } else if (/* strModName=="" && */ strLevelName=="14_SacredYards") {
         FixTexturesSacredYards();
-      } else if ( strModName=="" && strLevelName=="KarnakDemo") {
+      } else if (/* strModName=="" && */ strLevelName=="KarnakDemo") {
         FixTexturesKarnakDemo();
-      } else if ( strModName=="" && strLevelName=="Intro") {
+      } else if (/* strModName=="" && */ strLevelName=="Intro") {
         FixTexturesIntro();
       }
     }

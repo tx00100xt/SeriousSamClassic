@@ -375,7 +375,7 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   pdp->PutTexture( &_toMapBcgRD, PIXaabbox2D( PIX2D(pixC2S,pixR2S), PIX2D(pixC2E,pixR2E)), C_WHITE|255);
 
   // render icons
-  for( INDEX iIcon=0; iIcon<ARRAYCOUNT(aIconCoords); iIcon++)
+  for( ULONG iIcon=0; iIcon<ARRAYCOUNT(aIconCoords); iIcon++)
   {
     // if level's icon should be rendered
     if( ulLevelMask & (1UL<<iIcon))
@@ -390,7 +390,7 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   }
 
   // render paths
-  for( INDEX iPath=0; iPath<ARRAYCOUNT(aPathPrevNextLevels); iPath++)
+  for( ULONG iPath=0; iPath<ARRAYCOUNT(aPathPrevNextLevels); iPath++)
   {
     INDEX iPrevLevelBit = aPathPrevNextLevels[iPath][0];
     INDEX iNextLevelBit = aPathPrevNextLevels[iPath][1];

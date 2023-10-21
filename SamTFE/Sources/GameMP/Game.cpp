@@ -438,30 +438,30 @@ void MaybeDiscardLastLines(void)
       }
     }
     // Fix Alley Of Sphinxes textures
-    if ( strModName=="" && strLevelName=="11_AlleyOfSphinxes") {
+    if (/* strModName=="" && */ strLevelName=="11_AlleyOfSphinxes") {
       _FixTexturesOnAlleyOfSphinxes();
     }
   } else if (iBugFixMetod == 2) {
     // Fix textures
-    if ( strModName=="" && strLevelName=="04_ValleyOfTheKings") {
+    if (/* strModName==""&& */ strLevelName=="04_ValleyOfTheKings") {
       _FixTexturesValleyOfTheKings();
-    } else if ( strModName=="" && strLevelName=="07_Dunes") {
+    } else if (/* strModName=="" && */ strLevelName=="07_Dunes") {
       _FixTexturesDunes();
-    } else if ( strModName=="" && strLevelName=="08_Suburbs") {
+    } else if (/* strModName=="" && */ strLevelName=="08_Suburbs") {
       _FixTexturesSuburbs();
-    } else if ( strModName=="" && strLevelName=="10_Metropolis") {
+    } else if (/* strModName=="" && */ strLevelName=="10_Metropolis") {
       _FixTexturesMetropolis();
-    } else if ( strModName=="" && strLevelName=="11_AlleyOfSphinxes") {
+    } else if (/* strModName=="" && */ strLevelName=="11_AlleyOfSphinxes") {
       _FixTexturesAlleyOfSphinxes();
-    } else if ( strModName=="" && strLevelName=="12_Karnak") {
+    } else if (/* strModName=="" && */ strLevelName=="12_Karnak") {
       _FixTexturesKarnak();
     } else if (/* strModName=="" && */ strLevelName=="13_Luxor") {
       _FixTexturesLuxor();
-    } else if ( strModName=="" && strLevelName=="14_SacredYards") {
+    } else if (/* strModName=="" && */ strLevelName=="14_SacredYards") {
       _FixTexturesSacredYards();
-    } else if ( strModName=="" && strLevelName=="KarnakDemo") {
+    } else if (/* strModName=="" && */ strLevelName=="KarnakDemo") {
       _FixTexturesKarnakDemo();
-    } else if ( strModName=="" && strLevelName=="Intro") {
+    } else if (/* strModName=="" && */ strLevelName=="Intro") {
       _FixTexturesIntro();
     }
   }
