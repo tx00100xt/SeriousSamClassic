@@ -329,6 +329,7 @@ FLOAT hud_fOpacity     = 0.9f;
 FLOAT hud_fScaling     = 1.0f;
 FLOAT hud_tmWeaponsOnScreen = 3.0f;
 FLOAT hud_tmLatencySnapshot = 1.0f;
+INDEX hud_bWeaponsIconScale = 0; // HUD weapons icons scale: 0 - small, 1 - big
 
 FLOAT plr_fBreathingStrength = 0.0f;
 extern FLOAT plr_tmSnoopingTime;
@@ -689,6 +690,7 @@ void CPlayer_OnInitClass(void)
   _pShell->DeclareSymbol("INDEX cht_bDumpFinalBossData;", &cht_bDumpFinalBossData);
   _pShell->DeclareSymbol("INDEX cht_bDebugFinalBossAnimations;", &cht_bDebugFinalBossAnimations);
   _pShell->DeclareSymbol("INDEX cht_bDumpPlayerShading;", &cht_bDumpPlayerShading);
+  _pShell->DeclareSymbol("persistent user INDEX hud_bWeaponsIconScale;", (void *) &hud_bWeaponsIconScale);
 
   _pShell->DeclareSymbol("persistent user FLOAT wpn_fRecoilSpeed[17];",   &wpn_fRecoilSpeed);
   _pShell->DeclareSymbol("persistent user FLOAT wpn_fRecoilLimit[17];",   &wpn_fRecoilLimit);
