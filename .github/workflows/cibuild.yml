@@ -1,4 +1,4 @@
-name: Build
+SE!name: Build
 
 on:
   push:
@@ -71,9 +71,7 @@ jobs:
           mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x32/SamTSE/Mods/XPLUS
           echo "*** Create archive ***"
           cd ${{github.workspace}}
-          cp -fr SamTFE/SE1_10b.gro x32/SamTFE
           cp -fr SamTFE/ModEXT.txt x32/SamTFE
-          cp -fr SamTSE/SE1_10b.gro x32/SamTSE
           cp -fr SamTSE/ModEXT.txt x32/SamTSE
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz x32
           
@@ -143,9 +141,7 @@ jobs:
           mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTSE/Mods/XPLUS
           echo "*** Create archive ***"
           cd ${{github.workspace}}
-          cp -fr SamTFE/SE1_10b.gro x64/SamTFE
           cp -fr SamTFE/ModEXT.txt x64/SamTFE
-          cp -fr SamTSE/SE1_10b.gro x64/SamTSE
           cp -fr SamTSE/ModEXT.txt x64/SamTSE
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz x64
           
@@ -211,8 +207,8 @@ jobs:
           mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTSE/Mods/XPLUS
           echo "*** Create archive ***"
           cd ${{github.workspace}}
-          cp -fr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
-          cp -fr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
+          cp -fr {SamTFE/ModEXT.txt} x64/SamTFE
+          cp -fr {SamTSE/ModEXT.txt} x64/SamTSE
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-amd64-bin.tar.xz x64
 
     - name: Upload artifact
@@ -313,9 +309,7 @@ jobs:
          del SamTSE\Bin\*.map
          copy SamTSE\Bin\*.* x32\SamTSE\Bin 
          echo "*** Copy Data files ***"
-         copy SamTFE\SE1_10b.gro x32\SamTFE
          copy SamTFE\ModEXT.txt x32\SamTFE
-         copy SamTSE\SE1_10b.gro x32\SamTSE
          copy SamTSE\ModEXT.txt x32\SamTSE 
          echo "*** Create archive ***"
          7z a -mx=9 SeriousSamClassic-${{ steps.date.outputs.time }}-win32-bin.7z x32
@@ -418,9 +412,7 @@ jobs:
          del SamTSE\Bin\*.map
          copy SamTSE\Bin\*.* x64\SamTSE\Bin
          echo "*** Copy Data files ***"
-         copy SamTFE\SE1_10b.gro x64\SamTFE
          copy SamTFE\ModEXT.txt x64\SamTFE
-         copy SamTSE\SE1_10b.gro x64\SamTSE
          copy SamTSE\ModEXT.txt x64\SamTSE
          echo "*** Create archive ***"
          7z a -mx=9 SeriousSamClassic-${{ steps.date.outputs.time }}-win64-bin.7z x64
@@ -487,8 +479,8 @@ jobs:
             mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/x64/SamTSE
             mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTFE/Mods/XPLUS
             mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/x64/SamTSE/Mods/XPLUS 
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
+            cp -vfr {SamTFE/ModEXT.txt} x64/SamTFE
+            cp -vfr {SamTSE/ModEXT.txt} x64/SamTSE
             echo "*** Create archive ***"
             XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SeriousSamClassic-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz x64
                       
@@ -557,8 +549,8 @@ jobs:
             cp -vfr SamTSE/Sources/build-x64/{DedicatedServer,MakeFONT,SeriousSam} x64/SamTSE/Bin
             cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libEntitiesMP.dylib x64/SamTSE/Mods/XPLUS/Bin  
             cp -vfr SamTSE/Sources/build-x64-xplus/Debug/libGameMP.dylib x64/SamTSE/Mods/XPLUS/Bin 
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
+            cp -vfr {SamTFE/ModEXT.txt} x64/SamTFE
+            cp -vfr {SamTSE/ModEXT.txt} x64/SamTSE
             echo "*** Create archive ***"
             XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SeriousSamClassic-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz x64
                       
@@ -625,8 +617,8 @@ jobs:
             mv -f SeriousSamClassic/SamTFE/Mods/XPLUS/Bin x32/SamTFE/Mods/XPLUS
             mv -f SeriousSamClassic/SamTSE/Mods/XPLUS/Bin x32/SamTSE/Mods/XPLUS 
             echo "*** Copy Data files ***"
-            cp -vfr SeriousSamClassic/{SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x32/SamTFE
-            cp -vfr SeriousSamClassic/{SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x32/SamTSE            
+            cp -vfr SeriousSamClassic/{SamTFE/ModEXT.txt} x32/SamTFE
+            cp -vfr SeriousSamClassic/{SamTSE/ModEXT.txt} x32/SamTSE            
             echo "*** Create archive ***"         
             mv x32 armv7l
             XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-armv7l-bin.tar.xz armv7l
@@ -699,8 +691,8 @@ jobs:
             mv -f SeriousSamClassic/SamTFE/Mods/XPLUS/Bin x64/SamTFE/Mods/XPLUS
             mv -f SeriousSamClassic/SamTSE/Mods/XPLUS/Bin x64/SamTSE/Mods/XPLUS 
             echo "*** Copy Data files ***"
-            cp -vfr SeriousSamClassic/{SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} x64/SamTFE
-            cp -vfr SeriousSamClassic/{SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE            
+            cp -vfr SeriousSamClassic/{SamTFE/ModEXT.txt} x64/SamTFE
+            cp -vfr SeriousSamClassic/{SamTSE/ModEXT.txt} x64/SamTSE            
             echo "*** Create archive ***"
             mv x64 aarch64
             XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz aarch64
@@ -809,8 +801,8 @@ jobs:
             mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/riscv64/SamTSE 
             echo "*** Copy Data files ***"
             echo "*** Copy Data files ***"
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} riscv64/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} riscv64/SamTSE
+            cp -vfr {SamTFE/ModEXT.txt} riscv64/SamTFE
+            cp -vfr {SamTSE/ModEXT.txt} riscv64/SamTSE
             echo "*** Create archive ***"
             tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz riscv64          
             
@@ -913,8 +905,8 @@ jobs:
             mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/ppc64le/SamTSE 
             echo "*** Copy Data files ***"
             echo "*** Copy Data files ***"
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} ppc64le/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} ppc64le/SamTSE
+            cp -vfr {SamTFE/ModEXT.txt} ppc64le/SamTFE
+            cp -vfr {SamTSE/ModEXT.txt} ppc64le/SamTSE
             echo "*** Create archive ***"
             tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-ppc64le-bin.tar.xz ppc64le          
             
@@ -1016,8 +1008,8 @@ jobs:
             mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/s390x/SamTFE
             mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/s390x/SamTSE 
             echo "*** Copy Data files ***"
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} s390x/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} s390x/SamTSE
+            cp -vfr {SamTFE/ModEXT.txt} s390x/SamTFE
+            cp -vfr {SamTSE/ModEXT.txt} s390x/SamTSE
             echo "*** Create archive ***"
             tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz s390x          
             
