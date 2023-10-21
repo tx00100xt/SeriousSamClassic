@@ -27,7 +27,6 @@ extern CGame *_pGame;
 #endif
 static CDrawPort *_pdpLoadingHook = NULL;  // drawport for loading hook
 extern BOOL _bUserBreakEnabled;
-extern BOOL map_bIsFirstEncounter;
 
 
 #define REFRESHTIME (0.2f)
@@ -101,6 +100,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
   // get session properties currently loading
   CSessionProperties *psp = (CSessionProperties *)_pNetwork->GetSessionProperties();
   ULONG ulLevelMask = psp->sp_ulLevelsMask;
+  INDEX iLevel = -1;
   if (psp->sp_bCooperative) {
     INDEX iLevel = -1;
     INDEX iLevelNext = -1;
@@ -117,24 +117,9 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
     strNextLevelName.ScanF("%01d_%01d_", &u, &v);
     iLevelNext = u*10+v;
     RemapLevelNames(iLevelNext);
-
-    // first encounter
-    if((iLevel == -1) && (_pNetwork->md_strGameID == "serioussam") ) {
-      strLevelName.ScanF("%02d_", &iLevel);
-      strNextLevelName.ScanF("%02d_", &iLevelNext);
-
-      /*if(iLevel != -1) {
-        map_bIsFirstEncounter = TRUE;
-      }
-    } else {
-      map_bIsFirstEncounter = FALSE;*/
-    }
-
-    if(_pNetwork->md_strGameID == "serioussam") {
-      map_bIsFirstEncounter = TRUE;
-    } else {
-      map_bIsFirstEncounter = FALSE;
-    }
+    
+    //strLevelName.ScanF("%02d_", &iLevel);
+    //strNextLevelName.ScanF("%02d_", &iLevelNext);
    
     if (iLevel>0) {
       ulLevelMask|=1<<(iLevel-1);

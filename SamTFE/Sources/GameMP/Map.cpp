@@ -16,41 +16,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdAfx.h"
 #include "LCDDrawing.h"
 
-extern BOOL map_bIsFirstEncounter;
-
-static CTextureObject atoIconsSE[13];
-static CTextureObject atoIconsFE[15];
-
+static CTextureObject atoIcons[15];
 static CTextureObject _toPathDot;
+static CTextureObject _toMapBcgLD;
+static CTextureObject _toMapBcgLU;
+static CTextureObject _toMapBcgRD;
+static CTextureObject _toMapBcgRU;
 
-static CTextureObject _toMapBcgLDFE;
-static CTextureObject _toMapBcgLUFE;
-static CTextureObject _toMapBcgRDFE;
-static CTextureObject _toMapBcgRUFE;
-
-static CTextureObject _toMapBcgLDSE;
-static CTextureObject _toMapBcgLUSE;
-static CTextureObject _toMapBcgRDSE;
-static CTextureObject _toMapBcgRUSE;
-
-PIX aIconCoordsSE[][2] =
-{
-  {0, 0},      // 00: Last Episode
-  {168, 351},  // 01: Palenque 01 
-  {42, 345},   // 02: Palenque 02 
-  {41, 263},   // 03: Teotihuacan 01      
-  {113, 300},  // 04: Teotihuacan 02      
-  {334, 328},  // 05: Teotihuacan 03      
-  {371, 187},  // 06: Ziggurat	 
-  {265, 111},  // 07: Atrium		 
-  {119, 172},  // 08: Gilgamesh	 
-  {0, 145},    // 09: Babel		   
-  {90, 30},    // 10: Citadel		 
-  {171, 11},   // 11: Land of Damned		     
-  {376, 0},    // 12: Cathedral	 
-};
-
-PIX aIconCoordsFE[][2] =
+PIX aIconCoords[][2] =
 {
   {175,404},  // 00: Hatshepsut
   {60,381},   // 01: Sand Canyon
@@ -69,20 +42,6 @@ PIX aIconCoordsFE[][2] =
   {185,0},    // 14: Pyramid
 };
 
-#define LASTEPISODE_BIT 0
-#define PALENQUE01_BIT 1
-#define PALENQUE02_BIT  2
-#define TEOTIHUACAN01_BIT 3
-#define TEOTIHUACAN02_BIT 4
-#define TEOTIHUACAN03_BIT 5
-#define ZIGGURAT_BIT 6
-#define ATRIUM_BIT 7
-#define GILGAMESH_BIT 8
-#define BABEL_BIT 9
-#define CITADEL_BIT 10
-#define LOD_BIT 11
-#define CATHEDRAL_BIT 12
-
 #define HATSHEPSUT_BIT 0
 #define SAND_BIT 1
 #define RAMSES_BIT 2
@@ -99,23 +58,7 @@ PIX aIconCoordsFE[][2] =
 #define SACRED_BIT 13
 #define PYRAMID_BIT 14
 
-INDEX  aPathPrevNextLevelsSE[][2] = 
-{
-  {LASTEPISODE_BIT, PALENQUE01_BIT},      // 00
-  {PALENQUE01_BIT, PALENQUE02_BIT},       // 01
-  {PALENQUE02_BIT, TEOTIHUACAN01_BIT },   // 02
-  {TEOTIHUACAN01_BIT, TEOTIHUACAN02_BIT}, // 03
-  {TEOTIHUACAN02_BIT, TEOTIHUACAN03_BIT}, // 04
-  {TEOTIHUACAN03_BIT, ZIGGURAT_BIT},      // 05
-  {ZIGGURAT_BIT, ATRIUM_BIT},             // 06
-  {ATRIUM_BIT, GILGAMESH_BIT},            // 07
-  {GILGAMESH_BIT, BABEL_BIT},             // 08
-  {BABEL_BIT, CITADEL_BIT},               // 09
-  {CITADEL_BIT, LOD_BIT},                 // 10
-  {LOD_BIT, CATHEDRAL_BIT},               // 11
-};
-
-INDEX  aPathPrevNextLevelsFE[][2] = 
+INDEX  aPathPrevNextLevels[][2] = 
 {
   {HATSHEPSUT_BIT, SAND_BIT},     // 00
   {SAND_BIT, RAMSES_BIT},         // 01
@@ -135,119 +78,7 @@ INDEX  aPathPrevNextLevelsFE[][2] =
   {LUXOR_BIT, PYRAMID_BIT},       // 15
 };
 
-PIX aPathDotsSE[][10][2] = 
-{
-  // 00: Palenque01 - Palenque02
-  {
-    {-1,-1},
-  },
-
-  // 01: Palenque01 - Palenque02
-  {
-    {211,440},
-    {193,447},
-    {175,444},
-    {163,434},
-    {152,423},
-    {139,418},
-    {-1,-1},
-  },
-  
-  // 02: Palenque02 - Teotihuacan01
-  {
-    {100,372},
-    {102,363},
-    {108,354},
-    {113,345},
-    {106,338},
-    {-1,-1},
-  },
-
-  // 03: Teotihuacan01 - Teotihuacan02
-  {
-    {153,337},
-    {166,341},
-    {180,346},
-    {194,342},
-    {207,337},
-    {-1,-1},
-  },
-
-  // 04: Teotihuacan02 - Teotihuacan03
-  {
-    {279,339},
-    {287,347},
-    {296,352},
-    {307,365},
-    {321,367},
-    {335,362},
-    {-1,-1},
-  },
-
-  // 05: Teotihuacan03 - Ziggurat
-  {
-    {-1,-1},
-  },
-
-  // 06: Ziggurat - Atrium
-  {
-    {412,285},
-    {396,282},
-    {383,273},
-    {368,266},
-    {354,264},
-    {-1,-1},
-  },
-
-  // 07: Atrium - Gilgamesh
-  {
-    {276,255},
-    {262,258},
-    {248,253},
-    {235,245},
-    {222,240},
-    {-1,-1},
-  },
-
-  // 08: Gilgamesh - Babel
-  {
-    {152,245},
-    {136,248},
-    {118,253},
-    {100,251},
-    {85,246},
-    {69,243},
-    {-1,-1},
-  },
-
-  // 09: Babel - Citadel
-  {
-    {-1,-1},
-  },
-
-  // 10: Citadel - Lod
-  {
-    {190,130},
-    {204,126},
-    {215,119},
-    {232,116},
-    {241,107},
-    {-1,-1},
-  },
-
-  // 11: Lod - Cathedral
-  {
-    {330,108},
-    {341,117},
-    {353,126},
-    {364,136},
-    {377,146},
-    {395,147},
-    {-1,-1},
-  },
-};
-
-PIX aPathDotsFE[][10][2] = 
+PIX aPathDots[][10][2] = 
 {
   // 00: Hatshepsut - Sand
   {
@@ -427,92 +258,50 @@ PIX aPathDotsFE[][10][2] =
 BOOL ObtainMapData(void)
 {
   try {
-#ifndef FIRST_ENCOUNTER
-    // the second encounter
-    atoIconsSE[ 0].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Book.tex"));
-    atoIconsSE[ 1].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level00.tex"));
-    atoIconsSE[ 2].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level01.tex"));
-    atoIconsSE[ 3].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level02.tex"));
-    atoIconsSE[ 4].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level03.tex"));
-    atoIconsSE[ 5].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level04.tex"));
-    atoIconsSE[ 6].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level05.tex"));
-    atoIconsSE[ 7].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level06.tex"));
-    atoIconsSE[ 8].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level07.tex"));
-    atoIconsSE[ 9].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level08.tex"));
-    atoIconsSE[10].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level09.tex"));
-    atoIconsSE[11].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level10.tex"));
-    atoIconsSE[12].SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\Level11.tex"));
-    _toPathDot    .SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\PathDot.tex"));
-    _toMapBcgLDSE .SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\MapBcgLD.tex"));
-    _toMapBcgLUSE .SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\MapBcgLU.tex"));
-    _toMapBcgRDSE .SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\MapBcgRD.tex"));
-    _toMapBcgRUSE .SetData_t(CTFILENAME("TexturesMP\\Computer\\Map\\MapBcgRU.tex"));
+    atoIcons[ 0].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level00.tex"));
+    atoIcons[ 1].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level01.tex"));
+    atoIcons[ 2].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level02.tex"));
+    atoIcons[ 3].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level03.tex"));
+    atoIcons[ 4].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level04.tex"));
+    atoIcons[ 5].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level05.tex"));
+    atoIcons[ 6].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level06.tex"));
+    atoIcons[ 7].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level07.tex"));
+    atoIcons[ 8].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level08.tex"));
+    atoIcons[ 9].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level09.tex"));
+    atoIcons[10].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level10.tex"));
+    atoIcons[11].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level11.tex"));
+    atoIcons[12].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level12.tex"));
+    atoIcons[13].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level13.tex"));
+    atoIcons[14].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level14.tex"));
+    _toPathDot  .SetData_t(CTFILENAME("Textures\\Computer\\Map\\PathDot.tex"));
+    _toMapBcgLD .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgLD.tex"));
+    _toMapBcgLU .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgLU.tex"));
+    _toMapBcgRD .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgRD.tex"));
+    _toMapBcgRU .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgRU.tex"));
     // force constant textures
-    ((CTextureData*)atoIconsSE[ 0].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 1].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 2].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 3].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 4].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 5].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 6].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 7].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 8].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[ 9].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[10].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[11].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsSE[12].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toPathDot    .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgLDSE .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgLUSE .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgRDSE .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgRUSE .GetData())->Force(TEX_CONSTANT);
-#else
-    // the first encounter
-    atoIconsFE[ 0].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level00.tex"));
-    atoIconsFE[ 1].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level01.tex"));
-    atoIconsFE[ 2].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level02.tex"));
-    atoIconsFE[ 3].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level03.tex"));
-    atoIconsFE[ 4].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level04.tex"));
-    atoIconsFE[ 5].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level05.tex"));
-    atoIconsFE[ 6].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level06.tex"));
-    atoIconsFE[ 7].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level07.tex"));
-    atoIconsFE[ 8].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level08.tex"));
-    atoIconsFE[ 9].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level09.tex"));
-    atoIconsFE[10].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level10.tex"));
-    atoIconsFE[11].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level11.tex"));
-    atoIconsFE[12].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level12.tex"));
-    atoIconsFE[13].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level13.tex"));
-    atoIconsFE[14].SetData_t(CTFILENAME("Textures\\Computer\\Map\\Level14.tex"));
-    _toPathDot    .SetData_t(CTFILENAME("Textures\\Computer\\Map\\PathDot.tex"));
-    _toMapBcgLDFE .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgLD.tex"));
-    _toMapBcgLUFE .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgLU.tex"));
-    _toMapBcgRDFE .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgRD.tex"));
-    _toMapBcgRUFE .SetData_t(CTFILENAME("Textures\\Computer\\Map\\MapBcgRU.tex"));
-    // force constant textures
-    ((CTextureData*)atoIconsFE[ 0].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 1].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 2].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 3].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 4].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 5].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 6].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 7].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 8].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[ 9].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[10].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[11].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[12].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[13].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)atoIconsFE[14].GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toPathDot    .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgLDFE .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgLUFE .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgRDFE .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toMapBcgRUFE .GetData())->Force(TEX_CONSTANT);
-#endif
-  }
-  catch (const char *strError) {
-    CPrintF("%s\n", (const char *)strError);
+    ((CTextureData*)atoIcons[ 0].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 1].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 2].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 3].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 4].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 5].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 6].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 7].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 8].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[ 9].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[10].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[11].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[12].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[13].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)atoIcons[14].GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)_toPathDot  .GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)_toMapBcgLD .GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)_toMapBcgLU .GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)_toMapBcgRD .GetData())->Force(TEX_CONSTANT);
+    ((CTextureData*)_toMapBcgRU .GetData())->Force(TEX_CONSTANT);
+  } 
+  catch (char *strError) {
+    CPrintF("%s\n", strError);
     return FALSE;
   }
   return TRUE;
@@ -520,43 +309,26 @@ BOOL ObtainMapData(void)
 
 void ReleaseMapData(void)
 {
-  atoIconsSE[0].SetData(NULL);
-  atoIconsSE[1].SetData(NULL);
-  atoIconsSE[2].SetData(NULL);
-  atoIconsSE[3].SetData(NULL);
-  atoIconsSE[4].SetData(NULL);
-  atoIconsSE[5].SetData(NULL);
-  atoIconsSE[6].SetData(NULL);
-  atoIconsSE[7].SetData(NULL);
-  atoIconsSE[8].SetData(NULL);
-  atoIconsSE[9].SetData(NULL);
-  atoIconsSE[10].SetData(NULL);
-  atoIconsSE[11].SetData(NULL);
-  atoIconsSE[12].SetData(NULL);
-  atoIconsFE[0].SetData(NULL);
-  atoIconsFE[1].SetData(NULL);
-  atoIconsFE[2].SetData(NULL);
-  atoIconsFE[3].SetData(NULL);
-  atoIconsFE[4].SetData(NULL);
-  atoIconsFE[5].SetData(NULL);
-  atoIconsFE[6].SetData(NULL);
-  atoIconsFE[7].SetData(NULL);
-  atoIconsFE[8].SetData(NULL);
-  atoIconsFE[9].SetData(NULL);
-  atoIconsFE[10].SetData(NULL);
-  atoIconsFE[11].SetData(NULL);
-  atoIconsFE[12].SetData(NULL);
-  atoIconsFE[13].SetData(NULL);
-  atoIconsFE[14].SetData(NULL);
+  atoIcons[0].SetData(NULL);
+  atoIcons[1].SetData(NULL);
+  atoIcons[2].SetData(NULL);
+  atoIcons[3].SetData(NULL);
+  atoIcons[4].SetData(NULL);
+  atoIcons[5].SetData(NULL);
+  atoIcons[6].SetData(NULL);
+  atoIcons[7].SetData(NULL);
+  atoIcons[8].SetData(NULL);
+  atoIcons[9].SetData(NULL);
+  atoIcons[10].SetData(NULL);
+  atoIcons[11].SetData(NULL);
+  atoIcons[12].SetData(NULL);
+  atoIcons[13].SetData(NULL);
+  atoIcons[14].SetData(NULL);
   _toPathDot.SetData(NULL);
-  _toMapBcgLDSE.SetData(NULL);
-  _toMapBcgLUSE.SetData(NULL);
-  _toMapBcgRDSE.SetData(NULL);
-  _toMapBcgRUSE.SetData(NULL);
-  _toMapBcgLDFE.SetData(NULL);
-  _toMapBcgLUFE.SetData(NULL);
-  _toMapBcgRDFE.SetData(NULL);
-  _toMapBcgRUFE.SetData(NULL);
+  _toMapBcgLD.SetData(NULL);
+  _toMapBcgLU.SetData(NULL);
+  _toMapBcgRD.SetData(NULL);
+  _toMapBcgRU.SetData(NULL);
 }
 
 void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
@@ -565,25 +337,6 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   {
     ReleaseMapData();
     return;
-  }
-
-  PIX(*aIconCoords)[2]           = map_bIsFirstEncounter ? aIconCoordsFE         : aIconCoordsSE;
-  CTextureObject* atoIcons       = map_bIsFirstEncounter ? atoIconsFE            : atoIconsSE;
-  INDEX(*aPathPrevNextLevels)[2] = map_bIsFirstEncounter ? aPathPrevNextLevelsFE : aPathPrevNextLevelsSE;
-  PIX(*aPathDots)[10][2]         = map_bIsFirstEncounter ? aPathDotsFE           : aPathDotsSE;
-
-  INDEX ctLevels = map_bIsFirstEncounter ? ARRAYCOUNT(aIconCoordsFE) : ARRAYCOUNT(aIconCoordsSE);
-
-  CTextureObject* _toMapBcgLD = &_toMapBcgLDSE;
-  CTextureObject* _toMapBcgLU = &_toMapBcgLUSE;
-  CTextureObject* _toMapBcgRD = &_toMapBcgRDSE;
-  CTextureObject* _toMapBcgRU = &_toMapBcgRUSE;
-
-  if(map_bIsFirstEncounter) {
-    _toMapBcgLD = &_toMapBcgLDFE;
-    _toMapBcgLU = &_toMapBcgLUFE;
-    _toMapBcgRD = &_toMapBcgRDFE;
-    _toMapBcgRU = &_toMapBcgRUFE;
   }
 
   PIX pixdpw = (PIX) pdp->GetWidth();
@@ -605,8 +358,9 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   PIX pixSX = (PIX) ((pixdpw-imgw*fStretch)/2);
   PIX pixSY = Max( PIX((pixdph-imgh*fStretch)/2), PIX(0));
 
-  PIX pixC1S = pixSX;                  // column 1 start pixel
-  PIX pixR1S = pixSY;                  // raw 1 start pixel
+  // render pale map bcg
+  PIX pixC1S = pixSX;                          // column 1 start pixel
+  PIX pixR1S = pixSY;                          // raw 1 start pixel
   PIX pixC1E = (PIX) (pixSX+256*fStretch);     // column 1 end pixel
   PIX pixR1E = (PIX) (pixSY+256*fStretch);     // raw 1 end pixel
   PIX pixC2S = (PIX) (pixC1E-fStretch);        // column 2 start pixel
@@ -614,41 +368,29 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
   PIX pixC2E = (PIX) (pixC2S+256*fStretch);    // column 2 end pixel
   PIX pixR2E = (PIX) (pixR2S+256*fStretch);    // raw 2 end pixel
 
-  if (ulLevelMask == 0x00000001 && !map_bIsFirstEncounter) {
+  // render pale map bcg
+  pdp->PutTexture( &_toMapBcgLU, PIXaabbox2D( PIX2D(pixC1S,pixR1S), PIX2D(pixC1E,pixR1E)), C_WHITE|255);
+  pdp->PutTexture( &_toMapBcgRU, PIXaabbox2D( PIX2D(pixC2S,pixR1S), PIX2D(pixC2E,pixR1E)), C_WHITE|255);
+  pdp->PutTexture( &_toMapBcgLD, PIXaabbox2D( PIX2D(pixC1S,pixR2S), PIX2D(pixC1E,pixR2E)), C_WHITE|255);
+  pdp->PutTexture( &_toMapBcgRD, PIXaabbox2D( PIX2D(pixC2S,pixR2S), PIX2D(pixC2E,pixR2E)), C_WHITE|255);
 
-    // render the book
-    //PIX pixX = (PIX) (aIconCoords[0][0]*fStretch+pixC1S);
-    //PIX pixY = (PIX) (aIconCoords[0][1]*fStretch+pixR1S);
-    CTextureObject *pto = &atoIcons[0];
-    // FIXME: DG: or was the line below supposed to use pixX and pixY?
-    pdp->PutTexture( pto, PIXaabbox2D( PIX2D(pixC1S,pixR1S), PIX2D(pixC2E,pixR2E)), C_WHITE|255);
-
-  } else {
-
-    // render pale map bcg
-    pdp->PutTexture( _toMapBcgLU, PIXaabbox2D( PIX2D(pixC1S,pixR1S), PIX2D(pixC1E,pixR1E)), C_WHITE|255);
-    pdp->PutTexture( _toMapBcgRU, PIXaabbox2D( PIX2D(pixC2S,pixR1S), PIX2D(pixC2E,pixR1E)), C_WHITE|255);
-    pdp->PutTexture( _toMapBcgLD, PIXaabbox2D( PIX2D(pixC1S,pixR2S), PIX2D(pixC1E,pixR2E)), C_WHITE|255);
-    pdp->PutTexture( _toMapBcgRD, PIXaabbox2D( PIX2D(pixC2S,pixR2S), PIX2D(pixC2E,pixR2E)), C_WHITE|255);
-
-    // render icons
-    for( INDEX iIcon=(!map_bIsFirstEncounter); iIcon<ctLevels; iIcon++)
+  // render icons
+  for( INDEX iIcon=0; iIcon<ARRAYCOUNT(aIconCoords); iIcon++)
+  {
+    // if level's icon should be rendered
+    if( ulLevelMask & (1UL<<iIcon))
     {
-      // if level's icon should be rendered
-      if( ulLevelMask & (1UL<<iIcon))
-      {
-        PIX pixX = (PIX) (aIconCoords[iIcon][0]*fStretch+pixC1S);
-        PIX pixY = (PIX) (aIconCoords[iIcon][1]*fStretch+pixR1S);
-        CTextureObject *pto = &atoIcons[iIcon];
-        PIX pixImgW = (PIX) (((CTextureData *)pto->GetData())->GetPixWidth()*fStretch);
-        PIX pixImgH = (PIX) (((CTextureData *)pto->GetData())->GetPixHeight()*fStretch);
-        pdp->PutTexture( pto, PIXaabbox2D( PIX2D(pixX, pixY), PIX2D(pixX+pixImgW, pixY+pixImgH)), C_WHITE|255);
-      }
+      PIX pixX = (PIX) (aIconCoords[iIcon][0]*fStretch+pixC1S);
+      PIX pixY = (PIX) (aIconCoords[iIcon][1]*fStretch+pixR1S);
+      CTextureObject *pto = &atoIcons[iIcon];
+      PIX pixImgW = (PIX) (((CTextureData *)pto->GetData())->GetPixWidth()*fStretch);
+      PIX pixImgH = (PIX) (((CTextureData *)pto->GetData())->GetPixHeight()*fStretch);
+      pdp->PutTexture( pto, PIXaabbox2D( PIX2D(pixX, pixY), PIX2D(pixX+pixImgW, pixY+pixImgH)), C_WHITE|255);
     }
   }
 
   // render paths
-  for( INDEX iPath=0; iPath<ctLevels; iPath++)
+  for( INDEX iPath=0; iPath<ARRAYCOUNT(aPathPrevNextLevels); iPath++)
   {
     INDEX iPrevLevelBit = aPathPrevNextLevels[iPath][0];
     INDEX iNextLevelBit = aPathPrevNextLevels[iPath][1];
@@ -665,7 +407,7 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
         PIX pixDotY=(PIX) (pixR1S+aPathDots[iPath][iDot][1]*fStretch);
         if(aPathDots[iPath][iDot][0]==-1) break;
         pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY), PIX2D(pixDotX+8*fStretch, pixDotY+8*fStretch)),
-          (map_bIsFirstEncounter ? C_WHITE : C_BLACK)|255);
+          C_WHITE|255);
       }
     }
   }
@@ -676,63 +418,24 @@ void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
     pdp->SetFont( _pfdDisplayFont);
     pdp->SetTextScaling( fStretch);
     pdp->SetTextAspect( 1.0f);
-    
-    INDEX iPosX, iPosY;
+    // set coordinates
+    PIX pixhtcx = (PIX) (pixC1S+116*fStretch);          // hook text center x
+    PIX pixhtcy = (PIX) (pixR1S+220*fStretch);          // hook text center y
+
     COLOR colText = RGBToColor(200,128,56)|CT_OPAQUE;
-
-    if(!map_bIsFirstEncounter) {
-      // set coordinates and dot colors
-      if (ulLevelMask == 0x00000001) {
-        iPosX = 200;
-        iPosY = 330;
-        colText = 0x5c6a9aff;
-      } else {
-        iPosX = 395; 
-        iPosY = 403;
-        colText = 0xc87832ff;
-      }
-    }
-    else // DG: make sure iPosX/Y is initialized
-    {
-      // no idea if 0 makes sense, but at least it's deterministic
-      iPosX = 0;
-      iPosY = 0;
-    }
-
-    PIX pixhtcx = (PIX) (pixC1S+iPosX*fStretch);
-    PIX pixhtcy = (PIX) (pixR1S+iPosY*fStretch);
-
-    if(map_bIsFirstEncounter) {
-      pixhtcx = pixC1S+116*fStretch;
-      pixhtcy = pixR1S+220*fStretch;
-    }
-
     pdp->PutTextC( pphi->phi_strDescription, pixhtcx, pixhtcy, colText);
     for( INDEX iProgresDot=0; iProgresDot<16; iProgresDot+=1)
     {
-      if(map_bIsFirstEncounter) {
-        PIX pixDotX=(PIX) (pixC1S+(48+iProgresDot*8)*fStretch);
-        PIX pixDotY=(PIX) (pixR1S+249*fStretch);
+      PIX pixDotX = (PIX) (pixC1S+(48+iProgresDot*8)*fStretch);
+      PIX pixDotY = (PIX) (pixR1S+249*fStretch);
 
-        COLOR colDot = C_WHITE|255;
-        if(iProgresDot>pphi->phi_fCompleted*16) {
-          colDot = C_WHITE|64;
-        }
-        pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY),
-          PIX2D(pixDotX+8*fStretch, pixDotY+8*fStretch)), colDot);
-      } else {
-        PIX pixDotX=(PIX) (pixC1S+((iPosX-68)+iProgresDot*8)*fStretch);
-        PIX pixDotY=(PIX) (pixR1S+(iPosY+19)*fStretch);
-
-        COLOR colDot = colText|255;
-        if(iProgresDot>pphi->phi_fCompleted*16) {
-          colDot = C_BLACK|64;
-        }
-        pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY),
-          PIX2D(pixDotX+2+8*fStretch, pixDotY+2+8*fStretch)), C_BLACK|255);
-        pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY),
-          PIX2D(pixDotX+8*fStretch, pixDotY+8*fStretch)), colDot);
+      COLOR colDot = C_WHITE|255;
+      if(iProgresDot>pphi->phi_fCompleted*16)
+      {
+        colDot = C_WHITE|64;
       }
+      pdp->PutTexture( &_toPathDot, PIXaabbox2D( PIX2D(pixDotX, pixDotY), 
+        PIX2D(pixDotX+8*fStretch, pixDotY+8*fStretch)), colDot);
     }
   }
 
