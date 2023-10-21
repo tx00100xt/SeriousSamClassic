@@ -372,7 +372,7 @@ FLOAT hud_fScaling     = 1.0f;
 FLOAT hud_tmWeaponsOnScreen = 3.0f;
 FLOAT hud_tmLatencySnapshot = 1.0f;
 INDEX hud_bShowMatchInfo = TRUE;
-INDEX hud_bWeaponsIconScale = 0; // HUD weapons icons scale: 0 - small, 1 - big
+INDEX hud_bWeaponsIconScale = 1; // HUD weapons icons scale: 0 - small, 1 - big
 
 FLOAT plr_fBreathingStrength = 0.0f;
 extern FLOAT plr_tmSnoopingTime;
