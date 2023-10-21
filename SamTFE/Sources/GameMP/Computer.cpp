@@ -535,7 +535,7 @@ void PrintButton(CDrawPort *pdp, INDEX iButton)
     return;
   } 
   _pGame->LCDSetDrawport(&dpButton);
-  _pGame->LCDRenderCompGrid();
+  _pGame->LCDRenderGrid();
   _pGame->LCDRenderClouds2();
   _pGame->LCDScreenBoxOpenLeft(_colBoxes);
 
@@ -755,7 +755,7 @@ void RenderMessageStats(CDrawPort *pdp)
 {
   CSessionProperties *psp = (CSessionProperties *)_pNetwork->GetSessionProperties();
   ULONG ulLevelMask = psp->sp_ulLevelsMask;
-  //INDEX iLevel = -1;
+  INDEX iLevel = -1;
   if (psp->sp_bCooperative) {
     extern void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi);
     if (pdp->Lock()) {
@@ -793,7 +793,7 @@ void RenderMessageImage(CDrawPort *pdp)
   CCompMessage &cm = _acmMessages[_iActiveMessage];
 
   if (cm.cm_itImage == CCompMessage::IT_STATISTICS) {
-    _pGame->LCDRenderCompGrid();
+    _pGame->LCDRenderGrid();
   }
   _pGame->LCDRenderClouds2();
   _pGame->LCDScreenBox(_colBoxes);
@@ -1244,22 +1244,16 @@ void CGame::ComputerRender(CDrawPort *pdp)
   MarkCurrentRead();
 
   // get current time and alpha value
-  //FLOAT tmNow = (FLOAT)tvNow.GetSeconds();
-  //ULONG ulA   = NormFloatToByte(fComputerFadeValue);
+  FLOAT tmNow = (FLOAT)tvNow.GetSeconds();
+  ULONG ulA   = NormFloatToByte(fComputerFadeValue);
 
   _colLight  = LCDFadedColor(C_WHITE|255);
-  #ifdef FIRST_ENCOUNTER  // First Encounter
-  _colMedium = LCDFadedColor(SE_COL_GREEN_LIGHT|255);
-  _colDark   = LCDFadedColor(LerpColor(SE_COL_GREEN_DARK, SE_COL_GREEN_LIGHT, 0.5f)|255);
-  _colBoxes  = LCDFadedColor(LerpColor(SE_COL_GREEN_DARK, SE_COL_GREEN_LIGHT, 0.5f)|255);    
-  #else // Second Encounter
-  _colMedium = LCDFadedColor(SE_COL_BLUE_LIGHT|255);
-  _colDark   = LCDFadedColor(LerpColor(SE_COL_BLUE_DARK, SE_COL_BLUE_LIGHT, 0.5f)|255);
-  _colBoxes  = LCDFadedColor(LerpColor(SE_COL_BLUE_DARK, SE_COL_BLUE_LIGHT, 0.5f)|255);    
-  #endif
+  _colMedium = LCDFadedColor(C_GREEN|255);
+  _colDark   = LCDFadedColor(LerpColor(C_dGREEN, C_GREEN, 0.5f)|255);
+  _colBoxes  = LCDFadedColor(LerpColor(C_dGREEN, C_GREEN, 0.5f)|255);
 
   // background
-  LCDRenderCloudsForComp();
+  LCDRenderClouds1();
 //  dpComp.DrawLine( 0, pixSizeJ-1, pixSizeI, pixSizeJ-1, C_GREEN|ulA);
 
   // all done
@@ -1269,7 +1263,7 @@ void CGame::ComputerRender(CDrawPort *pdp)
   CDrawPort dpTitle(&dpComp, _boxTitle);
   if (dpTitle.Lock()) {
     LCDSetDrawport(&dpTitle);
-    LCDRenderCompGrid();
+    LCDRenderGrid();
     LCDRenderClouds2();
     LCDScreenBoxOpenLeft(_colBoxes);
     PrintTitle(&dpTitle);
@@ -1280,7 +1274,7 @@ void CGame::ComputerRender(CDrawPort *pdp)
   CDrawPort dpExit(&dpComp, _boxExit);
   if (dpExit.Lock()) {
     LCDSetDrawport(&dpExit);
-    LCDRenderCompGrid();
+    LCDRenderGrid();
     LCDRenderClouds2();
     LCDScreenBoxOpenRight(_colBoxes);
     PrintExit(&dpExit);
@@ -1295,7 +1289,7 @@ void CGame::ComputerRender(CDrawPort *pdp)
   CDrawPort dpMsgList(&dpComp, _boxMsgList);
   if (dpMsgList.Lock()) {
     LCDSetDrawport(&dpMsgList);
-    LCDRenderCompGrid();
+    LCDRenderGrid();
     LCDRenderClouds2();
     LCDScreenBox(_colBoxes);
     PrintMessageList(&dpMsgList);
@@ -1305,7 +1299,7 @@ void CGame::ComputerRender(CDrawPort *pdp)
   CDrawPort dpMsgText(&dpComp, _boxMsgText);
   if (dpMsgText.Lock()) {
     LCDSetDrawport(&dpMsgText);
-    LCDRenderCompGrid();
+    LCDRenderGrid();
     LCDRenderClouds2();
     LCDScreenBox(_colBoxes);
     PrintMessageText(&dpMsgText);

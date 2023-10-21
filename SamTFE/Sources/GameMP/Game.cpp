@@ -3196,35 +3196,6 @@ void TiledTextureSE( PIXaabbox2D &_boxScreen, FLOAT fStretch, const MEX2D &vScre
 
 void CGame::LCDInit(void)
 {
-  try {
-    _toBcgClouds.SetData_t(CTFILENAME("Textures\\General\\Background6.tex"));
-#ifdef FIRST_ENCOUNTER
-    _toPointer.SetData_t(CTFILENAME("Textures\\General\\Pointer.tex"));
-    _toBcgGrid.SetData_t(CTFILENAME("Textures\\General\\Grid16x16-dot.tex"));
-#else
-    _toPointer.SetData_t(CTFILENAME("TexturesMP\\General\\Pointer.tex"));
-    _toBcgGrid.SetData_t(CTFILENAME("TexturesMP\\General\\grid.tex"));
-    _toBackdrop.SetData_t(CTFILENAME("TexturesMP\\General\\MenuBack.tex"));
-    // thoses are not in original TFE datas and must be added externaly (with SE1_10.gro or a minimal versio of it)
-    _toSamU.SetData_t(CTFILENAME("TexturesMP\\General\\SamU.tex"));
-    _toSamD.SetData_t(CTFILENAME("TexturesMP\\General\\SamD.tex"));
-    _toLeftU.SetData_t(CTFILENAME("TexturesMP\\General\\LeftU.tex"));
-    _toLeftD.SetData_t(CTFILENAME("TexturesMP\\General\\LeftD.tex"));
-    // force constant textures
-    ((CTextureData*)_toBackdrop .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toSamU     .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toSamD     .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toLeftU    .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toLeftD    .GetData())->Force(TEX_CONSTANT);
-#endif
-    ((CTextureData*)_toBcgClouds.GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toPointer  .GetData())->Force(TEX_CONSTANT);
-    ((CTextureData*)_toBcgGrid  .GetData())->Force(TEX_CONSTANT);
-
-
-  } catch (const char *strError) {
-    FatalError("%s\n", strError);
-  }
   ::_LCDInit();
 }
 void CGame::LCDEnd(void)
@@ -3233,73 +3204,35 @@ void CGame::LCDEnd(void)
 }
 void CGame::LCDPrepare(FLOAT fFade)
 {
-  // get current time and alpha value
-  _tmNow_SE = (FLOAT)_pTimer->GetHighPrecisionTimer().GetSeconds();
-  _ulA_SE   = NormFloatToByte(fFade);
-
   ::_LCDPrepare(fFade);
 }
 void CGame::LCDSetDrawport(CDrawPort *pdp)
 {
-  _pdp_SE = pdp;
-  _pixSizeI_SE = _pdp_SE->GetWidth();
-  _pixSizeJ_SE = _pdp_SE->GetHeight();
-  _boxScreen_SE = PIXaabbox2D ( PIX2D(0,0), PIX2D(_pixSizeI_SE, _pixSizeJ_SE));
-    
-  if (pdp->dp_SizeIOverRasterSizeI==1.0f) {
-    _bPopup = FALSE;
-  } else {
-    _bPopup = TRUE;
-  }
-  
   ::_LCDSetDrawport(pdp);
 }
 void CGame::LCDDrawBox(PIX pixUL, PIX pixDR, const PIXaabbox2D &box, COLOR col)
 {
-    #ifdef FIRST_ENCOUNTER  // First Encounter
-    col = SE_COL_GREEN_NEUTRAL|255;    
-    #else // Second Encounter
-    col = SE_COL_BLUE_NEUTRAL|255;
-    #endif
-
   ::_LCDDrawBox(pixUL, pixDR, box, col);
 }
 void CGame::LCDScreenBox(COLOR col)
 {
-    #ifdef FIRST_ENCOUNTER  // First Encounter
-    col = SE_COL_GREEN_NEUTRAL|255;    
-    #else // Second Encounter
-    col = SE_COL_BLUE_NEUTRAL|255;
-    #endif
-
   ::_LCDScreenBox(col);
 }
 void CGame::LCDScreenBoxOpenLeft(COLOR col)
 {
-    #ifdef FIRST_ENCOUNTER  // First Encounter
-    col = SE_COL_GREEN_NEUTRAL|255;    
-    #else // Second Encounter
-    col = SE_COL_BLUE_NEUTRAL|255;
-    #endif
-
   ::_LCDScreenBoxOpenLeft(col);
 }
 void CGame::LCDScreenBoxOpenRight(COLOR col)
 {
-    #ifdef FIRST_ENCOUNTER  // First Encounter
-    col = SE_COL_GREEN_NEUTRAL|255;    
-    #else // Second Encounter
-    col = SE_COL_BLUE_NEUTRAL|255;
-    #endif
-
   ::_LCDScreenBoxOpenRight(col);
 }
 void CGame::LCDRenderClouds1(void)
 {
 
   #ifdef FIRST_ENCOUNTER 
-  LCDRenderCloudsForComp();
-  LCDRenderCompGrid();
+  //LCDRenderCloudsForComp();
+  //LCDRenderCompGrid();
+  ::_LCDRenderClouds1();
   #else
   _pdp_SE->PutTexture(&_toBackdrop, _boxScreen_SE, C_WHITE|255);
 
@@ -3379,42 +3312,15 @@ void CGame::LCDRenderCloudsForComp(void)
 }
 void CGame::LCDRenderClouds2(void)
 {
-  NOTHING;
+  ::_LCDRenderClouds2();
 }
 void CGame::LCDRenderGrid(void)
 {
-  NOTHING;
-}
-void CGame::LCDRenderCompGrid(void)
-{
-   MEXaabbox2D boxBcgGrid;
-   TiledTextureSE(_boxScreen_SE, 0.5f*_pdp_SE->GetWidth()/(_pdp_SE->dp_SizeIOverRasterSizeI*640.0f), MEX2D(0,0), boxBcgGrid);
-    #ifdef FIRST_ENCOUNTER  // First Encounter
-   _pdp_SE->PutTexture(&_toBcgGrid, _boxScreen_SE, boxBcgGrid, SE_COL_GREEN_NEUTRAL|_ulA_SE>>1); 
-    #else // Second Encounter
-   _pdp_SE->PutTexture(&_toBcgGrid, _boxScreen_SE, boxBcgGrid, SE_COL_BLUE_NEUTRAL|_ulA_SE>>1); 
-    #endif
+  ::_LCDRenderGrid();
 }
 void CGame::LCDDrawPointer(PIX pixI, PIX pixJ)
 {
-  CDisplayMode dmCurrent;
-  _pGfx->GetCurrentDisplayMode(dmCurrent);
-  if (dmCurrent.IsFullScreen()) {
-    while (ShowCursor(FALSE) >= 0);
-  } else {
-    if (!_pInput->IsInputEnabled()) {
-      while (ShowCursor(TRUE) < 0);
-    }
-    return;
-  }
-  PIX pixSizeI = _toPointer.GetWidth();
-  PIX pixSizeJ = _toPointer.GetHeight();
-  pixI-=1;
-  pixJ-=1;
-  _pdp_SE->PutTexture( &_toPointer, PIXaabbox2D( PIX2D(pixI, pixJ), PIX2D(pixI+pixSizeI, pixJ+pixSizeJ)),
-                    LCDFadedColor(C_WHITE|255));
-
-  //::_LCDDrawPointer(pixI, pixJ);
+  ::_LCDDrawPointer(pixI, pixJ);
 }
 COLOR CGame::LCDGetColor(COLOR colDefault, const char *strName)
 {

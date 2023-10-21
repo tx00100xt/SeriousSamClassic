@@ -163,8 +163,8 @@ void CGame::ConsoleRender(CDrawPort *pdp)
   if( iBackwardLine>1) Swap( colLight, colDark);
   PIX pixLineSpacing = _pfdConsoleFont->fd_pixCharHeight + _pfdConsoleFont->fd_pixLineSpacing;
 
-  LCDRenderCloudsForComp();
-  //LCDRenderGrid();
+  LCDRenderClouds1();
+  LCDRenderGrid();
   LCDRenderClouds2();
   #ifdef FIRST_ENCOUNTER  // First Encounter
   dpConsole.DrawLine( 0, pixSizeJ-1, pixSizeI, pixSizeJ-1, LCDFadedColor(SE_COL_GREEN_NEUTRAL|255));   
