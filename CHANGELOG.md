@@ -182,6 +182,5 @@ All notable changes to this project will be documented in this file.
 - Add hud_bWeaponsIconScale var for scale HUD weapons icon.
 - Large weapon icons are set by default.
 - Added new Scripts and updated other.
-- Removed SE1_10b.gro, because not used now.
 - Additional light sources for XPLUS also.
 - Restored the original menu design as in TFE (grid, clouds and so on).
