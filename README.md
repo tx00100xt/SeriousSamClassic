@@ -237,7 +237,7 @@ serioussam       	# for run Serious Sam Classic The First Encounter
 serioussamse       	# for run Serious Sam Classic The Second Encounter
 ```
 **Note:** If the game does not find the data on the recommended paths, then it will independently perform a search.
-Please note that when installing the game on a system, all content of the original game is required (including directories: Controls, Data, Demos, Help, and so on) in directories 1 or 2, depending on the directory you select.
+Please note that when installing the game on a system, all content of the original game is required (including directories: Controls, Data, Demos, Help, and so on) in directories **/usr/share/serioussam(se)** or **~/.local/share/Serious-Engine/serioussam(se)**, depending on the directory you select.
 You can see a more detailed description in the [Wiki](https://github.com/tx00100xt/SeriousSamClassic/wiki/How-to-building-a-package-for-Debian-or-Ubuntu.md#game-resources).
 
 ## Serious Sam Classic XPLUS
