@@ -367,7 +367,7 @@ void LimitFrameRate(void)
   }
   TIME tmWantedDelta = 1.0f / iMaxFPS;
 #ifdef PLATFORM_UNIX
-  if( tmCurrentDelta<tmWantedDelta) _pTimer->Sleep( (tmWantedDelta-tmCurrentDelta)*1000.0f);
+  if((tmCurrentDelta > 0) && (tmCurrentDelta<tmWantedDelta)) _pTimer->Sleep( (tmWantedDelta-tmCurrentDelta)*1000.0f);
 #else
   if (tmCurrentDelta<tmWantedDelta) Sleep((tmWantedDelta - tmCurrentDelta)*1000.0f);
 #endif
