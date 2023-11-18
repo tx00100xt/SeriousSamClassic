@@ -18,7 +18,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdAfx.h"
 #include "GameMP/Game.h"
+#ifndef PLATFORM_OPENBSD
 #include <sys/timeb.h>
+#endif
 #include <time.h>
 #include <locale.h>
 

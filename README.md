@@ -127,6 +127,49 @@ make -j4
 make install
 ```
 
+### OpenBSD
+
+#### Install the required packages
+```
+sudo pkg_add bison cmake git sdl2 libogg libvorbis nasm
+```
+#### Setting up the repository
+
+```
+git clone https://github.com/tx00100xt/SeriousSamClassic.git
+```
+
+#### Copy official game data (optional)
+
+If you have access to a copy of the game (either by CD or through Steam),
+you can copy the *.gro files from the game directory to the repository.
+(SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
+
+#### Building for amd64 (for SS:TFE and SS:TSE)
+
+Type this in your terminal:
+
+```
+cd SeriousSamClassic
+mkdir build
+cd build
+cmake ..
+make -j4
+make install
+```
+#### Building for i386 (for SS:TFE and SS:TSE)
+
+Type this in your terminal:
+
+```
+cd SeriousSamClassic
+mkdir build
+cd build
+cmake .. -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DCMAKE_SHARED_LINKER_FLAGS='-Wl,-znotext' -DUSE_I386_NASM_ASM=TRUE
+make -j4
+make install
+```
+
 ### macOS
 
 #### Install dependes
@@ -321,6 +364,7 @@ Supported OS
 -----------
 * `Linux`
 * `FreeBSD`
+* `OpenBSD`
 * `Windows`
 * `Raspberry PI OS`
 * `macOS`

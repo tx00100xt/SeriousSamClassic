@@ -79,6 +79,12 @@ public:
    iter##next=iter, iter##next.IsPastEnd() || (iter##next.MoveToNext(),1), !iter.IsPastEnd(); \
      iter = iter##next)
 
+#ifdef PLATFORM_OPENBSD
+#ifdef LIST_HEAD
+  #undef LIST_HEAD
+#endif
+#endif
+
 // get the pointer to the first element in the list
 #define LIST_HEAD(listhead, baseclass, member) \
   ( (baseclass *) ( ((UBYTE *)(&(listhead).Head())) - _offsetof(baseclass, member) ) )

@@ -32,7 +32,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <stdlib.h>
 #if (!defined __INTEL_COMPILER) && (!defined PLATFORM_MACOSX)
+#ifdef PLATFORM_OPENBSD
+#include <sys/malloc.h>
+#else
 #include <malloc.h>
+#endif
 #endif
 #include <stdarg.h>
 #include <stdio.h>

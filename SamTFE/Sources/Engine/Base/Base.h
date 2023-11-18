@@ -64,6 +64,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
     #define PLATFORM_MACOSX 1
 #elif (defined __FreeBSD__)
     #define PLATFORM_FREEBSD 1
+#elif (defined __OpenBSD__)
+    #define PLATFORM_OPENBSD 1
+    #define PLATFORM_FREEBSD 1
 #else
   #warning "UNKNOWN PLATFORM IDENTIFIED!!!!"
   #define PLATFORM_UNKNOWN 1

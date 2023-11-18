@@ -2,7 +2,9 @@
 
 #include "SeriousSam/StdH.h"
 #include <Engine/Build.h>
+#ifndef PLATFORM_OPENBSD
 #include <sys/timeb.h>
+#endif
 #include <time.h>
 
 #ifdef PLATFORM_WIN32

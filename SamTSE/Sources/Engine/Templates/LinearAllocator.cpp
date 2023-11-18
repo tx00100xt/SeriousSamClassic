@@ -148,6 +148,15 @@ inline void CLinearAllocator<Type>::Reset(void)
     // do nothing
     return;
 
+#ifdef PLATFORM_OPENBSD
+#ifdef LIST_HEAD
+  #undef LIST_HEAD
+#endif
+// get the pointer to the first element in the list
+#define LIST_HEAD(listhead, baseclass, member) \
+  ( (baseclass *) ( ((UBYTE *)(&(listhead).Head())) - _offsetof(baseclass, member) ) )
+#endif
+
   // if there is only one block allocated
   } else if (&la_lhBlocks.Head()==&la_lhBlocks.Tail()) {
     // just restart at the beginning
