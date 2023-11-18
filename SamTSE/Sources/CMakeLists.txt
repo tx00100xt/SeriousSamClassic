@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(USE_SYSTEM_SDL2 "Use systems sdl2 development files" On)
 option(USE_SYSTEM_ZLIB "Use systems zlib development files" On)
 option(USE_CCACHE "Set to ON to use ccache if present in the system" ${USE_CCACHE})
+option(USE_SYSTEM_INSTALL "Install to systems directories" Off)
 
 # fallback for cmake versions without add_compile_options # RAKE! Borrowed from dhewm3 project
 if(NOT COMMAND add_compile_options)
@@ -110,6 +111,21 @@ endif()
 ###############################################################
 ###############################################################
 
+# Set up some sanity stuff...
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME MATCHES "GNU|kFreeBSD")
+    SET(LINUX TRUE)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-reorder -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-unused-function -Wno-format")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-reorder -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-unused-function -Wno-format")
+endif()
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")
+    SET(FREEBSD TRUE)
+endif()
+if(APPLE)
+    SET(MACOSX TRUE)
+endif()
+if(MSVC)
+    SET(WINDOWS TRUE)
+endif()
 
 # RAKE! Where to install the binaries.
 if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "") # Only works for linux since I don't
@@ -123,12 +139,17 @@ if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "
     else()
         set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/../")                        # set install path to project root directory since
     endif()                                                                        # since one wasn't set during config
-    set(LOCAL_INSTALL TRUE)
-    message(STATUS "Using LOCAL Install")
+    if(NOT USE_SYSTEM_INSTALL)
+        set(LOCAL_INSTALL TRUE)
+        message(STATUS "Using LOCAL Install")
+    endif() 
 endif()
-if(CMAKE_INSTALL_PREFIX STREQUAL "/usr" ) # Only works for linux since I don't know what default is for windows/macos/freebsd.
+if(CMAKE_INSTALL_PREFIX STREQUAL "/usr" OR USE_SYSTEM_INSTALL)
     set(LOCAL_INSTALL FALSE)
     message(STATUS "Using SYSTEM Install")
+    if(FREEBSD)
+        set(CMAKE_INSTALL_PREFIX "/usr/local")
+    endif()
 endif()
 
 # ImageMagic needed for SYSTEM INSTALL
@@ -139,22 +160,6 @@ if(NOT LOCAL_INSTALL)
     else()
         message(FATAL_ERROR "Error! LOCAL_INSTAL is set but neccessary ImageMagick convert are missing")
     endif()
-endif()
-
-# Set up some sanity stuff...
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME MATCHES "GNU|kFreeBSD")
-    SET(LINUX TRUE)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-reorder -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-unused-function -Wno-format")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-reorder -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-unused-function -Wno-format")
-endif()
-if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
-    SET(FREEBSD TRUE)
-endif()
-if(APPLE)
-    SET(MACOSX TRUE)
-endif()
-if(MSVC)
-    SET(WINDOWS TRUE)
 endif()
 
 # remove clang spam.
@@ -225,6 +230,10 @@ set(CMAKE_INSTALL_LIBDIR "/usr/lib")
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CMAKE_ARCH_BITS 64)
     set(CMAKE_INSTALL_LIBDIR "/usr/lib64")
+endif()
+
+if(FREEBSD)
+    set(CMAKE_INSTALL_LIBDIR "/usr/local/lib")
 endif()
 
 message(STATUS "Arch bits: ${CMAKE_ARCH_BITS}")

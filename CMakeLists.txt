@@ -7,6 +7,7 @@ project(SeriousEngine)
 option(USE_SYSTEM_SDL2 "Use systems sdl2 development files" On)
 option(USE_SYSTEM_ZLIB "Use systems zlib development files" On)
 option(USE_CCACHE "Set to ON to use ccache if present in the system" ${USE_CCACHE})
+option(USE_SYSTEM_INSTALL "Install to systems directories" Off)
 
 # fallback for cmake versions without add_compile_options # RAKE! Borrowed from dhewm3 project
 if(NOT COMMAND add_compile_options)

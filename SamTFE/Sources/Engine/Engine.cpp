@@ -742,7 +742,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
   CPrintF(TRANSV("Running %d-bit version\n"), sys_iGameBits);
 
 #ifdef PLATFORM_UNIX
+#ifdef PLATFORM_FREEBSD
+  int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/local/bin/", (size_t) 15 );
+#else
   int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/bin/", (size_t) 9 );
+#endif
   if( _isystempath == 0 ) {
        sys_iSysPath = 1; // using system path
   } else {
@@ -751,6 +755,10 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
 
   // get library path for mods
   _fnmModLibPath = "";
+#ifdef PLATFORM_FREEBSD
+  if( sys_iSysPath == 1 ) {
+    _fnmModLibPath = "/usr/local/lib/" + strGameID + "/";
+#else
   if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/aarch64-linux-gnu/" + strGameID)) {
     _fnmModLibPath = "/usr/lib/aarch64-linux-gnu/" + strGameID + "/"; 
   } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/arm-linux-gnueabihf/" + strGameID)) {
@@ -769,6 +777,7 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
     _fnmModLibPath = "/usr/lib64/" + strGameID + "/";
   } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib//" + strGameID)) {
     _fnmModLibPath = "/usr/lib/" + strGameID + "/";
+#endif
   } else if( sys_iSysPath == 0 ) {
     _fnmModLibPath = _fnmApplicationPath;
   } else {
@@ -798,7 +807,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
       _fnm_TestFile = "1_00_music.gro";
     }
     CPrintF(TRANSV("Testing file: %s\n"), (const char *) _fnm_TestFile);
+#ifdef PLATFORM_FREEBSD
+    _fnm_usr_TestFile = "/usr/local/share/" + strGameID + "/" + _fnm_TestFile; //  data in usr
+#else
     _fnm_usr_TestFile = "/usr/share/" + strGameID + "/" + _fnm_TestFile; //  data in usr
+#endif
     _fnm_local_TestFile = _fnmUserDir + _fnm_TestFile;                   //  data in home .local
     _fnm_home_TestFile = (const char *)_fnmUserDataPath  + _fnm_TestFile;
     // test
@@ -806,7 +819,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
       CPrintF(TRANSV("Testing system path: %s\n"), (const char *) _fnm_usr_TestFile);
       CPrintF(TRANSV("Testing local  path: %s\n"), (const char *) _fnm_local_TestFile);
       if( access((const char *) _fnm_usr_TestFile, F_OK) == 0 ) {
+#ifdef PLATFORM_FREEBSD
+        _fnmApplicationPath = "/usr/local/share/" + strGameID + "/";                       // all game data
+#else
         _fnmApplicationPath = "/usr/share/" + strGameID + "/";                       // all game data
+#endif
         CPrintF(TRANSV("Found usr path: %s\n"), (const char *) _fnmUserDataPath);
       } else if( access((const char *) _fnm_local_TestFile, F_OK) == 0 ) {
         _fnmApplicationPath = _fnmUserDir;                                           // all game data
@@ -814,7 +831,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
       } else {
         // search in home dir 
         // BOOL YesNoMessage(const char *strFormat, ...)
+#ifdef PLATFORM_FREEBSD
+        InfoMessage(TRANS("No game files were found in /usr/local/share/%s/\n or %s\nThe home directory will be searched."),(const char *) strGameID,(const char *) _fnmUserDir);
+#else
         InfoMessage(TRANS("No game files were found in /usr/share/%s/\n or %s\nThe home directory will be searched."),(const char *) strGameID,(const char *) _fnmUserDir);
+#endif
         struct passwd *pw = getpwuid(getuid());
         const char *_homedir = pw->pw_dir;
         _testfiledone = 0;
@@ -832,7 +853,11 @@ ENGINE_API void SE_InitEngine(CTString strGameID)
         } else {
           CPrintF(TRANSV("ERROR: Game data not ound!\n"));
           _fnmUserDataPath = "";
+#ifdef PLATFORM_FREEBSD
+          FatalError(TRANSV("Failed to search game data!\nPlease put the game data in the paths:\n/usr/local/share/%s/\n or %s\n or somewhere in your home directory\nSee the log for more details.\nGame log is here: ~/.local/share/Serious-Engine/%s/SeriousSam.log"),(const char *) strGameID,(const char *) _fnmUserDir,(const char *) strGameID);
+#else
           FatalError(TRANSV("Failed to search game data!\nPlease put the game data in the paths:\n/usr/share/%s/\n or %s\n or somewhere in your home directory\nSee the log for more details.\nGame log is here: ~/.local/share/Serious-Engine/%s/SeriousSam.log"),(const char *) strGameID,(const char *) _fnmUserDir,(const char *) strGameID);
+#endif
         }
       } 
     } else {
