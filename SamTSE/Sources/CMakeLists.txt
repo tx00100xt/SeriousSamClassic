@@ -125,7 +125,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME MATCHES "GNU")
 endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-unused-but-set-variable -Wno-uninitialized -Wno-unused-function -Wno-format")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-unused-but-set-variable -Wno-uninitialized -Wno-unused-function -Wno-format")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-enum-constexpr-conversion -Wno-unused-but-set-variable -Wno-uninitialized -Wno-unused-function -Wno-format")
     set(FREEBSD TRUE)
     if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")                                  # for local install
       set(RPATH_SETTINGS "-rpath,$ORIGIN")
