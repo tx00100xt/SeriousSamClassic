@@ -301,7 +301,7 @@ CTimerValue CPacketBufferStats::GetPacketSendTime(SLONG slSize)
   if (pbs_fLatencyLimit<=0.0f && pbs_fLatencyVariation<=0.0f) {
    tvLatency = CTimerValue(0.0);
   } else {
-   tvLatency = CTimerValue(DOUBLE(pbs_fLatencyLimit+(pbs_fLatencyVariation*rand())/RAND_MAX));
+   tvLatency = CTimerValue(DOUBLE(pbs_fLatencyLimit+(pbs_fLatencyVariation*rand())/(float)(RAND_MAX)));
   }
 
   // time when the packet should be sent is max of

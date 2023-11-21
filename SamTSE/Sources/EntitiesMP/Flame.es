@@ -195,7 +195,7 @@ functions:
     lsNew.ls_ulFlags = LSF_NONPERSISTENT|LSF_DYNAMIC;
     if(m_bBurningBrush)
     {
-      UBYTE ubRndH = UBYTE( 25+(FLOAT(rand())/RAND_MAX-0.5f)*28);
+      UBYTE ubRndH = UBYTE( 25+(FLOAT(rand())/(float)(RAND_MAX)-0.5f)*28);
       UBYTE ubRndS = 166;
       UBYTE ubRndV = 48;
       lsNew.ls_colColor = HSVToColor(ubRndH, ubRndS, ubRndV);

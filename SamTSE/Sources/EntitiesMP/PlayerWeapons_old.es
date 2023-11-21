@@ -1443,7 +1443,7 @@ functions:
   void ShowFlare(CModelObject &moWeapon, INDEX iAttachObject, INDEX iAttachFlare, FLOAT fSize) {
     CModelObject *pmo = &(moWeapon.GetAttachmentModel(iAttachObject)->amo_moModelObject);
     CAttachmentModelObject *pamo = pmo->GetAttachmentModel(iAttachFlare);
-    pamo->amo_plRelative.pl_OrientationAngle(3) = (rand()*360.0f)/RAND_MAX;
+    pamo->amo_plRelative.pl_OrientationAngle(3) = (rand()*360.0f)/(float)(RAND_MAX);
     pmo = &(pamo->amo_moModelObject);
     pmo->StretchModel(FLOAT3D(fSize, fSize, fSize));
   };

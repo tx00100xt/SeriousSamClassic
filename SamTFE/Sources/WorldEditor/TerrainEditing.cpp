@@ -126,7 +126,7 @@ void ApplyRNDNoise(void)
       FLOAT fBrushMultiplier=GetBrushMultiplier(x,y);
       INDEX iPixSrc=y*_rect.Width()+x;
       FLOAT fInfluence=_puwBuffer[iPixSrc];
-      FLOAT fRnd=FLOAT(rand())/RAND_MAX-0.5f;
+      FLOAT fRnd=FLOAT(rand())/(float)(RAND_MAX)-0.5f;
       FLOAT fValue=_puwBuffer[iPixSrc];
       FLOAT fMaxRandomized=fValue+fRnd*fMaxNoise;
       FLOAT fFilterPower=Clamp(fBrushMultiplier*_fStrength,0.0f,1.0f);
@@ -260,7 +260,7 @@ UWORD GetHMPixel(INDEX x, INDEX y)
 
 UWORD RandomizePixel(FLOAT fmid, FLOAT fdmax)
 {
-  FLOAT fRand=((FLOAT)rand())/RAND_MAX-0.5f;
+  FLOAT fRand=((FLOAT)rand())/(float)(RAND_MAX)-0.5f;
   FLOAT fd=fdmax*fRand;
   FLOAT fres=Clamp(fmid+fd,0.0f,65536.0f);
   return fres;
@@ -337,7 +337,7 @@ void RandomizeWhiteNoise(void)
   FLOAT *pfTemp=_pafWhiteNoise;
   for(INDEX i=0; i<WNOISE*WNOISE; i++)
   {
-    FLOAT fRnd=FLOAT(rand())/RAND_MAX-0.5f;
+    FLOAT fRnd=FLOAT(rand())/(float)(RAND_MAX)-0.5f;
     *pfTemp=fRnd;
     pfTemp++;
   }    

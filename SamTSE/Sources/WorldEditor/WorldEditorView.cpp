@@ -13033,7 +13033,7 @@ void CWorldEditorView::OnRandomOffsetU()
     if( pTD != NULL)
     {
       // add rnd offsets to mapping
-      itbpo->bpo_abptTextures[pDoc->m_iTexture].bpt_mdMapping.md_fUOffset+=((FLOAT)rand())/RAND_MAX*pTD->GetWidth();
+      itbpo->bpo_abptTextures[pDoc->m_iTexture].bpt_mdMapping.md_fUOffset+=((FLOAT)rand())/(float)(RAND_MAX)*pTD->GetWidth();
     }
   }
 }
@@ -13048,7 +13048,7 @@ void CWorldEditorView::OnRandomOffsetV()
     if( pTD != NULL)
     {
       // add rnd offsets to mapping
-      itbpo->bpo_abptTextures[pDoc->m_iTexture].bpt_mdMapping.md_fVOffset+=((FLOAT)rand())/RAND_MAX*pTD->GetHeight();
+      itbpo->bpo_abptTextures[pDoc->m_iTexture].bpt_mdMapping.md_fVOffset+=((FLOAT)rand())/(float)(RAND_MAX)*pTD->GetHeight();
     }
   }
 }

@@ -44,7 +44,7 @@ static EntityInfo eiAirElemental = {
   0.0f, AIRBOSS_BODY_HEIGHT, 0.0f,
 };
 
-#define RAND_05 (FLOAT(rand())/RAND_MAX-0.5f)
+#define RAND_05 (FLOAT(rand())/(float)(RAND_MAX)-0.5f)
 #define FIREPOS_TWISTER FLOAT3D(-0.04f, 0.91f, -1.06f)
 #define SIZE_NORMAL 1
 #define SIZE_BIG01  2

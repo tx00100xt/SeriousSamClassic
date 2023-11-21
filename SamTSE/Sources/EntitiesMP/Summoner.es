@@ -34,7 +34,7 @@ event ESummonerTeleport {
 };
 
 %{
-#define RAND_05 (FLOAT(rand())/RAND_MAX-0.5f)
+#define RAND_05 (FLOAT(rand())/(float)(RAND_MAX)-0.5f)
 #define SUMMONER_SIZE 7.0f
 #define TM_WAIT_BEFORE_FIRE 1.9f
 #define SUMMONER_HEALTH 15000.0f

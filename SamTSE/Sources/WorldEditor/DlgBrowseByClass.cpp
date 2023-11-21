@@ -1105,7 +1105,7 @@ void CDlgBrowseByClass::OnSelendokPluggins()
           if( (pen->GetFlags() & ENF_ANCHORED) == 0)
           {
             CPlacement3D pl=pen->GetPlacement();
-            pl.pl_OrientationAngle(1)=((FLOAT)rand())/RAND_MAX*360.0f;
+            pl.pl_OrientationAngle(1)=((FLOAT)rand())/(float)(RAND_MAX)*360.0f;
             pen->SetPlacement(pl);
           }
         }
@@ -1126,7 +1126,7 @@ void CDlgBrowseByClass::OnSelendokPluggins()
           if( (pen->GetFlags() & ENF_ANCHORED) == 0)
           {
             CPlacement3D pl=pen->GetPlacement();
-            pl.pl_OrientationAngle(2)=((FLOAT)rand())/RAND_MAX*360.0f;
+            pl.pl_OrientationAngle(2)=((FLOAT)rand())/(float)(RAND_MAX)*360.0f;
             pen->SetPlacement(pl);
           }
         }
@@ -1147,7 +1147,7 @@ void CDlgBrowseByClass::OnSelendokPluggins()
           if( (pen->GetFlags() & ENF_ANCHORED) == 0)
           {
             CPlacement3D pl=pen->GetPlacement();
-            pl.pl_OrientationAngle(3)=((FLOAT)rand())/RAND_MAX*360.0f;
+            pl.pl_OrientationAngle(3)=((FLOAT)rand())/(float)(RAND_MAX)*360.0f;
             pen->SetPlacement(pl);
           }
         }

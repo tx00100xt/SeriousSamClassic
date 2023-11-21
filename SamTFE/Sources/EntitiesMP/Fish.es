@@ -147,9 +147,9 @@ functions:
       for( INDEX i=0; i<4; i++)
       {
         FLOAT3D vDirection = vSource;
-        vDirection(1) += ((FLOAT(rand())/RAND_MAX)-0.5f) * DISTANCE_ELECTRICITY/1.0f;
-        vDirection(2) += ((FLOAT(rand())/RAND_MAX)-0.5f) * DISTANCE_ELECTRICITY/1.0f;
-        vDirection(3) += ((FLOAT(rand())/RAND_MAX)-0.5f) * DISTANCE_ELECTRICITY/1.0f;
+        vDirection(1) += ((FLOAT(rand())/(float)(RAND_MAX))-0.5f) * DISTANCE_ELECTRICITY/1.0f;
+        vDirection(2) += ((FLOAT(rand())/(float)(RAND_MAX))-0.5f) * DISTANCE_ELECTRICITY/1.0f;
+        vDirection(3) += ((FLOAT(rand())/(float)(RAND_MAX))-0.5f) * DISTANCE_ELECTRICITY/1.0f;
         Particles_Ghostbuster(vSource, vDirection, 32, 1.0f);
       }
     }
@@ -215,9 +215,9 @@ functions:
         fDieFactor = 1.0f-(ClampUp(fTimePassed-0.25f,0.5f)/0.5f);
       }
       // adjust light fx
-      FLOAT fR = 0.7f+0.1f*(FLOAT(rand())/RAND_MAX);
-      FLOAT fG = 0.7f+0.2f*(FLOAT(rand())/RAND_MAX);
-      FLOAT fB = 0.7f+0.3f*(FLOAT(rand())/RAND_MAX);
+      FLOAT fR = 0.7f+0.1f*(FLOAT(rand())/(float)(RAND_MAX));
+      FLOAT fG = 0.7f+0.2f*(FLOAT(rand())/(float)(RAND_MAX));
+      FLOAT fB = 0.7f+0.3f*(FLOAT(rand())/(float)(RAND_MAX));
       colAmbient = RGBToColor( (UBYTE) (fR*128*fDieFactor), (UBYTE) (fG*128*fDieFactor), (UBYTE) (fB*128*fDieFactor));
       colLight = C_WHITE;
       return CEnemyBase::AdjustShadingParameters(vLightDirection, colLight, colAmbient);

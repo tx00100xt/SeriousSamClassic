@@ -1420,7 +1420,7 @@ functions:
     CAttachmentModelObject *pamo = pl.GetModelObject()->GetAttachmentModelList(
       PLAYER_ATTACHMENT_TORSO, iAttachWeapon, iAttachObject, iAttachFlare, -1);
     if (pamo!=NULL) {
-      pamo->amo_plRelative.pl_OrientationAngle(3) = (rand()*360.0f)/RAND_MAX;
+      pamo->amo_plRelative.pl_OrientationAngle(3) = (rand()*360.0f)/(float)(RAND_MAX);
       CModelObject &mo = pamo->amo_moModelObject;
       mo.StretchModel(FLOAT3D(1, 1, 1));
     }
