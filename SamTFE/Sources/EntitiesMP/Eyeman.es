@@ -174,7 +174,7 @@ functions:
       switch (IRnd()%2) {
         case 0: iAnim = EYEMAN_ANIM_MORPHWOUND01; break;
         case 1: iAnim = EYEMAN_ANIM_MORPHWOUND02; break;
-        default: ASSERTALWAYS("Eyeman unknown fly damage");
+        default: iAnim = EYEMAN_ANIM_MORPHWOUND01; //ASSERTALWAYS("Eyeman unknown fly damage");
       }
     } else {
       FLOAT3D vFront;
@@ -185,6 +185,7 @@ functions:
           case 0: iAnim = EYEMAN_ANIM_WOUND03; break;
           case 1: iAnim = EYEMAN_ANIM_WOUND06; break;
           case 2: iAnim = EYEMAN_ANIM_WOUND07; break;
+          default: iAnim = EYEMAN_ANIM_WOUND03;
         }
       } else {
         if (fDamageDir<0) {

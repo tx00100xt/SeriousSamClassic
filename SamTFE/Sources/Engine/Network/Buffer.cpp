@@ -305,7 +305,7 @@ CTimerValue CBlockBufferStats::GetBlockFinalTime(SLONG slSize)
   if (bbs_fLatencyLimit<=0.0f && bbs_fLatencyVariation<=0.0f) {
    tvLatency = CTimerValue(0.0);
   } else {
-   tvLatency = CTimerValue(DOUBLE(bbs_fLatencyLimit+(bbs_fLatencyVariation*rand())/RAND_MAX));
+   tvLatency = CTimerValue(DOUBLE(bbs_fLatencyLimit+(bbs_fLatencyVariation*rand())/(float)(RAND_MAX)));
   }
 
   // start of packet receiving is later of

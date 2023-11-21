@@ -61,10 +61,10 @@ void InitGLSettings(void)
 {
   ASSERT(_lhSettings.IsEmpty());
 
-  char achrLine    [1024];
-  char achrRenderer[1024];
-  char achrDesc    [1024];
-  char achrScript  [1024];
+  char achrLine    [1025];
+  char achrRenderer[1025];
+  char achrDesc    [1025];
+  char achrScript  [1025];
 
   CTFileStream strmFile;
   try

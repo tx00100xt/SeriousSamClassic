@@ -1319,7 +1319,7 @@ void CCommunicationInterface::UpdateMasterBuffers()
           }
 					// there might be more to do
 					bSomethingDone = TRUE;
-				} else if (net_fDropPackets <= 0  || (FLOAT(rand())/RAND_MAX) > net_fDropPackets) {
+				} else if (net_fDropPackets <= 0  || (FLOAT(rand())/(float)(RAND_MAX)) > net_fDropPackets) {
 					// if no packet drop emulation (or the packet is not dropped), form the packet 
 					// and add it to the end of the UDP Master's input buffer
 					ppaNewPacket = new CPacket;

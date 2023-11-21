@@ -116,7 +116,7 @@ functions:
       case 2: iAnim = BONEMAN_ANIM_WOUNDCRITICAL03; break;
       case 3: iAnim = BONEMAN_ANIM_FALL01; break;
       case 4: iAnim = BONEMAN_ANIM_FALL02; break;
-      default: ASSERTALWAYS("Boneman unknown damage");
+      default: iAnim = BONEMAN_ANIM_WOUNDCRITICAL01; //ASSERTALWAYS("Boneman unknown damage");
     }
     StartModelAnim(iAnim, 0);
     DeactivateRunningSound();
@@ -129,7 +129,7 @@ functions:
     switch (IRnd()%2) {
       case 0: iAnim = BONEMAN_ANIM_DEATHTOBACK; break;
       case 1: iAnim = BONEMAN_ANIM_DEATHTOFRONT; break;
-      default: ASSERTALWAYS("Boneman unknown death");
+      default: iAnim = BONEMAN_ANIM_DEATHTOBACK; //ASSERTALWAYS("Boneman unknown death");
     }
     StartModelAnim(iAnim, 0);
     DeactivateRunningSound();

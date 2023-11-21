@@ -181,14 +181,14 @@ functions:
       switch (IRnd()%2) {
         case 0: iAnim = DRAGONMAN_ANIM_AIRWOUNDSLIGHT; break;
         case 1: iAnim = DRAGONMAN_ANIM_AIRWOUND02CRITICAL; break;
-        default: ASSERTALWAYS("Dragonman unknown fly damage");
+        default: iAnim = DRAGONMAN_ANIM_AIRWOUNDSLIGHT; //ASSERTALWAYS("Dragonman unknown fly damage");
       }
     } else {
       switch (IRnd()%3) {
         case 0: iAnim = DRAGONMAN_ANIM_GROUNDWOUNDCRITICALBACK; break;
         case 1: iAnim = DRAGONMAN_ANIM_GROUNDWOUNDCRITICALFRONT; break;
         case 2: iAnim = DRAGONMAN_ANIM_GROUNDWOUNDCRITICALBACK2; break;
-        default: ASSERTALWAYS("Dragonman unknown ground damage");
+        default: iAnim = DRAGONMAN_ANIM_GROUNDWOUNDCRITICALBACK; //ASSERTALWAYS("Dragonman unknown ground damage");
       }
     }
     StartModelAnim(iAnim, 0);
@@ -204,7 +204,7 @@ functions:
       switch (IRnd()%2) {
         case 0: iAnim = DRAGONMAN_ANIM_GROUNDDEATHBACK; break;
         case 1: iAnim = DRAGONMAN_ANIM_GROUNDDEATHFRONT; break;
-        default: ASSERTALWAYS("Dragonman unknown ground death");
+        default: iAnim = DRAGONMAN_ANIM_GROUNDDEATHBACK; //ASSERTALWAYS("Dragonman unknown ground death");
       }
     }
     StartModelAnim(iAnim, 0);

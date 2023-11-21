@@ -487,8 +487,8 @@ FLOAT RM_TestRayCastHit( CModelInstance &mi, FLOATmatrix3D &mRotation, FLOAT3D &
                         const FLOAT3D &vTarget,FLOAT fOldDistance,INDEX *piBoneID)
 {
 	FLOAT fDistance = 1E6f;
-	static int i=0;
-	i++;
+	//static int i=0;
+	//i++;
 
 	BOOL bTemp = _bTransformBonelessModelToViewSpace;
 	_bTransformBonelessModelToViewSpace = TRUE;

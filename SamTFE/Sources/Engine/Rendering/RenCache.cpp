@@ -879,7 +879,9 @@ void CRenderer::AddSpansToScene(void)
 
   _pfRenderProfile.StartTimer(CRenderProfile::PTI_ADDSPANSTOSCENE);
   UBYTE *pubShadow = re_pubShadow+re_slShadowWidth*re_iCurrentScan;
+#ifndef NDEBUG
   INDEX ctPixels = 0;
+#endif
   // for all spans in the current line
   for( INDEX iSpan=0; iSpan<ctSpans; iSpan++)
   { // get span start and stop I from edges
@@ -908,7 +910,9 @@ void CRenderer::AddSpansToScene(void)
       re_bSomeDarkExists = TRUE;
     }
     // add to pixel counter
+#ifndef NDEBUG
     ctPixels+=pixLen;
+#endif
   }
   ASSERT(ctPixels<=re_pixSizeI);
   _pfRenderProfile.StopTimer(CRenderProfile::PTI_ADDSPANSTOSCENE);

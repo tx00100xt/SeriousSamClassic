@@ -981,8 +981,8 @@ void BSPCutter<Type, iDimensions>::CutPolygon(BSPPolygon<Type, iDimensions> &bpo
 
     // if the polygon is on the split plane
     } else {
-      BSPNode<Type, iDimensions> *pbnFront;  // front node (relative to the polygon orientation)
-      BSPNode<Type, iDimensions> *pbnBack;   // back node (relative to the polygon orientation)
+      BSPNode<Type, iDimensions> *pbnFront = nullptr;  // front node (relative to the polygon orientation)
+      BSPNode<Type, iDimensions> *pbnBack = nullptr;   // back node (relative to the polygon orientation)
 
       // check the direction of the polygon with the front direction of the split plane
       Type tDirection = (Vector<Type, iDimensions> &)bpoPolygon%(Vector<Type, iDimensions> &)bn;

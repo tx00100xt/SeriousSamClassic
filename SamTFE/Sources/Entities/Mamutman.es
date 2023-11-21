@@ -68,8 +68,8 @@ functions:
     INDEX iAnim;
     switch (IRnd()%2) {
       case 0: iAnim = MAMUTMAN_ANIM_DEATH01; break;
-      case 1: iAnim = MAMUTMAN_ANIM_DEATH01; break;
-      default: ASSERTALWAYS("Mamutman unknown death");
+      case 1: iAnim = MAMUTMAN_ANIM_DEATH02; break;
+      default: iAnim = MAMUTMAN_ANIM_DEATH01; //ASSERTALWAYS("Mamutman unknown death");
     }
     StartModelAnim(iAnim, 0);
     return iAnim;

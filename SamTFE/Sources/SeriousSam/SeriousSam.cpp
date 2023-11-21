@@ -1607,7 +1607,7 @@ void CheckModReload(void)
     MessageBoxA(0, "Error launching the Mod!\n", "Serious Sam", MB_OK|MB_ICONERROR);
 #else
     execl((const char *)argv[0],(const char *)argv[1],(const char *)argv[2],(const char *)argv[3], \
-       (const char *)argv[4],(const char *)argv[5],(const char *)argv[6],(const char *)argv[7]);
+       (const char *)argv[4],(const char *)argv[5],(const char *)argv[6],(const char *)argv[7], nullptr);
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                          "Serious Sam",
                          "Error launching the Mod!\n",

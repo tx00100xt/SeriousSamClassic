@@ -67,7 +67,7 @@ functions:
       case 0: iAnim = CATMAN_ANIM_WOUND01; break;
       case 1: iAnim = CATMAN_ANIM_WOUND02; break;
       case 2: iAnim = CATMAN_ANIM_WOUND03; break;
-      default: ASSERTALWAYS("Catman unknown damage");
+      default: iAnim = CATMAN_ANIM_WOUND01; //ASSERTALWAYS("Catman unknown damage");
     }
     StartModelAnim(iAnim, 0);
     return iAnim;
@@ -79,7 +79,7 @@ functions:
     switch (IRnd()%2) {
       case 0: iAnim = CATMAN_ANIM_DEATH01; break;
       case 1: iAnim = CATMAN_ANIM_DEATH02; break;
-      default: ASSERTALWAYS("Catman unknown death");
+      default: iAnim = CATMAN_ANIM_DEATH01; //ASSERTALWAYS("Catman unknown death");
     }
     StartModelAnim(iAnim, 0);
     return iAnim;

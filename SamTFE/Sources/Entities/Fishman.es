@@ -74,14 +74,14 @@ functions:
       switch (IRnd()%2) {
         case 0: iAnim = FISHMAN_ANIM_WATERWOUND01; break;
         case 1: iAnim = FISHMAN_ANIM_WATERWOUND02; break;
-        default: ASSERTALWAYS("Fishman unknown liquid damage");
+        default: iAnim = FISHMAN_ANIM_WATERWOUND01; //ASSERTALWAYS("Fishman unknown liquid damage");
       }
     } else {
       switch (IRnd()%3) {
         case 0: iAnim = FISHMAN_ANIM_GROUNDWOUND03; break;
         case 1: iAnim = FISHMAN_ANIM_GROUNDWOUND04; break;
         case 2: iAnim = FISHMAN_ANIM_GROUNDWOUND05; break;
-        default: ASSERTALWAYS("Fishman unknown ground damage");
+        default: iAnim = FISHMAN_ANIM_GROUNDWOUND03; //ASSERTALWAYS("Fishman unknown ground damage");
       }
     }
     StartModelAnim(iAnim, 0);

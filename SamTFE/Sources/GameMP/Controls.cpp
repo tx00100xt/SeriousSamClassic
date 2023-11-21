@@ -177,9 +177,9 @@ CTString ReadTextLine(CTStream &strm, const CTString &strKeyword, BOOL bTranslat
 
 void CControls::Load_t( CTFileName fnFile)
 {
-  char achrLine[ 1024];
-  char achrName[ 1024];
-  char achrID[ 1024];
+  char achrLine[ 1025];
+  char achrName[ 1025];
+  char achrID[ 1025];
   char achrActionName[ 1025];
   
   // open script file for reading

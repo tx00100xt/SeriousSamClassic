@@ -228,7 +228,7 @@ functions:
       case 0: iAnim = SCORPMAN_ANIM_WOUND01; break;
       case 1: iAnim = SCORPMAN_ANIM_WOUND02; break;
       case 2: iAnim = SCORPMAN_ANIM_WOUND03; break;
-      default: ASSERTALWAYS("Scorpman unknown damage");
+      default: iAnim = SCORPMAN_ANIM_WOUND01; //ASSERTALWAYS("Scorpman unknown damage");
     }
     StartModelAnim(iAnim, 0);
     MinigunOff();

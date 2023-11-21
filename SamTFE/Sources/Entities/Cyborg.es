@@ -127,7 +127,7 @@ functions:
       case 1: iAnim = CYBORG_ANIM_WOUND02; break;
       case 2: iAnim = CYBORG_ANIM_WOUND03; break;
       case 3: iAnim = CYBORG_ANIM_WOUND04; break;
-      default: ASSERTALWAYS("Cyborg unknown damage");
+      default: iAnim = CYBORG_ANIM_WOUND01; //ASSERTALWAYS("Cyborg unknown damage");
     }
     StartModelAnim(iAnim, 0);
     return iAnim;
@@ -139,7 +139,7 @@ functions:
     switch (IRnd()%2) {
       case 0: iAnim = CYBORG_ANIM_DEATH01; break;
       case 1: iAnim = CYBORG_ANIM_DEATH02; break;
-      default: ASSERTALWAYS("Cyborg unknown death");
+      default: iAnim = CYBORG_ANIM_DEATH01; //ASSERTALWAYS("Cyborg unknown death");
     }
     StartModelAnim(iAnim, 0);
     return iAnim;

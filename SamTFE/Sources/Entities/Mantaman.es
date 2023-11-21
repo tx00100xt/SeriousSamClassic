@@ -60,7 +60,7 @@ functions:
     switch (IRnd()%2) {
       case 0: iAnim = MANTAMAN_ANIM_WOUND01; break;
       case 1: iAnim = MANTAMAN_ANIM_WOUND02; break;
-      default: ASSERTALWAYS("Mantaman unknown liquid damage");
+      default: iAnim = MANTAMAN_ANIM_WOUND01; //ASSERTALWAYS("Mantaman unknown liquid damage");
     }
     StartModelAnim(iAnim, 0);
     return iAnim;
