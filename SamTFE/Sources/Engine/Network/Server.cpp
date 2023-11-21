@@ -787,7 +787,9 @@ void CServer::MakeAllActions(void)
     nsbAllActions<<srv_tmLastProcessedTick;
 
     // for all players in game
+#ifndef NDEBUG
     INDEX iPlayer = 0;
+#endif // NDEBUG
     FOREACHINSTATICARRAY(srv_aplbPlayers, CPlayerBuffer, itplb) {
       // if player is active
       if (itplb->IsActive()) {
@@ -797,7 +799,9 @@ void CServer::MakeAllActions(void)
         // write its action
         itplb->CreateActionPacket(&nsbAllActions, iSession);
       }
+#ifndef NDEBUG
       iPlayer++;
+#endif // NDEBUG
     }
 
     // add the all-actions block to the buffer
@@ -1034,7 +1038,9 @@ void CServer::SendSessionStateData(INDEX iClient)
     CTStream *pstrmState; CTMemoryStream *pstrmDelta;
     extern INDEX net_bDumpConnectionInfo;
 
+#ifndef NDEBUG
     UBYTE* pubSrc = NULL;
+#endif // NDEBUG
     /*if (net_bDumpConnectionInfo) {
       strmStateFile.Create_t(CTString("Temp\\State.bin"));
       strmDeltaFile.Create_t(CTString("Temp\\Delta.bin"));
@@ -1044,7 +1050,9 @@ void CServer::SendSessionStateData(INDEX iClient)
       pstrmState = &strmStateMem;
       pstrmDelta = &strmDeltaMem;
 
+#ifndef NDEBUG
       pubSrc = strmDeltaMem.mstrm_pubBuffer + strmDeltaMem.mstrm_slLocation;
+#endif // NDEBUG
     //}
 
     ASSERT(pubSrc != NULL);
@@ -1526,7 +1534,7 @@ void CServer::Handle(INDEX iClient, CNetworkMessage &nmMessage)
         continue;
       }
       // if message is public or the client has some of destination players
-      if (ulTo==-1UL || ulTo&MaskOfPlayersOnClient(iSession)) {
+      if (ulTo==(static_cast<ULONG>(-1)) || ulTo&MaskOfPlayersOnClient(iSession)) {
         // send the message to that computer
         _pNetwork->SendToClient(iSession, nmOut);
       }

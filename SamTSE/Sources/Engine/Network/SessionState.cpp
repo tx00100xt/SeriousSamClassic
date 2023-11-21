@@ -935,7 +935,7 @@ void CSessionState::ProcessGameTick(CNetworkMessage &nmMessage, TIME tmCurrentTi
 
   _pfPhysicsProfile.StartTimer(CPhysicsProfile::PTI_APPLYACTIONS);
   // for all clients
-  INDEX iClient = 0;
+  //INDEX iClient = 0;
   FOREACHINSTATICARRAY(ses_apltPlayers, CPlayerTarget, itplt) {
     // if client is active
     if (itplt->IsActive()) {
@@ -955,7 +955,7 @@ void CSessionState::ProcessGameTick(CNetworkMessage &nmMessage, TIME tmCurrentTi
         itplt->plt_penPlayerEntity->SetHealth(1.0f);
       }
     }
-    iClient++;
+    //iClient++;
   }
   cli_bEmulateDesync = FALSE;
 

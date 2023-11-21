@@ -362,7 +362,7 @@ void CCommunicationInterface::PrepareForUse(BOOL bUseNetwork, BOOL bClient)
       cm_strName = net_strLocalHost;
       cm_ulLocalHost = StringToAddress(cm_strName);
       // if invalid
-      if (cm_ulLocalHost==0 || cm_ulLocalHost==-1UL) {
+      if (cm_ulLocalHost==0 || cm_ulLocalHost==(static_cast<ULONG>(-1))) {
         cm_ulLocalHost=0;
         // report it
         CPrintF(TRANSV("  requested local address is invalid\n"));

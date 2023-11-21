@@ -70,8 +70,8 @@ void CBrushArchive::MakeIndices(void)
   // NOTE: Mips and brushes don't have indices, because it is not needed yet.
   // Polygon and sector indices are needed for loading/saving of portal-sector links.
 
-  INDEX ctBrushes=0;
-  INDEX ctMips=0;
+  //INDEX ctBrushes=0; // ####### not used
+  //INDEX ctMips=0; // ####### not used
   INDEX ctSectors=0;
   INDEX ctPolygons=0;
   // for each brush
@@ -88,9 +88,9 @@ void CBrushArchive::MakeIndices(void)
         itbsc->bsc_iInWorld = ctSectors;
         ctSectors++;
       }
-      ctMips++;
+      //ctMips++;
     }
-    ctBrushes++;
+    //ctBrushes++;
   }
 
   // make arrays of pointers to sectors and polygons

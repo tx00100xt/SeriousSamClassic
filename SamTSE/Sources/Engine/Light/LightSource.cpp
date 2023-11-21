@@ -101,14 +101,18 @@ void CLightSource::Read_t( CTStream *pstrm)        // throw char *
       *pstrm>>iLayerInShadowMap;
       // for each layer in the shadow map
       INDEX iLayerInShadowMapCurrent = 0;
+#ifndef NDEBUG
       BOOL bLayerFound = FALSE;
+#endif // NDEBUG
       FOREACHINLIST(CBrushShadowLayer, bsl_lnInShadowMap, pbsm->bsm_lhLayers, itbsl) {
         // if it is that layer
         if (iLayerInShadowMapCurrent==iLayerInShadowMap) {
           // attach the layer to the light source
           itbsl->bsl_plsLightSource = this;
           ls_lhLayers.AddTail(itbsl->bsl_lnInLightSource);
+#ifndef NDEBUG
           bLayerFound = TRUE;
+#endif // NDEBUG
           break;
         }
         iLayerInShadowMapCurrent++;

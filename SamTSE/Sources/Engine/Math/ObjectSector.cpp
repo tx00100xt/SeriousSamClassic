@@ -586,12 +586,15 @@ void CObjectSector::CheckOptimizationAlgorithm(void)
   }}
 
   // for inverse edges
+#ifndef NDEBUG
   INDEX iInversesFound = 0;
+#endif // NDEBUG
   {FOREACHINDYNAMICARRAY(osc_aoedEdges, CObjectEdge, ited1) {
     FOREACHINDYNAMICARRAY(osc_aoedEdges, CObjectEdge, ited2) {
       CObjectEdge &ed1 = ited1.Current();
       CObjectEdge &ed2 = ited2.Current();
       if (&ed1 == &ed2) continue;
+#ifndef NDEBUG
       BOOL inv1, inv2;
       inv1 = (&ed1 == ed2.optimize.oed_InverseEdge);
       inv2 = (&ed2 == ed1.optimize.oed_InverseEdge);
@@ -600,6 +603,7 @@ void CObjectSector::CheckOptimizationAlgorithm(void)
       if (inv1) {
         iInversesFound++;
       }
+#endif // NDEBUG
       // check against inverses that have not been found
       ASSERT( (inv1 || inv2) || (ed1.oed_Vertex0 != ed2.oed_Vertex1) || (ed1.oed_Vertex1 != ed2.oed_Vertex0) );
     }

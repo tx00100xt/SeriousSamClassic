@@ -2691,7 +2691,7 @@ void DrawTriangle_Mask( UBYTE *pubMaskPlane, SLONG slMaskWidth, SLONG slMaskHeig
   //SLONG ctJLong   = pixDnJ - pixUpJ;
 
   FLOAT currK, curr1oK, currUoK, currVoK;
-  PIX   pixJ = pixUpJ;
+  //PIX   pixJ = pixUpJ;
 
   // if model has texture and texture has alpha channel, do complex mapping thru texture's alpha channel
   if( _pulTexture!=NULL && bTransparency) 
@@ -2717,15 +2717,18 @@ void DrawTriangle_Mask( UBYTE *pubMaskPlane, SLONG slMaskWidth, SLONG slMaskHeig
       fDVoKoDI = -fDVoKoDI;
     }
     // find prestepped U/K, V/K, 1/K
+    // ###############################################################
+    // comment unised vars - clang warnings: -Wunused-but-set-variable
+    // ###############################################################
     FLOAT f1oKLong   = pUpper->pv2_f1oK  + fPrestepUp * fD1oKoDJLong;
-    FLOAT f1oKShort1 = pUpper->pv2_f1oK  + fPrestepUp * fD1oKoDJShort1;
-    FLOAT f1oKShort2 = pMiddle->pv2_f1oK + fPrestepMd * fD1oKoDJShort2;
+    //FLOAT f1oKShort1 = pUpper->pv2_f1oK  + fPrestepUp * fD1oKoDJShort1;
+    //FLOAT f1oKShort2 = pMiddle->pv2_f1oK + fPrestepMd * fD1oKoDJShort2;
     FLOAT fUoKLong   = pUpper->pv2_fUoK  + fPrestepUp * fDUoKoDJLong;
-    FLOAT fUoKShort1 = pUpper->pv2_fUoK  + fPrestepUp * fDUoKoDJShort1;
-    FLOAT fUoKShort2 = pMiddle->pv2_fUoK + fPrestepMd * fDUoKoDJShort2;
+    //FLOAT fUoKShort1 = pUpper->pv2_fUoK  + fPrestepUp * fDUoKoDJShort1;
+    //FLOAT fUoKShort2 = pMiddle->pv2_fUoK + fPrestepMd * fDUoKoDJShort2;
     FLOAT fVoKLong   = pUpper->pv2_fVoK  + fPrestepUp * fDVoKoDJLong;
-    FLOAT fVoKShort1 = pUpper->pv2_fVoK  + fPrestepUp * fDVoKoDJShort1;
-    FLOAT fVoKShort2 = pMiddle->pv2_fVoK + fPrestepMd * fDVoKoDJShort2;
+    //FLOAT fVoKShort1 = pUpper->pv2_fVoK  + fPrestepUp * fDVoKoDJShort1;
+    //FLOAT fVoKShort2 = pMiddle->pv2_fVoK + fPrestepMd * fDVoKoDJShort2;
     
     // render upper triangle part
     PIX pixTexU, pixTexV;
@@ -2750,13 +2753,13 @@ void DrawTriangle_Mask( UBYTE *pubMaskPlane, SLONG slMaskWidth, SLONG slMaskHeig
         countI--;
       }
   nextLine1:
-      pixJ++;
+      //pixJ++;
       f1oKLong   += fD1oKoDJLong;
-      f1oKShort1 += fD1oKoDJShort1;
+      //f1oKShort1 += fD1oKoDJShort1;
       fUoKLong   += fDUoKoDJLong;
-      fUoKShort1 += fDUoKoDJShort1;
+      //fUoKShort1 += fDUoKoDJShort1;
       fVoKLong   += fDVoKoDJLong;
-      fVoKShort1 += fDVoKoDJShort1;
+      //fVoKShort1 += fDVoKoDJShort1;
       fixILong   += fixDIoDJLong;
       fixIShort1 += fixDIoDJShort1;
       ctJShort1--;
@@ -2784,13 +2787,13 @@ void DrawTriangle_Mask( UBYTE *pubMaskPlane, SLONG slMaskWidth, SLONG slMaskHeig
         countI--;
       }
   nextLine2:
-      pixJ++;
+      //pixJ++;
       f1oKLong   += fD1oKoDJLong;
-      f1oKShort2 += fD1oKoDJShort2;
+      //f1oKShort2 += fD1oKoDJShort2;
       fUoKLong   += fDUoKoDJLong;
-      fUoKShort2 += fDUoKoDJShort2;
+      //fUoKShort2 += fDUoKoDJShort2;
       fVoKLong   += fDVoKoDJLong;
-      fVoKShort2 += fDVoKoDJShort2;
+      //fVoKShort2 += fDVoKoDJShort2;
       fixILong   += fixDIoDJLong;
       fixIShort2 += fixDIoDJShort2;
       ctJShort2--;
@@ -2810,7 +2813,7 @@ void DrawTriangle_Mask( UBYTE *pubMaskPlane, SLONG slMaskWidth, SLONG slMaskHeig
         currI += direction;
         countI--;
       }
-      pixJ++;
+      //pixJ++;
       fixILong   += fixDIoDJLong;
       fixIShort1 += fixDIoDJShort1;
       ctJShort1--;
@@ -2826,7 +2829,7 @@ void DrawTriangle_Mask( UBYTE *pubMaskPlane, SLONG slMaskWidth, SLONG slMaskHeig
         currI += direction;
         countI--;
       }
-      pixJ++;
+      //pixJ++;
       fixILong   += fixDIoDJLong;
       fixIShort2 += fixDIoDJShort2;
       ctJShort2--;

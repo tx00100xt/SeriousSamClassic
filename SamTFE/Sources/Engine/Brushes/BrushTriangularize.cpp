@@ -799,12 +799,16 @@ void CTriangularizer::MakeElements(void)
   for(INDEX i=0; i<ctElements; i++) {
     CBrushVertex *pbvx = tr_apbvxTriangleVertices[i];
     // find its element index
+#ifndef NDEBUG
     BOOL bFound=FALSE;
+#endif // NDEBUG
     for(INDEX ipbvx=0; ipbvx<tr_apbvxVertices.Count(); ipbvx++) {
       // if it is the same one, stop searching
       if (tr_apbvxVertices[ipbvx]==pbvx) {
         tr_aiElements[i] = ipbvx;
+#ifndef NDEBUG
         bFound = TRUE;
+#endif // NDEBUG
         break;
       }
     }

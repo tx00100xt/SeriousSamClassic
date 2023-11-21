@@ -1135,7 +1135,7 @@ ULONG CDrawPort::GetTextWidth( const CTString &strText) const
   // calculate width of entire text line
   PIX pixStringWidth=0, pixOldWidth=0;
   PIX pixCharStart=0, pixCharEnd=pixCellWidth;
-  INDEX ctCharsPrinted=0;
+  //INDEX ctCharsPrinted=0;
   for( INDEX i=0; i<(INDEX)strlen(strText); i++)
   { // get current letter
     unsigned char chrCurrent = strText[i];
@@ -1169,7 +1169,7 @@ ULONG CDrawPort::GetTextWidth( const CTString &strText) const
       pixCharEnd   = dp_FontData->fd_fcdFontCharData[chrCurrent].fcd_pixEnd;
     }
     pixStringWidth += (((pixCharEnd-pixCharStart)*fixTextScalingX)>>16) +dp_pixTextCharSpacing;
-    ctCharsPrinted++;
+    //ctCharsPrinted++;
   }
   // determine largest width
   if( pixStringWidth < pixOldWidth) pixStringWidth = pixOldWidth;

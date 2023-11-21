@@ -1748,10 +1748,13 @@ void Particles_FlameThrowerStart(const CPlacement3D &plPipe, FLOAT fStartTime, F
       fT = fT-int(fT);
       FLOAT fBirthTime = fNow-(fT*FTSPARK_TOTAL_TIME);
       if( (fBirthTime<fStartTime) || (fBirthTime>fStopTime+2.0f) ) continue;
+// ######## fFade not used in this function
+#ifndef NDEBUG
       FLOAT fFade;
       if (fT>(1.0f-FTSPARK_FADE_OUT)) fFade=(1-fT)*(1/FTSPARK_FADE_OUT);
       else fFade=1.0f;
       fFade *= (CT_FTSPARK_TRAIL-iTrail)*(1.0f/CT_FTSPARK_TRAIL);
+#endif // NDEBUG
 
       FLOAT3D vPos = vCenter +
         vX*(afStarsPositions[iSpark][0]*0.15f*fT) +
@@ -5278,7 +5281,7 @@ void Particles_CollectEnergy(CEntity *pen, FLOAT tmStart, FLOAT tmStop)
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
   FLOAT fLife = 0.5;
-  INDEX ctRendered = 0;
+  //INDEX ctRendered = 0; // ##### not used in tfis func
   FLOAT tmDelta = fLife/CT_COLLECT_ENERGY_PARTICLES;
   for( INDEX iVtx=0; iVtx<CT_COLLECT_ENERGY_PARTICLES; iVtx++)
   {
@@ -5310,7 +5313,7 @@ void Particles_CollectEnergy(CEntity *pen, FLOAT tmStart, FLOAT tmStop)
     
     FLOAT fSize = 0.125f;
     Particle_RenderLine( vPos2, vPos, fSize, colLine);
-    ctRendered++;
+    //ctRendered++;
   }
 
   // all done
@@ -5347,7 +5350,7 @@ void Particles_CollectEnergy(CEntity *pen, FLOAT tmStart, FLOAT tmStop)
     //COLOR colLine = RGBToColor( ubA, ubA, ubA) | CT_OPAQUE;
     FLOAT fSize = 2;
     Particle_RenderSquare( vPos, fSize, 0.0f, C_ORANGE|ubA);
-    ctRendered++;
+    //ctRendered++;
   }
 
   // all done
@@ -5695,7 +5698,7 @@ void Particles_LarvaEnergy(CEntity *pen, FLOAT3D vOffset)
 
   FLOAT fNow = _pTimer->GetLerpedCurrentTick();
   FLOAT fLife = 0.5;
-  INDEX ctRendered = 0;
+  //INDEX ctRendered = 0; // ###### not used in this func
   FLOAT tmDelta = fLife/CT_COLLECT_ENERGY_PARTICLES;
   for( INDEX iVtx=0; iVtx<CT_COLLECT_ENERGY_PARTICLES; iVtx++)
   {
@@ -5727,7 +5730,7 @@ void Particles_LarvaEnergy(CEntity *pen, FLOAT3D vOffset)
     
     FLOAT fSize = 0.125f;
     Particle_RenderLine( vPos2, vPos, fSize, colLine);
-    ctRendered++;
+    //ctRendered++;
   }
 
   // all done
@@ -5764,7 +5767,7 @@ void Particles_LarvaEnergy(CEntity *pen, FLOAT3D vOffset)
     //COLOR colLine = RGBToColor( ubA, ubA, ubA) | CT_OPAQUE;
     FLOAT fSize = 2;
     Particle_RenderSquare( vPos, fSize, 0.0f, C_ORANGE|ubA);
-    ctRendered++;
+    //ctRendered++;
   }
 
   // all done

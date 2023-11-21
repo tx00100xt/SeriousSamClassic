@@ -1993,7 +1993,7 @@ void CModelObject::RenderModel_View( CRenderModel &rm)
   _pfModelProfile.IncrementTimerAveragingCounter( CModelProfile::PTI_VIEW_INIT_VERTICES, _ctAllSrfVx);
 
   // for each surface in current mip model
-  BOOL bEmpty = TRUE;
+  //BOOL bEmpty = TRUE; // ########### not used
   {FOREACHINSTATICARRAY( mmi.mmpi_MappingSurfaces, MappingSurface, itms)
   {
     const MappingSurface &ms = *itms;
@@ -2001,7 +2001,7 @@ void CModelObject::RenderModel_View( CRenderModel &rm)
     ctSrfVx = ms.ms_ctSrfVx;
     // skip to next in case of invisible or empty surface
     if( (ms.ms_ulRenderingFlags&SRF_INVISIBLE) || ctSrfVx==0) break;
-    bEmpty = FALSE;
+    //bEmpty = FALSE;
     puwSrfToMip = &mmi.mmpi_auwSrfToMip[iSrfVx0];
     pvtxSrfBase = &_avtxSrfBase[iSrfVx0];
     INDEX iSrfVx;
