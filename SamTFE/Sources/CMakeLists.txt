@@ -176,6 +176,10 @@ if(CMAKE_INSTALL_PREFIX STREQUAL "/usr" OR USE_SYSTEM_INSTALL)
     endif()
 endif()
 
+if(CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
+  include_directories("/usr/pkg/include")
+endif()
+
 # ImageMagic needed for SYSTEM INSTALL
 if(NOT LOCAL_INSTALL)
 	find_package(ImageMagick COMPONENTS convert)

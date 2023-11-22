@@ -378,6 +378,10 @@ typedef long int RESULT;		// for error codes
 typedef long int INDEX;     // for indexed values and quantities
 #endif
 
+#if (defined __NetBSD__)
+typedef int64_t  __int64 ;
+#endif
+
 #define FALSE 0
 #define TRUE  1
 
