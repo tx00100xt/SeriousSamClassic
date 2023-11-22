@@ -1018,6 +1018,7 @@ void ampegdecoder::jointstereo(grsistruct &si, float (*xr)[576], int *scalefacl)
 
   int sfb;
   int sfbhigh=22;
+  int _tmpsfb=0;
   if (si.blocktype==2)
   {
     int sfblow=si.mixedblock?3:0;
@@ -1035,10 +1036,10 @@ void ampegdecoder::jointstereo(grsistruct &si, float (*xr)[576], int *scalefacl)
       if (sfb>3)
         sfbhigh=0;
       int v=7;
-      for (sfb=sfb; sfb<13; sfb++)
+      for (_tmpsfb=sfb; _tmpsfb<13; _tmpsfb++)
       {
-        v=(sfb==12)?v:scalefacs[sfb*3+j];
-        for (i=bis[sfb]+j; i<bis[sfb+1]; i+=3)
+        v=(_tmpsfb==12)?v:scalefacs[_tmpsfb*3+j];
+        for (i=bis[_tmpsfb]+j; i<bis[_tmpsfb+1]; i+=3)
           ispos[i]=v;
       }
     }
@@ -1050,12 +1051,13 @@ void ampegdecoder::jointstereo(grsistruct &si, float (*xr)[576], int *scalefacl)
     if (i<bil[sfb])
       break;
   int v=7;
-  for (sfb=sfb; sfb<sfbhigh; sfb++)
+  for (_tmpsfb=sfb; _tmpsfb<sfbhigh; _tmpsfb++)
   {
-    v=(sfb==21)?v:scalefacl[sfb];
-    for (i=bil[sfb]; i<bil[sfb+1]; i++)
+    v=(_tmpsfb==21)?v:scalefacl[_tmpsfb];
+    for (i=bil[_tmpsfb]; i<bil[_tmpsfb+1]; i++)
       ispos[i]=v;
   }
+
 
   int msstereo=hdrmodeext&2;
   for (i=0; i<max; i++)

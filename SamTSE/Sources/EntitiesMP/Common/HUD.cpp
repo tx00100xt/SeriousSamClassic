@@ -62,7 +62,6 @@ extern FLOAT hud_fOpacity;
 extern FLOAT hud_fScaling;
 extern FLOAT hud_tmWeaponsOnScreen;
 extern INDEX hud_bShowMatchInfo;
-extern INDEX hud_bWeaponsIconScale; // HUD weapons icons scale: 0 - small, 1 - big
 
 // player statistics sorting keys
 enum SortKeys {
@@ -286,6 +285,7 @@ static int qsort_CompareFrags( const void *ppPEN0, const void *ppPEN1) {
   else              return -qsort_CompareDeaths(ppPEN0, ppPEN1);
 }
 
+#ifndef NDEBUG
 static int qsort_CompareLatencies( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
@@ -295,6 +295,7 @@ static int qsort_CompareLatencies( const void *ppPEN0, const void *ppPEN1) {
   else if( sl0>sl1) return -1;
   else              return  0;
 }
+#endif // NDEBUG
 
 // prepare color transitions
 static void PrepareColorTransitions( COLOR colFine, COLOR colHigh, COLOR colMedium, COLOR colLow,
@@ -1122,21 +1123,13 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
       if( _awiWeapons[i].wi_paiAmmo!=NULL && _awiWeapons[i].wi_paiAmmo->ai_iAmmoAmmount==0) {
         _fCustomScalingAdjustment = 0.9f; //#### 0.7f - 1.0f
         HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, 0x22334400);
-        if (hud_bWeaponsIconScale) {
-          _fCustomScalingAdjustment = 0.75f;
-        } else {
-          _fCustomScalingAdjustment = 0.5f;
-        }
+        _fCustomScalingAdjustment = 0.5f;
         HUD_DrawIcon(   fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, 0x22334400, 1.0f, FALSE);
       // yes ammo
       } else {
         _fCustomScalingAdjustment = 1.0f; //#### 0.7f - 1.0f
         HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, colBorder);
-        if (hud_bWeaponsIconScale) {
-          _fCustomScalingAdjustment = 0.75f;
-        } else {
-          _fCustomScalingAdjustment = 0.5f;
-        }
+        _fCustomScalingAdjustment = 0.5f;
         HUD_DrawIcon(   fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, colIcon, 1.0f, FALSE);
       }
       // advance to next position

@@ -44,6 +44,7 @@ extern INDEX hud_iSortPlayers;
 extern FLOAT hud_fOpacity;
 extern FLOAT hud_fScaling;
 extern FLOAT hud_tmWeaponsOnScreen;
+extern INDEX hud_bWeaponsIconScale; // HUD weapons icons scale: 0 - small, 1 - big
 
 
 // player statistics sorting keys
@@ -248,6 +249,7 @@ static int qsort_CompareDeaths( const void *ppPEN0, const void *ppPEN1) {
   else              return  0;
 }
 
+#ifndef NDEBUG
 static int qsort_CompareLatencies( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
@@ -257,6 +259,7 @@ static int qsort_CompareLatencies( const void *ppPEN0, const void *ppPEN1) {
   else if( sl0>sl1) return -1;
   else              return  0;
 }
+#endif // NDEBUG
 
 // prepare color transitions
 static void PrepareColorTransitions( COLOR colFine, COLOR colHigh, COLOR colMedium, COLOR colLow,
@@ -815,7 +818,11 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
       if( ptoWantedWeapon == _awiWeapons[i].wi_ptoWeapon) colIcon = C_WHITE;
       _fCustomScalingAdjustment = 1.0f;
       HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, colIcon);
-      _fCustomScalingAdjustment = 0.5f;
+      if (hud_bWeaponsIconScale) {
+        _fCustomScalingAdjustment = 0.75f;
+      } else {
+        _fCustomScalingAdjustment = 0.5f;
+      }
       HUD_DrawIcon(   fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, colIcon, 1.0f, FALSE);
       // advance to next position
       fCol += fAdvUnit;

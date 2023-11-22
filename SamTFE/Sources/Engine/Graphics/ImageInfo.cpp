@@ -108,7 +108,7 @@ struct TGAHeader
   UBYTE IdLength;
   UBYTE ColorMapType;
   UBYTE ImageType;
-  UBYTE ColorMapSpec[5];
+  UBYTE ColorMapSpec[5]; // #### 5 ... strm>>t.ColorMapSpec[5]; ????
   UWORD Xorigin;
   UWORD Yorigin;
   UWORD	Width;
@@ -121,7 +121,8 @@ static __forceinline CTStream &operator>>(CTStream &strm, TGAHeader &t) {
   strm>>t.IdLength;
   strm>>t.ColorMapType;
   strm>>t.ImageType;
-  strm>>t.ColorMapSpec[5];
+  //strm>>t.ColorMapSpec[5];  // #### not correct 
+  strm.Read_t(t.ColorMapSpec, sizeof (t.ColorMapSpec));
   strm>>t.Xorigin;
   strm>>t.Yorigin;
   strm>>t.Width;
