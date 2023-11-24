@@ -4,9 +4,9 @@
 .SH NAME
 .PP
 .BR serioussamclassic
-is open source game engine version developed by Croteam for Serious Sam Classic with Vulkan support
+is open source game engine version developed by Croteam for Serious Sam Classic
 (Windows, Linux, FreeBSD, OpenBSD, Raspberry Pi OS, macOS).
-Based on https://github.com/sultim-t/Serious-Engine-Vk and linux port https://github.com/icculus/Serious-Engine
+Based on https://github.com/icculus/Serious-Engine
 .PP
 .SH SYNOPSIS
 Open terminal and put command:
@@ -146,10 +146,10 @@ Variable;Icon size
 .SH INTRIDUCTION
 .PP
 This implementation of the source code provides for installation in the
-system, in the /usr/bin, /usr/lib, /usr/share directories.
+system, in the /usr/local/bin, /usr/local/lib, /usr/local/share directories.
 .PP
 During the launch of the game, the engine determines the place of launch,
-and if the launch occurred from the /usr/bin directory, it switches
+and if the launch occurred from the /usr/local/bin directory, it switches
 to the libraries search mode in the system directories. Also adds searching 
 for game data in various directories. About the search for game data will 
 be written below.
@@ -174,94 +174,66 @@ game and a master server.
 .PP
 .SS Location of executables, libraries, and modification libraries
 .PP
-The executable files of the game are located in the \fI'/usr/bin'\fR directory.
+The executable files of the game are located in the \fI'/usr/local/bin'\fR directory.
 .PP
-\fB /usr/bin/"internal game name"\fR
+\fB /usr/local/bin/"internal game name"\fR
 .PP
 The dedicated server and the font creation utility for the game are also
 located in this directory.
 .PP
-\fB /usr/bin/"internal game name"\fB-ded\fR
-\fB /usr/bin/"internal game name"\fB-mkfont\fR
+\fB /usr/local/bin/"internal game name"\fB-ded\fR
+\fB /usr/local/bin/"internal game name"\fB-mkfont\fR
 .PP
 The game libraries will be searched in the following directories:
-.PP
-\fB /usr/lib/"internal-game-name"/\fR
-\fB /usr/lib64/"internal game name"/\fR
-\fB /usr/lib/i386-linux-gnu/"internal game name"/\fR
-\fB /usr/lib/x86_64-linux-gnu/"internal game name"/\fR
-\fB /usr/lib/arm-linux-gnueabihf/"internal game name"/\fR
-\fB /usr/lib/aarch64-linux-gnu/"internal game name"/\fR
-\fB /usr/lib/riscv64-linux-gnu/"internal game name"/\fR
-\fB /usr/lib/s390x-linux-gnu/"internal game name"/\fR
-\fB /usr/lib/powerpc64-linux-gnu/"internal game name"/\fR
-.PP
+\fIusr/local/lib/"internal-game-name"/\fR
 The location of the libraries of modifications is also on the same principle.
 .PP
-\fB /usr/lib/"internal game name"/Mods/"Mod name"/\fR
-\fB /usr/lib64/"internal game name"/Mods/"Mod name"/\fR
-\fB /usr/lib/i386-linux-gnu/"internal game name"/Mods/"Mod name"/\fR
-\fB /usr/lib/x86_64-linux-gnu/"internal game name"/Mods/"Mod name"/\fR
-\fB /usr/lib/arm-linux-gnueabihf/"internal game name"/Mods/"Mod name"/\fR
-\fB /usr/lib/aarch64-linux-gnu/"internal game name"/Mods/"Mod name"/\fR
-\fB /usr/lib/riscv64-linux-gnu/"internal game name"/Mods/"Mod name"/\fR
-\fB /usr/lib/s390x-linux-gnu/"internal game name"//Mods/"Mod name"/\fR
-\fB /usr/lib/powerpc64-linux-gnu/"internal game name"//Mods/"Mod name"/\fR
+\fB /usr/local/lib/"internal game name"/Mods/"Mod name"\fR
 .PP
 Game libraries are assigned a suffix defined in file \fIModEXT.txt\fR
 The suffix is assigned to both game libraries and mod libraries.
-The game library engine must be located in the standard library search area. In one of: 
-.PP
-\fB /usr/lib\fR
-\fB /usr/lib64\fR
-\fB /usr/lib/i386-linux-gnu\fR
-\fB /usr/lib/x86_64-linux-gnu\fR
-\fB /usr/lib/arm-linux-gnueabihf\fR
-\fB /usr/lib/aarch64-linux-gnu\fR
-\fB /usr/lib/riscv64-linux-gnu\fR
-\fB /usr/lib/s390x-linux-gnu\fR
-\fB /usr/lib/powerpc64-linux-gnu\fR
-.PP
+The game library engine must be located in the standard library search area.
+In one of: \fI/usr/local/lib\fR
 The game executable first loads the engine library, which loads the remaining
 libraries from the subdirectory with the game's internal name.
 To get output names by convention, use the cmake build 
-key \fB-DUSE_SYSTEM_INSTALL\fP=On or \fB-DCMAKE_INSTALL_PREFIX:PATH\fP=/usr
+key \fB-DUSE_SYSTEM_INSTALL\fP=On
 .PP
 In accordance with the naming convention, we get the following location of the
 executable files, game libraries Serious Sam The First Encounter 
-and Serious Sam The Second Encounter for Debian/Ubuntu:
+and Serious Sam The Second Encounter for FreeBSD/OpenBSD:
 .PP
-\fB /usr/bin/serioussam\fR
-\fB /usr/bin/serioussam-ded\fR
-\fB /usr/bin/serioussam-mkfont\fR
-\fB /usr/lib/x86_64-linux-gnu/libEngine.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussam/libShaders.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussam/libGame.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussam/libEntities.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussam/libamp11lib.so\fR
-\fB /usr/bin/serioussamse\fR
-\fB /usr/bin/serioussamse-ded\fR
-\fB /usr/bin/serioussamse-mkfont\fR
-\fB /usr/lib/x86_64-linux-gnu/libEngineMP.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussamse/libShaders.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussamse/libGameMP.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussamse/libEntitiesMP.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussamse/libamp11lib.so\fR
+\fB /usr/local/bin/serioussam\fR
+\fB /usr/local/bin/serioussam-ded\fR
+\fB /usr/local/bin/serioussam-mkfont\fR
+\fB /usr/local/lib/libEngine.so\fR
+\fB /usr/local/lib/serioussam/libShaders.so\fR
+\fB /usr/local/lib/serioussam/libGame.so\fR
+\fB /usr/local/lib/serioussam/libEntities.so\fR
+\fB /usr/local/lib/serioussam/libamp11lib.so\fR
+\fB /usr/local/bin/serioussamse\fR
+\fB /usr/local/bin/serioussamse-ded\fR
+\fB /usr/local/bin/serioussamse-mkfont\fR
+\fB /usr/local/lib/libEngineMP.so\fR
+\fB /usr/local/lib/serioussamse/libShaders.so\fR
+\fB /usr/local/lib/serioussamse/libGameMP.so\fR
+\fB /usr/local/lib/serioussamse/libEntitiesMP.so\fR
+\fB /usr/local/lib/serioussamse/libamp11lib.so\fR
 .PP
 For mod XPLUS:
-\fB /usr/lib/x86_64-linux-gnu/serioussam/Mods/XPLUS/libGame.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussam/Mods/XPLUS/libEntities.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussamse/Mods/XPLUS/libGameMP.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussamse/Mods/XPLUS/libEntitiesMP.so\fR
+\fB /usr/local/lib/serioussam/Mods/XPLUS/libGame.so\fR
+\fB /usr/local/lib/serioussam/Mods/XPLUS/libEntities.so\fR
+\fB /usr/local/lib/serioussamse/Mods/XPLUS/libGameMP.so\fR
+\fB /usr/local/lib/serioussamse/Mods/XPLUS/libEntitiesMP.so\fR
 .PP
 For mod Serious Sam Alpha Remake (SSA):
-\fB /usr/lib/x86_64-linux-gnu/serioussam/Mods/SSA/libGame.so\fR
-\fB /usr/lib/x86_64-linux-gnu/serioussam/Mods/SSA/libEntities.so\fRq
+\fB /usr/local/lib/serioussam/Mods/SSA/libGame.so\fR
+\fB /usr/local/lib/serioussam/Mods/SSA/libEntities.so\fRq
 .PP
 .SS Location of game data, user data, and data modifications
 .PP
 During the launch of the game, the engine determines the launch location, and
-if the launch occurred from the /usr/bin directory, then the game data
+if the launch occurred from the /usr/local/bin directory, then the game data
 will be searched for the recommended paths. If the game data is not found using
 the recommended paths, then the search will be in the home directory, and when
 the game files are found, the path will be written to the configuration
@@ -270,8 +242,8 @@ a message box will appear.
 .PP
 Recommended paths for hosting game data:
 .PP
-\fB /usr/share/serioussam/\fR \-\ for TFE
-\fB /usr/share/serioussamse/\fR \-\ for TSE
+\fB /usr/local/share/serioussam/\fR \-\ for TFE
+\fB /usr/local/share/serioussamse/\fR \-\ for TSE
 .PP
 or
 .PP
@@ -280,8 +252,8 @@ or
 .PP
 Mod Data:
 .PP
-\fB /usr/share/serioussam/Mods/"Mod name"\fR \-\ for TFE
-\fB /usr/share/serioussamse/Mods/"Mod name"\fR \-\ for TSE
+\fB /usr/local/share/serioussam/Mods/"Mod name"\fR \-\ for TFE
+\fB /usr/local/share/serioussamse/Mods/"Mod name"\fR \-\ for TSE
 .PP
 or
 .PP
@@ -296,8 +268,8 @@ The file SE1_10b.gro is not included in the game data distributed on
 CDs or digital stores. If you chose the first recommended option, 
 set it to:
 .PP
-\fB /usr/share/serioussam/SE1_10b.gro\fR \-\ for TFE
-\fB /usr/share/serioussamse/SE1_10b.gro\fR \-\ for TSE
+\fB /usr/local/share/serioussam/SE1_10b.gro\fR \-\ for TFE
+\fB /usr/local/share/serioussamse/SE1_10b.gro\fR \-\ for TSE
 .PP
 .SH PLAYING
 .PP
@@ -320,7 +292,8 @@ resources can be found in:
 If you bought a digital on GOG, you can unpack the resources with the 
 innoextract CLI tool. To install innoextract via your package manager, run:
 .PP
-\fB sudo apt-get install innoextract\fR
+\fB sudo pkg install innoextract\fR - for FreeBSD
+\fB sudo pkg_add innoextract\fR - for OpenBSD
 .PP
 Copy files \fI"setup_serious_sam_the_first_encounter_2.0.0.10.exe"\fR and \fI"setup_serious_sam_the_second_encounter_2.1.0.8.exe"\fR 
 to a home directory and run the following commands:
