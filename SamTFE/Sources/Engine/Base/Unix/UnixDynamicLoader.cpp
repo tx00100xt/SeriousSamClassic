@@ -3,10 +3,50 @@
 /* rcg10072001 Implemented. */
 
 #include <dlfcn.h>
+#include <locale.h>
+#include <dirent.h>
+#include <errno.h>
 
 #include <Engine/Engine.h>
 #include <Engine/Base/DynamicLoader.h>
 
+CTString realname;
+
+int default_filter(const struct dirent *ent)
+{
+    /* Keep only entries that do not begin with a '.'. */
+    return (ent->d_name[0] != '.');
+}
+
+CTString SearchLib(const char *dirname)
+{
+    int  arg;
+    /* Use user's locale rules (for alphasort). */
+    setlocale(LC_ALL, "");
+    struct dirent **list = NULL;
+    int i, count;
+
+    count = scandir((const char *)dirname, &list, default_filter, alphasort);
+    if (count == -1) {
+        CPrintF("CUnixDynamicLoader error: %s\n", strerror(errno));
+        return CTString("");
+    }
+
+    for (i = 0; i < count; i++) {
+        int _file = strncmp((const char *)list[i]->d_name, (const char *)"libvorbisfile.so", (size_t) 16 ); 
+        if(_file == 0) {
+           CPrintF("CUnixDynamicLoader: found %s\n", (const char *)list[i]->d_name);
+            break;
+        }
+    }
+    free(list);
+
+    if (i+1 >= count) {
+        CPrintF("CUnixDynamicLoader error: libvorbisfile not fiund\n");   
+        return CTString("");
+    }
+    return CTString((const char *)list[i]->d_name);
+}
 class CUnixDynamicLoader : public CDynamicLoader
 {
 public:
@@ -27,7 +67,6 @@ CDynamicLoader *CDynamicLoader::GetInstance(const char *libname)
 {
     return(new CUnixDynamicLoader(libname));
 }
-
 
 void CUnixDynamicLoader::SetError(void)
 {
@@ -70,7 +109,7 @@ void CUnixDynamicLoader::DoOpen(const char *lib)
 
     CTFileName fnmLib = CTString(lib);
     CTFileName fnmLibname = fnmLib.FileName();
-    int _libvorbisfile   = strncmp((const char *)fnmLibname, (const char *) "libvorbisfile", (size_t) 13 ); // skip
+    int _libvorbisfile  = strncmp((const char *)fnmLibname, (const char *) "libvorbisfile", (size_t) 13 ); // skip
     if( _pShell->GetINDEX("sys_iSysPath") == 1 && _libvorbisfile !=0 ) {
         fnmLib = _fnmModLibPath + _fnmMod + fnmLib.FileName() + fnmLib.FileExt();
     }
@@ -82,7 +121,21 @@ void CUnixDynamicLoader::DoOpen(const char *lib)
         module = ::dlopen((const char *)fnmLib, RTLD_LAZY | RTLD_GLOBAL);
     }
     #endif
-    SetError();
+    #ifdef PLATFORM_FREEBSD
+    if (_libvorbisfile == 0 && module == NULL) { // if libvorbisfile.so not open trying searching libvorbisfile.so.xxx
+        CPrintF("Trying to search libvorbisfile.so.xxx ...\n");
+        #if defined(__NetBSD__)
+          realname = SearchLib((const char *)"/usr/pkg/lib");
+        #else
+          realname = SearchLib((const char *)"/usr/local/lib");
+        #endif
+        fnmLib = CTString(realname); // libvorbisfile.so.xxx
+        module = ::dlopen((const char *)fnmLib, RTLD_LAZY | RTLD_GLOBAL);
+    }
+    #endif
+    if (module == NULL) {
+        SetError();
+    }
 }
 
 
@@ -111,9 +164,21 @@ CUnixDynamicLoader::CUnixDynamicLoader(const char *libname)
         // Always try to dlopen from inside the game dirs before trying
         //  system libraries...
         if (fnm.FileDir() == "") {
-            char buf[MAX_PATH];
-            _pFileSystem->GetExecutablePath(buf, sizeof (buf));
-            CTFileName fnmDir = CTString(buf);
+          char buf[MAX_PATH];
+          _pFileSystem->GetExecutablePath(buf, sizeof (buf));
+          CTFileName fnmDir = CTString(buf);
+        #ifdef PLATFORM_FREEBSD
+          CTFileName fnmLib = CTString(libname);
+          CTFileName fnmLibname = fnmLib.FileName();
+          int _libvorbisfile   = strncmp((const char *)fnmLibname, (const char *) "libvorbisfile", (size_t) 13 );
+          if( _pShell->GetINDEX("sys_iSysPath") == 1 && _libvorbisfile ==0 ) {
+          #if defined(__NetBSD__)
+            fnmDir = CTString("/usr/pkg/lib");
+          #else
+            fnmDir = CTString("/usr/local/lib");
+          #endif
+          } 
+        #endif
             fnmDir = fnmDir.FileDir() + fnm;
             DoOpen(fnmDir);
             if (module != NULL) {
