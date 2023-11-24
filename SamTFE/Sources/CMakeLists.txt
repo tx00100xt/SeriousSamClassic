@@ -201,7 +201,7 @@ endif()
 
 # remove clang spam.
 if(MACOSX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nullability-completeness")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nullability-completeness -Wno-deprecated")
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
