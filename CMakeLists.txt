@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.7)
 project(SeriousEngine)
 
 # Set @rpath for Mac OS X shared library install names.
@@ -72,12 +72,6 @@ if(APPLE)
 endif()
 if(MSVC)
     set(WINDOWS TRUE)
-endif()
-
-# remove clang spam.
-if(MACOSX OR FREEBSD)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-nullability-completeness")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nullability-completeness")
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)

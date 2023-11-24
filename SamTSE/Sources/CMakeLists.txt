@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.7)
 project(SeriousEngine)
 
 # set minimal standart
@@ -119,22 +119,34 @@ endif()
 # "-rpath=/var/tmp/portage" is suitable for Gentoo and installing the game into the system
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME MATCHES "GNU")
     set(LINUX TRUE)
+    message(STATUS "Set GNU Linux TRUE")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-undefined-inline -Wno-reorder -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-unused-function")
     set(RPATH_SETTINGS "-rpath,$ORIGIN")
 endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "OpenBSD" OR CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-undefined-inline -Wno-enum-constexpr-conversion -Wno-unused-but-set-variable -Wno-uninitialized -Wno-unused-function")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-undefined-inline -Wno-unused-but-set-variable -Wno-uninitialized -Wno-unused-function")
     set(FREEBSD TRUE)
-    if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")                                  # for local install
-      set(RPATH_SETTINGS "-rpath,$ORIGIN")
+    if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")                                  # for local instal
+      if(CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i686|x86|AMD64" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set(RPATH_SETTINGS "-z,notext,-rpath,$ORIGIN")
+        message(STATUS "Arch i386 using -Wl,-z,notext LD flags")
+      else()
+        set(RPATH_SETTINGS "-rpath,$ORIGIN")
+      endif()
       message(STATUS "Using cmake generator 'Unix Makefiles'")
     elseif(CMAKE_GENERATOR STREQUAL "Ninja")                                       # defalt for install to the system
-      set(RPATH_SETTINGS "-rpath=/tmp")     
+      if(CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i686|x86|AMD64" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set(RPATH_SETTINGS "-z,notext,-rpath=/tmp")
+        message(STATUS "Arch i386 using -Wl,-z,notext LD flags")
+      else()
+        set(RPATH_SETTINGS "-rpath=/tmp")
+      endif()  
       message(STATUS "Using cmake generator 'Ninja'")
     else()
         message(FATAL_ERROR "Unknown cmake generator")
     endif()
 endif()
+
 if(APPLE)
     set(MACOSX TRUE)
     if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")
@@ -147,6 +159,7 @@ if(APPLE)
         message(FATAL_ERROR "Unknown cmake generator")
     endif()
 endif()
+
 if(MSVC)
     set(WINDOWS TRUE)
 endif()
@@ -176,10 +189,6 @@ if(CMAKE_INSTALL_PREFIX STREQUAL "/usr" OR USE_SYSTEM_INSTALL)
     endif()
 endif()
 
-if(CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
-  include_directories("/usr/pkg/include")
-endif()
-
 # ImageMagic needed for SYSTEM INSTALL
 if(NOT LOCAL_INSTALL)
 	find_package(ImageMagick COMPONENTS convert)
@@ -191,8 +200,7 @@ if(NOT LOCAL_INSTALL)
 endif()
 
 # remove clang spam.
-if(MACOSX OR FREEBSD)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-nullability-completeness")
+if(MACOSX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nullability-completeness")
 endif()
 
@@ -262,6 +270,9 @@ endif()
 
 if(FREEBSD)
     set(CMAKE_INSTALL_LIBDIR "/usr/local/lib")
+endif()
+if(CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
+  include_directories("/usr/pkg/include")
 endif()
 
 message(STATUS "Arch bits: ${CMAKE_ARCH_BITS}")
