@@ -4,7 +4,7 @@ DISTVERSION=	1.10.6b
 PORTREVISION=	1
 CATEGORIES=	games
 
-MAINTAINER= 	<YOUR MAIL>
+MAINTAINER= 	YOUR@MAIL
 COMMENT=	Open source version of game Serious Sam Classic 
 WWW=		https://github.com/tx00100xt/SeriousSamClassic
 
