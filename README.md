@@ -126,6 +126,8 @@ cmake ..
 make -j4
 make install
 ```
+To build a binary package for installation on the system, you can use the template:
+https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
 ### OpenBSD
 
@@ -169,6 +171,8 @@ cmake .. -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_ASM=TRUE -DUSE_I386
 make -j4
 make install
 ```
+To build a binary package for installation on the system, you can use the template:
+https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
 ### NetBSD
 
@@ -179,6 +183,9 @@ sudo pkgin install cmake nasm bison SDL2 libogg libvorbis
 The **i386** version will only work with **sysctl -w security.pax.mprotect.global=0**
 Also don’t forget to add the path **/usr/pkg/lib** to **LD_LIBRARY_PATH**.
 The rest is the same as described for the OpenBSD.
+
+To build a binary package for installation on the system, you can use the template:
+https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
 ### macOS
 
