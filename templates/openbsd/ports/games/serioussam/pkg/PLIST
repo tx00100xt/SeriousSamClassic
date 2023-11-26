@@ -1,3 +1,4 @@
+@conflict serioussam-vk-*
 @bin bin/serioussam
 @bin bin/serioussam-ded
 @bin bin/serioussam-mkfont

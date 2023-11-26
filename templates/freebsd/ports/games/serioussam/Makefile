@@ -1,5 +1,5 @@
 PORTNAME=	serioussam
-DISTNAME=	SeriousSamClassi
+DISTNAME=	SeriousSamClassic
 DISTVERSION=	1.10.6b
 PORTREVISION=	1
 CATEGORIES=	games
