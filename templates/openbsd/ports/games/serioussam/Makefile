@@ -25,7 +25,8 @@ MAINTAINER =		YOUR NAME <YOUR MAIL>
 # GPLv2
 PERMIT_PACKAGE =	Yes
 
-WANTLIB += ${COMPILER_LIBCXX} SDL2 c m z pthread
+WANTLIB += ${COMPILER_LIBCXX} SDL2 c m z ogg \
+		pthread vorbis vorbisfile
 
 MODULES =		devel/cmake
 
