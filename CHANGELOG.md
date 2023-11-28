@@ -184,3 +184,13 @@ All notable changes to this project will be documented in this file.
 - Added new Scripts and updated other.
 - Additional light sources for XPLUS also.
 - Restored the original menu design as in TFE (grid, clouds and so on).
+
+## 2023-11-07 - 2023-11-28
+- Fix Debug install sections.
+- Fixed delay in LimitFrameRate function.
+  Look here: https://forum.ubuntu.ru/index.php?topic=320015.msg2489163#msg2489163
+- Added OpenBSD and NetBSD support.
+- Added install to system for FreeBSD, OpenBSD and NetBSD.
+- Added templates for FreeBSD, OpenBSD and NetBSD for build package.
+- Made many corrections in the code regarding compiler warnings.
+- Added man pages for.for FreeBSD, OpenBSD and NetBSD.

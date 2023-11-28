@@ -44,13 +44,12 @@ CXXFLAGS+=	-DIOAPI_NO_64
 .if ${MACHINE_ARCH} == "i386"
 TOOL_DEPENDS+=	nasm>=1.1:../../devel/nasm
 CMAKE_ARGS+=	-DUSE_I386_NASM_ASM=ON
-CFLAGS+=	-mmmx
-CXXFLAGS+=	-mmmx
 .endif
 
-.if ${MACHINE_ARCH} == "armv7" || ${MACHINE_ARCH} == "aarch64"
-CMAKE_ARGS+=	-DRPI4=ON
-.endif
+# Unocmment this for aarch64 and armv7 architectures
+#.if ${MACHINE_ARCH} == "armv7" || ${MACHINE_ARCH} == "aarch64"
+#CMAKE_ARGS+=	-DRPI4=ON
+#.endif
 
 INSTALLATION_DIRS+=	man
 INSTALLATION_DIRS+=	man/man1

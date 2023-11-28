@@ -16,7 +16,9 @@ LICENSE_FILE= 	${WRKSRC}/LICENSE
 # Building code for them workd.
 # Work on real hardware has been 
 # tested for architectures: armv7 aaarch64 under Linux
-ONLY_FOR_ARCHS= amd64 i386
+# When testing i386 on Virtualbox, image artifacts were sometimes observed.
+# Perhaps everything will be fine on real hardware.
+ONLY_FOR_ARCHS= amd64
 
 BUILD_DEPENDS=	flex:textproc/flex \
 		convert:graphics/ImageMagick7
@@ -50,11 +52,10 @@ post-install:
 #CMAKE_ON=	RPI4
 #.endif
 
-.if ${ARCH} == i386
-CMAKE_ON=	USE_I386_NASM_ASM
-BUILD_DEPENDS+=	nasm:devel/nasm
-CFLAGS+=	-mmmx
-CXXFLAGS+=	-mmmx
-.endif
+# Unocmment this for i386 architecture
+#.if ${ARCH} == i386
+#CMAKE_ON=	USE_I386_NASM_ASM
+#BUILD_DEPENDS+=	nasm:devel/nasm
+#.endif
 
 .include	<bsd.port.mk>

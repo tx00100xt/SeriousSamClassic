@@ -3,5 +3,3 @@ $NetBSD: distinfo,v 1.6 2023/11/25 10:43:53 nia Exp $
 BLAKE2s (SeriousSamClassic-1.10.6b.tar.gz) = 2a84398c483412328f69f9650c1c2d3d31d4c96a0e589f4d540350f9bf910b3a
 SHA512 (SeriousSamClassic-1.10.6b.tar.gz) = d01bb4fdc2999d6d3cb91051e5cb8fded1df6a07174ae62cfbe7094eb58daf899af3c6b4b28e3e981a93354ffc426a65bf32d06bdb15be1927f291502a54ccc6
 Size (SeriousSamClassic-1.10.6b.tar.gz) = 28934724 bytes
-SHA1 (patch-SamTFE_Sources_CMakeLists.txt) = 2c30fbb0aebd044fb7688a2b1d632fd9fada536b
-SHA1 (patch-SamTSE_Sources_CMakeLists.txt) = 6ad918504f913560fd4dc021c0e8cc48d27eed40

@@ -60,6 +60,7 @@ cmake ..
 make -j4
 make install
 ```
+If you prefer **ninja**, then add key **-GNinja** to the cmake. And replace the **make** command with **ninja**.
 
 ### Ubuntu 
 Instead of building you can install packages from ppa by adding ppa:tx00100xt/serioussam to your system's Software Sources.
@@ -126,6 +127,8 @@ cmake ..
 make -j4
 make install
 ```
+If you prefer **ninja**, then add key **-GNinja** to the cmake. And replace the **make** command with **ninja**.
+For **i386** architecture, add key **-DUSE_SYSTEM_INSTALL=ON** to **cmake**.
 To build a binary package for installation on the system, you can use the template:
 https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
@@ -159,18 +162,8 @@ cmake ..
 make -j4
 make install
 ```
-#### Building for i386 (for SS:TFE and SS:TSE)
-
-Type this in your terminal:
-
-```
-cd SeriousSamClassic
-mkdir build
-cd build
-cmake .. -DCMAKE_C_FLAGS=-mmmx -DCMAKE_CXX_FLAGS=-mmmx -DUSE_ASM=TRUE -DUSE_I386_NASM_ASM=TRUE
-make -j4
-make install
-```
+If you prefer **ninja**, then add key **-GNinja** to the cmake. And replace the **make** command with **ninja**.
+For **i386** architecture, add key **-DUSE_SYSTEM_INSTALL=ON** to **cmake**.
 To build a binary package for installation on the system, you can use the template:
 https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
@@ -181,9 +174,7 @@ Install required dependencies:
 sudo pkgin install cmake nasm bison SDL2 libogg libvorbis
 ```
 The **i386** version will only work with **sysctl -w security.pax.mprotect.global=0**
-Also don’t forget to add the path **/usr/pkg/lib** to **LD_LIBRARY_PATH**.
 The rest is the same as described for the OpenBSD.
-
 To build a binary package for installation on the system, you can use the template:
 https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
@@ -382,6 +373,7 @@ Supported OS
 * `Linux`
 * `FreeBSD`
 * `OpenBSD`
+* `NetBSD`
 * `Windows`
 * `Raspberry PI OS`
 * `macOS`
