@@ -82,52 +82,67 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(DEBUG TRUE)
 endif()
 
-if (LINUX)
-    set (CMAKE_OS_NAME "GNU/Linux" CACHE STRING "Operating system name" FORCE)
+if(LINUX)
+    set(CMAKE_OS_NAME "GNU/Linux" CACHE STRING "Operating system name" FORCE)
     ## Check for Debian GNU/Linux
-    find_file (DEBIAN_FOUND debian_version debconf.conf
-      PATHS /etc
-      )
-    if (DEBIAN_FOUND)
-      set (CMAKE_OS_NAME "Debian" CACHE STRING "Operating system name" FORCE)
-    endif (DEBIAN_FOUND)
+    find_file(DEBIAN_FOUND debian_version debconf.conf
+        PATHS /etc
+    )
+    if(DEBIAN_FOUND)
+        set(CMAKE_OS_NAME "Debian" CACHE STRING "Operating system name" FORCE)
+    endif(DEBIAN_FOUND)
     ##  Check for Fedora
-    find_file (FEDORA_FOUND fedora-release
-      PATHS /etc
-      )
-    if (FEDORA_FOUND)
-      set (CMAKE_OS_NAME "Fedora" CACHE STRING "Operating system name" FORCE)
-    endif (FEDORA_FOUND)
+    find_file(FEDORA_FOUND fedora-release
+        PATHS /etc
+    )
+    if(FEDORA_FOUND)
+        set(CMAKE_OS_NAME "Fedora" CACHE STRING "Operating system name" FORCE)
+    endif(FEDORA_FOUND)
     ##  Check for RedHat
-    find_file (REDHAT_FOUND redhat-release inittab.RH
-      PATHS /etc
-      )
-    if (REDHAT_FOUND)
-      set (CMAKE_OS_NAME "RedHat" CACHE STRING "Operating system name" FORCE)
-    endif (REDHAT_FOUND)   
+    find_file(REDHAT_FOUND redhat-release inittab.RH
+        PATHS /etc
+    )
+    if(REDHAT_FOUND)
+        set(CMAKE_OS_NAME "RedHat" CACHE STRING "Operating system name" FORCE)
+    endif(REDHAT_FOUND)
+    ##  Check for Gentoo
+    find_file(OS_Release_FOUND os-release
+        PATHS /usr/lib
+    )
+    if (OS_Release_FOUND)
+        ## Scan contents of file
+        file(STRINGS ${OS_Release_FOUND} Gentoo_FOUND
+            REGEX Gentoo
+        )
+        ## Check result of string search
+        if(Gentoo_FOUND)
+            set(CMAKE_OS_NAME "Gentoo" CACHE STRING "Operating system name" FORCE)
+            set(DEBIAN_FOUND FALSE)
+        endif(Gentoo_FOUND)
+    endif(OS_Release_FOUND)
     ## Extra check for Ubuntu    
-    if (DEBIAN_FOUND)
+    if(DEBIAN_FOUND)
       ## At its core Ubuntu is a Debian system, with
       ## a slightly altered configuration; hence from
       ## a first superficial inspection a system will
       ## be considered as Debian, which signifies an
       ## extra check is required.
-      find_file (UBUNTU_EXTRA legal issue
-	PATHS /etc
-	)
-    if (UBUNTU_EXTRA)
-	## Scan contents of file
-	file (STRINGS ${UBUNTU_EXTRA} UBUNTU_FOUND
-	  REGEX Ubuntu
-	  )
-	## Check result of string search
-	if (UBUNTU_FOUND)
-	  set (CMAKE_OS_NAME "Ubuntu" CACHE STRING "Operating system name" FORCE)
-	  set (DEBIAN_FOUND FALSE)
-	endif (UBUNTU_FOUND)
-    endif (UBUNTU_EXTRA)      
-    endif (DEBIAN_FOUND)
-endif (LINUX)
+      find_file(UBUNTU_EXTRA legal issue
+        PATHS /etc
+      )
+      if(UBUNTU_EXTRA)
+        ## Scan contents of file
+        file(STRINGS ${UBUNTU_EXTRA} UBUNTU_FOUND
+          REGEX Ubuntu
+        )
+        ## Check result of string search
+        if(UBUNTU_FOUND)
+          set(CMAKE_OS_NAME "Ubuntu" CACHE STRING "Operating system name" FORCE)
+          set(DEBIAN_FOUND FALSE)
+        endif(UBUNTU_FOUND)
+      endif(UBUNTU_EXTRA)      
+    endif(DEBIAN_FOUND)
+endif(LINUX)
 
 add_subdirectory(SamTFE/Sources)
 add_subdirectory(SamTSE/Sources)

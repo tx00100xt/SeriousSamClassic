@@ -107,6 +107,14 @@ else()
  message(STATUS "Building Serious Sam Classic The Second Encounter")
 endif()
 
+option(USE_ASM "Use ASM code" TRUE)
+if (USE_ASM)
+    MESSAGE(STATUS "Using assembler code (when available)")
+else()
+    add_definitions(-DUSE_PORTABLE_C=1)
+    MESSAGE(STATUS "Using portable C instead of all ASM")
+endif()
+
 ###############################################################
 ###############################################################
 ###############################################################
@@ -120,7 +128,7 @@ endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME MATCHES "GNU")
     set(LINUX TRUE)
     message(STATUS "Set GNU Linux TRUE")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-reorder -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-unused-function")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-reorder -Wno-unused-but-set-variable -Wno-maybe-uninitialized -Wno-class-memaccess -Wno-unused-function")
     set(RPATH_SETTINGS "-rpath,$ORIGIN")
 endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "OpenBSD" OR CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
@@ -128,16 +136,26 @@ if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "OpenBSD" 
     set(FREEBSD TRUE)
     if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")                                  # for local instal
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i686|x86|amd64|AMD64" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
-        set(RPATH_SETTINGS "-z,notext,-rpath,$ORIGIN")
-        message(STATUS "Arch i386 using -Wl,-z,notext LD flags")
+        if(USE_ASM)
+          set(RPATH_SETTINGS "-z,notext,-rpath,$ORIGIN")
+          message(STATUS "Arch i386 using -Wl,-z,notext LD flags")
+        else()
+          set(RPATH_SETTINGS "-rpath,$ORIGIN")
+          message(STATUS "Arch i386 portable C instead of all ASM")
+        endif()
       else()
         set(RPATH_SETTINGS "-rpath,$ORIGIN")
       endif()
       message(STATUS "Using cmake generator 'Unix Makefiles'")
     elseif(CMAKE_GENERATOR STREQUAL "Ninja")                                       # defalt for install to the system
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "i386|i686|x86|amd64|AMD64" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
-        set(RPATH_SETTINGS "-z,notext,-rpath=/tmp")
-        message(STATUS "Arch i386 using -Wl,-z,notext LD flags")
+        if(USE_ASM)
+          set(RPATH_SETTINGS "-z,notext,-rpath=/tmp")
+          message(STATUS "Arch i386 using -Wl,-z,notext LD flags")
+        else()
+          set(RPATH_SETTINGS "-rpath=/tmp")
+          message(STATUS "Arch i386 portable C instead of all ASM")
+        endif()
       else()
         set(RPATH_SETTINGS "-rpath=/tmp")
       endif()  
@@ -216,52 +234,67 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(DEBUG TRUE)
 endif()
 
-if (LINUX)
-    set (CMAKE_OS_NAME "GNU/Linux" CACHE STRING "Operating system name" FORCE)
+if(LINUX)
+    set(CMAKE_OS_NAME "GNU/Linux" CACHE STRING "Operating system name" FORCE)
     ## Check for Debian GNU/Linux
-    find_file (DEBIAN_FOUND debian_version debconf.conf
-      PATHS /etc
-      )
-    if (DEBIAN_FOUND)
-      set (CMAKE_OS_NAME "Debian" CACHE STRING "Operating system name" FORCE)
-    endif (DEBIAN_FOUND)
+    find_file(DEBIAN_FOUND debian_version debconf.conf
+        PATHS /etc
+    )
+    if(DEBIAN_FOUND)
+        set(CMAKE_OS_NAME "Debian" CACHE STRING "Operating system name" FORCE)
+    endif(DEBIAN_FOUND)
     ##  Check for Fedora
-    find_file (FEDORA_FOUND fedora-release
-      PATHS /etc
-      )
-    if (FEDORA_FOUND)
-      set (CMAKE_OS_NAME "Fedora" CACHE STRING "Operating system name" FORCE)
-    endif (FEDORA_FOUND)
+    find_file(FEDORA_FOUND fedora-release
+        PATHS /etc
+    )
+    if(FEDORA_FOUND)
+        set(CMAKE_OS_NAME "Fedora" CACHE STRING "Operating system name" FORCE)
+    endif(FEDORA_FOUND)
     ##  Check for RedHat
-    find_file (REDHAT_FOUND redhat-release inittab.RH
-      PATHS /etc
-      )
-    if (REDHAT_FOUND)
-      set (CMAKE_OS_NAME "RedHat" CACHE STRING "Operating system name" FORCE)
-    endif (REDHAT_FOUND)   
+    find_file(REDHAT_FOUND redhat-release inittab.RH
+        PATHS /etc
+    )
+    if(REDHAT_FOUND)
+        set(CMAKE_OS_NAME "RedHat" CACHE STRING "Operating system name" FORCE)
+    endif(REDHAT_FOUND)
+    ##  Check for Gentoo
+    find_file(OS_Release_FOUND os-release
+        PATHS /usr/lib
+    )
+    if (OS_Release_FOUND)
+        ## Scan contents of file
+        file(STRINGS ${OS_Release_FOUND} Gentoo_FOUND
+            REGEX Gentoo
+        )
+        ## Check result of string search
+        if(Gentoo_FOUND)
+            set(CMAKE_OS_NAME "Gentoo" CACHE STRING "Operating system name" FORCE)
+            set(DEBIAN_FOUND FALSE)
+        endif(Gentoo_FOUND)
+    endif(OS_Release_FOUND)
     ## Extra check for Ubuntu    
-    if (DEBIAN_FOUND)
+    if(DEBIAN_FOUND)
       ## At its core Ubuntu is a Debian system, with
       ## a slightly altered configuration; hence from
       ## a first superficial inspection a system will
       ## be considered as Debian, which signifies an
       ## extra check is required.
-      find_file (UBUNTU_EXTRA legal issue
-	PATHS /etc
-	)
-    if (UBUNTU_EXTRA)
-	## Scan contents of file
-	file (STRINGS ${UBUNTU_EXTRA} UBUNTU_FOUND
-	  REGEX Ubuntu
-	  )
-	## Check result of string search
-	if (UBUNTU_FOUND)
-	  set (CMAKE_OS_NAME "Ubuntu" CACHE STRING "Operating system name" FORCE)
-	  set (DEBIAN_FOUND FALSE)
-	endif (UBUNTU_FOUND)
-    endif (UBUNTU_EXTRA)      
-    endif (DEBIAN_FOUND)
-endif (LINUX)
+      find_file(UBUNTU_EXTRA legal issue
+        PATHS /etc
+      )
+      if(UBUNTU_EXTRA)
+        ## Scan contents of file
+        file(STRINGS ${UBUNTU_EXTRA} UBUNTU_FOUND
+          REGEX Ubuntu
+        )
+        ## Check result of string search
+        if(UBUNTU_FOUND)
+          set(CMAKE_OS_NAME "Ubuntu" CACHE STRING "Operating system name" FORCE)
+          set(DEBIAN_FOUND FALSE)
+        endif(UBUNTU_FOUND)
+      endif(UBUNTU_EXTRA)      
+    endif(DEBIAN_FOUND)
+endif(LINUX)
 
 message(STATUS "Operating system name: ${CMAKE_OS_NAME}")
 
@@ -501,14 +534,6 @@ if(DEBUG)
     set(DEBUGSUFFIX "D")
 else()
     set(DEBUGSUFFIX "")
-endif()
-
-option(USE_ASM "Use ASM code" TRUE)
-if (USE_ASM)
-    MESSAGE(STATUS "Using assembler code (when available)")
-else()
-    add_definitions(-DUSE_PORTABLE_C=1)
-    MESSAGE(STATUS "Using portable C instead of all ASM")
 endif()
 
 option(USE_I386_NASM_ASM "Use i386 nasm ASM code" FALSE)
