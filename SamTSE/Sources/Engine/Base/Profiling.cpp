@@ -28,7 +28,6 @@ template class CStaticArray<CProfileTimer>;
 static inline __int64 ReadTSC_profile(void)
 {
 #if (defined PLATFORM_NOT_X86) || (defined USE_PORTABLE_C)
-#warning Building portable version without asm code.
   struct timespec tv;
   clock_gettime(CLOCK_MONOTONIC, &tv);
   return( (((__int64) tv.tv_sec) * 1000) + (((__int64) tv.tv_nsec) / 1000000) );

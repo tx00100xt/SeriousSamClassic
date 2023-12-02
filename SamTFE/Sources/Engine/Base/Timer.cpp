@@ -42,7 +42,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 static inline __int64 ReadTSC(void)
 {
 #if (defined PLATFORM_NOT_X86) || (defined USE_PORTABLE_C)
-#warning Building portable version without asm code.
   struct timespec tp;
   clock_gettime(CLOCK_MONOTONIC, &tp);
   return( (((__int64) tp.tv_sec) * 1000000000LL) + ((__int64) tp.tv_nsec));
@@ -156,7 +155,6 @@ void sys_precise_clock(uint64_t *result)
 }
 
 #if (!defined PLATFORM_NOT_X86) || (!defined USE_PORTABLE_C)
-#warning Building version with rdtsc.
 // cpu_rdtsc
 void cpu_rdtsc(uint64_t* result)
 {
@@ -556,7 +554,6 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
   tm_bInterrupt = bInterrupt;
 
 #if (defined PLATFORM_NOT_X86) || (defined USE_PORTABLE_C)
-#warning Building portable version without asm code.
   // just use clock_gettime.
   tm_llCPUSpeedHZ = tm_llPerformanceCounterFrequency = 1000000000LL;
 #elif defined(PLATFORM_WIN32)
