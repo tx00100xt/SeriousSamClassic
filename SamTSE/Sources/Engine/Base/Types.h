@@ -165,6 +165,9 @@ MY_STATIC_ASSERT(size_tSize, sizeof(size_t) == sizeof(void*));
     #define FPU_REGS "st", "st(1)", "st(2)", "st(3)", "st(4)", "st(5)", "st(6)", "st(7)"
     #define MMX_REGS "mm0", "mm1", "mm2", "mm3", "mm4", "mm5", "mm6", "mm7"
   #endif
+#define NOT_USE_ASM 0
+#else
+#define NOT_USE_ASM 1
 #endif
 
 #ifdef PLATFORM_UNIX  /* rcg10042001 */
