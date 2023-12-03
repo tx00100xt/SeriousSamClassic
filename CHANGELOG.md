@@ -194,3 +194,7 @@ All notable changes to this project will be documented in this file.
 - Added templates for FreeBSD, OpenBSD and NetBSD for build package.
 - Made many corrections in the code regarding compiler warnings.
 - Added man pages for.for FreeBSD, OpenBSD and NetBSD.
+- Added searching library libvorbisfile for BSD platforms.
+
+## 2023-12-01 - 2023-12-02
+- Add building portable version for x86 and amd64 without asm code.
