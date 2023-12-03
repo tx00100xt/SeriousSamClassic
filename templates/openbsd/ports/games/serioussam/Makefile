@@ -8,11 +8,11 @@ ONLY_FOR_ARCHS =	amd64 i386
 
 GH_ACCOUNT =		tx00100xt
 GH_PROJECT =		SeriousSamClassic
-GH_TAGNAME =		1.10.6b
+GH_TAGNAME =		1.10.6c
 
 COMMENT =		Open source version of game Serious Sam Classic
 N=			serioussam
-V=			1.10.6b
+V=			1.10.6c
 PKGNAME =		${N}-${V}
 DISTNAME =		SeriousSamClassic-${V}
 CATEGORIES =		games
@@ -52,8 +52,8 @@ NO_TEST =		Yes
 #CONFIGURE_ARGS +=	-DRPI4=ON
 #.endif
 
-.if ${MACHINE_ARCH}== i386
-CONFIGURE_ARGS +=	-DUSE_I386_NASM_ASM=ON
+.if ${MACHINE_ARCH}== i386 || ${MACHINE_ARCH}== amd64
+CONFIGURE_ARGS +=	-DUSE_ASM=OFF
 .endif
 
 post-install:

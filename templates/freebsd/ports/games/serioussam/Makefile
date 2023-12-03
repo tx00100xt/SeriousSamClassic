@@ -1,6 +1,6 @@
 PORTNAME=	serioussam
 DISTNAME=	SeriousSamClassic
-DISTVERSION=	1.10.6b
+DISTVERSION=	1.10.6c
 PORTREVISION=	1
 CATEGORIES=	games
 
@@ -16,9 +16,7 @@ LICENSE_FILE= 	${WRKSRC}/LICENSE
 # Building code for them workd.
 # Work on real hardware has been 
 # tested for architectures: armv7 aaarch64 under Linux
-# When testing i386 on Virtualbox, image artifacts were sometimes observed.
-# Perhaps everything will be fine on real hardware.
-ONLY_FOR_ARCHS= amd64
+ONLY_FOR_ARCHS= amd64 i386
 
 BUILD_DEPENDS=	flex:textproc/flex \
 		convert:graphics/ImageMagick7
@@ -38,7 +36,7 @@ GH_ACCOUNT=	tx00100xt
 GH_PROJECT=	SeriousSamClassic
 USE_GITHUB=	yes
 
-CMAKE_ARGS=	-DRPI4:BOOL=FALSE -DUSE_ASM:BOOL=TRUE \
+CMAKE_ARGS=	-DRPI4:BOOL=FALSE -DUSE_ASM:BOOL=FALSE \
 	-DUSE_SYSTEM_INSTALL:BOOL=TRUE -DUSE_I386_NASM_ASM:BOOL=FALSE
 
 post-install:
@@ -47,15 +45,13 @@ post-install:
 
 .include <bsd.port.options.mk>
 
+.if ${ARCH} == amd64
+CMAKE_ON=	USE_ASM
+.endif
+
 # Unocmment this for aarch64 and armv7 architectures
 #.if ${ARCH} == aarch64 || ${ARCH} == armv7
 #CMAKE_ON=	RPI4
-#.endif
-
-# Unocmment this for i386 architecture
-#.if ${ARCH} == i386
-#CMAKE_ON=	USE_I386_NASM_ASM
-#BUILD_DEPENDS+=	nasm:devel/nasm
 #.endif
 
 .include	<bsd.port.mk>
