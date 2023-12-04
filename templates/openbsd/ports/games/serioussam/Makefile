@@ -1,63 +1,57 @@
-# The source code also contains definitions for
-# architectures riscv64 s390x powerpc64le.
-# Building code for them workd.
-# Work on real hardware has been 
-# tested for architectures: armv7 aaarch64 under Linux
+COMMENT =	open source version of the classic Serious Sam game
+N=		serioussam
+V=		1.10.6c
 
-ONLY_FOR_ARCHS =	amd64 i386
+DIST_TUPLE =	github tx00100xt SeriousSamClassic ${V} .
 
-GH_ACCOUNT =		tx00100xt
-GH_PROJECT =		SeriousSamClassic
-GH_TAGNAME =		1.10.6c
+PKGNAME =	${N}-${V}
+DISTNAME =	SeriousSamClassic-${V}
+CATEGORIES =	games
 
-COMMENT =		Open source version of game Serious Sam Classic
-N=			serioussam
-V=			1.10.6c
-PKGNAME =		${N}-${V}
-DISTNAME =		SeriousSamClassic-${V}
-CATEGORIES =		games
-REVISION =		1
+HOMEPAGE =	https://github.com/tx00100xt/SeriousSamClassic
 
-HOMEPAGE =		https://github.com/tx00100xt/SeriousSamClassic
-
-MAINTAINER =		YOUR NAME <YOUR MAIL>
+MAINTAINER =	Alexander Pavlov <t.x00100x.t@yandex.ru>
 
 # GPLv2
 PERMIT_PACKAGE =	Yes
 
-WANTLIB += ${COMPILER_LIBCXX} SDL2 c m z ogg \
-		pthread vorbis vorbisfile
+# Extra: ogg.6 vorbis.9 vorbisfile.6 (dlopen)
+WANTLIB =  ${COMPILER_LIBCXX} SDL2 c m ogg pthread vorbis vorbisfile z
 
-MODULES =		devel/cmake
+MODULES =	devel/cmake
 
-COMPILER =		base-clang ports-gcc
+COMPILER =	base-clang ports-gcc
 
 CONFIGURE_ARGS +=	-DUSE_SYSTEM_INSTALL=ON
 
-BUILD_DEPENDS =		devel/sdl2 \
-			devel/bison \
-			audio/libvorbis \
-			audio/libogg \
-			graphics/ImageMagick
+BUILD_DEPENDS =	audio/libogg \
+		audio/libvorbis \
+		devel/bison \
+		devel/sdl2 \
+		graphics/ImageMagick
 
 # Libraries loaded with dlopen(3)
-LIB_DEPENDS =		devel/sdl2 \
-			audio/libvorbis \
-			audio/libogg \
+LIB_DEPENDS =	audio/libogg \
+		audio/libvorbis \
+		devel/sdl2
 
-NO_TEST =		Yes
+RUN_DEPENDS =	devel/desktop-file-utils \
+		x11/gtk+4,-guic
 
-# Unocmment this for aarch64 and armv7 architectures
-#.if ${MACHINE_ARCH} == aarch64 || ${MACHINE_ARCH} == armv7
-#CONFIGURE_ARGS +=	-DRPI4=ON
-#.endif
+NO_TEST =	Yes
+
+.if ${MACHINE_ARCH} == aarch64 || ${MACHINE_ARCH} == armv7
+CONFIGURE_ARGS +=	-DRPI4=ON
+.endif
 
 .if ${MACHINE_ARCH}== i386 || ${MACHINE_ARCH}== amd64
 CONFIGURE_ARGS +=	-DUSE_ASM=OFF
 .endif
 
 post-install:
-	${INSTALL_MAN} ${WRKSRC}/man/bsd/serioussam.1 ${PREFIX}/man/man1/serioussam.1
-	${INSTALL_MAN} ${WRKSRC}/man/bsd/serioussamclassic.1 ${PREFIX}/man/man1/serioussamclassic.1
+	${INSTALL_MAN} ${WRKSRC}/man/bsd/serioussam.1 \
+		${PREFIX}/man/man1/serioussam.1
+	${INSTALL_MAN} ${WRKSRC}/man/bsd/serioussamclassic.1 \
+		${PREFIX}/man/man1/serioussamclassic.1
 
-.include	<bsd.port.mk>
+.include <bsd.port.mk>
