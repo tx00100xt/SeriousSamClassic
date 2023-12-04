@@ -1,12 +1,11 @@
-@conflict serioussam-vk-*
 @bin bin/serioussam
 @bin bin/serioussam-ded
 @bin bin/serioussam-mkfont
 @bin bin/serioussamse
 @bin bin/serioussamse-ded
 @bin bin/serioussamse-mkfont
-@so lib/libEngine.so
-@so lib/libEngineMP.so
+@lib lib/libEngine.so.${LIBEngine_VERSION}
+@lib lib/libEngineMP.so.${LIBEngineMP_VERSION}
 lib/serioussam/
 @so lib/serioussam/libEntities.so
 @so lib/serioussam/libGame.so

@@ -1,14 +1,14 @@
 COMMENT =	open source version of the classic Serious Sam game
-N=		serioussam
+
 V=		1.10.6c
 
 DIST_TUPLE =	github tx00100xt SeriousSamClassic ${V} .
+PKGNAME =	serioussam-${V}
 
-PKGNAME =	${N}-${V}
-DISTNAME =	SeriousSamClassic-${V}
 CATEGORIES =	games
 
-HOMEPAGE =	https://github.com/tx00100xt/SeriousSamClassic
+SHARED_LIBS +=	Engine 0.0
+SHARED_LIBS +=	EngineMP 0.0
 
 MAINTAINER =	Alexander Pavlov <t.x00100x.t@yandex.ru>
 
@@ -20,6 +20,7 @@ WANTLIB =  ${COMPILER_LIBCXX} SDL2 c m ogg pthread vorbis vorbisfile z
 
 MODULES =	devel/cmake
 
+# c++14
 COMPILER =	base-clang ports-gcc
 
 CONFIGURE_ARGS +=	-DUSE_SYSTEM_INSTALL=ON
