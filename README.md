@@ -136,24 +136,40 @@ https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
 #### Install the required packages
 ```
-sudo pkg_add bison cmake git sdl2 libogg libvorbis nasm
+doas pkg_add bison cmake ninja git sdl2 libogg libvorbis
 ```
 #### Setting up the repository
 
 ```
-git clone https://github.com/tx00100xt/SeriousSamClassic.git
+git clone https://github.com/jasperla/openbsd-wip.git
 ```
+Add the path to **openbsd-wip** to **PORTSDIR_PATH** in **/etc/mk.conf**
+Type this in your terminal:
+```
+cd openbsd-wip/games/serioussam
+make install
+```
+#### Copy official game data
 
-#### Copy official game data (optional)
+Copy all content of the original game to the appropriate directories:
+```
+~/.local/share/Serious-Engine/serioussam/ - for Serious Sam Classic The First Encounter
+~/.local/share/Serious-Engine/serioussamse/ - for Serious Sam Classic The Second Encounter
+```
+To start the game type in console: **serioussam** or **serioussamse**. You can also use the launch of the game through the menu.
+For more information, type in the console: **man serioussam**
 
-If you have access to a copy of the game (either by CD or through Steam),
-you can copy the *.gro files from the game directory to the repository.
-(SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
+### NetBSD
 
-#### Building for amd64 (for SS:TFE and SS:TSE)
+Install required dependencies:
+```
+sudo pkgin install cmake nasm bison SDL2 libogg libvorbis
+```
+#### Copy official game data
+
+If you have access to a copy of the game (either by CD or through Steam), you can copy the *.gro files from the game directory to the repository. (SeriousSamClassic/SamTFE is the directory of the game Serious Sam Classic The First Encounter, SeriousSamClassic/SamTSE is the directory of the game Serious Sam Classic The Second Encounter)
 
 Type this in your terminal:
-
 ```
 cd SeriousSamClassic
 mkdir build
@@ -162,19 +178,7 @@ cmake ..
 make -j4
 make install
 ```
-If you prefer **ninja**, then add key **-GNinja** to the cmake. And replace the **make** command with **ninja**.
-For **i386** architecture, add key **-DUSE_ASM=OFF** to **cmake**.
-To build a binary package for installation on the system, you can use the template:
-https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
-
-### NetBSD
-
-Install required dependencies:
-```
-sudo pkgin install cmake nasm bison SDL2 libogg libvorbis
-```
 The **i386** version will only work with **sysctl -w security.pax.mprotect.global=0**
-The rest is the same as described for the OpenBSD.
 To build a binary package for installation on the system, you can use the template:
 https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
