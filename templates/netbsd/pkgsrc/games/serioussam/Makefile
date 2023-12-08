@@ -1,10 +1,6 @@
 # $NetBSD: Makefile,v 1.22 2023/11/25 13:19:11 wiz Exp $
-# The source code also contains definitions for
-# architectures riscv64 s390x powerpc64le.
-# Building code for them workd.
-# Work on real hardware has been 
-# tested for architectures: armv7 aaarch64 under Linux.
-V= 1.10.6b
+
+V= 1.10.6c
 N= SeriousSamClassic
 
 DISTNAME=	${N}-${V}
@@ -16,9 +12,9 @@ GITHUB_PROJECT=	${N}
 GITHUB_TAG=	${V}
 EXTRACT_SUFX=	.tar.gz
 
-MAINTAINER=	<YOUR MAIL>
+MAINTAINER=	t.x00100x.t@yandex.ru
 HOMEPAGE=	https://github.com/tx00100xt/SeriousSamClassic
-COMMENT=	Open spurce version of game Serious Sam Classic
+COMMENT=	Open source version of game Serious Sam Classic
 LICENSE=	gnu-gpl-v2
 
 WRKSRC=		${WRKDIR}/${DISTNAME}
@@ -42,14 +38,12 @@ CXXFLAGS+=	-DIOAPI_NO_64
 .endif
 
 .if ${MACHINE_ARCH} == "i386"
-TOOL_DEPENDS+=	nasm>=1.1:../../devel/nasm
-CMAKE_ARGS+=	-DUSE_I386_NASM_ASM=ON
+CMAKE_ARGS+=	-DUSE_ASM=OFF
 .endif
 
-# Unocmment this for aarch64 and armv7 architectures
-#.if ${MACHINE_ARCH} == "armv7" || ${MACHINE_ARCH} == "aarch64"
-#CMAKE_ARGS+=	-DRPI4=ON
-#.endif
+.if ${MACHINE_ARCH} == "armv7" || ${MACHINE_ARCH} == "aarch64"
+CMAKE_ARGS+=	-DRPI4=ON
+.endif
 
 INSTALLATION_DIRS+=	man
 INSTALLATION_DIRS+=	man/man1

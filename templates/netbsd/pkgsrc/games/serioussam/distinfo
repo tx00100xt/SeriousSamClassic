@@ -1,5 +1,5 @@
 $NetBSD: distinfo,v 1.6 2023/11/25 10:43:53 nia Exp $
 
-BLAKE2s (SeriousSamClassic-1.10.6b.tar.gz) = dd40444b8afb92d622ff8f991bbf7cd16cd0c991494656ee441498c894cd7304
-SHA512 (SeriousSamClassic-1.10.6b.tar.gz) = 149263779588857a4efb8ceffebede03c1619946d91a19a3cfe9f6446d74caa5cab33bee2d34a46075bff9dbe752d634e846e2278cf2154ed731b0bd6033b3ec
-Size (SeriousSamClassic-1.10.6b.tar.gz) = 28933221 bytes
+BLAKE2s (SeriousSamClassic-1.10.6c.tar.gz) = 7567759fbc8fbfee2edc6a43286cfd51ebb313cd841ee8b28c3f71ae816136b5
+SHA512 (SeriousSamClassic-1.10.6c.tar.gz) = f617d2e73f404cc7f258f7f6ba4b6ef8f590f33633cc38f010d2df2c0b7576bdf282a2dbb19bd5b88e7d03dd231a564f4c077ca431bbd87696d086802befaacd
+Size (SeriousSamClassic-1.10.6c.tar.gz) = 28936901 bytes

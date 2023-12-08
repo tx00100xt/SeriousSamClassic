@@ -178,7 +178,7 @@ cmake ..
 make -j4
 make install
 ```
-The **i386** version will only work with **sysctl -w security.pax.mprotect.global=0**
+For **i386** use **cmake .. -DUSE_ASM=OFF**
 To build a binary package for installation on the system, you can use the template:
 https://github.com/tx00100xt/SeriousSamClassic/tree/main/templates
 
