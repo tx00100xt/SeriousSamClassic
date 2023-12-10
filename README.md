@@ -398,7 +398,10 @@ License
 
 ### Note:
 The following applies only to the for Windows build. Because none of the following is used when building under (Linux, *BSD, macOS) systems.
+<pre>
+
 Some of the code included with the engine sources is not licensed under the GNU GPL v2:
+</pre>
 
 * zlib (located in `Sources/Engine/zlib`) by Jean-loup Gailly and Mark Adler
 * LightWave SDK (located in `Sources/LWSkaExporter/SDK`) by NewTek Inc.
