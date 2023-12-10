@@ -396,6 +396,8 @@ License
 * Serious Engine is licensed under the GNU GPL v2 (see LICENSE file).
 * amp11lib is licensed under the GNU GPL v2 (see amp11lib/COPYING file).
 
+### Note:
+The following applies only to the for Windows build. Because none of the following is used when building under (Linux, *BSD, macOS) systems.
 Some of the code included with the engine sources is not licensed under the GNU GPL v2:
 
 * zlib (located in `Sources/Engine/zlib`) by Jean-loup Gailly and Mark Adler

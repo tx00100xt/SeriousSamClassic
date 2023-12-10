@@ -62,6 +62,8 @@ if(USE_SYSTEM_ZLIB)
     else()
         message(FATAL_ERROR "Error! USE_SYSTEM_ZLIB is set but neccessary developer files are missing")
     endif()
+else()
+    add_definitions(-DSE1_ZLIB=1)
 endif()
 
 option(USE_ASM "Use ASM code" TRUE)
