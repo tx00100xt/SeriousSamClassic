@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Network/Compression.h>
 #include <Engine/Base/Synchronization.h>
 
-#ifdef PLATFORM_UNIX && !SE1_ZLIB
+#if defined(PLATFORM_UNIX) && !SE1_ZLIB
 #include <zlib.h>
 #else
 #include <Engine/zlib/zlib.h>
