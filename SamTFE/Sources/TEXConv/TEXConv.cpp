@@ -36,7 +36,7 @@ HWND _hwndMain = NULL;
 
 // retrives memory offset of a specified mip-map or a size of all mip-maps (IN PIXELS!)
 // (zero offset means first, i.e. largest mip-map)
-PIX GetMipmapOffset(INDEX iMipLevel, PIX pixWidth, PIX pixHeight)
+static PIX _GetMipmapOffset(INDEX iMipLevel, PIX pixWidth, PIX pixHeight)
 {
 	PIX pixTexSize = 0;
 	PIX pixMipSize = pixWidth*pixHeight;
@@ -51,7 +51,7 @@ PIX GetMipmapOffset(INDEX iMipLevel, PIX pixWidth, PIX pixHeight)
 }
 
 // adds 8-bit opaque alpha channel to 24-bit bitmap (in place supported)
-void AddAlphaChannel(UBYTE *pubSrcBitmap, ULONG *pulDstBitmap, PIX pixSize, UBYTE *pubAlphaBitmap)
+static void _AddAlphaChannel(UBYTE *pubSrcBitmap, ULONG *pulDstBitmap, PIX pixSize, UBYTE *pubAlphaBitmap)
 {
 	UBYTE ubR, ubG, ubB, ubA = 255;
 	// loop backwards thru all bitmap pixels
@@ -66,7 +66,7 @@ void AddAlphaChannel(UBYTE *pubSrcBitmap, ULONG *pulDstBitmap, PIX pixSize, UBYT
 }
 
 // removes 8-bit alpha channel from 32-bit bitmap (in place supported)
-static void RemoveAlphaChannel(ULONG *pulSrcBitmap, UBYTE *pubDstBitmap, PIX pixSize)
+static void _RemoveAlphaChannel(ULONG *pulSrcBitmap, UBYTE *pubDstBitmap, PIX pixSize)
 {
 	UBYTE ubR, ubG, ubB;
 	// loop thru all bitmap pixels
@@ -78,7 +78,7 @@ static void RemoveAlphaChannel(ULONG *pulSrcBitmap, UBYTE *pubDstBitmap, PIX pix
 	}
 }
 // Convert old texture format (3) to format (4)
-static void Convert( CTextureData *pTD)
+static void _Convert( CTextureData *pTD)
 {
   // skip effect textures
   if( pTD->td_ptegEffect != NULL) return;
@@ -87,7 +87,7 @@ static void Convert( CTextureData *pTD)
   PIX pixWidth     = pTD->GetPixWidth();
   PIX pixHeight    = pTD->GetPixHeight();
   PIX pixMipSize   = pixWidth * pixHeight;
-  PIX pixFrameSize = GetMipmapOffset( 15, pixWidth, pixHeight);
+  PIX pixFrameSize = _GetMipmapOffset( 15, pixWidth, pixHeight);
   // allocate memory for new texture
   ULONG *pulFramesNew = (ULONG*)AllocMemory( pixFrameSize*pTD->td_ctFrames *BYTES_PER_TEXEL);
   UWORD *puwFramesOld = (UWORD*)pTD->td_pulFrames;
@@ -229,7 +229,7 @@ void SubMain( int argc, char *argv[])
       pTD->td_ulFlags |= ulFlags;
       bAlphaChannel = pTD->td_ulFlags&TEX_ALPHACHANNEL;
       // determine frame size
-      if( iVersion==4) pTD->td_slFrameSize = GetMipmapOffset( 15, pTD->GetPixWidth(), pTD->GetPixHeight())
+      if( iVersion==4) pTD->td_slFrameSize = _GetMipmapOffset( 15, pTD->GetPixWidth(), pTD->GetPixHeight())
                                       * BYTES_PER_TEXEL;
     } // TDAT
 
@@ -266,7 +266,7 @@ void SubMain( int argc, char *argv[])
             // read texture without alpha channel from file
             TEXFile.Read_t( pulCurrentFrame, pixFrameSizeOnDisk *3);
             // add opaque alpha channel
-            AddAlphaChannel( (UBYTE*)pulCurrentFrame, pulCurrentFrame, pixFrameSizeOnDisk);
+            _AddAlphaChannel( (UBYTE*)pulCurrentFrame, pulCurrentFrame, pixFrameSizeOnDisk);
           }
         }
       }
@@ -276,7 +276,7 @@ void SubMain( int argc, char *argv[])
   while( !TEXFile.AtEOF());
 
   // if texture is in old format, convert it to current format
-  if( iVersion==3) Convert(pTD);
+  if( iVersion==3) _Convert(pTD);
   printf("Width: %d  Height: %d\n", pTD->GetPixHeight(), pTD->GetPixWidth());
 
   // Croteam internal image format
@@ -302,7 +302,7 @@ void SubMain( int argc, char *argv[])
   if( pTD->td_ulFlags&TEX_ALPHACHANNEL) {
     memcpy( ii.ii_Picture, pulFrame, slMipSize);
   } else {
-    RemoveAlphaChannel( pulFrame, ii.ii_Picture, pixMipSize);
+    _RemoveAlphaChannel( pulFrame, ii.ii_Picture, pixMipSize);
   }
 
   // save tga
