@@ -1338,6 +1338,15 @@ if(BUILD_MAKEFONT)
     set_target_properties(MakeFONT${MP} PROPERTIES ENABLE_EXPORTS ON)
 endif()
 
+option(BUILD_TEXConv "Compile the TEXConv, too" TRUE)
+if(BUILD_TEXConv)
+    add_executable(TEXConv${MP} TEXConv/TEXConv.cpp)
+    target_link_libraries(TEXConv${MP} ${ENGINELIB})
+    add_dependencies(TEXConv${MP} ParseEntities${MP})
+    # Make symbols in the main executable available to dynamic objects
+    set_target_properties(TEXConv${MP} PROPERTIES ENABLE_EXPORTS ON)
+endif()
+
 option(BUILD_AMP11LIB "Compile the AMP11LIB, too" TRUE)
 if(BUILD_AMP11LIB)
 add_definitions(-DFASTBITS)
@@ -1410,6 +1419,14 @@ if(LINUX)
 	    target_link_libraries(MakeFONT${MP} ${SDL2_LIBRARY})
         target_link_libraries(MakeFONT${MP} ${ZLIB_LIBRARIES})
     endif()
+    if(BUILD_TEXConv)
+        set_target_properties(TEXConv${MP} PROPERTIES LINK_FLAGS "-Wl,${RPATH_SETTINGS}")
+        target_link_libraries(TEXConv${MP} "m")
+        target_link_libraries(TEXConv${MP} "dl")
+        target_link_libraries(TEXConv${MP} "pthread")
+	    target_link_libraries(TEXConv${MP} ${SDL2_LIBRARY})
+        target_link_libraries(TEXConv${MP} ${ZLIB_LIBRARIES})
+    endif()
 endif()
 
 if(FREEBSD)
@@ -1432,12 +1449,14 @@ if(LOCAL_INSTALL)
  set_target_properties(SeriousSam${MP} PROPERTIES OUTPUT_NAME "SeriousSam")
  set_target_properties(DedicatedServer${MP}  PROPERTIES OUTPUT_NAME "DedicatedServer")
  set_target_properties(MakeFONT${MP} PROPERTIES OUTPUT_NAME "MakeFONT")
+ set_target_properties(TEXConv${MP} PROPERTIES OUTPUT_NAME "TEXConv")
  set_target_properties(amp11lib${MP} PROPERTIES OUTPUT_NAME "amp11lib${DEBUGSUFFIX}")
  set_target_properties(${SHADERSLIBSE} PROPERTIES OUTPUT_NAME "Shaders${DEBUGSUFFIX}")
 else()
  set_target_properties(SeriousSam${MP} PROPERTIES OUTPUT_NAME "${INTERNAL_NAME}")
  set_target_properties(DedicatedServer${MP}  PROPERTIES OUTPUT_NAME "${INTERNAL_NAME}-ded")
  set_target_properties(MakeFONT${MP} PROPERTIES OUTPUT_NAME "${INTERNAL_NAME}-mkfont")
+ set_target_properties(TEXConv${MP} PROPERTIES OUTPUT_NAME "${INTERNAL_NAME}-texconv")
  set_target_properties(amp11lib${MP} PROPERTIES OUTPUT_NAME "amp11lib")
  set_target_properties(${SHADERSLIB} PROPERTIES OUTPUT_NAME "Shaders")
 endif()
@@ -1463,6 +1482,11 @@ if(DEBUG) # RAKE! Will this work with TFE?
                 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
+    if(BUILD_TEXConv)
+        install(TARGETS TEXConv${MP}
+                RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
+                PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+    endif()
     if(BUILD_AMP11LIB)
         install(TARGETS amp11lib${MP}
                 LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin/Debug"
@@ -1480,6 +1504,11 @@ else()
     endif()
     if(BUILD_MAKEFONT)
         install(TARGETS MakeFONT${MP}
+                RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
+                PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+    endif()
+    if(BUILD_TEXConv)
+        install(TARGETS TEXConv${MP}
                 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
@@ -1510,6 +1539,11 @@ if(DEBUG) # RAKE! Will this work with TFE?
                 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
+    if(BUILD_TEXConv)
+        install(TARGETS TEXConv${MP}
+                RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
+                PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+    endif()
     if(BUILD_AMP11LIB)
         install(TARGETS amp11lib${MP}
                 LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin/Debug"
@@ -1530,6 +1564,11 @@ else()
     endif()
     if(BUILD_MAKEFONT)
         install(TARGETS MakeFONT${MP}
+                RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
+                PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+    endif()
+    if(BUILD_TEXConv)
+        install(TARGETS TEXConv${MP}
                 RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
                 PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
     endif()
