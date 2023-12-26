@@ -196,5 +196,9 @@ All notable changes to this project will be documented in this file.
 - Added man pages for.for FreeBSD, OpenBSD and NetBSD.
 - Added searching library libvorbisfile for BSD platforms.
 
-## 2023-12-01 - 2023-12-02
+## 2023-12-01 - 2023-12-26
 - Add building portable version for x86 and amd64 without asm code.
+- Fixed creation of textures from TGA images in the Modeler and Editor.
+- Added man pages Man pages for Gentoo.
+- Fixed broken water and fire effects for textures. They were broken when ported to Linux in 2016.
+- Adding the TEXConv utility that converts normal textures into TGA images.

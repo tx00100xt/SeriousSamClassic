@@ -22,6 +22,7 @@ This is the source code for Serious Engine v.1.10, including the following proje
 * `Depend` Used to build a list of dependency files based on a list of root files
 * `LWSkaExporter` Exporter for use in LightWave
 * `MakeFONT` Used for generating *.fnt files
+* `TexConv` Used for converting *.tex files to *.tga images
 * `Shaders` Compiled shaders
 * `GameAgent` The serverlist masterserver written in Python
 * `libogg`, `libvorbis` Third party libraries used for playing OGG-encoded ingame music (see http://www.vorbis.com/ for more information)
