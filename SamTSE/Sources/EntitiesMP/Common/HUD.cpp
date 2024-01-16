@@ -62,6 +62,7 @@ extern FLOAT hud_fOpacity;
 extern FLOAT hud_fScaling;
 extern FLOAT hud_tmWeaponsOnScreen;
 extern INDEX hud_bShowMatchInfo;
+extern INDEX hud_bWeaponsIconScale; // HUD weapons icons scale: 0 - small, 1 - big
 
 // player statistics sorting keys
 enum SortKeys {
@@ -1123,13 +1124,21 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
       if( _awiWeapons[i].wi_paiAmmo!=NULL && _awiWeapons[i].wi_paiAmmo->ai_iAmmoAmmount==0) {
         _fCustomScalingAdjustment = 0.9f; //#### 0.7f - 1.0f
         HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, 0x22334400);
-        _fCustomScalingAdjustment = 0.5f;
+        if (hud_bWeaponsIconScale) {
+          _fCustomScalingAdjustment = 0.75f;
+        } else {
+          _fCustomScalingAdjustment = 0.5f;
+        }
         HUD_DrawIcon(   fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, 0x22334400, 1.0f, FALSE);
       // yes ammo
       } else {
         _fCustomScalingAdjustment = 1.0f; //#### 0.7f - 1.0f
         HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, colBorder);
-        _fCustomScalingAdjustment = 0.5f;
+        if (hud_bWeaponsIconScale) {
+          _fCustomScalingAdjustment = 0.75f;
+        } else {
+          _fCustomScalingAdjustment = 0.5f;
+        }
         HUD_DrawIcon(   fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, colIcon, 1.0f, FALSE);
       }
       // advance to next position
