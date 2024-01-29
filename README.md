@@ -241,6 +241,20 @@ make -j4
 make install
 ```
 
+Flatpak
+-------
+You can also install the game using [io.itch.tx00100xt.SeriousSamClassic] flatpak   
+from the flathub repository. When you first start the game,   
+you will be asked to place your game data along the following paths:
+```
+~/.var/app/io.itch.tx00100xt.SeriousSamClassic/data/Serious-Engine/serioussam
+```
+```
+~/.var/app/io.itch.tx00100xt.SeriousSamClassic/data/Serious-Engine/serioussamse
+```
+You can place game data in these paths before starting the game. Then the game will start immediately.  
+To start the game, use the application menu. More detailed information about flatpak on the [SeriousSamClassic Flatpak wiki.](https://github.com/tx00100xt/SeriousSamClassic/wiki/Flatpak.md)
+
 Running
 -------
 
@@ -431,6 +445,7 @@ Some of the code included with the engine sources is not licensed under the GNU 
 * LightWave SDK (located in `Sources/LWSkaExporter/SDK`) by NewTek Inc.
 * libogg/libvorbis (located in `Sources/libogg` and `Sources/libvorbis`) by Xiph.Org Foundation
 
+[io.itch.tx00100xt.SeriousSamClassic]: https://flathub.org/apps/io.itch.tx00100xt.SeriousSamClassic "Serious Sam Classic on flathub"
 [Xplus TFE from Google Drive]: https://drive.google.com/file/d/1MPmibfMCGTWFBSGeFWG3uae0zZzJpiKy/view?usp=sharing "Serious Sam Classic XPLUS Mod"
 [Xplus TSE from Google Drive]: https://drive.google.com/file/d/1W_UIeVl7y3ZBroM39FmKdngNZuXC7DKv/view?usp=sharing "Serious Sam Classic XPLUS Mod"
 [Xplus TFE from pCloud]: https://e1.pcloud.link/publink/show?code=XZ02gRZ4nhrRGPSfV4aEL4IF8GYySafWVJX "Serious Sam Classic XPLUS Mod"
