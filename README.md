@@ -1,7 +1,7 @@
 ## Serious Sam Classic
 [![Build status](https://github.com/tx00100xt/SeriousSamClassic/actions/workflows/cibuild.yml/badge.svg)](https://github.com/tx00100xt//SeriousSamClassic/actions/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/tx00100xt/SeriousSamClassic)](https://github.com/tx00100xt/SeriousSamClassic/releases/tag/v1.10.6d)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/tx00100xt/SeriousSamClassic)](https://github.com/tx00100xt/SeriousSamClassic/releases/tag/1.10.6d)
 [![Github downloads](https://img.shields.io/github/downloads/tx00100xt/SeriousSamClassic/total.svg?logo=github&logoColor=white&style=flat-square&color=E75776)](https://github.com/tx00100xt/SeriousSamClassic/releases/)
 
 This is the source code for Serious Engine v.1.10, including the following projects:
@@ -271,8 +271,7 @@ To start the game, use the application menu. More detailed information about sna
 
 AppImage
 --------
-[![Get Appimage](https://raw.githubusercontent.com/srevinsaju/get-appimage/master/static/badges/get-appimage-branding-blue.png)]
-(https://github.com/tx00100xt/SeriousSamClassic/releases/tag/v1.10.6d)
+[![Get Appimage](https://raw.githubusercontent.com/srevinsaju/get-appimage/master/static/badges/get-appimage-branding-blue.png)](https://github.com/tx00100xt/SeriousSamClassic/releases/tag/1.10.6d)
    
 You can also run the game using AppImage. When you first start the game,  
 you will be asked to place your game data along the following paths:
