@@ -3,7 +3,7 @@
 
 <component type="desktop">
   <id>serioussam</id>
-  <name>SeriousSam-TFE</name>
+  <name>SeriousSamTFE</name>
   <summary>Open source first person shooter based on Serious-Engine</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>

@@ -1,10 +1,10 @@
 # appimage-builder recipe see https://appimage-builder.readthedocs.io for details
 version: 1
 AppDir:
-  path: ./AppDir
+  path: ./SeriousSamTSE.AppDir
   app_info:
     id: serioussamse
-    name: SeriousSam-TSE
+    name: SeriousSamTSE
     icon: serioussam
     version: 1.10.6d
     exec: usr/bin/serioussamse
@@ -52,5 +52,6 @@ AppDir:
       image: appimagecrafters/tests-env:ubuntu-xenial
       command: ./AppRun
 AppImage:
+  sign-key: 6E9137E3B0FE3FDC67D70F2ECDC41982C027BAAA
   arch: x86_64
   update-information: guess
