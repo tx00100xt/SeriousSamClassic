@@ -69,6 +69,15 @@
  		    endif()
  		endif()
  	endif()
+@@ -735,7 +735,7 @@
+  entity(Entities/NavigationMarker)
+  entity(Entities/ParticlesHolder)
+  entity(Entities/Pendulum)
+- entity(Entities/Pipebomb)
++ #entity(Entities/Pipebomb)
+  entity(Entities/PlayerActionMarker)
+  entity(Entities/PlayerAnimator)
+  entity(Entities/Player)
 --- a/SamTSE/Sources/CMakeLists.txt	2024-02-13 13:18:55.092066026 +0300
 +++ b/SamTSE/Sources/CMakeLists.txt	2024-02-13 13:02:50.340893761 +0300
 @@ -1,4 +1,4 @@
@@ -132,3 +141,12 @@
  		    endif()
  		endif()
  	endif()
+@@ -735,7 +735,7 @@
+  entity(Entities/NavigationMarker)
+  entity(Entities/ParticlesHolder)
+  entity(Entities/Pendulum)
+- entity(Entities/Pipebomb)
++ #entity(Entities/Pipebomb)
+  entity(Entities/PlayerActionMarker)
+  entity(Entities/PlayerAnimator)
+  entity(Entities/Player)
