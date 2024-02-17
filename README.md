@@ -283,6 +283,12 @@ you will be asked to place your game data along the following paths:
 ```
 You can place game data in these paths before starting the game. Then the game will start immediately.  
 You can also place your game data anywhere in your home directory. The first time you start the game, it will find it itself.
+AppImage also contains libraries for the modification of XPLUS. Download:
+```
+wget https://archive.org/download/sam-tfe-xplus/SamTFE-XPLUS.tar.xz
+wget https://archive.org/download/sam-tse-xplus/SamTSE-XPLUS.tar.xz
+```
+And unpack it to the root directory of game resources. After unpacking the archives for the XPLUS mod, simply select this mod in the game menu.
 
 Running
 -------

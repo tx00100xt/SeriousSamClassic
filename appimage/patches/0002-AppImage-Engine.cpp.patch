@@ -111,7 +111,13 @@
    CPrintF("\n");
 --- a/SamTSE/Sources/Engine/Engine.cpp	2024-02-13 13:19:08.215747324 +0300
 +++ b/SamTSE/Sources/Engine/Engine.cpp	2024-02-13 13:06:48.202436314 +0300
-@@ -115,6 +115,7 @@
+@@ -110,11 +110,12 @@
+ 
+ // MOD info
+ static CTString sys_strModName = "";
+-static CTString sys_strModExt  = "";
++static CTString sys_strModExt  = "MP";
+ 
  // Path vars
  static INDEX sys_iGameBits = 0;
  ENGINE_API INDEX sys_iSysPath = 0;
@@ -220,3 +226,12 @@
  #endif
  
    CPrintF("\n");
+@@ -932,7 +932,7 @@
+   InitStreams();
+   // keep mod name in sys cvar
+   sys_strModName = _strModName;
+-  sys_strModExt  = _strModExt;
++  sys_strModExt  = "MP";
+ 
+ // checking of crc
+ #if 0

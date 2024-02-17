@@ -67,6 +67,25 @@
  // global string with filename of the started application
  CTFileName _fnmApplicationExe;
  // global string with user-specific writable directory.
+@@ -194,15 +194,16 @@
+     }
+   }
+   // find eventual extension for the mod's dlls
+-  _strModExt = "";
++  _strModExt = "MP";
+   // DG: apparently both ModEXT.txt and ModExt.txt exist in the wild.
++/*
+   CTFileName tmp;
+   if(ExpandFilePath(EFP_READ, CTString("ModEXT.txt"), tmp) != EFP_NONE) {
+     LoadStringVar(CTString("ModEXT.txt"), _strModExt);
+   } else {
+     LoadStringVar(CTString("ModExt.txt"), _strModExt);
+   }
+-
++*/
+ 
+   CPrintF(TRANSV("Loading group files...\n"));
+ 
 @@ -220,6 +222,16 @@
    }
    delete files;
