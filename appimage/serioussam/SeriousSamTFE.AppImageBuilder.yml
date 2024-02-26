@@ -3,7 +3,7 @@ version: 1
 AppDir:
   path: ./SeriousSamTFE.AppDir
   app_info:
-    id: serioussam
+    id: io.itch.tx00100xt.serioussam
     name: SeriousSamTFE
     icon: serioussam
     version: 1.10.6d
