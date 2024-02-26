@@ -288,10 +288,10 @@ AppImage also contains libraries for the modification of XPLUS. Download:
 wget https://archive.org/download/sam-tfe-xplus/SamTFE-XPLUS.tar.xz
 wget https://archive.org/download/sam-tse-xplus/SamTSE-XPLUS.tar.xz
 ```
-And unpack it to the root directory of game resources. After unpacking the archives for the XPLUS mod, simply select this mod in the game menu.  
+And unpack it to the root directory of game resources. After unpacking the archives for the XPLUS mod, simply select this mod in the game menu.
 You can build your AppImage using the build script. Type this in your terminal:
 ```
-././build-appimage.sh
+./build-appimage.sh
 ```
 Running
 -------
