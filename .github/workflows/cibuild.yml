@@ -999,7 +999,7 @@ jobs:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
 
-  build-ubuntu-x64:
+  build-appimage-x64:
     name: AppImage ${{ matrix.Configuration }} ${{ matrix.Platform }}
     runs-on: ubuntu-20.04
     strategy:
