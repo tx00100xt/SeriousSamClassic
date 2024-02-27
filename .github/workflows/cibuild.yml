@@ -21,7 +21,7 @@ jobs:
         Platform: [x86]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install latest stable Alpine Linux
       uses: jirutka/setup-alpine@master
@@ -92,7 +92,7 @@ jobs:
         Platform: [x86_64]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install latest stable Alpine Linux
       uses: jirutka/setup-alpine@master
@@ -164,7 +164,7 @@ jobs:
         Platform: [x64]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install packages
       run: |
@@ -226,7 +226,7 @@ jobs:
         Configuration: [Release]
         Platform: [Win32]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - uses: microsoft/setup-msbuild@v1.3.1
       with:
@@ -328,7 +328,7 @@ jobs:
         Configuration: [Release]
         Platform: [x64]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - uses: microsoft/setup-msbuild@v1.3.1
       with:
@@ -432,7 +432,7 @@ jobs:
         Configuration: [Release]
         Platform: [x64]    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get current date
         id: date
@@ -499,7 +499,7 @@ jobs:
         Configuration: [Release]
         Platform: [x64]    
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get current date
         id: date
@@ -718,7 +718,7 @@ jobs:
           - arch: riscv64
             distro: ubuntu22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Build artifact
         id: build
@@ -816,7 +816,7 @@ jobs:
           - arch: ppc64le
             distro: ubuntu22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Build artifact
         id: build
@@ -914,7 +914,7 @@ jobs:
           - arch: s390x
             distro: ubuntu22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Build artifact
         id: build
