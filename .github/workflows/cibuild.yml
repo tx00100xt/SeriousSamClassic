@@ -998,3 +998,62 @@ jobs:
         with:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
+
+  build-appimage-x64:
+    name: AppImage ${{ matrix.Configuration }} ${{ matrix.Platform }}
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        Configuration: [Release]
+        Platform: [x64]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+        env: # Or as an environment variable
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+
+      - name: List keys5
+        run: gpg -K
+
+      - uses: actions/checkout@v4
+      - name: Install packages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y libsdl2-dev libogg-dev libvorbis-dev &&
+          sudo apt-get install -qq -y bison flex zlib1g-dev libxxhash-dev &&
+          sudo apt-get install libvulkan1 libvulkan-dev libcurl4-nss-dev  libopenal-dev libopenal1
+          
+      - name: Get current date
+        id: date
+        uses: Kaven-Universe/github-action-current-date-time@v1
+        with:
+           format: "YYYYMMDD"
+
+      - name: Show current date
+        run: |
+          echo "${{ steps.date.outputs.time }}"         
+      - name: Run Build
+        run: |
+          cd ${{github.workspace}}
+          ./build-appimage.sh
+          mv -f ${{github.workspace}}/SeriousSamTFE-1.10.6d-x86_64.AppImage SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+          mv -f ${{github.workspace}}/SeriousSamTSE-1.10.6d-x86_64.AppImage SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+      - name: Upload TFE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+          path: SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+
+      - name: Upload TSE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+          path: SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
