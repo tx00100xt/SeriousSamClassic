@@ -77,7 +77,7 @@ jobs:
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz x32
           
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86-bin.tar.xz          
@@ -149,7 +149,7 @@ jobs:
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz x64
           
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-alpine-x86_64-bin.tar.xz          
@@ -212,7 +212,7 @@ jobs:
           cp -fr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} x64/SamTSE
           tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-amd64-bin.tar.xz x64
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-amd64-bin.tar.xz
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-amd64-bin.tar.xz 
@@ -314,7 +314,7 @@ jobs:
          echo "*** Create archive ***"
          7z a -mx=9 SeriousSamClassic-${{ steps.date.outputs.time }}-win32-bin.7z x32
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-win32-bin.7z
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-win32-bin.7z  
@@ -418,7 +418,7 @@ jobs:
          7z a -mx=9 SeriousSamClassic-${{ steps.date.outputs.time }}-win64-bin.7z x64
       
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-win64-bin.7z
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-win64-bin.7z       
@@ -485,7 +485,7 @@ jobs:
             XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SeriousSamClassic-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz x64
                       
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-bsd-amd64-bin.tar.xz
@@ -555,7 +555,7 @@ jobs:
             XZ_DEFAULTS="-T 10" tar --use-compress-program=xz -cpvf SeriousSamClassic-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz x64
                       
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-macos-amd64-bin.tar.xz
@@ -628,7 +628,7 @@ jobs:
          sudo mv ${{github.workspace}}/Release/SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-armv7l-bin.tar.xz ${{github.workspace}}/
                         
     - name: Upload Release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-armv7l-bin.tar.xz
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-armv7l-bin.tar.xz
@@ -701,7 +701,7 @@ jobs:
          sudo mv ${{github.workspace}}/Release/SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz ${{github.workspace}}/
                         
     - name: Upload Release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz  
@@ -799,7 +799,7 @@ jobs:
             tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz riscv64          
             
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz  
@@ -897,7 +897,7 @@ jobs:
             tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-ppc64le-bin.tar.xz ppc64le          
             
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-ppc64le-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-ppc64le-bin.tar.xz     
@@ -994,7 +994,7 @@ jobs:
             tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz s390x          
             
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
           path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
