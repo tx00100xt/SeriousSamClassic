@@ -228,7 +228,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - uses: microsoft/setup-msbuild@v1.3.1
+    - uses: microsoft/setup-msbuild@v2
       with:
         vs-version: '14.0' 
         
@@ -330,7 +330,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - uses: microsoft/setup-msbuild@v1.3.1
+    - uses: microsoft/setup-msbuild@v2
       with:
         vs-version: '14.0' 
         
@@ -445,7 +445,7 @@ jobs:
           echo "${{ steps.date.outputs.time }}"
           
       - name: Build on FreeBSD
-        uses: cross-platform-actions/action@v0.10.0
+        uses: cross-platform-actions/action@v0.23.0
         with:
           operating_system: freebsd
           architecture: x86-64
