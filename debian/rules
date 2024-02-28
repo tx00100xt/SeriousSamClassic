@@ -17,7 +17,6 @@ endif
 	dh $@
 
 override_dh_auto_configure:
-	find . -name "CMakeLists.txt" -exec sed -i 's/-march=native) # set mtune=generic/-mtune=generic) # set mtune=generic/g' {} +
 	dh_auto_configure -- -G "Unix Makefiles" \
 	 -DCMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH) \
 	 $(CMAKE_ADDITIONAL_FLAGS)

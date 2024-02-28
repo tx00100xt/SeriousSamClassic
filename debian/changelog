@@ -1,5 +1,5 @@
-serioussamclassic (1.10.6-1) jammy; urgency=medium
+serioussam (1.10.6e-+dfsg-1) stable; urgency=medium
 
   * Initial release
 
- -- YOUR_NAME <YOUR_EMAIL>  Tue, 16 Oct 2023 23:37:15 +0300
+ -- Alexander Pavlov <t.x00100x.t@yandex.ru>  Wed, 28 Feb 2024 20:33:46 +0300

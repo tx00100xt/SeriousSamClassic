@@ -1,20 +1,20 @@
-serioussamclassic for Debian
-----------------------------
+serioussam for Debian
+---------------------
 
 Introduction
 ============
 
-This implementation of the source code provides for installation in the system, in the /usr/bin, /usr/lib, /usr/share directories.
+This implementation of the source code provides for installation in the system, in the /usr/games, /usr/lib, /usr/share directories.
 
-During the launch of the game, the engine determines the place of launch, and if the launch occurred from the /usr/bin directory, 
+During the launch of the game, the engine determines the place of launch, and if the launch occurred from the /usr/games directory, 
 it switches to the libraries search mode in the system directories. Also adds searching for game data in various directories. 
 About the search for game data will be written below.
 
 Otherwise, the engine considers that a local launch of the game has occurred and will look for game data in the root directory of the game.
 User data, such as game settings, log, saves, demos will be located in:
 
-~/.local/share/Serious-Engine/serioussam/ - for TFE
-~/.local/share/Serious-Engine/serioussamse/ - for TSE
+~/.serioussam/ - for TFE
+~/.serioussamse/ - for TSE
 
 If you start the game with the +portable key, then there will be a full portable mode and user data, such as game settings, 
 log, saves, demos will also be located in the root directory of the game.
@@ -28,118 +28,81 @@ These names are initially accepted in the engine and are used for example in a n
 Location of executables, libraries, and modification libraries
 ==============================================================
 
-The executable files of the game are located in the '/usr/bin' directory.
+The executable files of the game are located in the '/usr/games' directory.
 
-/usr/bin/"internal game name"
+/usr/games/"internal game name"
 
 The dedicated server and the font creation utility for the game are also located in this directory.
 
-/usr/bin/"internal game name"-ded
-/usr/bin/"internal game name"-mkfont
+/usr/games/"internal game name"-ded
+/usr/games/"internal game name"-mkfont
+/usr/games/"internal game name"-texconv
 
 The game libraries will be searched in the following directories:
-/usr/lib/"internal game name"/
-/usr/lib64/"internal game name"/
-/usr/lib/i386-linux-gnu/"internal game name"/
-/usr/lib/x86_64-linux-gnu/"internal game name"/
-/usr/lib/arm-linux-gnueabihf/"internal game name"/
-/usr/lib/aarch64-linux-gnu/"internal game name"/
-/usr/lib/riscv64-linux-gnu/"internal game name"/
-/usr/lib/s390x-linux-gnu/"internal game name"/
-/usr/lib/powerpc64-linux-gnu/"internal game name"/
+/usr/lib/games/"internal game name"/
 
 
 The location of the libraries of modifications is also on the same principle.
-
-/usr/lib/"internal game name"/Mods/"Mod name"/
-/usr/lib64/"internal game name"/Mods/"Mod name"/
-/usr/lib/i386-linux-gnu/"internal game name"/Mods/"Mod name"/
-/usr/lib/x86_64-linux-gnu/"internal game name"/Mods/"Mod name"/
-/usr/lib/arm-linux-gnueabihf/"internal game name"/Mods/"Mod name"/
-/usr/lib/aarch64-linux-gnu/"internal game name"/Mods/"Mod name"/
-/usr/lib/riscv64-linux-gnu/"internal game name"/Mods/"Mod name"/
-/usr/lib/s390x-linux-gnu/"internal game name"//Mods/"Mod name"/
-/usr/lib/powerpc64-linux-gnu/"internal game name"//Mods/"Mod name"/
+/usr/lib/games/"internal game name"/Mods/"Mod name"/
 
 Game libraries are assigned a suffix defined in file ModEXT.txt
 The suffix is assigned to both game libraries and mod libraries.
-
-The game library engine must be located in the standard library search area. In one of:
-/usr/lib
-/usr/lib64
-/usr/lib/i386-linux-gnu
-/usr/lib/x86_64-linux-gnu
-/usr/lib/arm-linux-gnueabihf
-/usr/lib/aarch64-linux-gnu
-/usr/lib/riscv64-linux-gnu
-/usr/lib/s390x-linux-gnu
-/usr/lib/powerpc64-linux-gnu
 
 The game executable first loads the engine library, which loads the remaining libraries from the subdirectory with the game's internal name.
 
 To get output names by convention, use the cmake build key -DCMAKE_INSTALL_PREFIX:PATH=/usr
 
-In accordance with the naming convention, we get the following location of the executable files, game libraries Serious Sam The First Encounter and Serious Sam The Second Encounter for Ubuntu/Dedian x86_64:
+In accordance with the naming convention, we get the following location of the executable files, game libraries Serious Sam The First Encounter and Serious Sam The Second Encounter for Ubuntu/Dedian:
 
-/usr/bin/serioussam
-/usr/bin/serioussam-ded
-/usr/bin/serioussam-mkfont
-/usr/lib/x86_64-linux-gnu/libEngine.so
-/usr/lib/x86_64-linux-gnu/serioussam/libShaders.so
-/usr/lib/x86_64-linux-gnu/serioussam/libGame.so
-/usr/lib/x86_64-linux-gnu/serioussam/libEntities.so
-/usr/lib/x86_64-linux-gnu/serioussam/libamp11lib.so
-/usr/bin/serioussamse
-/usr/bin/serioussamse-ded
-/usr/bin/serioussamse-mkfont
-/usr/lib/x86_64-linux-gnu/libEngineMP.so
-/usr/lib/x86_64-linux-gnu/serioussamse/libShaders.so
-/usr/lib/x86_64-linux-gnu/serioussamse/libGameMP.so
-/usr/lib/x86_64-linux-gnu/serioussamse/libEntitiesMP.so
-/usr/lib/x86_64-linux-gnu/serioussamse/libamp11lib.so
+/usr/games/serioussam
+/usr/games/serioussam-ded
+/usr/games/serioussam-mkfont
+/usr/games/serioussam-texconv
+/usr/lib/games/libEngine.so
+/usr/lib/games/serioussam/libShaders.so
+/usr/lib/games/serioussam/libGame.so
+/usr/lib/games/serioussam/libEntities.so
+/usr/lib/games/serioussam/libamp11lib.so
+/usr/games/serioussamse
+/usr/games/serioussamse-ded
+/usr/games/serioussamse-mkfont
+/usr/games/serioussamse-texconv
+/usr/lib/games/libEngineMP.so
+/usr/lib/games/serioussamse/libShaders.so
+/usr/lib/games/serioussamse/libGameMP.so
+/usr/lib/games/serioussamse/libEntitiesMP.so
+/usr/lib/games/serioussamse/libamp11lib.so
 
 For mod XPLUS:
-/usr/lib/x86_64-linux-gnu/serioussam/Mods/XPLUS/libGame.so
-/usr/lib/x86_64-linux-gnu/serioussam/Mods/XPLUS/libEntities.so
-/usr/lib/x86_64-linux-gnu/serioussamse/Mods/XPLUS/libGameMP.so
-/usr/lib/x86_64-linux-gnu/serioussamse/Mods/XPLUS/libEntitiesMP.so
+/usr/lib/games/serioussam/Mods/XPLUS/libGame.so
+/usr/lib/games/serioussam/Mods/XPLUS/libEntities.so
+/usr/lib/games/serioussamse/Mods/XPLUS/libGameMP.so
+/usr/lib/games/serioussamse/Mods/XPLUS/libEntitiesMP.so
 
 For mod Serious Sam Alpha Remake (SSA):
-/usr/lib/x86_64-linux-gnu/serioussam/Mods/SSA/libGame.so
-/usr/lib/x86_64-linux-gnu/serioussam/Mods/SSA/libEntities.so
+/usr/lib/games/serioussam/Mods/SSA/libGame.so
+/usr/lib/games/serioussam/Mods/SSA/libEntities.so
 
 Location of game data, user data, and data modifications
 ========================================================
 
-During the launch of the game, the engine determines the launch location, and if the launch occurred from the /usr/bin directory, then the game data will be searched for the recommended paths. If the game data is not found using the recommended paths, then the search will be in the home directory, and when the game files are found, the path will be written to the configuration file (not recommended). If the game files are not found, a message box will appear.
+During the launch of the game, the engine determines the launch location, and if the launch occurred from the /usr/games directory, then the game data will be searched for the recommended paths. If the game data is not found using the recommended paths, then the search will be in the home directory, and when the game files are found, the path will be written to the configuration file (not recommended). If the game files are not found, a message box will appear.
 
-Recommended paths for hosting game data:
+Paths for hosting game data:
 
-/usr/share/serioussam/ - for TFE
-/usr/share/serioussamse/ - for TSE
-
-or
-
-~/.local/share/Serious-Engine/serioussam/ - for TFE
-~/.local/share/Serious-Engine/serioussamse/ - for TSE
+~/.serioussam/ - for TFE
+~/.serioussamse/ - for TSE
 
 Mod Data:
 
-/usr/share/serioussam/Mods/"Mod name" - for TFE
-/usr/share/serioussamse/Mods/"Mod name" - for TSE
-
-or
-
-~/.local/share/Serious-Engine/serioussam/Mods/"Mod name" - for TFE
-~/.local/share/Serious-Engine/serioussamse/Mods/"Mod name" - for TSE
-
-t is not allowed to arrange game data parts in different recommended paths. Also, if you chose your own path (which is not recommended), it must be the only one.
+~/.serioussam/Mods/"Mod name" - for TFE
+~/.serioussamse/Mods/"Mod name" - for TSE
 
 The file SE1_10b.gro is not included in the game data distributed on CDs or digital stores.
 If you chose the first recommended option, set it to:
 
-/usr/share/serioussam/SE1_10b.gro - for TFE
-/usr/share/serioussamse/SE1_10b.gro - for TSE
+/usr/share/games/serioussam/SE1_10b.gro - for TFE
+/usr/share/games/serioussamse/SE1_10b.gro - for TSE
 
 Playing the original game
 =========================
@@ -174,12 +137,12 @@ Physical  version
 
 If you bought a physical copy of the game and you have an ISO of your disk, you can unpack the resources with the any archive manager. 
 Game resources are located in the Install directory of the disk. Just copy all the *.gro files from there, 
-as well as the Levels directory to directories ~/.local/share/Serious-Engine/serioussam and ~/.local/share/Serious-Engine/serioussamse, respectively, for games Serious Sam: The First Encounter and Serious Sam: The Second Encounter.
+as well as the Levels directory to directories ~/.serioussam and ~/.serioussamse, respectively, for games Serious Sam: The First Encounter and Serious Sam: The Second Encounter.
 
 Launching the game
 ==================
 
-To start the game type in consolet:
+To start the game type in console:
 
 serioussam
 
@@ -192,4 +155,4 @@ You can also use the launch of the game through the menu.
 After installing the packages and copying all the data, you can check what we got.
 
 
- -- Alexander <t.x00100x.t@yandex.ru>  Sun, 28 May 2023 20:33:46 +0300
+ -- Alexander Pavlov <t.x00100x.t@yandex.ru>  Wed, 28 Feb 2024 20:33:46 +0300

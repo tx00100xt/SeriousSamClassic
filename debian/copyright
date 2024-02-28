@@ -1,37 +1,106 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: serioussamclassic
-Upstream-Contact: YOUR_NAME <YOUR_EMAIL>
+Upstream-Name: SeriousSamClassic
+Upstream-Contact: https://github.com/tx00100xt/SeriousSamClassic/issues
 Source: https://github.com/tx00100xt/SeriousSamClassic
+Files-Excluded:
+appimage
+ flatpak
+ Images
+ man
+ templates
+ SamTFE/Bin
+ SamTFE/Controls
+ SamTFE/Data
+ SamTFE/Demos
+ SamTFE/Help
+ SamTFE/Levels
+ SamTFE/Players
+ SamTFE/Scripts
+ SamTFE/Sources/***/*.ini
+ SamTFE/Sources/Engine/zlib
+ SamTFE/Sources/EngineGui
+ SamTFE/Sources/External
+ SamTFE/Sources/GameGUIMP
+ SamTFE/Sources/LWSkaExporter
+ SamTFE/Sources/Modeler
+ SamTFE/Sources/RCon
+ SamTFE/Sources/SeriousSam/SeriousSam.aps
+ SamTFE/Sources/SeriousSam/Splash.bmp
+ SamTFE/Sources/SeriousSam/SplashMask.bmp
+ SamTFE/Sources/SeriousSkaStudio
+ SamTFE/Sources/WorldEditor
+ SamTFE/Temp
+ SamTFE/Tools.Win32
+ SamTFE/VirtualTrees
+ SamTFE/SE1_10b.gro
+ SamTFE/serioussam.desktop
+ SamTFE/serioussam.png
+ SamTSE/Bin
+ SamTSE/Controls
+ SamTSE/Data
+ SamTSE/Demos
+ SamTSE/Help
+ SamTSE/Levels
+ SamTSE/Players
+ SamTSE/Scripts
+ SamTSE/Sources/***/*.ini
+ SamTSE/Sources/Engine/zlib
+ SamTSE/Sources/EngineGui
+ SamTSE/Sources/External
+ SamTSE/Sources/GameGUIMP
+ SamTSE/Sources/LWSkaExporter
+ SamTSE/Sources/Modeler
+ SamTSE/Sources/RCon
+ SamTSE/Sources/SeriousSam/SeriousSam.aps
+ SamTSE/Sources/SeriousSam/Splash.bmp
+ SamTSE/Sources/SeriousSam/SplashMask.bmp
+ SamTSE/Sources/SeriousSkaStudio
+ SamTSE/Sources/WorldEditor
+ SamTSE/Temp
+ SamTSE/Tools.Win32
+ SamTSE/VirtualTrees
+ SamTSE/SE1_10b.gro
+ SamTSE/serioussamse.desktop
+ SamTSE/serioussamse.png
+
+Disclaimer:
+ This package is in the contrib archive area, which is not part of Debian.
+ The engine itself is free software, but it is only useful when combined
+ with proprietary game data.
 
 Files: *
-Copyright: 2002-2012 Croteam Ltd. 
+Copyright:
+ © 2002-2012 Croteam
+ © 2012-2016 Ryan C. Gordon
+ © 2021-2024 Alexander Pavlov
 License: GPL-2
- Serious Engine is licensed under the GNU GPL v2 (see LICENSE file).
- amp11lib is licensed under the GNU GPL v2 (see amp11lib/COPYING file).
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 2 as
+ published by the Free Software Foundation.
  .
- Some of the code included with the engine sources is not licensed under the GNU GPL v2:
- zlib (located in Sources/Engine/zlib) by Jean-loup Gailly and Mark Adler
- LightWave SDK (located in Sources/LWSkaExporter/SDK) by NewTek Inc.
- libogg/libvorbis (located in Sources/libogg and Sources/libvorbis) by Xiph.Org Foundation
- .
-
-Files: debian/*
-Copyright: 2023 YOUR_NAME <YOUR_EMAIL>
-License: GPL-2+
- This package is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- .
- This package is distributed in the hope that it will be useful,
+ This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
  .
- You should have received a copy of the GNU General Public License
- along with this program. If not, see <https://www.gnu.org/licenses/>
+ You should have received a copy of the GNU General Public License along
+ with this program; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  .
- On Debian systems, the complete text of the GNU General
- Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+ On Debian systems, the complete text of the GNU General Public License
+ version 2 can be found in '/usr/share/common-licenses/GPL-2'.
 
-
+Files: debian/*
+Copyright: 2024 Alexander Pavlov <t.x00100x.t@yandex.ru>
+License: WTFPL
+           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                     Version 2, December 2004
+ .
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+ .
+           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ .
+ 0. You just DO WHAT THE FUCK YOU WANT TO.
