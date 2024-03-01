@@ -1,10 +1,11 @@
-.\" Manpage for serioussam
+.\" Manpage for serioussamse
 .\" Contact  -- Alexander Pavlov <t.x00100x.t@yandex.ru> to correct errors or typos.
-.TH man 1 "02  2024" "1.0" "serioussam man page"
+.TH man 6 "02  2024" "1.0" "serioussamse man page"
 .SH NAME
+serioussam \- Serious Sam Classic
 .PP
 .BR serioussam
-is open source game engine version developed by Croteam for Serious Sam Classic with Vulkan support
+is open source game engine version developed by Croteam for Serious Sam Classic
 (Windows, Linux, FreeBSD, OpenBSD, NetBSD, Raspberry Pi OS, macOS).
 Based on https://github.com/Croteam-official/Serious-Engine and linux port https://github.com/icculus/Serious-Engine
 .PP
@@ -195,10 +196,6 @@ The location of the libraries of modifications is also on the same principle.
 .PP
 Game libraries are assigned a suffix defined in file \fIModEXT.txt\fR
 The suffix is assigned to both game libraries and mod libraries.
-The game library engine must be located in the standard library search area. In one of: 
-.PP
-\fB /usr/lib/games\fR
-.PP
 The game executable first loads the engine library, which loads the remaining
 libraries from the subdirectory with the game's internal name.
 To get output names by convention, use the cmake build 
@@ -212,7 +209,7 @@ and Serious Sam The Second Encounter for Debian/Ubuntu:
 \fB /usr/games/serioussam-ded\fR
 \fB /usr/games/serioussam-mkfont\fR
 \fB /usr/games/serioussam-texconv\fR
-\fB /usr/lib/games/libEngine.so\fR
+\fB /usr/lib/games/serioussam/libEngine.so\fR
 \fB /usr/lib/games/serioussam/libShaders.so\fR
 \fB /usr/lib/games/serioussam/libGame.so\fR
 \fB /usr/lib/games/serioussam/libEntities.so\fR
@@ -221,7 +218,7 @@ and Serious Sam The Second Encounter for Debian/Ubuntu:
 \fB /usr/games/serioussamse-ded\fR
 \fB /usr/games/serioussamse-mkfont\fR
 \fB /usr/games/serioussamse-texconv\fR
-\fB /usr/lib/games/libEngineMP.so\fR
+\fB /usr/lib/games/serioussamse/libEngineMP.so\fR
 \fB /usr/lib/games/serioussamse/libShaders.so\fR
 \fB /usr/lib/games/serioussamse/libGameMP.so\fR
 \fB /usr/lib/games/serioussamse/libEntitiesMP.so\fR
