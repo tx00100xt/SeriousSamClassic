@@ -2,9 +2,9 @@
 .\" Contact  -- Alexander Pavlov <t.x00100x.t@yandex.ru> to correct errors or typos.
 .TH man 6 "02  2024" "1.0" "serioussamse man page"
 .SH NAME
-serioussam \- Serious Sam Classic
+serioussamse \- Serious Sam Classic
 .PP
-.BR serioussam
+.BR serioussamse
 is open source game engine version developed by Croteam for Serious Sam Classic
 (Windows, Linux, FreeBSD, OpenBSD, NetBSD, Raspberry Pi OS, macOS).
 Based on https://github.com/Croteam-official/Serious-Engine and linux port https://github.com/icculus/Serious-Engine
@@ -54,7 +54,7 @@ forces and find a new way to reach the notorious Mental himself.
 .RS
 Starts the specified game level.
 .EX
-Example: \fBserioussam +level "Levels//01_Hatshepsut.wld"\fR
+Example: \fBserioussamse +level "Levels//01_Hatshepsut.wld"\fR
 .EE
 .RE
 .TP
@@ -68,7 +68,7 @@ settings files will be saved in the root directory of the game.
 .RS
 Connects to the server using the specified ip and port.
 .EX
-Example: \fBserioussam +connect 192.168.0.100:25600\fR
+Example: \fBserioussamse +connect 192.168.0.100:25600\fR
 .EE
 .RE
 .TP
@@ -76,7 +76,7 @@ Example: \fBserioussam +connect 192.168.0.100:25600\fR
 .RS
 At startup, it launches a custom script for execution.
 .EX
-Example: \fBserioussam +script "Scripts//Myset.ini"\fR
+Example: \fBserioussamse +script "Scripts//Myset.ini"\fR
 .EE
 .RE
 .TP
@@ -84,7 +84,7 @@ Example: \fBserioussam +script "Scripts//Myset.ini"\fR
 .RS
 Runs the specified modification.
 .EX
-Example: \fBserioussam +game XPLUS\fR
+Example: \fBserioussamse +game XPLUS\fR
 .EE
 .RE
 .TP
@@ -92,7 +92,7 @@ Example: \fBserioussam +game XPLUS\fR
 .RS
 Specifies an alternative file for logging.
 .EX
-Example: \fBserioussam +logfile "Mylog.log"\fR
+Example: \fBserioussamse +logfile "Mylog.log"\fR
 .EE
 .RE
 .SH CONSOLE COMMANDS

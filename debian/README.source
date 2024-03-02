@@ -58,7 +58,7 @@ In accordance with the naming convention, we get the following location of the e
 /usr/games/serioussam-ded
 /usr/games/serioussam-mkfont
 /usr/games/serioussam-texconv
-/usr/lib/games/libEngine.so
+/usr/lib/games/serioussam/libEngine.so
 /usr/lib/games/serioussam/libShaders.so
 /usr/lib/games/serioussam/libGame.so
 /usr/lib/games/serioussam/libEntities.so
@@ -67,7 +67,7 @@ In accordance with the naming convention, we get the following location of the e
 /usr/games/serioussamse-ded
 /usr/games/serioussamse-mkfont
 /usr/games/serioussamse-texconv
-/usr/lib/games/libEngineMP.so
+/usr/lib/games/serioussam/libEngineMP.so
 /usr/lib/games/serioussamse/libShaders.so
 /usr/lib/games/serioussamse/libGameMP.so
 /usr/lib/games/serioussamse/libEntitiesMP.so
