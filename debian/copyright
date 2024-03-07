@@ -3,18 +3,30 @@ Upstream-Name: serioussam
 Upstream-Contact: https://github.com/tx00100xt/SeriousSamClassic/issues/
       Alexander Pavlov <t.x00100x.t@yandex.ru>
 Source: https://github.com/tx00100xt/SeriousSamClassic
-Files-Excluded: appimage
+Files-Excluded: .github
+      appimage
+      debian
       flatpak
       Images
       man
       templates
+      build-appimage.sh
+      build-linux32demo.sh
+      build-linux64demo.sh
+      run_game.sh
+      run_game_hud.sh
+      run_server.sh
       SamTFE/Bin
       SamTFE/Controls
       SamTFE/Data
       SamTFE/Demos
+      SamTFE/GameAgent
       SamTFE/Help
       SamTFE/Levels
+      SamTFE/Mods
+      SamTFE/ModEXT.txt
       SamTFE/Players
+      SamTFE/SaveGame
       SamTFE/Scripts
       SamTFE/Sources/***/*.ini
       SamTFE/Sources/Engine/zlib
@@ -22,6 +34,7 @@ Files-Excluded: appimage
       SamTFE/Sources/External
       SamTFE/Sources/GameGUIMP
       SamTFE/Sources/LWSkaExporter
+      SamTFE/Sources/Models/Enemies/Robots
       SamTFE/Sources/Modeler
       SamTFE/Sources/RCon
       SamTFE/Sources/SeriousSam/SeriousSam.aps
@@ -29,6 +42,56 @@ Files-Excluded: appimage
       SamTFE/Sources/SeriousSam/SplashMask.bmp
       SamTFE/Sources/SeriousSkaStudio
       SamTFE/Sources/WorldEditor
+      SamTFE/Sources/MakeFONT/MakeFONT.vcxproj.user
+      SamTFE/Sources/MakeFONT/MakeFONT.vcxproj
+      SamTFE/Sources/MakeFONT/MakeFONT.vcxproj.filters
+      SamTFE/Sources/amp11lib/amp11lib.vcxproj.filters
+      SamTFE/Sources/amp11lib/amp11lib.vcxproj.user
+      SamTFE/Sources/amp11lib/amp11lib.vcxproj
+      SamTFE/Sources/Engine/Engine.vcxproj
+      SamTFE/Sources/Engine/Sound/DSOUND.H
+      SamTFE/Sources/Engine/Engine.vcxproj.user
+      SamTFE/Sources/Engine/Engine.vcxproj.filters
+      SamTFE/Sources/SeriousSam/nocursor.cur
+      SamTFE/Sources/SeriousSam/SeriousSam.vcxproj
+      SamTFE/Sources/SeriousSam/SeriousSam.vcxproj.user
+      SamTFE/Sources/SeriousSam/SeriousSam.rc
+      SamTFE/Sources/SeriousSam/SeriousSam.vcxproj.filters
+      SamTFE/Sources/SeriousSam/res
+      SamTFE/Sources/build-linux64.sh
+      SamTFE/Sources/DecodeReport/DecodeReport.vcxproj.user
+      SamTFE/Sources/DecodeReport/DecodeReport.vcxproj.filters
+      SamTFE/Sources/DecodeReport/DecodeReport.vcxproj
+      SamTFE/Sources/GameMP/Game.vcxproj.user
+      SamTFE/Sources/GameMP/Game.vcxproj
+      SamTFE/Sources/GameMP/Game.user
+      SamTFE/Sources/TEXConv/TEXConv.vcxproj.filters
+      SamTFE/Sources/TEXConv/TEXConv.vcxproj
+      SamTFE/Sources/TEXConv/TEXConv.vcxproj.user
+      SamTFE/Sources/Shaders/Shaders.vcxproj.user
+      SamTFE/Sources/Shaders/Shaders.vcxproj.filters
+      SamTFE/Sources/Shaders/Shaders.vcxproj
+      SamTFE/Sources/DedicatedServer/DedicatedServer.vcxproj.filters
+      SamTFE/Sources/DedicatedServer/DedicatedServer.vcxproj.user
+      SamTFE/Sources/DedicatedServer/icon1.ico
+      SamTFE/Sources/DedicatedServer/DedicatedServer.rc
+      SamTFE/Sources/DedicatedServer/DedicatedServer.vcxproj
+      SamTFE/Sources/DedicatedServer/ReadMe.txt
+      SamTFE/Sources/build-linux32.sh
+      SamTFE/Sources/Ecc/Ecc.vcxproj
+      SamTFE/Sources/Ecc/Ecc.vcxproj.user
+      SamTFE/Sources/Ecc/Ecc.vcxproj.filters
+      SamTFE/Sources/Entities/Entities.vcxproj.filters
+      SamTFE/Sources/Entities/Entities.vcxproj
+      SamTFE/Sources/Entities/LastFileID.txt
+      SamTFE/Sources/Entities/Entities.vcxproj.user
+      SamTFE/Sources/Depend/Depend.vcxproj
+      SamTFE/Sources/Depend/Depend.vcxproj.user
+      SamTFE/Sources/Depend/Depend.vcxproj.filters
+      SamTFE/Sources/EntitiesMP/EntitiesMP.vcxproj
+      SamTFE/Sources/EntitiesMP/EntitiesMP.vcxproj.filters
+      SamTFE/Sources/EntitiesMP/LastFileID.txt
+      SamTFE/Sources/EntitiesMP/EntitiesMP.vcxproj.user
       SamTFE/Temp
       SamTFE/Tools.Win32
       SamTFE/VirtualTrees
@@ -37,13 +100,18 @@ Files-Excluded: appimage
       SamTFE/Sources/SamTFE.sln
       SamTFE/Mods/SeriousSamTbn.tex
       SamTFE/Mods/XPLUSTbn.tex
+      SamTFE/SE1_10b.gro
       SamTSE/Bin
       SamTSE/Controls
       SamTSE/Data
       SamTSE/Demos
+      SamTSE/GameAgent
       SamTSE/Help
       SamTSE/Levels
+      SamTSE/Mods
+      SamTSE/ModEXT.txt
       SamTSE/Players
+      SamTSE/SaveGame
       SamTSE/Scripts
       SamTSE/Sources/***/*.ini
       SamTSE/Sources/Engine/zlib
@@ -51,6 +119,7 @@ Files-Excluded: appimage
       SamTSE/Sources/External
       SamTSE/Sources/GameGUIMP
       SamTSE/Sources/LWSkaExporter
+      SamTSE/Sources/Models/Enemies/Robots
       SamTSE/Sources/Modeler
       SamTSE/Sources/RCon
       SamTSE/Sources/SeriousSam/SeriousSam.aps
@@ -58,6 +127,59 @@ Files-Excluded: appimage
       SamTSE/Sources/SeriousSam/SplashMask.bmp
       SamTSE/Sources/SeriousSkaStudio
       SamTSE/Sources/WorldEditor
+      SamTSE/Sources/MakeFONT/MakeFONT.vcxproj.user
+      SamTSE/Sources/MakeFONT/MakeFONT.vcxproj
+      SamTSE/Sources/MakeFONT/MakeFONT.vcxproj.filters
+      SamTSE/Sources/amp11lib/amp11lib.vcxproj.filters
+      SamTSE/Sources/amp11lib/amp11lib.vcxproj.user
+      SamTSE/Sources/amp11lib/amp11lib.vcxproj
+      SamTSE/Sources/Engine/Engine.vcxproj
+      SamTSE/Sources/Engine/Sound/DSOUND.H
+      SamTSE/Sources/Engine/Engine.vcxproj.user
+      SamTSE/Sources/Engine/Engine.vcxproj.filters
+      SamTSE/Sources/SeriousSam/nocursor.cur
+      SamTSE/Sources/SeriousSam/SeriousSam.vcxproj
+      SamTSE/Sources/SeriousSam/SeriousSam.vcxproj.user
+      SamTSE/Sources/SeriousSam/SeriousSam.rc
+      SamTSE/Sources/SeriousSam/SeriousSam.vcxproj.filters
+      SamTSE/Sources/SeriousSam/res
+      SamTSE/Sources/build-linux64.sh
+      SamTSE/Sources/DecodeReport/DecodeReport.vcxproj.user
+      SamTSE/Sources/DecodeReport/DecodeReport.vcxproj.filters
+      SamTSE/Sources/DecodeReport/DecodeReport.vcxproj
+      SamTSE/Sources/GameMP/GameMP.vcxproj.filters
+      SamTSE/Sources/GameMP/GameMP.vcxproj
+      SamTSE/Sources/GameMP/Game.vcxproj.user
+      SamTSE/Sources/GameMP/Game.vcxproj
+      SamTSE/Sources/GameMP/Game.user
+      SamTSE/Sources/GameMP/GameMP.vcxproj.user
+      SamTSE/Sources/TEXConv/TEXConv.vcxproj.filters
+      SamTSE/Sources/TEXConv/TEXConv.vcxproj
+      SamTSE/Sources/TEXConv/TEXConv.vcxproj.user
+      SamTSE/Sources/Shaders/Shaders.vcxproj.user
+      SamTSE/Sources/Shaders/Shaders.vcxproj.filters
+      SamTSE/Sources/Shaders/Shaders.vcxproj
+      SamTSE/Sources/DedicatedServer/DedicatedServer.vcxproj.filters
+      SamTSE/Sources/DedicatedServer/DedicatedServer.vcxproj.user
+      SamTSE/Sources/DedicatedServer/icon1.ico
+      SamTSE/Sources/DedicatedServer/DedicatedServer.rc
+      SamTSE/Sources/DedicatedServer/DedicatedServer.vcxproj
+      SamTSE/Sources/DedicatedServer/ReadMe.txt
+      SamTSE/Sources/build-linux32.sh
+      SamTSE/Sources/Ecc/Ecc.vcxproj
+      SamTSE/Sources/Ecc/Ecc.vcxproj.user
+      SamTSE/Sources/Ecc/Ecc.vcxproj.filters
+      SamTSE/Sources/Entities/Entities.vcxproj
+      SamTSE/Sources/Entities/Entities.vcxproj.filters
+      SamTSE/Sources/Entities/LastFileID.txt
+      SamTSE/Sources/Entities/Entities.vcxproj.user
+      SamTSE/Sources/Depend/Depend.vcxproj
+      SamTSE/Sources/Depend/Depend.vcxproj.user
+      SamTSE/Sources/Depend/Depend.vcxproj.filters
+      SamTSE/Sources/EntitiesMP/EntitiesMP.vcxproj
+      SamTSE/Sources/EntitiesMP/EntitiesMP.vcxproj.filters
+      SamTSE/Sources/EntitiesMP/LastFileID.txt
+      SamTSE/Sources/EntitiesMP/EntitiesMP.vcxproj.user
       SamTSE/Temp
       SamTSE/Tools.Win32
       SamTSE/VirtualTrees
@@ -66,13 +188,16 @@ Files-Excluded: appimage
       SamTSE/Sources/SamTSE.sln
       SamTSE/Mods/SecondEncounterTbn.tex
       SamTSE/Mods/XPLUSTbn.tex
+      SamTSE/SE1_10b.gro
 Disclaimer:
      This package is in the contrib archive area, which is not part of Debian.
      The engine itself is free software, but it is only useful when combined
      with proprietary game data.
 
 Files: *
-Copyright: 2002-2012 Croteam
+Copyright: 1997-2001 Niklas Beisert, Alen Ladavac
+           2002-2012 Croteam
+           2004-2008 Luigi Auriemma
            2012-2016 Ryan C. Gordon
            2021-2024 Alexander Pavlov <t.x00100x.t@dyandex.ru>
 License:   GPL-2.0

@@ -70,7 +70,99 @@ Forwarded: not-needed
  		    endif()
  		endif()
  	endif()
-@@ -1551,25 +1524,25 @@
+@@ -1265,39 +1238,9 @@
+     ${ADDITIONAL_ENGINE_SRCS}
+     ${ZLIB_SRCS}
+ )
+-set(ENGINELIB "Engine${MP}${DEBUGSUFFIX}")
+-add_library(${ENGINELIB} SHARED
+-     ${ENGINE_SRCS}
+-)
+-if(MACOSX)
+-    target_link_libraries(${ENGINELIB} "-undefined dynamic_lookup")
+-endif()
+-add_dependencies(${ENGINELIB} ParseEntities${MP})
+-target_link_libraries(${ENGINELIB} engine_safemath${MP})
+-if(FREEBSD)
+-target_link_libraries(${ENGINELIB} ${SDL2_LIBRARY})
+-target_link_libraries(${ENGINELIB} ${ZLIB_LIBRARIES})
+-endif()
+-if(MACOSX)
+-    if(USE_SYSTEM_SDL2) # use sdl2 framework on system
+-      target_link_libraries(${ENGINELIB} ${SDL2_LIBRARY})
+-    else() # use local libsdl2
+-	  find_library(COCOA_FRAMEWORK Cocoa)
+-      target_link_libraries(${ENGINELIB} "${COCOA_FRAMEWORK}")
+-      target_link_libraries(${ENGINELIB} "${CMAKE_CURRENT_SOURCE_DIR}/lib/macosx/libSDL2-2.0.0.dylib")
+-    endif()
+-target_link_libraries(${ENGINELIB} ${ZLIB_LIBRARIES})
+-endif()
+-if(PANDORA)
+-    target_link_libraries(${ENGINELIB} "rt")
+-endif()
+-if(RPI4)
+-    target_link_libraries(${ENGINELIB} "rt")
+-endif()
+-set_target_properties(${ENGINELIB} PROPERTIES ENABLE_EXPORTS ON LINK_FLAGS "-Wl,${RPATH_SETTINGS}")
+ 
+ add_executable(SeriousSam${MP}
+-    #${ENGINE_SRCS}
++    ${ENGINE_SRCS}
+     SeriousSam/LevelInfo.cpp
+     SeriousSam/CmdLine.cpp
+     SeriousSam/SeriousSam.cpp
+@@ -1311,7 +1254,7 @@
+     SeriousSam/MenuGadgets.cpp
+     SeriousSam/MenuPrinting.cpp
+ )
+-target_link_libraries(SeriousSam${MP} ${ENGINELIB})
++target_link_libraries(SeriousSam${MP} engine_safemath)
+ add_dependencies(SeriousSam${MP} ParseEntities${MP})
+ # Make symbols in the main executable available to dynamic objects
+ set_target_properties(SeriousSam${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1322,8 +1265,8 @@
+ # !!! FIXME:  that's a better plan and we can remove the toggle here.
+ option(BUILD_DEDICATED_SERVER "Compile the dedicated server, too" TRUE)
+ if(BUILD_DEDICATED_SERVER)
+-    add_executable(DedicatedServer${MP} DedicatedServer/DedicatedServer.cpp)
+-    target_link_libraries(DedicatedServer${MP} ${ENGINELIB})
++    add_executable(DedicatedServer${MP} ${ENGINE_SRCS} DedicatedServer/DedicatedServer.cpp)
++    target_link_libraries(DedicatedServer${MP} engine_safemath)
+     add_dependencies(DedicatedServer${MP} ParseEntities${MP})
+     # Make symbols in the main executable available to dynamic objects
+     set_target_properties(DedicatedServer${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1331,8 +1274,8 @@
+ 
+ option(BUILD_MAKEFONT "Compile the MakeFONT, too" TRUE)
+ if(BUILD_MAKEFONT)
+-    add_executable(MakeFONT${MP} MakeFONT/MakeFONT.cpp)
+-    target_link_libraries(MakeFONT${MP} ${ENGINELIB})
++    add_executable(MakeFONT${MP} ${ENGINE_SRCS} MakeFONT/MakeFONT.cpp)
++    target_link_libraries(MakeFONT${MP} engine_safemath)
+     add_dependencies(MakeFONT${MP} ParseEntities${MP})
+     # Make symbols in the main executable available to dynamic objects
+     set_target_properties(MakeFONT${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1340,8 +1283,8 @@
+ 
+ option(BUILD_TEXConv "Compile the TEXConv, too" TRUE)
+ if(BUILD_TEXConv)
+-    add_executable(TEXConv${MP} TEXConv/TEXConv.cpp)
+-    target_link_libraries(TEXConv${MP} ${ENGINELIB})
++    add_executable(TEXConv${MP} ${ENGINE_SRCS} TEXConv/TEXConv.cpp)
++    target_link_libraries(TEXConv${MP} engine_safemath)
+     add_dependencies(TEXConv${MP} ParseEntities${MP})
+     # Make symbols in the main executable available to dynamic objects
+     set_target_properties(TEXConv${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1525,7 +1468,7 @@
+ # NOT LOCAL INSTALL
+ elseif(NOT LOCAL_INSTALL AND NOT XPLUS)
+ if(DEBUG) # RAKE! Will this work with TFE?
+-    install(TARGETS SeriousSam${MP} ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB} ${ENGINELIB}
++    install(TARGETS SeriousSam${MP} ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB}
+             RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
+             LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin/Debug"
+             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+@@ -1551,25 +1494,22 @@
      endif()
  else()
      install(TARGETS SeriousSam${MP} ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB}
@@ -78,10 +170,9 @@ Forwarded: not-needed
 +            RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/games"
              LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
              PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-     install(TARGETS ${ENGINELIB}
+-    install(TARGETS ${ENGINELIB}
 -            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
-             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
      if(BUILD_DEDICATED_SERVER)
          install(TARGETS DedicatedServer${MP}
 -                RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
@@ -101,25 +192,24 @@ Forwarded: not-needed
                  PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
      endif()
      if(BUILD_AMP11LIB)
-@@ -1588,10 +1561,14 @@
+@@ -1587,11 +1527,12 @@
+ # RAKE! If CMAKE_INSTALL_PREFIX was set during config then its not a local install
  # and SE1_10.gro needs to be installed to Games root dir.
  if(NOT LOCAL_INSTALL AND NOT XPLUS)
-     install(FILES ${CMAKE_ADD_TARGET_DIR}/../SE1_10b.gro
+-    install(FILES ${CMAKE_ADD_TARGET_DIR}/../SE1_10b.gro
 -            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${INTERNAL_NAME}"
-+            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/games/${INTERNAL_NAME}"
-             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
--    install(FILES "${CMAKE_ADD_TARGET_DIR}/../${INTERNAL_NAME}.desktop"
--            DESTINATION "${CMAKE_INSTALL_PREFIX}//share/applications"
 +  if(INTERNAL_NAME STREQUAL "serioussam")
 +    install(FILES "${CMAKE_ADD_TARGET_DIR}/../${INTERNAL_NAME}.desktop" RENAME "io.github.tx00100xt.serioussam.desktop"
 +            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/applications"
-+            PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+-    install(FILES "${CMAKE_ADD_TARGET_DIR}/../${INTERNAL_NAME}.desktop"
+-            DESTINATION "${CMAKE_INSTALL_PREFIX}//share/applications"
 +    install(FILES "${CMAKE_ADD_TARGET_DIR}/../../debian/io.github.tx00100xt.serioussam.appdata.xml"
 +            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/metainfo"
              PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
      set(A 16)
      set(B 32)
-@@ -1605,9 +1582,14 @@
+@@ -1605,9 +1546,14 @@
              OUTPUT_VARIABLE outVar
         )
         install(FILES ${CMAKE_ADD_TARGET_DIR}/../${X}.png
@@ -205,7 +295,99 @@ Forwarded: not-needed
  		    endif()
  		endif()
  	endif()
-@@ -1551,25 +1524,25 @@
+@@ -1265,39 +1238,9 @@
+     ${ADDITIONAL_ENGINE_SRCS}
+     ${ZLIB_SRCS}
+ )
+-set(ENGINELIB "Engine${MP}${DEBUGSUFFIX}")
+-add_library(${ENGINELIB} SHARED
+-     ${ENGINE_SRCS}
+-)
+-if(MACOSX)
+-    target_link_libraries(${ENGINELIB} "-undefined dynamic_lookup")
+-endif()
+-add_dependencies(${ENGINELIB} ParseEntities${MP})
+-target_link_libraries(${ENGINELIB} engine_safemath${MP})
+-if(FREEBSD)
+-target_link_libraries(${ENGINELIB} ${SDL2_LIBRARY})
+-target_link_libraries(${ENGINELIB} ${ZLIB_LIBRARIES})
+-endif()
+-if(MACOSX)
+-    if(USE_SYSTEM_SDL2) # use sdl2 framework on system
+-      target_link_libraries(${ENGINELIB} ${SDL2_LIBRARY})
+-    else() # use local libsdl2
+-	  find_library(COCOA_FRAMEWORK Cocoa)
+-      target_link_libraries(${ENGINELIB} "${COCOA_FRAMEWORK}")
+-      target_link_libraries(${ENGINELIB} "${CMAKE_CURRENT_SOURCE_DIR}/lib/macosx/libSDL2-2.0.0.dylib")
+-    endif()
+-target_link_libraries(${ENGINELIB} ${ZLIB_LIBRARIES})
+-endif()
+-if(PANDORA)
+-    target_link_libraries(${ENGINELIB} "rt")
+-endif()
+-if(RPI4)
+-    target_link_libraries(${ENGINELIB} "rt")
+-endif()
+-set_target_properties(${ENGINELIB} PROPERTIES ENABLE_EXPORTS ON LINK_FLAGS "-Wl,${RPATH_SETTINGS}")
+ 
+ add_executable(SeriousSam${MP}
+-    #${ENGINE_SRCS}
++    ${ENGINE_SRCS}
+     SeriousSam/LevelInfo.cpp
+     SeriousSam/CmdLine.cpp
+     SeriousSam/SeriousSam.cpp
+@@ -1311,7 +1254,7 @@
+     SeriousSam/MenuGadgets.cpp
+     SeriousSam/MenuPrinting.cpp
+ )
+-target_link_libraries(SeriousSam${MP} ${ENGINELIB})
++target_link_libraries(SeriousSam${MP} engine_safemath)
+ add_dependencies(SeriousSam${MP} ParseEntities${MP})
+ # Make symbols in the main executable available to dynamic objects
+ set_target_properties(SeriousSam${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1322,8 +1265,8 @@
+ # !!! FIXME:  that's a better plan and we can remove the toggle here.
+ option(BUILD_DEDICATED_SERVER "Compile the dedicated server, too" TRUE)
+ if(BUILD_DEDICATED_SERVER)
+-    add_executable(DedicatedServer${MP} DedicatedServer/DedicatedServer.cpp)
+-    target_link_libraries(DedicatedServer${MP} ${ENGINELIB})
++    add_executable(DedicatedServer${MP} ${ENGINE_SRCS} DedicatedServer/DedicatedServer.cpp)
++    target_link_libraries(DedicatedServer${MP} engine_safemath)
+     add_dependencies(DedicatedServer${MP} ParseEntities${MP})
+     # Make symbols in the main executable available to dynamic objects
+     set_target_properties(DedicatedServer${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1331,8 +1274,8 @@
+ 
+ option(BUILD_MAKEFONT "Compile the MakeFONT, too" TRUE)
+ if(BUILD_MAKEFONT)
+-    add_executable(MakeFONT${MP} MakeFONT/MakeFONT.cpp)
+-    target_link_libraries(MakeFONT${MP} ${ENGINELIB})
++    add_executable(MakeFONT${MP} ${ENGINE_SRCS} MakeFONT/MakeFONT.cpp)
++    target_link_libraries(MakeFONT${MP} engine_safemath)
+     add_dependencies(MakeFONT${MP} ParseEntities${MP})
+     # Make symbols in the main executable available to dynamic objects
+     set_target_properties(MakeFONT${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1340,8 +1283,8 @@
+ 
+ option(BUILD_TEXConv "Compile the TEXConv, too" TRUE)
+ if(BUILD_TEXConv)
+-    add_executable(TEXConv${MP} TEXConv/TEXConv.cpp)
+-    target_link_libraries(TEXConv${MP} ${ENGINELIB})
++    add_executable(TEXConv${MP} ${ENGINE_SRCS} TEXConv/TEXConv.cpp)
++    target_link_libraries(TEXConv${MP} engine_safemath)
+     add_dependencies(TEXConv${MP} ParseEntities${MP})
+     # Make symbols in the main executable available to dynamic objects
+     set_target_properties(TEXConv${MP} PROPERTIES ENABLE_EXPORTS ON)
+@@ -1525,7 +1468,7 @@
+ # NOT LOCAL INSTALL
+ elseif(NOT LOCAL_INSTALL AND NOT XPLUS)
+ if(DEBUG) # RAKE! Will this work with TFE?
+-    install(TARGETS SeriousSam${MP} ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB} ${ENGINELIB}
++    install(TARGETS SeriousSam${MP} ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB}
+             RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin"
+             LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/Bin/Debug"
+             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+@@ -1551,25 +1494,22 @@
      endif()
  else()
      install(TARGETS SeriousSam${MP} ${SHADERSLIB} ${GAMEMPLIB} ${ENTITIESMPLIB}
@@ -213,10 +395,9 @@ Forwarded: not-needed
 +            RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/games"
              LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
              PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-     install(TARGETS ${ENGINELIB}
+-    install(TARGETS ${ENGINELIB}
 -            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${INTERNAL_NAME}"
-             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
      if(BUILD_DEDICATED_SERVER)
          install(TARGETS DedicatedServer${MP}
 -                RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
@@ -236,25 +417,24 @@ Forwarded: not-needed
                  PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
      endif()
      if(BUILD_AMP11LIB)
-@@ -1588,10 +1561,14 @@
+@@ -1587,11 +1527,12 @@
+ # RAKE! If CMAKE_INSTALL_PREFIX was set during config then its not a local install
  # and SE1_10.gro needs to be installed to Games root dir.
  if(NOT LOCAL_INSTALL AND NOT XPLUS)
-     install(FILES ${CMAKE_ADD_TARGET_DIR}/../SE1_10b.gro
+-    install(FILES ${CMAKE_ADD_TARGET_DIR}/../SE1_10b.gro
 -            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/${INTERNAL_NAME}"
-+            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/games/${INTERNAL_NAME}"
-             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
--    install(FILES "${CMAKE_ADD_TARGET_DIR}/../${INTERNAL_NAME}.desktop"
--            DESTINATION "${CMAKE_INSTALL_PREFIX}//share/applications"
 +  if(INTERNAL_NAME STREQUAL "serioussam")
 +    install(FILES "${CMAKE_ADD_TARGET_DIR}/../${INTERNAL_NAME}.desktop" RENAME "io.github.tx00100xt.serioussam.desktop"
 +            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/applications"
-+            PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+-    install(FILES "${CMAKE_ADD_TARGET_DIR}/../${INTERNAL_NAME}.desktop"
+-            DESTINATION "${CMAKE_INSTALL_PREFIX}//share/applications"
 +    install(FILES "${CMAKE_ADD_TARGET_DIR}/../../debian/io.github.tx00100xt.serioussam.appdata.xml"
 +            DESTINATION "${CMAKE_INSTALL_PREFIX}/share/metainfo"
              PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
      set(A 16)
      set(B 32)
-@@ -1605,9 +1582,14 @@
+@@ -1605,9 +1546,14 @@
              OUTPUT_VARIABLE outVar
         )
         install(FILES ${CMAKE_ADD_TARGET_DIR}/../${X}.png

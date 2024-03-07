@@ -209,7 +209,6 @@ and Serious Sam The Second Encounter for Debian/Ubuntu:
 \fB /usr/games/serioussam-ded\fR
 \fB /usr/games/serioussam-mkfont\fR
 \fB /usr/games/serioussam-texconv\fR
-\fB /usr/lib/games/serioussam/libEngine.so\fR
 \fB /usr/lib/games/serioussam/libShaders.so\fR
 \fB /usr/lib/games/serioussam/libGame.so\fR
 \fB /usr/lib/games/serioussam/libEntities.so\fR
@@ -218,7 +217,6 @@ and Serious Sam The Second Encounter for Debian/Ubuntu:
 \fB /usr/games/serioussamse-ded\fR
 \fB /usr/games/serioussamse-mkfont\fR
 \fB /usr/games/serioussamse-texconv\fR
-\fB /usr/lib/games/serioussamse/libEngineMP.so\fR
 \fB /usr/lib/games/serioussamse/libShaders.so\fR
 \fB /usr/lib/games/serioussamse/libGameMP.so\fR
 \fB /usr/lib/games/serioussamse/libEntitiesMP.so\fR
@@ -300,6 +298,32 @@ from there, as well as the Levels directory to directories
 \fB ~/.serioussam\fR and
 \fB ~/.serioussamse\fR, respectively, for games 
 Serious Sam: The First Encounter and Serious Sam: The Second Encounter.
+.PP
+.SS Demo version
+.PP
+This implementation of the engine supports the use of content from the demo version of the game. When the game starts, 
+the engine determines the installed game content, and if it finds content from the demo version, it turns on the mode for using the demo version of the content.
+A demo version of the game can be obtained from many places. For example:
+.PP
+\fB  https://www.moddb.com/downloads/serious-sam-the-second-encounter\fR
+.PP
+\fB  https://www.gamefront.com/games/serious-sam-the-second-encounter/file/serious-sam-the-second-encounter-demo\fR
+.PP
+The most convenient way is to download using the wget from the WebArchive. 
+To install content from the demo version of the game, open a terminal and run the following commands:
+.PP
+\fB  sudo apt install p7zip\fR
+\fB  wget https://archive.org/download/serioussamsedemo/SeriousSamSEDemo.exe\fR
+\fB  wget https://archive.org/download/SeriousSamPatches/secondencounterpatch107_usa.exe\fR
+\fB  7z x SeriousSamSEDemo.exe\fR
+\fB  7z x -y secondencounterpatch107_usa.exe\fR
+\fB  mkdir ~/.serioussamse\fR
+\fB  cp -ax Disk1/* ~/.serioussamse\fR
+\fB  rm -fr Disk1\fR
+.PP
+When you first launch the game, goto Menu -> Options -> Execute Addons and select the default option. 
+The demo version uses old settings scripts. New ones you can take here: https://github.com/tx00100xt/SeriousSamClassic
+Just rewrite the Scripts directory replacing the files
 .PP
 .SS Launching the game
 To start the game type in console: \fB serioussam\fR or \fB serioussamse\fR. You can also use the launch of the game through the menu.

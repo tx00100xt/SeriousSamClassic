@@ -58,7 +58,6 @@ In accordance with the naming convention, we get the following location of the e
 /usr/games/serioussam-ded
 /usr/games/serioussam-mkfont
 /usr/games/serioussam-texconv
-/usr/lib/games/serioussam/libEngine.so
 /usr/lib/games/serioussam/libShaders.so
 /usr/lib/games/serioussam/libGame.so
 /usr/lib/games/serioussam/libEntities.so
@@ -67,7 +66,6 @@ In accordance with the naming convention, we get the following location of the e
 /usr/games/serioussamse-ded
 /usr/games/serioussamse-mkfont
 /usr/games/serioussamse-texconv
-/usr/lib/games/serioussamlibEngineMP.so
 /usr/lib/games/serioussamse/libShaders.so
 /usr/lib/games/serioussamse/libGameMP.so
 /usr/lib/games/serioussamse/libEntitiesMP.so
@@ -138,6 +136,43 @@ Physical  version
 If you bought a physical copy of the game and you have an ISO of your disk, you can unpack the resources with the any archive manager. 
 Game resources are located in the Install directory of the disk. Just copy all the *.gro files from there, 
 as well as the Levels directory to directories ~/.serioussam and ~/.serioussamse, respectively, for games Serious Sam: The First Encounter and Serious Sam: The Second Encounter.
+
+Demo  version
+=============
+
+This implementation of the engine supports the use of content from the demo version of the game. When the game starts, 
+the engine determines the installed game content, and if it finds content from the demo version, it turns on the mode for using the demo version of the content.
+A demo version of the game can be obtained from many places. For example:
+
+https://www.moddb.com/downloads/serious-sam-the-first-encounter-demo
+https://www.moddb.com/downloads/serious-sam-the-second-encounter
+https://www.gamefront.com/games/serious-sam/file/serioussamdemo-exe
+https://www.gamefront.com/games/serious-sam-the-second-encounter/file/serious-sam-the-second-encounter-demo
+
+The most convenient way is to download using the wget from the WebArchive. 
+To install content from the demo version of the game, open a terminal and run the following commands:
+
+sudo apt install p7zip
+
+wget https://archive.org/download/SeriousSamDemo/SeriousSamDemo.exe
+wget https://archive.org/download/SeriousSamPatches/serioussampatch105_usa.exe
+7z x SeriousSamDemo.exe
+7z x -y serioussampatch105_usa.exe
+mkdir ~/.serioussam
+cp -ax Disk1/* ~/.serioussam
+rm -fr Disk1
+
+wget https://archive.org/download/serioussamsedemo/SeriousSamSEDemo.exe
+wget https://archive.org/download/SeriousSamPatches/secondencounterpatch107_usa.exe
+7z x SeriousSamSEDemo.exe
+7z x -y secondencounterpatch107_usa.exe
+mkdir ~/.serioussamse
+cp -ax Disk1/* ~/.serioussamse
+rm -fr Disk1
+
+When you first launch the game, goto Menu -> Options -> Execute Addons and select the default option. 
+The demo version uses old settings scripts. New ones you can take here: https://github.com/tx00100xt/SeriousSamClassic
+Just rewrite the Scripts directory replacing the files
 
 Launching the game
 ==================
