@@ -1,7 +1,19 @@
-// amp11 - an Audio-MPEG decoder - layer 3 decoder
-// Copyright (c) 1997-99 Niklas Beisert
-// See COPYING (GNU Library General Public License 2) for license
+/* Copyright (c) 1997-2001 Niklas Beisert, Alen Ladavac. 
+This program is free software; you can redistribute it and/or modify
+it under the terms of version 2 of the GNU General Public License as published by
+the Free Software Foundation
 
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
+
+// amp11 - an Audio-MPEG decoder - layer 3 decoder
 // huffman tables were taken from mpg123 by Michael Hipp
 
 #include <stdio.h>
@@ -1057,7 +1069,6 @@ void ampegdecoder::jointstereo(grsistruct &si, float (*xr)[576], int *scalefacl)
     for (i=bil[_tmpsfb]; i<bil[_tmpsfb+1]; i++)
       ispos[i]=v;
   }
-
 
   int msstereo=hdrmodeext&2;
   for (i=0; i<max; i++)
