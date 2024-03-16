@@ -91,21 +91,23 @@ typedef uint32_t UINT;
   #define PLATFORM_RISCV64 0
 #endif
 
-#if defined(__aarch64__) || defined(__arm__) || PLATFORM_RISCV64 || defined(__mips__) || defined(__s390x__) || defined(__s390__) \
+#if defined(__aarch64__) || defined(__arm__) || PLATFORM_RISCV64 || defined(mips) || defined(__mips__) || defined(__mips) || defined(__s390x__) || defined(__s390__) \
     || defined(_powerpc)  || defined(__powerpc__)  || defined(__powerpc64__)  || defined(__POWERPC__)  || defined(__ppc__) \
-    || defined(__ppc64__)  || defined(__PPC__)  || defined(__PPC64__)  || defined(_ARCH_PPC)  || defined(_ARCH_PPC64) || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__)
+    || defined(__ppc64__)  || defined(__PPC__)  || defined(__PPC64__)  || defined(_ARCH_PPC)  || defined(_ARCH_PPC64) || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__) \
+    || defined(__loongarch_lp64) || defined(__loongarch_double_float) || defined(__loongarch_single_float) || defined(__loongarch_soft_float)
   #define PLATFORM_NOT_X86 1
 #else
   #define PLATFORM_NOT_X86 0
 #endif
 
 #if defined(__x86_64__) || defined(_M_X64) || defined(__aarch64__) || defined(_ARCH_PPC64) \
-    || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__) || PLATFORM_RISCV64 || defined(__powerpc64__) || defined(__s390x__) || defined(__ppc64__)
+    || defined(_M_IA64) || defined(__IA64__) || defined(__e2k__) || PLATFORM_RISCV64 || defined(__powerpc64__) || defined(__s390x__) || defined(__ppc64__) \
+    || defined(__loongarch_lp64) || defined(__loongarch_double_float) || defined(__loongarch_single_float) || defined(__loongarch_soft_float)
 
   #define PLATFORM_64BIT 1
 
 #elif defined(__i386) || defined(_M_IX86) || defined(__arm__) || defined(_M_ARM) || defined(__POWERPC__) \
-      || defined(_M_PPC) || defined(_ARCH_PPC)
+      || defined(_M_PPC) || defined(_ARCH_PPC) || (defined(mips) && !defined(__LP64__)) || (defined(mips__) && !defined(__LP64__)) || (defined(__mips__) && !defined(__LP64__))
 
   #define PLATFORM_32BIT 1
 
