@@ -16,6 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdAfx.h"
 
 #include "CompMessage.h"
+#include "Data.h"
 extern CTString _strStatsDetails;
 
 CCompMessage::CCompMessage(void)
@@ -78,6 +79,7 @@ void CCompMessage::Load_t(void)
   cm_bLoaded = TRUE;
 }
 
+/*
 // format message for given line width
 void CCompMessage::Format(INDEX ctCharsPerLine)
 {
@@ -182,6 +184,98 @@ void CCompMessage::PrepareMessage(INDEX ctCharsPerLine)
   // format it for new width
   Format(ctCharsPerLine);
 }
+*/
+// [Cecil] Format message based on text width
+void CCompMessage::Format(CDrawPort *pdp, PIX pixMaxWidth) {
+  if (cm_ctFormattedLines > 0) {
+    return;
+  }
+
+  cm_strFormattedText = "";
+  cm_ctFormattedLines = 1;
+
+  // Get stats
+  if (strncmp(cm_strText, "$STAT", 5) == 0) {
+    cm_strFormattedText = _strStatsDetails;
+
+    // Count line breaks
+    INDEX ct = cm_strFormattedText.Length();
+
+    for (INDEX i = 0; i < ct; i++) {
+      if (cm_strFormattedText[i] == '\n') {
+        cm_ctFormattedLines++;
+      }
+    }
+    return;
+  }
+
+  // Find last character that fits
+  CTString str = cm_strText;
+  INDEX i = IData::TextFitsInWidth(pdp, pixMaxWidth, str);
+  INDEX ct = cm_strText.Length();
+
+  // If it's not at the end
+  while (i < ct) {
+    // Go back until a certain word delimiter
+    INDEX iDelimiter = i;
+
+    while (--iDelimiter >= 0) {
+      char ch = str[iDelimiter];
+
+      // If found a suitable delimiter
+      switch (ch) {
+        case ' ': case '\n': case '\t': case '\r':
+          // Get the character after it and terminate the loop
+          i = iDelimiter + 1;
+          iDelimiter = 0;
+          break;
+      }
+    }
+
+    // Get part that fits and save the rest
+    CTString strPart;
+    str.Split(i, strPart, str);
+
+    // Add this part and go to a new line
+    cm_strFormattedText += strPart + "\n";
+
+    // Find next last character of that fits
+    i = IData::TextFitsInWidth(pdp, pixMaxWidth, str);
+    ct = str.Length();
+  }
+
+  // Add the rest of the string
+  cm_strFormattedText += str;
+
+  // Count line breaks
+  ct = cm_strFormattedText.Length();
+
+  for (i = 0; i < ct; i++) {
+    if (cm_strFormattedText[i] == '\n') {
+      cm_ctFormattedLines++;
+    }
+  }
+};
+
+// [Cecil] Prepare message for using by just loading it
+void CCompMessage::PrepareMessage(void)
+{
+  // if not loaded
+  if (!cm_bLoaded) {
+    // try to
+    try {
+      // load it
+      Load_t();
+    // if failed
+    } catch (const char *strError) {
+      // report warning
+      CPrintF("Cannot load message'%s': %s\n", (const char *)(CTString &)cm_fnmFileName, (const char *)strError);
+      // do nothing else
+      return;
+    }
+  }
+}
+
 
 // free memory used by message, but keep message filename
 void CCompMessage::UnprepareMessage(void)

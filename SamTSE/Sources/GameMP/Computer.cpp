@@ -16,6 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdAfx.h"
 #include "LCDDrawing.h"
 #include "CompMessage.h"
+#include "Render.h"
 
 #ifdef PLATFORM_UNIX
 #include <Engine/Base/SDL/SDLEvents.h>
@@ -63,6 +64,15 @@ static INDEX _ctMessagesOnScreen = 5;
 static INDEX _ctTextLinesOnScreen = 20;
 static INDEX _ctTextCharsPerRow = 20;
 
+// [Cecil] Maximum width for the message text
+static PIX _pixMessageTextWidth = 0;
+
+// [Cecil] Slider width multiplier
+static FLOAT _fSliderWidthMul = 1.0f;
+
+// [Cecil] Actual slider width
+#define SLIDER_WIDTH PIX(_pixMarginI * 2 * _fSliderWidthMul)
+
 // position of the message list
 static INDEX _iFirstMessageOnScreen = -1;
 static INDEX _iWantedFirstMessageOnScreen = 0;
@@ -88,6 +98,10 @@ static COLOR _colMedium;
 static COLOR _colDark;
 static COLOR _colBoxes;
 
+// [Cecil] Use bigger font in computer
+INDEX cmp_bBigFont = TRUE;
+FLOAT cmp_fBigFontScale = 1.0f;
+
 static void SetFont1(CDrawPort *pdp)
 {
   pdp->SetFont(_pfdConsoleFont);
@@ -101,6 +115,33 @@ static void SetFont2(CDrawPort *pdp)
   pdp->SetTextScaling(_fScaling2);
   pdp->SetTextAspect(1.0f);
 }
+
+// [Cecil] Check if should use big message font
+static inline BOOL UseBigFont(void) {
+  return (cmp_bBigFont && _pixSizeJ >= 720);
+};
+
+// [Cecil] Set message font
+static void SetMessageFont(CDrawPort *pdp) {
+  if (UseBigFont()) {
+    _pfdDisplayFont->SetFixedWidth();
+    pdp->SetFont(_pfdDisplayFont);
+
+    pdp->SetTextScaling(_fScaling2);
+    pdp->SetTextCharSpacing(-5.0f * _fScaling2);
+    pdp->SetTextAspect(1.0f);
+
+  } else {
+    SetFont1(pdp);
+  }
+};
+
+// [Cecil] Reset message font
+static void ResetMessageFont(void) {
+  if (UseBigFont()) {
+    _pfdDisplayFont->SetVariableWidth();
+  }
+};
 
 static COLOR MouseOverColor(const PIXaabbox2D &box, COLOR colNone,
                             COLOR colOff, COLOR colOn)
@@ -152,10 +193,8 @@ static PIXaabbox2D GetTextSliderSpace(void)
   PIX pixSizeI = _boxMsgText.Size()(1);
   PIX pixSizeJ = _boxMsgText.Size()(2);
 
-  PIX pixSliderSizeI = _pixMarginI*2;
-  if (pixSliderSizeI<5) {
-    pixSliderSizeI=5;
-  }
+  PIX pixSliderSizeI = ClampDn(SLIDER_WIDTH, (PIX)5);
+
   return PIXaabbox2D(
     PIX2D(pixSizeI-pixSliderSizeI, _pixMarginJ*4),
     PIX2D(pixSizeI, pixSizeJ));
@@ -166,10 +205,8 @@ static PIXaabbox2D GetMsgSliderSpace(void)
   PIX pixSizeI = _boxMsgList.Size()(1);
   PIX pixSizeJ = _boxMsgList.Size()(2);
 
-  PIX pixSliderSizeI = _pixMarginI*2;
-  if (pixSliderSizeI<5) {
-    pixSliderSizeI=5;
-  }
+  PIX pixSliderSizeI = ClampDn(SLIDER_WIDTH, (PIX)5);
+
   return PIXaabbox2D(
     PIX2D(pixSizeI-pixSliderSizeI, 0),
     PIX2D(pixSizeI, pixSizeJ));
@@ -181,8 +218,8 @@ static PIXaabbox2D GetTextSliderBox(void)
     return PIXaabbox2D();
   }
   INDEX ctTextLines = _acmMessages[_iActiveMessage].cm_ctFormattedLines;
-  //PIX pixSizeI = _boxMsgText.Size()(1);
-  //PIX pixSizeJ = _boxMsgText.Size()(2);
+  PIX pixSizeI = _boxMsgText.Size()(1);
+  PIX pixSizeJ = _boxMsgText.Size()(2);
   return GetSliderBox(
     _iTextLineOnScreen, _ctTextLinesOnScreen, ctTextLines, GetTextSliderSpace());
 }
@@ -190,8 +227,8 @@ static PIXaabbox2D GetTextSliderBox(void)
 static PIXaabbox2D GetMsgSliderBox(void)
 {
   INDEX ctLines = _acmMessages.Count();
-  //PIX pixSizeI = _boxMsgList.Size()(1);
-  //PIX pixSizeJ = _boxMsgList.Size()(2);
+  PIX pixSizeI = _boxMsgList.Size()(1);
+  PIX pixSizeJ = _boxMsgList.Size()(2);
   return GetSliderBox(
     _iFirstMessageOnScreen, _ctMessagesOnScreen, ctLines, GetMsgSliderSpace());
 }
@@ -309,7 +346,7 @@ void MessageTextDn(INDEX ctLines)
     return;
   }
   // find text lines count
-  _acmMessages[_iActiveMessage].PrepareMessage(_ctTextCharsPerRow);
+  _acmMessages[_iActiveMessage].PrepareMessage();
   INDEX ctTextLines = _acmMessages[_iActiveMessage].cm_ctFormattedLines;
   // calculate maximum value for first visible line
   INDEX iFirstLine = ctTextLines-_ctTextLinesOnScreen;
@@ -377,7 +414,7 @@ static void UpdateFirstOnScreen(void)
     if (i>=_iWantedFirstMessageOnScreen
       &&i<_iWantedFirstMessageOnScreen+_ctMessagesOnScreen) {
       // load
-      cm.PrepareMessage(_ctTextCharsPerRow);
+      cm.PrepareMessage();
     // if not on screen
     } else {
       // unload
@@ -450,19 +487,35 @@ static void UpdateSize(CDrawPort *pdp)
   // determine scaling
   _fScaling = 1.0f;
   _fScaling2 = 1.0f;
+  _fSliderWidthMul = 1.0f;
+
+  CFontData *pfd = _pfdConsoleFont;
+  INDEX iSubHeight = 0;
+
+  // Too small
   if (pixSizeJ<384) {
     _fScaling = 1.0f;
     _fScaling2 = pixSizeJ/480.0f;
+
+  // [Cecil] Too big
+  } else if (UseBigFont()) {
+    pfd = _pfdDisplayFont;
+    iSubHeight = 3;
+
+    FLOAT fMul = (pixSizeJ / 720.0f) * Clamp(cmp_fBigFontScale, 0.1f, 3.0f);
+    _fScaling *= fMul;
+    _fScaling2 *= fMul;
+    _fSliderWidthMul = 1.5f;
   }
 
-  // remember font size
-  CFontData *pfd = _pfdConsoleFont;
-  _pixCharSizeI = (PIX) (pfd->fd_pixCharWidth  + pfd->fd_pixCharSpacing);
-  _pixCharSizeJ = (PIX) (pfd->fd_pixCharHeight + pfd->fd_pixLineSpacing);
-  _pixCharSize2I = (PIX) (_pixCharSizeI*_fScaling2);
-  _pixCharSize2J = (PIX) (_pixCharSizeJ*_fScaling2);
-  _pixCharSizeI = (PIX) (_pixCharSizeI*_fScaling);
-  _pixCharSizeJ = (PIX) (_pixCharSizeJ*_fScaling);
+  // [Cecil] Message font sizes
+  _pixCharSizeI = (pfd->fd_pixCharWidth  + pfd->fd_pixCharSpacing) * _fScaling;
+  _pixCharSizeJ = (pfd->fd_pixCharHeight + pfd->fd_pixLineSpacing - iSubHeight) * _fScaling;
+
+  // [Cecil] Other computer text sizes
+  pfd = _pfdConsoleFont;
+  _pixCharSize2I = (pfd->fd_pixCharWidth  + pfd->fd_pixCharSpacing) * _fScaling2;
+  _pixCharSize2J = (pfd->fd_pixCharHeight + pfd->fd_pixLineSpacing) * _fScaling2;
 
   _pixMarginI = (PIX) (5*_fScaling2);
   _pixMarginJ = (PIX) (5*_fScaling2);
@@ -519,8 +572,12 @@ static void UpdateSize(CDrawPort *pdp)
   _boxMsgList -= PIX2D(0, fGroup0);
   _boxMsgText += PIX2D(fGroup0, 0);
   _boxMsgImage+= PIX2D(0, fGroup0);
+
+  // [Cecil] Calculate maximum width for the message text
+  _pixMessageTextWidth = (_boxMsgText.Size()(1) - _pixMarginI * 2 - SLIDER_WIDTH);
+
   _ctMessagesOnScreen  = (_boxMsgList.Size()(2) - _pixMarginJ*2)                 / _pixCharSizeJ;
-  _ctTextCharsPerRow   = (_boxMsgText.Size()(1) - _pixMarginI*4)                 / _pixCharSizeI;
+  _ctTextCharsPerRow   = _pixMessageTextWidth / _pixCharSizeI;
   _ctTextLinesOnScreen = (_boxMsgText.Size()(2) - _pixMarginJ*2 - _pixMarginJ*4) / _pixCharSizeJ;
 }
 
@@ -601,7 +658,7 @@ void PrintMessageList(CDrawPort *pdp)
 {
   PIX pixTextX = _pixMarginI;
   PIX pixYLine = _pixMarginJ;
-  SetFont1(pdp);
+  SetMessageFont(pdp); // [Cecil]
 
   INDEX iFirst = _iFirstMessageOnScreen;
   INDEX iLast = Min(INDEX(_iFirstMessageOnScreen+_ctMessagesOnScreen), _acmMessages.Count())-1;
@@ -634,6 +691,8 @@ void PrintMessageList(CDrawPort *pdp)
   }
   pdp->Fill( boxSlider.Min()(1)+2,  boxSlider.Min()(2)+2,
              boxSlider.Size()(1)-4, boxSlider.Size()(2)-4, col);
+
+  ResetMessageFont(); // [Cecil]
 }
 
 // print text of current message
@@ -669,8 +728,9 @@ void PrintMessageText(CDrawPort *pdp)
       strSubject0+=strChar;
     }
   }
-  PIX pixWidth0 = pdp->GetTextWidth(strSubject0);
-  PIX pixWidth1 = pdp->GetTextWidth(strSubject1);
+  // [Cecil] Better text width calculation
+  PIX pixWidth0 = IRender::GetTextWidth(pdp, strSubject0);
+  PIX pixWidth1 = IRender::GetTextWidth(pdp, strSubject1);
   pdp->PutText(strSubject0, _pixMarginI, _pixMarginJ-1, _colMedium);
   pdp->PutText(strSubject1, _pixMarginI+pixWidth0, _pixMarginJ-1, LerpColor( _colLight, _colMedium, 0.5f));
   pdp->PutText(strSubject2, _pixMarginI+pixWidth0+pixWidth1, _pixMarginJ-1, _colLight);
@@ -680,12 +740,15 @@ void PrintMessageText(CDrawPort *pdp)
   // fill in fresh player statistics
   if (strncmp(_acmMessages[_iActiveMessage].cm_strText, "$STAT", 5)==0) {
     _ppenPlayer->GetStats(_strStatsDetails, CST_DETAIL, _ctTextCharsPerRow);
-    _acmMessages[_iActiveMessage].cm_ctFormattedWidth = 0;
   }
-  // format text
-  _acmMessages[_iActiveMessage].PrepareMessage(_ctTextCharsPerRow);
 
-  SetFont1(pdp);
+  // [Cecil] Set font before formatting
+  SetMessageFont(pdp);
+
+  // [Cecil] Load and format text based on the box width
+  _acmMessages[_iActiveMessage].PrepareMessage();
+  _acmMessages[_iActiveMessage].Format(pdp, _pixMessageTextWidth);
+
   INDEX ctLineToPrint = int(_fMsgAppearDelta*20.0f);
   // print it
   PIX pixJ = _pixMarginJ*4;
@@ -713,6 +776,8 @@ void PrintMessageText(CDrawPort *pdp)
   }
   pdp->Fill( boxSlider.Min()(1)+2,  boxSlider.Min()(2)+2,
              boxSlider.Size()(1)-4, boxSlider.Size()(2)-4, col);
+
+  ResetMessageFont(); // [Cecil]
 }
 
 
@@ -1311,12 +1376,17 @@ void CGame::ComputerRender(CDrawPort *pdp)
     PrintMessageText(&dpMsgText);
     dpMsgText.Unlock();
   }
-  // draw image of current message
-  CDrawPort dpMsgImage(&dpComp, _boxMsgImage);
-  if (dpMsgImage.Lock()) {
-    LCDSetDrawport(&dpMsgImage);
-    RenderMessageImage(&dpMsgImage);
-    dpMsgImage.Unlock();
+
+  // [Cecil] Skip if invalid box size
+  if (!_boxMsgImage.IsEmpty()) {
+    // draw image of current message
+    CDrawPort dpMsgImage(&dpComp, _boxMsgImage);
+
+    if (dpMsgImage.Lock()) {
+      LCDSetDrawport(&dpMsgImage);
+      RenderMessageImage(&dpMsgImage);
+      dpMsgImage.Unlock();
+    }
   }
 
   // render mouse pointer on top of everything else

@@ -45,7 +45,9 @@ public:
   // load the message from file
   void Load_t(void);  // throw char *
   // format message for given line width
-  void Format(INDEX ctCharsPerLine);
+  //void Format(INDEX ctCharsPerLine);
+  // [Cecil] Format message based on text width
+  void Format(CDrawPort* pdp, PIX pixMaxWidth);
 
 public:
   CCompMessage(void);
@@ -53,7 +55,8 @@ public:
   // constructs message from ID
   void SetMessage(CCompMessageID *pcmi);
   // prepare message for using (load, format, etc.)
-  void PrepareMessage(INDEX ctCharsPerLine);
+  //void PrepareMessage(INDEX ctCharsPerLine);
+  void PrepareMessage();
   // free memory used by message, but keep message filename
   void UnprepareMessage(void);
   // mark message as read

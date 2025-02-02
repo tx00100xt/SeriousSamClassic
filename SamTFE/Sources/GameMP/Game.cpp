@@ -1241,6 +1241,9 @@ void CGame::InitInternal( void)
   gm_iWEDSinglePlayer = 0;
   gm_iSinglePlayer = 0;
 
+  // Big Font
+  extern INDEX cmp_bBigFont;
+  _pShell->DeclareSymbol("persistent user INDEX gam_bBigComputerFont;", &cmp_bBigFont);
   // add game timer handler
   _pTimer->AddHandler(&m_gthGameTimerHandler);
   // add shell variables
