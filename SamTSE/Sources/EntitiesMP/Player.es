@@ -67,6 +67,7 @@ extern __declspec(dllimport) FLOAT _fPlayerFOVAdjuster;
 INDEX hud_bShowPing	= FALSE;
 INDEX hud_bShowKills = FALSE;
 INDEX hud_bShowScore = TRUE;
+INDEX hud_bLegacyHUD = FALSE;
 
 extern void JumpFromBouncer(CEntity *penToBounce, CEntity *penBouncer);
 // from game
@@ -713,6 +714,7 @@ void CPlayer_OnInitClass(void)
   _pShell->DeclareSymbol("persistent user INDEX	hud_bShowPing;",	&hud_bShowPing);
   _pShell->DeclareSymbol("persistent user INDEX	hud_bShowKills;",	&hud_bShowKills);
   _pShell->DeclareSymbol("persistent user INDEX	hud_bShowScore;",	&hud_bShowScore);
+  _pShell->DeclareSymbol("persistent user INDEX	hud_bLegacyHUD;",	&hud_bLegacyHUD);
 
   _pShell->DeclareSymbol("user INDEX ctl_bMoveForward;",  (void *) &pctlCurrent.bMoveForward);
   _pShell->DeclareSymbol("user INDEX ctl_bMoveBackward;", (void *) &pctlCurrent.bMoveBackward);

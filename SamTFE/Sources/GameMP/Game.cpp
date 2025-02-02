@@ -2280,14 +2280,19 @@ static void PrintStats( CDrawPort *pdpDrawPort)
 		else if( fFPS >= 0.1f) strFPS.PrintF( "%4.1f", fFPS);
 
 		// printout FPS number
-		pdpDrawPort->PutTextR( strFPS, slDPWidth*0.643f, slDPHeight*0.97f, colFPS|245);
-
+        if(!_pShell->GetINDEX("hud_bLegacyHUD")) {
+		  pdpDrawPort->PutTextR( strFPS, slDPWidth*0.643f, slDPHeight*0.97f, colFPS|245);
+        } else {
+          if( hud_fEnableFPS) pdpDrawPort->PutTextC( strFPS, slDPWidth*0.75f, slDPHeight*0.005f, colFPS|192);
+        }
 		// set display interface (proportional) font
-		pdpDrawPort->SetFont( _pfdDisplayFont);
-		pdpDrawPort->SetTextAspect( 1.0f);
-		pdpDrawPort->SetTextScaling( 0.6f*fTextScale);
-		strFPS.PrintF("FPS\n");
-		pdpDrawPort->PutTextR( strFPS, slDPWidth*0.67f, slDPHeight*0.979f, colFPS|245);
+        if(!_pShell->GetINDEX("hud_bLegacyHUD")) {
+		  pdpDrawPort->SetFont( _pfdDisplayFont);
+		  pdpDrawPort->SetTextAspect( 1.0f);
+		  pdpDrawPort->SetTextScaling( 0.6f*fTextScale);
+		  strFPS.PrintF("FPS\n");
+		  pdpDrawPort->PutTextR( strFPS, slDPWidth*0.67f, slDPHeight*0.979f, colFPS|245);
+       }
 
   // if in extensive stats mode
   if( hud_iStats==2 && hud_iEnableStats)

@@ -43,6 +43,7 @@ extern __declspec(dllimport) FLOAT _fFragScorerHeightAdjuster;
 extern INDEX hud_bShowPing;
 extern INDEX hud_bShowKills;
 extern INDEX hud_bShowScore;
+extern INDEX hud_bLegacyHUD;
 
 // cheats
 extern INDEX cht_bEnable;
@@ -863,16 +864,17 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
 	}
 	strValue.PrintF("%d", (SLONG)ceil(fValue));
   //####
-  _fCustomScalingAdjustment = 0.5f;
+  _fCustomScalingAdjustment = 0.9f;
+  if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
   PrepareColorTransitions( colMax, colTop, colMid, C_RED, 0.5f, 0.25f, FALSE);
   fRow = pixBottomBound-fHalfUnit;
   fCol = pixLeftBound+fHalfUnit;
   colDefault = AddShaker( 5, (INDEX) fValue, penLast->m_iLastHealth, penLast->m_tmHealthChanged, fMoverX, fMoverY);
-  _fCustomScalingAdjustment = 0.7f;
+  if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.7f;}
   HUD_DrawBorder( fCol+fMoverX, fRow+fMoverY, fOneUnit, fOneUnit, colBorder);
   fCol += fAdvUnit+fChrUnit*3/2 -fHalfUnit;
   HUD_DrawBorder( fCol, fRow, fChrUnit*3, fOneUnit, colBorder);
-  _fCustomScalingAdjustment = 0.5f;
+  if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
   HUD_DrawText( fCol, fRow, strValue, colDefault, fNormValue);
   fCol -= fAdvUnit+fChrUnit*3/2 -fHalfUnit;
   HUD_DrawIcon( fCol+fMoverX, fRow+fMoverY, _toHealth, C_WHITE /*_colHUD*/, fNormValue, TRUE);
@@ -884,14 +886,18 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
     strValue.PrintF( "%d", (SLONG)ceil(fValue));
     PrepareColorTransitions( colMax, colTop, colMid, C_lGRAY, 0.5f, 0.25f, FALSE);
     //fRow = pixBottomBound- (fNextUnit+fHalfUnit);//*_pDP->dp_fWideAdjustment;
-    fRow = pixBottomBound- (fNextUnit+fHalfUnit) * _fArmorHeightAdjuster;
+    if (hud_bLegacyHUD) {
+      fRow = pixBottomBound - (fNextUnit+fHalfUnit) * (_fArmorHeightAdjuster + 0.3f);
+    } else {
+      fRow = pixBottomBound - (fNextUnit+fHalfUnit) * _fArmorHeightAdjuster;
+    }
     fCol = pixLeftBound+    fHalfUnit;
     colDefault = AddShaker( 3, (INDEX) fValue, penLast->m_iLastArmor, penLast->m_tmArmorChanged, fMoverX, fMoverY);
-    _fCustomScalingAdjustment = 0.7f;
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.7f;}
     HUD_DrawBorder( fCol+fMoverX, fRow+fMoverY, fOneUnit, fOneUnit, colBorder);
     fCol += fAdvUnit+fChrUnit*3/2 -fHalfUnit;
     HUD_DrawBorder( fCol, fRow, fChrUnit*3, fOneUnit, colBorder);
-    _fCustomScalingAdjustment = 0.5f;
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
     HUD_DrawText( fCol, fRow, strValue, NONE, fNormValue);
     fCol -= fAdvUnit+fChrUnit*3/2 -fHalfUnit;
     if (fValue<=50.5f) {
@@ -925,30 +931,48 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
     BOOL bDrawAmmoIcon = _fCustomScaling<=1.0f;
     // draw ammo, value and weapon
     fRow = pixBottomBound-fHalfUnit;
-    fCol = 175 + fHalfUnit;
-    colDefault = AddShaker( 4, (INDEX) fValue, penLast->m_iLastAmmo, penLast->m_tmAmmoChanged, fMoverX, fMoverY);
-  	_fCustomScalingAdjustment = 0.7f;
-    HUD_DrawBorder( fCol+fMoverX, fRow+fMoverY, fOneUnit, fOneUnit, colBorder);
+    FLOAT fColAdjustment = 0.0f;
+    if (hud_bLegacyHUD) {
+      if (hud_fScaling > 0.5f) {
+        fColAdjustment = 3.0f;
+      } else {
+        fColAdjustment = 2.0f;
+      }
+      fCol = 205 + fHalfUnit;
+    } else {
+      fCol = 175 + fHalfUnit;
+    }
+    colDefault = AddShaker( 4, fValue, penLast->m_iLastAmmo, penLast->m_tmAmmoChanged, fMoverX, fMoverY);
+  	if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.7f;}
+    HUD_DrawBorder( fCol+fMoverX, fRow+fMoverY, fOneUnit*1.5, fOneUnit, colBorder);
     fCol += fAdvUnit+fChrUnit*3/2 -fHalfUnit;
+    fCol += fColAdjustment;
     HUD_DrawBorder( fCol, fRow, fChrUnit*3, fOneUnit, colBorder);
+    fCol -= fColAdjustment;
     if( bDrawAmmoIcon) {
       fCol += fAdvUnit+fChrUnit*3/2 -fHalfUnit;
       HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, colBorder);
-      _fCustomScalingAdjustment = 0.5f;
+      if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
       HUD_DrawIcon( fCol, fRow, *ptoCurrentAmmo, C_WHITE /*_colHUD*/, fNormValue, TRUE);
       fCol -= fAdvUnit+fChrUnit*3/2 -fHalfUnit;
     }
-    _fCustomScalingAdjustment = 0.5f;
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
+    fCol += fColAdjustment;
     HUD_DrawText( fCol, fRow, strValue, NONE, fNormValue);
+    fCol -= fColAdjustment;
     fCol -= fAdvUnit+fChrUnit*3/2 -fHalfUnit;
     HUD_DrawIcon( fCol+fMoverX, fRow+fMoverY, *ptoCurrentWeapon, C_WHITE /*_colHUD*/, fNormValue, !bDrawAmmoIcon);
   } else if( ptoCurrentWeapon!=NULL) {
     // draw only knife or colt icons (ammo is irrelevant)
     fRow = pixBottomBound-fHalfUnit;
-    fCol = 205 + fHalfUnit;
-    _fCustomScalingAdjustment = 0.7f;
-    HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, colBorder);
-    _fCustomScalingAdjustment = 0.5f;
+    if (hud_bLegacyHUD) {
+      fCol = 205 + fHalfUnit;
+    } else {
+      fCol = 205 + fHalfUnit;
+    }
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.7f;}
+    HUD_DrawBorder( fCol, fRow, fOneUnit* 1.5, fOneUnit, colBorder);
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
     HUD_DrawIcon(   fCol, fRow, *ptoCurrentWeapon, C_WHITE /*_colHUD*/, fNormValue, FALSE);
   }
 
@@ -991,9 +1015,9 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
       colBombIcon = LerpColor(colBombIcon, C_RED, fFactor);
       colBombBar = LerpColor(colBombBar, C_RED, fFactor);
     }
-    _fCustomScalingAdjustment = 0.7f;
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.7f;}
     HUD_DrawBorder( fCol,         fRow, fOneUnitS, fOneUnitS, colBombBorder);
-    _fCustomScalingAdjustment = 0.5f;
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
     HUD_DrawIcon(   fCol,         fRow, _toASeriousBomb, colBombIcon, fNormValue, FALSE);
     HUD_DrawBar(    fCol+fBarPos, fRow, (INDEX) (fOneUnitS/5), (INDEX) (fOneUnitS-2), BO_DOWN, colBombBar, fNormValue);
     // make space for serious bomb
@@ -1014,9 +1038,9 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
       if( ptoCurrentAmmo == ai.ai_ptoAmmo) colIcon = C_WHITE; 
       fNormValue = (FLOAT)ai.ai_iAmmoAmmount / ai.ai_iMaxAmmoAmmount;
       colBar = AddShaker( 4, ai.ai_iAmmoAmmount, ai.ai_iLastAmmoAmmount, ai.ai_tmAmmoChanged, fMoverX, fMoverY);
-	  _fCustomScalingAdjustment = 0.7f;
+      if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.7f;}
       HUD_DrawBorder( fCol,         fRow+fMoverY, fOneUnitS, fOneUnitS, colBorder);
-      _fCustomScalingAdjustment = 0.5f;
+      if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
       HUD_DrawIcon(   fCol,         fRow+fMoverY, *_aaiAmmo[i].ai_ptoAmmo, colIcon, fNormValue, FALSE);
       HUD_DrawBar(    fCol+fBarPos, fRow+fMoverY, (INDEX) (fOneUnitS/5), (INDEX) (fOneUnitS-2), BO_DOWN, colBar, fNormValue);
       // advance to next position
@@ -1037,9 +1061,9 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
     if( tmDelta<=0) continue;
     fNormValue = tmDelta / ptmPowerupsMax[i];
     // draw icon and a little bar
-    _fCustomScalingAdjustment = 0.7f;
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.7f;}
     HUD_DrawBorder( fCol,         fRow, fOneUnitS, fOneUnitS, colBorder);
-    _fCustomScalingAdjustment = 0.5f;
+    if (!hud_bLegacyHUD) {_fCustomScalingAdjustment = 0.5f;}
     HUD_DrawIcon(   fCol,         fRow, _atoPowerups[i], C_WHITE /*_colHUD*/, fNormValue, TRUE);
     HUD_DrawBar(    fCol+fBarPos, fRow, (INDEX) (fOneUnitS/5), (INDEX) (fOneUnitS-2), BO_DOWN, NONE, fNormValue);
     // play sound if icon is flashing
@@ -1068,7 +1092,7 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
   const BOOL bSinglePlay  =  GetSP()->sp_bSinglePlayer;
   COLOR colScore  = _colHUD;
   if(bSinglePlay) {
-    if (hud_bShowKills)
+    if (hud_bShowKills && !hud_bLegacyHUD)
 	{
     // set font and prepare font parameters
     _pfdDisplayFont->SetVariableWidth();
@@ -1124,21 +1148,27 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
       if( _awiWeapons[i].wi_paiAmmo!=NULL && _awiWeapons[i].wi_paiAmmo->ai_iAmmoAmmount==0) {
         _fCustomScalingAdjustment = 0.9f; //#### 0.7f - 1.0f
         HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, 0x22334400);
-        if (hud_bWeaponsIconScale) {
+        if (hud_bLegacyHUD) {
+          _fCustomScalingAdjustment = 1.0f;
+        } else if (hud_bWeaponsIconScale) {
           _fCustomScalingAdjustment = 0.75f;
         } else {
           _fCustomScalingAdjustment = 0.5f;
         }
+
         HUD_DrawIcon(   fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, 0x22334400, 1.0f, FALSE);
       // yes ammo
       } else {
         _fCustomScalingAdjustment = 1.0f; //#### 0.7f - 1.0f
         HUD_DrawBorder( fCol, fRow, fOneUnit, fOneUnit, colBorder);
-        if (hud_bWeaponsIconScale) {
+        if (hud_bLegacyHUD) {
+          _fCustomScalingAdjustment = 1.0f;
+        } else if (hud_bWeaponsIconScale) {
           _fCustomScalingAdjustment = 0.75f;
         } else {
           _fCustomScalingAdjustment = 0.5f;
         }
+
         HUD_DrawIcon(   fCol, fRow, *_awiWeapons[i].wi_ptoWeapon, colIcon, 1.0f, FALSE);
       }
       // advance to next position
@@ -1295,43 +1325,46 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
         const FLOAT fCharWidth = (PIX)((_pfdDisplayFont->GetWidth()-2) *fTextScale);
 //####
 	    long textoffset = 1;
+        INDEX j=i;
+        if (hud_bLegacyHUD) { j++;}
+        
         if( bCooperative)
 	    {
 	        if (hud_bShowKills)
 		    {
 		       textoffset += (TXT_WIDTH_KILLS /2);
-   	           _pDP->PutTextC(strKillsT,			_pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_MAGENTA |_ulAlphaHUD); textoffset += (TXT_WIDTH_KILLS/2);
-	           _pDP->PutText("/",					_pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_MAGENTA |_ulAlphaHUD);	textoffset += 2;
-	           _pDP->PutTextC(strKillsC,			_pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_MAGENTA |_ulAlphaHUD);	textoffset += (TXT_WIDTH_KILLS/2);
+   	           _pDP->PutTextC(strKillsT,			_pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_MAGENTA |_ulAlphaHUD); textoffset += (TXT_WIDTH_KILLS/2);
+	           _pDP->PutText("/",					_pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_MAGENTA |_ulAlphaHUD);	textoffset += 2;
+	           _pDP->PutTextC(strKillsC,			_pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_MAGENTA |_ulAlphaHUD);	textoffset += (TXT_WIDTH_KILLS/2);
 	        }
 	        if (hud_bShowPing)
 		    {
-	           _pDP->PutTextR("ms",				     _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += 2;
-	           _pDP->PutTextR(strPing,			     _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += TXT_WIDTH_PING+1;
+	           _pDP->PutTextR("ms",				     _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += 2;
+	           _pDP->PutTextR(strPing,			     _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += TXT_WIDTH_PING+1;
 		    }
-	       	_pDP->PutTextC(strArmor,			     _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, colArmor |_ulAlphaHUD);	textoffset += (TXT_WIDTH_ARMOR/2);
-	       	_pDP->PutText("/",					     _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, _colHUD  |_ulAlphaHUD);	textoffset += 2;
-	       	_pDP->PutTextC(strHealth,			     _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, colHealth|_ulAlphaHUD);	textoffset += (TXT_WIDTH_HEALTH/2);
+	       	_pDP->PutTextC(strArmor,			     _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, colArmor |_ulAlphaHUD);	textoffset += (TXT_WIDTH_ARMOR/2);
+	       	_pDP->PutText("/",					     _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, _colHUD  |_ulAlphaHUD);	textoffset += 2;
+	       	_pDP->PutTextC(strHealth,			     _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, colHealth|_ulAlphaHUD);	textoffset += (TXT_WIDTH_HEALTH/2);
 	    }else if( bScoreMatch) {
 	        if (hud_bShowPing)
 			{
-	           _pDP->PutTextR("ms",				     _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += 2;
-	           _pDP->PutTextR(strPing,				 _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += TXT_WIDTH_PING+1;
+	           _pDP->PutTextR("ms",				     _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += 2;
+	           _pDP->PutTextR(strPing,				 _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += TXT_WIDTH_PING+1;
 			}
-			_pDP->PutTextC(strMana,                  _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, colMana |_ulAlphaHUD);	textoffset += (TXT_WIDTH_MANA/2);
-			_pDP->PutText("/",                       _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, _colHUD |_ulAlphaHUD);	textoffset += 2;
-			_pDP->PutTextC(strScore,                 _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, colScore|_ulAlphaHUD);	textoffset += (TXT_WIDTH_SCORE/2);
+			_pDP->PutTextC(strMana,                  _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, colMana |_ulAlphaHUD);	textoffset += (TXT_WIDTH_MANA/2);
+			_pDP->PutText("/",                       _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, _colHUD |_ulAlphaHUD);	textoffset += 2;
+			_pDP->PutTextC(strScore,                 _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, colScore|_ulAlphaHUD);	textoffset += (TXT_WIDTH_SCORE/2);
 	    }else { // fragmatch!
 	        if (hud_bShowPing)
 			{
-	           _pDP->PutTextR("ms",				     _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += 2;
-	           _pDP->PutTextR(strPing,		         _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += TXT_WIDTH_PING+1;
+	           _pDP->PutTextR("ms",				     _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += 2;
+	           _pDP->PutTextR(strPing,		         _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, C_YELLOW |_ulAlphaHUD);	textoffset += TXT_WIDTH_PING+1;
 			}
-			_pDP->PutTextC(strDeaths,                _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, colDeaths|_ulAlphaHUD);	textoffset += (TXT_WIDTH_DEATHS/2);
-			_pDP->PutText("/",                       _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, _colHUD  |_ulAlphaHUD);	textoffset += 2;
-			_pDP->PutTextC(strFrags,                 _pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, colFrags |_ulAlphaHUD);	textoffset += (TXT_WIDTH_FRAGS/2);
+			_pDP->PutTextC(strDeaths,                _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, colDeaths|_ulAlphaHUD);	textoffset += (TXT_WIDTH_DEATHS/2);
+			_pDP->PutText("/",                       _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, _colHUD  |_ulAlphaHUD);	textoffset += 2;
+			_pDP->PutTextC(strFrags,                 _pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, colFrags |_ulAlphaHUD);	textoffset += (TXT_WIDTH_FRAGS/2);
 	    }
-		_pDP->PutTextR(strName,	_pixDPWidth - textoffset * fCharWidth, fCharHeight*i+fOneUnit * 2, colScore |_ulAlphaHUD);
+		_pDP->PutTextR(strName,	_pixDPWidth - textoffset * fCharWidth, fCharHeight*j+fOneUnit * 2, colScore |_ulAlphaHUD);
 	  }
       // calculate summ of scores (for coop mode)
       iScoreSum += iScore;
@@ -1417,7 +1450,11 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
     if( hud_bShowMessages && _penPlayer->m_ctUnreadMessages>0) {
       strValue.PrintF( "%d", _penPlayer->m_ctUnreadMessages);
       //fRow = pixTopBound+fHalfUnit;
-      fRow = pixBottomBound- (fNextUnit+fHalfUnit) * _fArmorHeightAdjuster - 21.0f;    
+      if (hud_bLegacyHUD) {
+        fRow = pixTopBound+fHalfUnit;
+      } else {
+        fRow = pixBottomBound- (fNextUnit+fHalfUnit) * _fArmorHeightAdjuster - 21.0f; 
+      }
       fCol = pixRightBound-fHalfUnit-fAdvUnit-fChrUnit*4;
       const FLOAT tmIn = 0.5f;
       const FLOAT tmOut = 0.5f;
@@ -1433,7 +1470,11 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
         } else {
           fRatio = 1.0f;
         }
-        fRow-=fAdvUnit*5*fRatio;
+        if (hud_bLegacyHUD) {
+          fRow+=fAdvUnit*5*fRatio;
+        } else {
+          fRow-=fAdvUnit*5*fRatio;
+        }
         fCol-=fAdvUnit*15*fRatio;
         col = LerpColor(_colHUD, C_WHITE|0xFF, fRatio);
       }
