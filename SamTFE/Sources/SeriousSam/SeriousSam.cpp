@@ -102,6 +102,7 @@ __extern FLOAT sam_fPlayerOffset = 0.0f;
 
 // display mode settings
 __extern INDEX sam_bFullScreenActive = FALSE;
+__extern INDEX sam_bBorderLessActive = FALSE;
 __extern INDEX sam_iScreenSizeI = 1024;  // current size of the window
 __extern INDEX sam_iScreenSizeJ = 768;  // current size of the window
 __extern INDEX sam_iAspectSizeI = 16;  //
@@ -214,7 +215,7 @@ static void ApplyRenderingPreferences(void)
 
 extern void ApplyVideoMode(void)
 {
-  StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,  sam_iAspectSizeI, sam_iAspectSizeJ,  (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive);
+  StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,  sam_iAspectSizeI, sam_iAspectSizeJ,  (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive, sam_bBorderLessActive);
 }
 
 static void BenchMark(void)
@@ -741,6 +742,7 @@ BOOL Init( HINSTANCE hInstance, int nCmdShow, CTString strCmdLine)
   // declare shell symbols
   _pShell->DeclareSymbol("user void PlayDemo(CTString);", (void *) &PlayDemo);
   _pShell->DeclareSymbol("persistent INDEX sam_bFullScreen;",   (void *) &sam_bFullScreenActive);
+  _pShell->DeclareSymbol("persistent INDEX sam_bBorderLess;",   (void *) &sam_bBorderLessActive);
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeI;",  (void *) &sam_iScreenSizeI);
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeJ;",  (void *) &sam_iScreenSizeJ);
   _pShell->DeclareSymbol("persistent INDEX sam_iAspectSizeI;",  (void *) &sam_iAspectSizeI);
@@ -841,7 +843,7 @@ BOOL Init( HINSTANCE hInstance, int nCmdShow, CTString strCmdLine)
   LoadDemosList();
 
   // apply application mode
-  StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive);
+  StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive ,sam_bBorderLessActive);
 
   // set default mode reporting
   if( sam_bFirstStarted) {
@@ -1252,7 +1254,8 @@ int SubMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int 
           if( sam_bFullScreenActive) {
             ShowWindow(_hwndMain, SW_SHOWNORMAL);
             // set the display mode once again
-            StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive);
+            sam_bBorderLessActive = FALSE;
+            StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive, sam_bBorderLessActive);
           // if not in full screen
           } else {
             // restore window
@@ -1265,7 +1268,7 @@ int SubMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int 
           _bWindowChanging  = TRUE;
           _bReconsiderInput = TRUE;
           // go to full screen
-          StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, TRUE);
+          StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, TRUE, FALSE);
           ShowWindow( _hwndMain, SW_SHOWNORMAL);
           break;
         }
@@ -1278,7 +1281,7 @@ int SubMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int 
       if( msg.message==WM_SYSKEYDOWN && msg.wParam==VK_RETURN && !IsIconic(_hwndMain)) {
         // !!! FIXME: SDL doesn't need to rebuild the GL context here to toggle fullscreen.
         //STUBBED("SDL doesn't need to rebuild the GL context here...");
-        StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, !sam_bFullScreenActive);
+        StartNewMode( (GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, sam_iAspectSizeI, sam_iAspectSizeJ, (enum DisplayDepth)sam_iDisplayDepth, !sam_bFullScreenActive, FALSE);
 #ifdef PLATFORM_UNIX
         if (_pInput != NULL) // rcg02042003 hack for SDL vs. Win32.
           _pInput->ClearRelativeMouseMotion();
@@ -1792,13 +1795,14 @@ int main(int argc, char **argv)
 
 // try to start a new display mode
 BOOL TryToSetDisplayMode( enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
-                          PIX aspSizeI, PIX aspSizeJ, enum DisplayDepth eColorDepth, BOOL bFullScreenMode)
+                          PIX aspSizeI, PIX aspSizeJ, enum DisplayDepth eColorDepth, BOOL bFullScreenMode, BOOL bBorderLessMode)
 {
   CDisplayMode dmTmp;
   dmTmp.dm_ddDepth = eColorDepth;
-  CPrintF( TRANS("  Starting display mode: %dx%dx%s (%s)\n"),
+  CPrintF( TRANS("  Starting display mode: %dx%dx%s (%s, %s)\n"),
            pixSizeI, pixSizeJ, (const char *) dmTmp.DepthString(),
-           bFullScreenMode ? TRANS("fullscreen") : TRANS("window"));
+           bFullScreenMode ? TRANS("fullscreen") : TRANS("window"),
+           bBorderLessMode ? TRANS("borderless") : TRANS("normal"));
 
   // mark to start ignoring window size/position messages until settled down
   _bWindowChanging = TRUE;
@@ -1926,13 +1930,13 @@ const INDEX aDefaultModes[][3] =
 const INDEX ctDefaultModes = ARRAYCOUNT(aDefaultModes);
 
 // start new display mode
-void StartNewMode( enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ, PIX aspSizeI, PIX aspSizeJ, enum DisplayDepth eColorDepth, BOOL bFullScreenMode)
+void StartNewMode( enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ, PIX aspSizeI, PIX aspSizeJ, enum DisplayDepth eColorDepth, BOOL bFullScreenMode, BOOL bBorderLessMode)
 {
   CPrintF( TRANS("\n* START NEW DISPLAY MODE ...\n"));
 
   _pShell->Execute("gam_bEnableAdvancedObserving = 1;");
   // try to set the mode
-  BOOL bSuccess = TryToSetDisplayMode( eGfxAPI, iAdapter, pixSizeI, pixSizeJ, aspSizeI, aspSizeJ, eColorDepth, bFullScreenMode);
+  BOOL bSuccess = TryToSetDisplayMode( eGfxAPI, iAdapter, pixSizeI, pixSizeJ, aspSizeI, aspSizeJ, eColorDepth, bFullScreenMode, bBorderLessMode);
 
   // if failed
   if( !bSuccess)
@@ -1953,7 +1957,7 @@ void StartNewMode( enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pi
       // set sam_iGfxAPI for SDL_CreateWindow
       sam_iGfxAPI = eGfxAPI;
       CPrintF(TRANSV("\nTrying recovery mode %d...\n"), iMode);
-      bSuccess = TryToSetDisplayMode( eGfxAPI, iAdapter, pixSizeI, pixSizeJ, aspSizeI, aspSizeJ, eColorDepth, bFullScreenMode);
+      bSuccess = TryToSetDisplayMode( eGfxAPI, iAdapter, pixSizeI, pixSizeJ, aspSizeI, aspSizeJ, eColorDepth, bFullScreenMode, bBorderLessMode);
       if( bSuccess) break;
     }
     // if all failed

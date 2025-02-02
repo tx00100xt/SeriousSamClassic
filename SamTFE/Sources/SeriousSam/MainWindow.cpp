@@ -35,6 +35,7 @@ static PIX _pixLastSizeI, _pixLastSizeJ;
 #ifdef PLATFORM_WIN32
 static HBITMAP _hbmSplash = NULL;
 static BITMAP  _bmSplash;
+extern INDEX sam_bBorderLessActive;
 
 // window procedure active while window changes are occuring
 LRESULT WindowProc_WindowChanging( HWND hWnd, UINT message, 
@@ -199,18 +200,46 @@ void CloseMainWindow(void)
 void ResetMainWindowNormal(void)
 {
 #ifdef PLATFORM_WIN32
-  ShowWindow( _hwndMain, SW_HIDE);
-  // add edges and title bar to window size so client area would have size that we requested
-  RECT rWindow, rClient;
-  GetClientRect( _hwndMain, &rClient);
-  GetWindowRect( _hwndMain, &rWindow);
-  const PIX pixWidth  = _pixLastSizeI + (rWindow.right-rWindow.left) - (rClient.right-rClient.left);
-  const PIX pixHeight = _pixLastSizeJ + (rWindow.bottom-rWindow.top) - (rClient.bottom-rClient.top);
-  const PIX pixPosX   = (::GetSystemMetrics(SM_CXSCREEN) - pixWidth ) /2;
-  const PIX pixPosY   = (::GetSystemMetrics(SM_CYSCREEN) - pixHeight) /2;
-  // set new window size and show it
-  SetWindowPos( _hwndMain, NULL, pixPosX,pixPosY, pixWidth,pixHeight, SWP_NOZORDER);
-  ShowWindow(   _hwndMain, SW_SHOW);
+    int iFullscreenWidth = ::GetSystemMetrics(SM_CXSCREEN);
+    int iFullscreenHeight = ::GetSystemMetrics(SM_CYSCREEN);
+
+    ShowWindow(_hwndMain, SW_HIDE);
+
+    PIX pixWidth = 0;
+    PIX pixHeight = 0;
+
+    if (sam_bBorderLessActive)
+    {
+        pixWidth = _pixLastSizeI;
+        pixHeight = _pixLastSizeJ;
+    }
+    else
+    {
+        // add edges and title bar to window size so client area would have size that we requested
+        RECT rWindow, rClient;
+        GetClientRect(_hwndMain, &rClient);
+        GetWindowRect(_hwndMain, &rWindow);
+
+        pixWidth = _pixLastSizeI + (rWindow.right - rWindow.left) - (rClient.right - rClient.left);
+        pixHeight = _pixLastSizeJ + (rWindow.bottom - rWindow.top) - (rClient.bottom - rClient.top);
+    }
+
+    const PIX pixPosX = (iFullscreenWidth - pixWidth) / 2;
+    const PIX pixPosY = (iFullscreenHeight - pixHeight) / 2;
+
+    if (sam_bBorderLessActive)
+    {
+        LONG lStyle = GetWindowLong(_hwndMain, GWL_STYLE);
+        lStyle &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
+        SetWindowLong(_hwndMain, GWL_STYLE, lStyle);
+        LONG lExStyle = GetWindowLong(_hwndMain, GWL_EXSTYLE);
+        lExStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
+        SetWindowLong(_hwndMain, GWL_EXSTYLE, lExStyle);
+    }
+
+    // set new window size and show it
+    SetWindowPos(_hwndMain, NULL, pixPosX, pixPosY, pixWidth, pixHeight, SWP_NOZORDER);
+    ShowWindow(_hwndMain, SW_SHOW);
 #endif
 }
 
@@ -247,7 +276,9 @@ void OpenMainWindowNormal( PIX pixSizeI, PIX pixSizeJ)
 #else
   SDL_snprintf( achWindowTitle, sizeof (achWindowTitle), TRANSV("Serious Sam (Window %dx%d)"), pixSizeI, pixSizeJ);
   //CPrintF((const char*)"--- %s ---\n",achWindowTitle);
-  _hwndMain = SDL_CreateWindow((const char*) strWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, SDL_WINDOW_OPENGL);
+  unsigned int _uFlags = SDL_WINDOW_OPENGL;
+  if (sam_bBorderLessActive) _uFlags |= SDL_WINDOW_BORDERLESS; 
+  _hwndMain = SDL_CreateWindow((const char*) strWindow1251ToUtf8(achWindowTitle), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pixSizeI, pixSizeJ, _uFlags);
   if( _hwndMain==NULL) FatalError(TRANSV("Cannot open main window!"));
   SE_UpdateWindowHandle( _hwndMain);
   _pixLastSizeI = pixSizeI;

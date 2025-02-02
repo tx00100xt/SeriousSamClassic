@@ -59,6 +59,7 @@ GameMode _gmRunningGameMode = GM_NONE;
 CListHead _lhServers;
 
 static INDEX sam_old_bFullScreenActive;
+static INDEX sam_old_bBorderLessActive;
 static INDEX sam_old_iAspectSizeI;
 static INDEX sam_old_iAspectSizeJ;
 static INDEX sam_old_iScreenSizeI;
@@ -289,6 +290,11 @@ CTString astrSplitScreenRadioTexts[] = {
   RADIOTRANS( "3 - split screen"),
   RADIOTRANS( "4 - split screen"),
 };
+//CTString astrBorderLessText[] =
+//{
+//  RADIOTRANS("Normal Window"),
+//  RADIOTRANS("BorderLess Window"),
+//};
 PIX apixAspectRatios[][2] =
 {
 	4, 3,
@@ -502,6 +508,7 @@ CTString astrDisplayAPIRadioTexts[] = {
 CMGTrigger mgDisplayAdaptersTrigger;
 CMGTrigger mgFullScreenTrigger;
 CMGTrigger mgAspectRatiosTrigger;
+CMGTrigger mgBorderLessTrigger;
 CMGTrigger mgResolutionsTrigger;
 CMGTrigger mgDisplayPrefsTrigger;
 CTString astrDisplayPrefsRadioTexts[] = {
@@ -2077,6 +2084,7 @@ static void UpdateVideoOptionsButtons(INDEX i);
 void RevertVideoSettings(void)
 {
   // restore previous variables
+  sam_bBorderLessActive = sam_old_bBorderLessActive;
   sam_bFullScreenActive = sam_old_bFullScreenActive;
   sam_iScreenSizeI      = sam_old_iScreenSizeI;
   sam_iScreenSizeJ      = sam_old_iScreenSizeJ;
@@ -2098,6 +2106,7 @@ void RevertVideoSettings(void)
 
 void ApplyVideoOptions(void)
 {
+  sam_old_bBorderLessActive = sam_bBorderLessActive;
   sam_old_bFullScreenActive = sam_bFullScreenActive;
   sam_old_iScreenSizeI      = sam_iScreenSizeI;
   sam_old_iScreenSizeJ      = sam_iScreenSizeJ;
@@ -2108,7 +2117,8 @@ void ApplyVideoOptions(void)
   sam_old_iGfxAPI           = sam_iGfxAPI;
   sam_old_iVideoSetup       = sam_iVideoSetup;
 
-  BOOL bFullScreenMode = mgFullScreenTrigger.mg_iSelected == 1;
+  BOOL bBorderLessMode = mgBorderLessTrigger.mg_iSelected; // == 1;
+  BOOL bFullScreenMode = mgFullScreenTrigger.mg_iSelected; // == 1;
   PIX pixWindowSizeI, pixWindowSizeJ;
   PIX aspWindowSizeI, aspWindowSizeJ;
 
@@ -2125,14 +2135,17 @@ void ApplyVideoOptions(void)
 
   // force fullscreen mode if needed
   CDisplayAdapter &da = _pGfx->gl_gaAPI[gat].ga_adaAdapter[iAdapter];
-  if( da.da_ulFlags & DAF_FULLSCREENONLY) bFullScreenMode = TRUE;
+  if( da.da_ulFlags & DAF_FULLSCREENONLY) { bFullScreenMode = TRUE; bBorderLessMode = FALSE;}
   if( da.da_ulFlags & DAF_16BITONLY) dd = DD_16BIT;
+  if( bBorderLessMode ) { bFullScreenMode = FALSE;}
   // force window to always be in default colors
   if( !bFullScreenMode) dd = DD_DEFAULT;
 
+  //CPrintF(TRANS(" bFullScreenMode,  bFullScreenMode mode could not be set!\n"), bFullScreenMode,);
 
   // (try to) set mode
-  StartNewMode(gat, iAdapter, pixWindowSizeI, pixWindowSizeJ, aspWindowSizeI, aspWindowSizeJ, dd, bFullScreenMode);
+  sam_bBorderLessActive = bBorderLessMode;
+  StartNewMode(gat, iAdapter, pixWindowSizeI, pixWindowSizeJ, aspWindowSizeI, aspWindowSizeJ, dd, bFullScreenMode, bBorderLessMode);
 
   //_fBigSizeJ = (2 - ((float)pixWindowSizeI / (float)pixWindowSizeJ))/10.0;
 
@@ -5161,13 +5174,25 @@ static void UpdateVideoOptionsButtons(INDEX iSelected)
   mgDisplayAdaptersTrigger.mg_bEnabled = _ctAdapters>1;
   mgVideoOptionsApply.mg_bEnabled = _bVideoOptionsChanged;
   // determine which should be visible
+  mgBorderLessTrigger.mg_bEnabled = TRUE;
   mgFullScreenTrigger.mg_bEnabled = TRUE;
   if( da.da_ulFlags&DAF_FULLSCREENONLY) {
     mgFullScreenTrigger.mg_bEnabled  = FALSE;
+    mgBorderLessTrigger.mg_bEnabled  = FALSE;
     mgFullScreenTrigger.mg_iSelected = 1;
+    mgBorderLessTrigger.mg_iSelected = 0;
     mgFullScreenTrigger.ApplyCurrentSelection();
+    mgBorderLessTrigger.ApplyCurrentSelection();
   }
 
+  if( mgFullScreenTrigger.mg_iSelected==1) {
+    mgBorderLessTrigger.mg_iSelected = 0;
+    mgBorderLessTrigger.ApplyCurrentSelection();
+  }
+  if( mgBorderLessTrigger.mg_iSelected==1) {
+    mgFullScreenTrigger.mg_iSelected = 0;
+    mgFullScreenTrigger.ApplyCurrentSelection();
+  }
 #ifdef PLATFORM_UNIX
   mgBitsPerPixelTrigger.mg_bEnabled = FALSE;
 #else
@@ -5203,10 +5228,21 @@ static void UpdateVideoOptionsButtons(INDEX iSelected)
 
 static void InitVideoOptionsButtons(void)
 {
+  if( sam_bBorderLessActive) {
+    sam_bFullScreenActive = FALSE;
+  } else  if (sam_bFullScreenActive) {
+      sam_bBorderLessActive = FALSE;
+  }
+
   if( sam_bFullScreenActive) {
     mgFullScreenTrigger.mg_iSelected = 1;
+    mgBorderLessTrigger.mg_iSelected = 0;
+  } else if ( sam_bBorderLessActive ) {
+    mgFullScreenTrigger.mg_iSelected = 0;
+    mgBorderLessTrigger.mg_iSelected = 1;
   } else {
     mgFullScreenTrigger.mg_iSelected = 0;
+    mgBorderLessTrigger.mg_iSelected = 0;
   }
 
   mgDisplayAPITrigger.mg_iSelected = APIToSwitch((GfxAPIType)(INDEX)sam_iGfxAPI);
@@ -5219,6 +5255,7 @@ static void InitVideoOptionsButtons(void)
   mgDisplayPrefsTrigger.mg_iSelected = Clamp(int(sam_iVideoSetup), 0,3);
 
   mgFullScreenTrigger.ApplyCurrentSelection();
+  mgBorderLessTrigger.ApplyCurrentSelection();
   mgDisplayPrefsTrigger.ApplyCurrentSelection();
   mgDisplayAPITrigger.ApplyCurrentSelection();
   mgDisplayAdaptersTrigger.ApplyCurrentSelection();
@@ -5241,32 +5278,36 @@ void CVideoOptionsMenu::Initialize_t(void)
   TRIGGER_MG(mgDisplayAdaptersTrigger, 	1, mgDisplayAPITrigger, mgDisplayPrefsTrigger, TRANS("DISPLAY ADAPTER"), astrNoYes);
   mgDisplayAdaptersTrigger.mg_strTip 	= TRANS("choose display adapter to be used");
 
-  TRIGGER_MG(mgDisplayPrefsTrigger, 	2, mgDisplayAdaptersTrigger, mgResolutionsTrigger, TRANS("PREFERENCES"), astrDisplayPrefsRadioTexts);
+  TRIGGER_MG(mgDisplayPrefsTrigger, 	2, mgDisplayAdaptersTrigger, mgAspectRatiosTrigger, TRANS("PREFERENCES"), astrDisplayPrefsRadioTexts);
   mgDisplayPrefsTrigger.mg_strTip 		= TRANS("balance between speed and rendering quality, depending on your system");
 
-  TRIGGER_MG(mgAspectRatiosTrigger, 	3, mgDisplayPrefsTrigger, mgFullScreenTrigger, TRANS("ASPECT RATIO"), astrNoYes);
+  TRIGGER_MG(mgAspectRatiosTrigger, 	3, mgDisplayPrefsTrigger, mgResolutionsTrigger, TRANS("ASPECT RATIO"), astrNoYes);
   mgAspectRatiosTrigger.mg_strTip 		= TRANS("select video aspect ratio");
 
-  TRIGGER_MG(mgResolutionsTrigger, 		4, mgDisplayPrefsTrigger, mgFullScreenTrigger, TRANS("RESOLUTION"), astrNoYes);
+  TRIGGER_MG(mgResolutionsTrigger, 		4, mgAspectRatiosTrigger, mgFullScreenTrigger, TRANS("RESOLUTION"), astrNoYes);
   mgResolutionsTrigger.mg_strTip 		= TRANS("select video mode resolution");
 
-  TRIGGER_MG(mgFullScreenTrigger, 		5, mgResolutionsTrigger, mgBitsPerPixelTrigger, TRANS("FULL SCREEN"), astrNoYes);
+  TRIGGER_MG(mgFullScreenTrigger, 		5, mgResolutionsTrigger, mgBorderLessTrigger, TRANS("FULL SCREEN"), astrNoYes);
   mgFullScreenTrigger.mg_strTip 		= TRANS("make game run in a window or in full screen");
 
-  TRIGGER_MG(mgBitsPerPixelTrigger, 	6, mgFullScreenTrigger, mgVideoRendering, TRANS("BITS PER PIXEL"), astrBitsPerPixelRadioTexts);
+  TRIGGER_MG(mgBorderLessTrigger, 		6, mgFullScreenTrigger, mgBitsPerPixelTrigger, TRANS("BORDERLESS MODE"), astrNoYes);
+  mgBorderLessTrigger.mg_strTip 		= TRANS("make game run in a borderless window");
+
+  TRIGGER_MG(mgBitsPerPixelTrigger, 	7, mgBorderLessTrigger, mgVideoRendering, TRANS("BITS PER PIXEL"), astrBitsPerPixelRadioTexts);
   mgBitsPerPixelTrigger.mg_strTip 		= TRANS("select number of colors used for display");
 
   mgDisplayPrefsTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   mgDisplayAPITrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   mgDisplayAdaptersTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   mgFullScreenTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
+  mgBorderLessTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   mgAspectRatiosTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   mgResolutionsTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   mgBitsPerPixelTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   
 
   mgVideoRendering.mg_bfsFontSize = BFS_MEDIUM;
-  mgVideoRendering.mg_boxOnScreen = BoxMediumRow(7.0f, _fGlobalModAdjuster);
+  mgVideoRendering.mg_boxOnScreen = BoxMediumRow(8.5f, _fGlobalModAdjuster);
   mgVideoRendering.mg_pmgUp = &mgBitsPerPixelTrigger;
   mgVideoRendering.mg_pmgDown = &mgVideoOptionsApply;
   mgVideoRendering.mg_strText = TRANS("RENDERING OPTIONS");
@@ -5275,7 +5316,7 @@ void CVideoOptionsMenu::Initialize_t(void)
   mgVideoRendering.mg_pActivatedFunction = &StartRenderingOptionsMenu;
 
   mgVideoOptionsApply.mg_bfsFontSize = BFS_LARGE;
-  mgVideoOptionsApply.mg_boxOnScreen = BoxBigRow(5.5f, _fGlobalButtonAdjuster);
+  mgVideoOptionsApply.mg_boxOnScreen = BoxBigRow(7.0f, _fGlobalButtonAdjuster);
   mgVideoOptionsApply.mg_pmgUp = &mgVideoRendering;
   mgVideoOptionsApply.mg_pmgDown = &mgDisplayAPITrigger;
   mgVideoOptionsApply.mg_strText = TRANS("APPLY");
