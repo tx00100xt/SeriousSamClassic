@@ -48,8 +48,13 @@ public:
   void Free(void);
 };
 
+#if defined(PLATFORM_UNIX)
 // the thread's local buffer
 THREADLOCAL(CMessageBuffer, mbReceivedMessage, CMessageBuffer());
+#else
+// the thread's local buffer
+static _declspec(thread) CMessageBuffer mbReceivedMessage = { 0, 0 };
+#endif
 
 void CMessageBuffer::Allocate(void)
 {

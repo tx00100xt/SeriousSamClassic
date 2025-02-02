@@ -1038,6 +1038,14 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
 
 /* Trying to connect with timeout   */
 
+#ifndef	EINPROGRESS
+#define EINPROGRESS 119
+#endif
+
+#ifndef	EINTR
+#define	EINTR 4
+#endif
+
     res = connect(_sock, (struct sockaddr *)&peer, sizeof(peer)); 
     if (res < 0) { 
        if (errno == EINPROGRESS) { 

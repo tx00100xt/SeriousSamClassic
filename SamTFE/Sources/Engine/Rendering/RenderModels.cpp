@@ -950,7 +950,7 @@ void CRenderer::RenderLensFlares(void)
                                               lfi.lfi_fDistance);
       const FLOAT fCenterFactor = (1-fOfCenterFadeFactor);
       const FLOAT fGlare = lft.lft_fGlareIntensity*fIntensity
-                   * (exp(1/(1+fGlearCompression*fCenterFactor*fCenterFactor)) -1) / (exp(1)-1);
+                   * (exp(1/(1+fGlearCompression*fCenterFactor*fCenterFactor)) -1) / (exp(1.0f)-1.0f);
       const ULONG ulGlareA = ClampUp( (ULONG) NormFloatToByte(fGlare), (ULONG) 255);
       // if there is any relevant glare
       if( ulGlareA>1) {

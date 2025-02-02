@@ -462,8 +462,8 @@ static void TexturesInfo(void)
   }}
 
   // report
-  const PIX pixNormDim = (PIX) (sqrt(TS.ts_pixNormSize));
-  const PIX pixAnimDim = (PIX) (sqrt(TS.ts_pixAnimSize));
+  const PIX pixNormDim = (PIX) (sqrt((DOUBLE)TS.ts_pixNormSize));
+  const PIX pixAnimDim = (PIX) (sqrt((DOUBLE)TS.ts_pixAnimSize));
   const PIX pixEffDim  = 1L<<tex_iEffectSize;
   CTString strTmp;
   strTmp = tex_bFineEffect ? "32-bit" : "16-bit";

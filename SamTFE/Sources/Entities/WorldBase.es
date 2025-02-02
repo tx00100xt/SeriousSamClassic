@@ -630,7 +630,7 @@ void CWorldBase_OnWorldRender(CWorld *pwo)
   // get current tick
   TIME tmNow = _pTimer->GetLerpedCurrentTick();
   // wrap time to prevent texture coordinates to get unprecise
-  tmNow = fmod(tmNow, 600.0); // (wrap every 10 minutes)
+  tmNow = fmod(tmNow, 600.0f); // (wrap every 10 minutes)
 
 // transformations
   // right

@@ -88,7 +88,7 @@ void ampegdecoder::init12()
 {
   int i;
   for (i=0; i<63; i++)
-    multiple[i]=exp(log(2)*(3-i)/3.0);
+	  multiple[i] = exp(log(2.0f)*(3 - i) / 3.0);
   multiple[63]=0;
   for (i=0; i<16; i++)
     rangefac[i]=2.0/((2<<i)-1);

@@ -20,7 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // ********************************************************************************************
 
 // Valley Of The Kings
-FLOAT _fValleyOfTheKingsCoordinates[4][3] {
+FLOAT _fValleyOfTheKingsCoordinates[4][3] = {
 -55.9375f,-16.25f,-231.75,
 -40.625f,-15.375f,-232.188f,
 -23.0f,-15.0f,-232.0f,
@@ -28,7 +28,7 @@ FLOAT _fValleyOfTheKingsCoordinates[4][3] {
 };
 
 // Dunes
-FLOAT _fDunesCoordinates[8][3] {
+FLOAT _fDunesCoordinates[8][3] = {
 -284.5f,171.625f,
 -495.625f,-285.5f,
 170.125f,-534.875f,
@@ -44,7 +44,7 @@ FLOAT _fDunesCoordinates[8][3] {
 };
 
 // Suburbs
-FLOAT _fSuburbsCoordinates[21][3] {
+FLOAT _fSuburbsCoordinates[21][3] = {
 224.125f,171.125f,887.375f,
 270.125f,170.0f,889.0f,
 370.125f,172.0f,822.125f,
@@ -69,12 +69,12 @@ FLOAT _fSuburbsCoordinates[21][3] {
 };
 
 // Metropolis
-FLOAT _fMetropolisCoordinates[1][3] {
+FLOAT _fMetropolisCoordinates[1][3] = {
 147.125f,64.3125f,26.6875f
 };
 
 // Alley Of Sphinxes
-FLOAT _fAlleyOfSphinxesCoordinates[37][3] {
+FLOAT _fAlleyOfSphinxesCoordinates[37][3] = {
 1594.0f,125.125f,2162.0f,
 1592.25f,128.375f,2181.38f,
 1586.0f,122.625f,1926.12f,
@@ -115,7 +115,7 @@ FLOAT _fAlleyOfSphinxesCoordinates[37][3] {
 };
 
 // Karnak
-FLOAT _fKarnakCoordinates[42][3] {
+FLOAT _fKarnakCoordinates[42][3] = {
 -186.938f,168.688f,1516.5f,
 -196.5f,171.562f,1493.06f,
 -275.062f,86.5f,1440.88f,
@@ -161,7 +161,7 @@ FLOAT _fKarnakCoordinates[42][3] {
 };
 
 // Luxor
-FLOAT _fLuxorCoordinates[52][3] {
+FLOAT _fLuxorCoordinates[52][3] = {
 -85.875f,14.4375f,6.6875f,
 -75.3125f,14.8125f,-5.0625f,
 -308.562f,116.312f,-7.8125f,
@@ -217,7 +217,7 @@ FLOAT _fLuxorCoordinates[52][3] {
 };
 
 // Sacred Yards
-FLOAT _fSacredYardsCoordinates[27][3] {
+FLOAT _fSacredYardsCoordinates[27][3] = {
 71.0f,108.938f,199.562f,
 87.75f,108.562f,182.938f,
 -150.5f,105.938f,89.0f,
@@ -248,7 +248,7 @@ FLOAT _fSacredYardsCoordinates[27][3] {
 };
 
 // Karnak Demo
-FLOAT _fKarnakDemoCoordinates[50][3] {
+FLOAT _fKarnakDemoCoordinates[50][3] = {
 -186.938f,168.688f,1516.5f,
 -196.5f,171.562f,1493.06f,
 -275.062f,86.5f,1440.88f,
@@ -302,7 +302,7 @@ FLOAT _fKarnakDemoCoordinates[50][3] {
 };
 
 // Intro
-FLOAT _fIntroCoordinates[8][3] {
+FLOAT _fIntroCoordinates[8][3] = {
 361.25f,119.25f,2016.62f,
 359.875f,120.5f,2067.88f,
 265.75f,120.25f,2064.62f,

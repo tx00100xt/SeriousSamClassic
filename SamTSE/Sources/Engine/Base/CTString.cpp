@@ -532,6 +532,16 @@ __declspec(naked) INDEX CTString::ScanF(const char *strFormat, ...)
 
 #else
 
+#if defined(_WIN32) && (_MSC_VER <= 1700)
+int vsscanf(const char *s, const char *fmt, va_list ap)
+{
+  void *a[20];
+  int i;
+  for (i=0; i<sizeof(a)/sizeof(a[0]); i++) a[i] = va_arg(ap, void *);
+  return sscanf(s, fmt, a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9]);
+}
+#endif // MSC_VER <= 1700
+
 INDEX CTString::ScanF(const char *strFormat, ...)
 {
     INDEX retval;

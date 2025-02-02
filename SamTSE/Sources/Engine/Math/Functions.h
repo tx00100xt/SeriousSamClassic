@@ -18,8 +18,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifdef PRAGMA_ONCE
   #pragma once
 #endif
+ 
+#include <float.h>
 
-// asm shortcuts
+#define _USE_MATH_DEFINES // needed to have definition of M_LOG2E 
+#include <math.h>
+
+// asm shortcuts`
 #define O offset
 #define Q qword ptr
 #define D dword ptr
@@ -308,7 +313,20 @@ inline FLOAT NormByteToFloat( const ULONG ul)
   return (FLOAT)ul * (1.0f/255.0f);
 }
 
-
+// fast float to int conversio _MSC_VER <= 1700
+#if defined(_WIN64) && (_MSC_VER <= 1700)
+inline SLONG FloatToInt( double d )
+{
+   union Cast
+   {
+      double d;
+      long l;
+    };
+   volatile Cast c;
+   c.d = d + 6755399441055744.0;
+   return c.l;
+}
+#else
 // fast float to int conversion
 inline SLONG FloatToInt( FLOAT f)
 {
@@ -330,6 +348,7 @@ inline SLONG FloatToInt( FLOAT f)
         : "memory"
   );
   return(slRet);
+
 #else
   // round to nearest by adding/subtracting 0.5 (depending on f pos/neg) before converting to SLONG
   float addToRound = copysignf(0.5f, f); // copy f's signbit to 0.5 => if f<0 then addToRound = -0.5, else 0.5
@@ -337,6 +356,8 @@ inline SLONG FloatToInt( FLOAT f)
 
 #endif
 }
+#endif // _MSC_VER <= 1700
+
 
 // log base 2 of any float numero
 inline FLOAT Log2( FLOAT f) {
@@ -363,8 +384,24 @@ inline FLOAT Log2( FLOAT f) {
   );
   return(fRet);
 #else
-  return log2f(f);
 
+#if ((defined(_WIN64) && (_MSC_VER >= 1800)) || defined(PLATFORM_UNIX))
+//#pragma message(">> log2f(f); <<")
+  return log2f(f);
+#else
+  /*
+  int * const    exp_ptr = reinterpret_cast <int *> (&f);
+  int            x = *exp_ptr;
+  const int      log_2 = ((x >> 23) & 255) - 128;
+  x &= ~(255 << 23);
+  x += 127 << 23;
+  *exp_ptr = x;
+  f = ((-1.0f/3) * f + 2) * f - 2.0f/3;   // (1)
+  return (f + log_2);
+  */
+  return log(f) * M_LOG2E;
+#endif  // _MSC_VER >= 1800
+   
 #endif
 }
 
@@ -461,7 +498,7 @@ inline FLOAT Sqrt( FLOAT x) { return (FLOAT)sqrt( ClampDn( x, 0.0f)); }
 #define ANGLE_SNAP (0.25f)   //0x0010
 // Wrap angle to be between 0 and 360 degrees
 inline ANGLE WrapAngle(ANGLE a) {
-  return (ANGLE) fmod( fmod(a,360.0) + 360.0, 360.0);  // 0..360
+  return (ANGLE) fmod( fmod(a,360.0f) + 360.0f, 360.0f);  // 0..360
 }
 
 // Normalize angle to be between -180 and +180 degrees
