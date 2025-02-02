@@ -5078,6 +5078,7 @@ static void FillResolutionsList()
       if( apixWidths[iRes][0]>_pixDesktopWidth) break;
       apixWidths[iRes][1] = (int)ceil( apixWidths[iRes][0] / ratio);
       if (apixWidths[iRes][1] == 1098) apixWidths[iRes][1] = 1080;
+      if (apixWidths[iRes][1] == 769) apixWidths[iRes][1] = 768;
       SetResolutionInList( iRes, apixWidths[iRes][0], apixWidths[iRes][1]);
     }
     _ctResolutions = iRes;
