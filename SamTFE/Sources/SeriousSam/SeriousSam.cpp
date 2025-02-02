@@ -1162,10 +1162,34 @@ void QuitScreenLoop(void)
   }
 }
 
+#ifdef PLATFORM_WIN32
+// [Cecil] Game application is DPI-aware
+static BOOL _bDPIAware = FALSE;
+// Make game application be aware of the DPI scaling on Windows Vista and later
+static void SetDPIAwareness(void) {
+  // Load the library
+  HMODULE hUser = LoadLibraryA("User32.dll");
+
+  if (hUser == NULL) return;
+
+  // Try to find the DPI awareness method
+  typedef BOOL (*CSetAwarenessFunc)(void);
+  CSetAwarenessFunc pFunc = (CSetAwarenessFunc)GetProcAddress(hUser, "SetProcessDPIAware");
+
+  if (pFunc == NULL) return;
+
+  // Mark game application as DPI-aware
+  _bDPIAware = pFunc();
+};
+#endif // PLATFORM_WIN32
 
 int SubMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
   (void)hPrevInstance;
+
+#ifdef PLATFORM_WIN32
+  SetDPIAwareness();
+#endif // PLATFORM_WIN32
 
   if( !Init( hInstance, nCmdShow, lpCmdLine )) return FALSE;
 

@@ -422,7 +422,7 @@ jobs:
 
   build-freebsd-x64:
     name: FreeBSD ${{ matrix.Configuration }} ${{ matrix.Platform }}
-    runs-on: macos-12
+    runs-on: macos-13
     strategy:
       fail-fast: false
       matrix:
@@ -489,7 +489,7 @@ jobs:
 
   build-macos-x64:
     name: macOS ${{ matrix.Configuration }} ${{ matrix.Platform }}
-    runs-on: macos-12
+    runs-on: macos-13
     strategy:
       fail-fast: false
       matrix:
