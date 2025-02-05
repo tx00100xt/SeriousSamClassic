@@ -84,6 +84,6 @@ export LD_LIBRARY_PATH=AppDir/usr/lib
 SIGN=1 ./linuxdeploy-x86_64.AppImage --executable AppDir/usr/bin/serioussamse --desktop-file AppDir/usr/share/applications/io.itch.tx00100xt.serioussamse.desktop --icon-file AppDir/usr/share/icons/hicolor/128x128/apps/serioussam.png --appdir AppDir --output appimage
 # rename appimages
 mv Serious_Sam_The_First_Encounter-x86_64.AppImage SeriousSamTFE-1.10.7-x86_64.AppImage
-chmod +x SeriousSamTFE-1.10.6d-x86_64.AppImage
+chmod +x SeriousSamTFE-1.10.7-x86_64.AppImage
 mv Serious_Sam_The_Second_Encounter-x86_64.AppImage SeriousSamTSE-1.10.7-x86_64.AppImage
-chmod +x SeriousSamTSE-1.10.6d-x86_64.AppImage
+chmod +x SeriousSamTSE-1.10.7-x86_64.AppImage
