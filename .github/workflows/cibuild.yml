@@ -1060,19 +1060,19 @@ jobs:
         run: |
           cd ${{github.workspace}}
           ./build-appimage.sh
-          mv -f ${{github.workspace}}/SeriousSamTFE-1.10.6d-x86_64.AppImage SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
-          mv -f ${{github.workspace}}/SeriousSamTSE-1.10.6d-x86_64.AppImage SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+          mv -f ${{github.workspace}}/SeriousSamTFE-1.10.7-x86_64.AppImage SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.7-x86_64.AppImage
+          mv -f ${{github.workspace}}/SeriousSamTSE-1.10.7-x86_64.AppImage SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.7-x86_64.AppImage
       - name: Upload TFE artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
-          path: SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+          name: SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.7-x86_64.AppImage
+          path: SeriousSamTFE-${{ steps.date.outputs.time }}-1.10.7-x86_64.AppImage
 
       - name: Upload TSE artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
-          path: SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.6d-x86_64.AppImage
+          name: SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.7-x86_64.AppImage
+          path: SeriousSamTSE-${{ steps.date.outputs.time }}-1.10.7-x86_64.AppImage
 
   build-linux-mipsel:
     name: Linux ${{ matrix.Configuration }} mipsel
