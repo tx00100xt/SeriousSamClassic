@@ -219,6 +219,9 @@ void CPerspectiveProjection3D::Prepare(void)
   pr_fDepthBufferAdd = pr_fDepthBufferNear;
 
   // calculate ratio for mip factor calculation
+  // vladdoc: this part is also a little suspect on how does it affect LODs depending on FOV.
+  // As perspective ratios are derived from FOV.
+  // Did not see what it affects though
   ppr_fMipRatio = pr_ScreenBBox.Size()(1)/(ppr_PerspectiveRatios(1)*640.0f);
 }
 
@@ -588,7 +591,13 @@ FLOAT CPerspectiveProjection3D::MipFactor(void) const
 {
   // check that the projection object is prepared for projecting
   ASSERT(pr_Prepared);
+  
+  // vladdoc: Original code broke mesh LODs for wide screen users.
+  // Did not work for fov > 70. As in meshes would start appearing 5 meters from you. tan(35) value ~= 0.70
+  // Even if mip factor is off you don't really need low detail mips that much anymore
+  ANGLE clampedFOV = ppr_FOVWidth > 70.0f ? 70.0f : ppr_FOVWidth;
+  
   // calculated using following formula: k = log2(1024*z/xratio);
   // the distance is, in fact, the z coordinate of the translation vector
-  return -pr_TranslationVector(3)*TanFast(ppr_FOVWidth/2.0f); // /Tan(90.0f/2.0f)=1;
+  return -pr_TranslationVector(3)*TanFast(clampedFOV/2.0f); // /Tan(90.0f/2.0f)=1;
 }
