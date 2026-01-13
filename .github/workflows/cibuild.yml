@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+      VULKAN_SDK: C:\VulkanSDK\
+
 jobs:
 
   build-alpine-x86:
@@ -336,7 +339,7 @@ jobs:
           $ver = (Invoke-WebRequest -Uri "https://vulkan.lunarg.com/sdk/latest.json" | ConvertFrom-Json).windows
           echo Version $ver
           $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/$ver/windows/VulkanSDK-$ver-Installer.exe" -OutFile VulkanSDK.exe
+          Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/$ver/windows/vulkansdk-windows-X64-$ver.exe" -OutFile VulkanSDK.exe
           echo Downloaded
           .\VulkanSDK.exe --root C:\VulkanSDK  --accept-licenses --default-answer --confirm-command install
 
@@ -422,7 +425,7 @@ jobs:
 
   build-freebsd-x64:
     name: FreeBSD ${{ matrix.Configuration }} ${{ matrix.Platform }}
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -442,11 +445,11 @@ jobs:
           echo "${{ steps.date.outputs.time }}"
 
       - name: Build on FreeBSD
-        uses: cross-platform-actions/action@v0.23.0
+        uses: cross-platform-actions/action@v0.32.0
         with:
           operating_system: freebsd
           architecture: x86-64
-          version: '13.1'
+          version: '15.0'
           shell: bash
           run: |
             uname -a
@@ -489,7 +492,7 @@ jobs:
 
   build-macos-x64:
     name: macOS ${{ matrix.Configuration }} ${{ matrix.Platform }}
-    runs-on: macos-13
+    runs-on: macos-14
     strategy:
       fail-fast: false
       matrix:
@@ -567,7 +570,7 @@ jobs:
         include:
         - arch: armv7l
           cpu: cortex-a53
-          base_image: raspios_lite:latest
+          base_image: raspios_lite:2023-05-03
           cpu_info: cpuinfo/raspberrypi_3b
 
     steps:
@@ -640,7 +643,7 @@ jobs:
         include:
         - arch: aarch64
           cpu: cortex-a72
-          base_image: raspios_lite_arm64:latest
+          base_image: raspios_lite_arm64:2023-05-03
           cpu_info: cpuinfo/raspberrypi_4b
 
     steps:
@@ -703,321 +706,9 @@ jobs:
         name: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz
         path: SeriousSamClassic-${{ steps.date.outputs.time }}-rpios-aarch64-bin.tar.xz
 
-  build-ubuntu-riscv64:
-    # The host should always be linux
-    runs-on: ubuntu-22.04
-    name: Ubuntu Release ${{ matrix.arch }}
-
-    # Run steps on a matrix of 4 arch/distro combinations
-    strategy:
-      matrix:
-        include:
-          - arch: riscv64
-            distro: ubuntu22.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
-        name: Build artifact
-        id: build
-        with:
-          arch: ${{ matrix.arch }}
-          distro: ${{ matrix.distro }}
-
-          # Not required, but speeds up builds
-          githubToken: ${{ github.token }}
-
-          # Create an artifacts directory
-          setup: |
-            mkdir -p "${PWD}/artifacts"
-          # Mount the artifacts directory as /artifacts in the container
-          dockerRunArgs: |
-            --volume "${PWD}/artifacts:/artifacts"
-          # Pass some environment variables to the container
-          env: | # YAML, but pipe character is necessary
-            artifact_name: git-${{ matrix.distro }}_${{ matrix.arch }}
-          # The shell to run commands with in the container
-          shell: /bin/bash
-
-          # Install some dependencies in the container. This speeds up builds if
-          # you are also using githubToken. Any dependencies installed here will
-          # be part of the container image that gets cached, so subsequent
-          # builds don't have to re-install them. The image layer is cached
-          # publicly in your project's package repository, so it is vital that
-          # no secrets are present in the container state or logs.
-          install: |
-            case "${{ matrix.distro }}" in
-              ubuntu*|jessie|stretch|buster|bullseye)
-                apt-get update -qq -y
-                apt-get install -qq -y git cmake build-essential xz-utils &&
-                apt-get install -qq -y libsdl2-dev libogg-dev libvorbis-dev &&
-                apt-get install -qq -y imagemagick bison flex zlib1g-dev libxxhash-dev &&
-                apt-get install -qq -y libvulkan1 libvulkan-dev vulkan-validationlayers vulkan-validationlayers-dev    
-                ;;
-              fedora*)
-                dnf -y update
-                dnf -y install git which
-                ;;
-              alpine*)
-                apk update
-                apk add git
-                ;;
-            esac
-          # Produce a binary artifact and place it in the mounted volume
-          run: |
-            cd ${{github.workspace}}
-            cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE
-            cd ${{github.workspace}}/build
-            make -j$(nproc || echo 4)
-            make install
-            cd ${{github.workspace}}
-            cmake -B ${{github.workspace}}/build-xplus -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE -DXPLUS=TRUE
-            cd ${{github.workspace}}/build-xplus
-            make -j$(nproc || echo 4)
-            make install
-      - name: Get current date
-        id: date
-        uses: Kaven-Universe/github-action-current-date-time@v1
-        with:
-           format: "YYYYMMDD"
-
-      - name: Show current date
-        run: |
-          echo "${{ steps.date.outputs.time }}"
-      - name: Make artifact
-        # Items placed in /artifacts in the container will be in
-        # ${PWD}/artifacts on the host.
-        run: |
-            cd ${{github.workspace}}
-            mkdir riscv64 && cd riscv64
-            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS}
-            cd ${{github.workspace}}
-            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/riscv64/SamTFE
-            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/riscv64/SamTSE
-            mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/riscv64/SamTFE/Mods/XPLUS
-            mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/riscv64/SamTSE/Mods/XPLUS
-            echo "*** Copy Data files ***"
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} riscv64/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} riscv64/SamTSE
-            echo "*** Create archive ***"
-            tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz riscv64
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz
-          path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-riscv64-bin.tar.xz
-
-  build-ubuntu-ppc64le:
-    # The host should always be linux
-    runs-on: ubuntu-22.04
-    name: Ubuntu Release ${{ matrix.arch }}
-
-    # Run steps on a matrix of 4 arch/distro combinations
-    strategy:
-      matrix:
-        include:
-          - arch: ppc64le
-            distro: ubuntu22.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
-        name: Build artifact
-        id: build
-        with:
-          arch: ${{ matrix.arch }}
-          distro: ${{ matrix.distro }}
-
-          # Not required, but speeds up builds
-          githubToken: ${{ github.token }}
-
-          # Create an artifacts directory
-          setup: |
-            mkdir -p "${PWD}/artifacts"
-          # Mount the artifacts directory as /artifacts in the container
-          dockerRunArgs: |
-            --volume "${PWD}/artifacts:/artifacts"
-          # Pass some environment variables to the container
-          env: | # YAML, but pipe character is necessary
-            artifact_name: git-${{ matrix.distro }}_${{ matrix.arch }}
-          # The shell to run commands with in the container
-          shell: /bin/bash
-
-          # Install some dependencies in the container. This speeds up builds if
-          # you are also using githubToken. Any dependencies installed here will
-          # be part of the container image that gets cached, so subsequent
-          # builds don't have to re-install them. The image layer is cached
-          # publicly in your project's package repository, so it is vital that
-          # no secrets are present in the container state or logs.
-          install: |
-            case "${{ matrix.distro }}" in
-              ubuntu*|jessie|stretch|buster|bullseye)
-                apt-get update -qq -y
-                apt-get install -qq -y git cmake build-essential xz-utils &&
-                apt-get install -qq -y libsdl2-dev libogg-dev libvorbis-dev &&
-                apt-get install -qq -y imagemagick bison flex zlib1g-dev libxxhash-dev &&
-                apt-get install -qq -y libvulkan1 libvulkan-dev vulkan-validationlayers vulkan-validationlayers-dev    
-                ;;
-              fedora*)
-                dnf -y update
-                dnf -y install git which
-                ;;
-              alpine*)
-                apk update
-                apk add git
-                ;;
-            esac
-          # Produce a binary artifact and place it in the mounted volume
-          run: |
-            cd ${{github.workspace}}
-            cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE
-            cd ${{github.workspace}}/build
-            make -j$(nproc || echo 4)
-            make install
-            cd ${{github.workspace}}
-            cmake -B ${{github.workspace}}/build-xplus -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE -DXPLUS=TRUE
-            cd ${{github.workspace}}/build-xplus
-            make -j$(nproc || echo 4)
-            make install
-      - name: Get current date
-        id: date
-        uses: Kaven-Universe/github-action-current-date-time@v1
-        with:
-           format: "YYYYMMDD"
-
-      - name: Show current date
-        run: |
-          echo "${{ steps.date.outputs.time }}"
-      - name: Make artifact
-        # Items placed in /artifacts in the container will be in
-        # ${PWD}/artifacts on the host.
-        run: |
-            cd ${{github.workspace}}
-            mkdir ppc64le && cd ppc64le
-            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS}
-            cd ${{github.workspace}}
-            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/ppc64le/SamTFE
-            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/ppc64le/SamTSE
-            mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/ppc64le/SamTFE/Mods/XPLUS
-            mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/ppc64le/SamTSE/Mods/XPLUS
-            echo "*** Copy Data files ***"
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} ppc64le/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} ppc64le/SamTSE
-            echo "*** Create archive ***"
-            tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-ppc64le-bin.tar.xz ppc64le
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-ppc64le-bin.tar.xz
-          path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-ppc64le-bin.tar.xz
-
-  build-ubuntu-s390x:
-    # The host should always be linux
-    runs-on: ubuntu-22.04
-    name: Ubuntu Release ${{ matrix.arch }}
-
-    # Run steps on a matrix of 4 arch/distro combinations
-    strategy:
-      matrix:
-        include:
-          - arch: s390x
-            distro: ubuntu22.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
-        name: Build artifact
-        id: build
-        with:
-          arch: ${{ matrix.arch }}
-          distro: ${{ matrix.distro }}
-
-          # Not required, but speeds up builds
-          githubToken: ${{ github.token }}
-
-          # Create an artifacts directory
-          setup: |
-            mkdir -p "${PWD}/artifacts"
-          # Mount the artifacts directory as /artifacts in the container
-          dockerRunArgs: |
-            --volume "${PWD}/artifacts:/artifacts"
-          # Pass some environment variables to the container
-          env: | # YAML, but pipe character is necessary
-            artifact_name: git-${{ matrix.distro }}_${{ matrix.arch }}
-          # The shell to run commands with in the container
-          shell: /bin/bash
-
-          # Install some dependencies in the container. This speeds up builds if
-          # you are also using githubToken. Any dependencies installed here will
-          # be part of the container image that gets cached, so subsequent
-          # builds don't have to re-install them. The image layer is cached
-          # publicly in your project's package repository, so it is vital that
-          # no secrets are present in the container state or logs.
-          install: |
-            case "${{ matrix.distro }}" in
-              ubuntu*|jessie|stretch|buster|bullseye)
-                apt-get update -qq -y
-                apt-get install -qq -y git cmake build-essential xz-utils &&
-                apt-get install -qq -y libsdl2-dev libogg-dev libvorbis-dev &&
-                apt-get install -qq -y imagemagick bison flex zlib1g-dev libxxhash-dev &&
-                apt-get install -qq -y libvulkan1 libvulkan-dev vulkan-validationlayers vulkan-validationlayers-dev    
-                ;;
-              fedora*)
-                dnf -y update
-                dnf -y install git which
-                ;;
-              alpine*)
-                apk update
-                apk add git
-                ;;
-            esac
-          # Produce a binary artifact and place it in the mounted volume
-          run: |
-            cd ${{github.workspace}}
-            cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE
-            cd ${{github.workspace}}/build
-            make -j$(nproc || echo 4)
-            make install
-            cd ${{github.workspace}}
-            cmake -B ${{github.workspace}}/build-xplus -DCMAKE_BUILD_TYPE=Release -DUSE_I386_NASM_ASM=FALSE -DXPLUS=TRUE
-            cd ${{github.workspace}}/build-xplus
-            make -j$(nproc || echo 4)
-            make install
-      - name: Get current date
-        id: date
-        uses: Kaven-Universe/github-action-current-date-time@v1
-        with:
-           format: "YYYYMMDD"
-
-      - name: Show current date
-        run: |
-          echo "${{ steps.date.outputs.time }}"
-      - name: Make artifact
-        # Items placed in /artifacts in the container will be in
-        # ${PWD}/artifacts on the host.
-        run: |
-            cd ${{github.workspace}}
-            mkdir s390x && cd s390x
-            mkdir {SamTFE,SamTFE/Mods,SamTFE/Mods/XPLUS,SamTSE,SamTSE/Mods,SamTSE/Mods/XPLUS}
-            cd ${{github.workspace}}
-            mv -f ${{github.workspace}}/SamTFE/Bin ${{github.workspace}}/s390x/SamTFE
-            mv -f ${{github.workspace}}/SamTSE/Bin ${{github.workspace}}/s390x/SamTSE
-            mv -f ${{github.workspace}}/SamTFE/Mods/XPLUS/Bin ${{github.workspace}}/s390x/SamTFE/Mods/XPLUS
-            mv -f ${{github.workspace}}/SamTSE/Mods/XPLUS/Bin ${{github.workspace}}/s390x/SamTSE/Mods/XPLUS
-            echo "*** Copy Data files ***"
-            cp -vfr {SamTFE/SE1_10b.gro,SamTFE/ModEXT.txt} s390x/SamTFE
-            cp -vfr {SamTSE/SE1_10b.gro,SamTSE/ModEXT.txt} s390x/SamTSE
-            echo "*** Create archive ***"
-            tar -cJpvf SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz s390x
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
-          path: SeriousSamClassic-${{ steps.date.outputs.time }}-lnx-s390x-bin.tar.xz
-
   build-appimage-x64:
     name: AppImage ${{ matrix.Configuration }} ${{ matrix.Platform }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -1232,7 +923,7 @@ jobs:
           sudo apt-get install -qq -y git xz-utils qemu qemu-user-static binfmt-support parted wget dosfstools zip p7zip-full squashfs-tools rpm2cpio
           sudo adduser $USER kvm
           echo "*** Download and install qemu-loongarch64-static ***"
-          wget -c http://mirror.ghettoforge.org/distributions/gf/el/9/gf/x86_64/qemu-user-static-loongarch64-8.2.0-1.2.gf.el9.x86_64.rpm
+          wget -c https://mirror.ghettoforge.net/distributions/gf/el/9/gf/x86_64/qemu-user-static-loongarch64-8.2.0-1.2.gf.el9.x86_64.rpm
           rpm2cpio qemu-user-static-loongarch64-8.2.0-1.2.gf.el9.x86_64.rpm | cpio -i --make-directories
           sudo cp -vfr usr/bin/qemu-loongarch64-static /usr/bin
           echo "*** Download and install loongarch64 image ***"
